@@ -1,0 +1,21 @@
+# Core dependencies
+alttester>=2.0.0
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+pydantic>=2.0.0
+
+# AI/ML dependencies
+langchain>=0.1.0
+langchain-openai>=0.0.2
+langchain-aws>=0.0.1
+langchain-google-genai>=0.0.5
+openai>=1.0.0
+
+# Image processing
+Pillow>=10.0.0
+numpy>=1.24.0
+
+# Utilities
+python-dotenv>=1.0.0
+redis>=5.0.0
+
