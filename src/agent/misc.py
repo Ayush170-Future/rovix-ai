@@ -146,3 +146,120 @@
 #     await task2
 #     input_controller.release_all_keys()
 #     screenshots, labels = await task3
+
+    
+# async def capture_screenshots_async(frames_per_action):
+#     """
+#     Capture screenshots at start, middle, and end frames in parallel with actions.
+    
+#     Returns:
+#         tuple: (screenshots list, screenshot_labels list)
+#     """
+#     screenshots = []
+#     screenshot_labels = []
+    
+#     try:
+#         # Calculate frame positions
+#         start_frame = frame_controller.get_current_frame()
+#         middle_frame = start_frame + (frames_per_action // 2)
+#         end_frame = start_frame + frames_per_action
+        
+#         print(f"Capturing screenshots at frames: {start_frame}, {middle_frame}, {end_frame}")
+        
+#         # Screenshot 1: Start (immediate) - Run in thread to avoid blocking
+#         print(f"  📸 Capturing START screenshot at frame {start_frame}")
+#         screenshot_start = await asyncio.to_thread(get_screenshot_base64)
+#         screenshots.append(screenshot_start)
+#         screenshot_labels.append(f"START (frame {start_frame})")
+        
+#         # Wait for middle frame
+#         timeout = 10  # seconds
+#         start_time = time.time()
+        
+#         while frame_controller.get_current_frame() < middle_frame:
+#             if time.time() - start_time > timeout:
+#                 print("Warning: Timeout waiting for middle frame")
+#                 break
+#             await asyncio.sleep(0.05)
+        
+#         # Screenshot 2: Middle - Run in thread to avoid blocking
+#         actual_middle_frame = frame_controller.get_current_frame()
+#         print(f"  📸 Capturing MIDDLE screenshot at frame {actual_middle_frame}")
+#         screenshot_middle = await asyncio.to_thread(get_screenshot_base64)
+#         screenshots.append(screenshot_middle)
+#         screenshot_labels.append(f"MIDDLE (frame {actual_middle_frame})")
+        
+#         # Wait for end frame
+#         start_time = time.time()
+#         while frame_controller.get_current_frame() < end_frame:
+#             if time.time() - start_time > timeout:
+#                 print("Warning: Timeout waiting for end frame")
+#                 break
+#             await asyncio.sleep(0.05)
+        
+#         # Screenshot 3: End - Run in thread to avoid blocking
+#         actual_end_frame = frame_controller.get_current_frame()
+#         print(f"  📸 Capturing END screenshot at frame {actual_end_frame}")
+#         screenshot_end = await asyncio.to_thread(get_screenshot_base64)
+#         screenshots.append(screenshot_end)
+#         screenshot_labels.append(f"END (frame {actual_end_frame})")
+        
+#         print(f"✅ Captured {len(screenshots)} screenshots")
+        
+#         return screenshots, screenshot_labels
+        
+#     except Exception as e:
+#         print(f"❌ Exception in capture_screenshots_async: {e}")
+#         print(f"   Exception type: {type(e).__name__}")
+#         import traceback
+#         traceback.print_exception(type(e), e, e.__traceback__)
+#         # Return whatever screenshots we managed to capture
+#         return screenshots, screenshot_labels
+
+
+# async def perform_action_async(action: Action):
+#     """Execute the action specified by the agent asynchronously"""
+#     print(f"Performing action: {action.action} for {action.duration}s - Reason: {action.reason}")
+    
+#     if action.action == "jump":
+#         await input_controller.jump_async(hold_duration=action.duration)
+#     elif action.action == "move_right":
+#         await input_controller.move_right_async(duration=action.duration)
+#     elif action.action == "move_left":
+#         await input_controller.move_left_async(duration=action.duration)
+#     elif action.action == "do_nothing":
+#         await asyncio.sleep(action.duration)
+
+# async def execute_actions_async(agent_output: AgentOutput):
+#     """
+#     Execute actions asynchronously (like jump_and_move_right pattern).
+#     Actions run concurrently, then keys are released.
+#     """
+#     executable_actions = [action for action in action_list.actions if not action.end_game]
+    
+#     if not executable_actions:
+#         print("No executable actions")
+#         return
+    
+#     # Release all keys first
+#     print("🔧 Releasing all keys to reset state...")
+#     input_controller.release_all_keys()
+    
+#     # Create asyncio tasks for all actions - they run concurrently
+#     print(f"🔧 Creating {len(executable_actions)} action tasks...")
+#     tasks = []
+#     for i, action in enumerate(executable_actions):
+#         print(f"   Task {i+1}: {action.action} ({action.duration}s)")
+#         tasks.append(asyncio.create_task(perform_action_async(action)))
+    
+#     # Wait for all actions to complete
+#     print("🔧 Waiting for all actions to complete...")
+#     for task in tasks:
+#         await task
+    
+#     print("✅ All actions completed!")
+    
+#     # Ensure all keys are released after inputs
+#     print("🔧 Releasing all keys after actions...")
+#     input_controller.release_all_keys()
+#     print("✅ All keys released")

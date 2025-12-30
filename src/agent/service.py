@@ -11,15 +11,25 @@ from typing import Literal, List, Optional
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 from dotenv import load_dotenv
-from prompts import SYSTEM_PROMPT
 import sys
 import time
 from langchain_aws import ChatBedrockConverse
 from langchain_google_genai import ChatGoogleGenerativeAI
 import numpy as np
+import redis
 
+redis_client = redis.Redis(host='localhost', port=6379, decode_responses=False)
+
+# Set up path for imports (must be before importing agent modules)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+# Import SYSTEM_PROMPT - works both as module and direct execution
+try:
+    from .prompts import SYSTEM_PROMPT
+except ImportError:
+    from agent.prompts import SYSTEM_PROMPT
 from tester import InputController, AltTesterClient, GameFrameController, SceneController, TimeController
+from agent.actions import ActionHandler
 
 load_dotenv()
 
@@ -32,13 +42,18 @@ model = ChatGoogleGenerativeAI(
     api_key=os.getenv("GOOGLE_API_KEY")
 )
 
+print("Initializing AltTesterClient...")
 client = AltTesterClient(host="127.0.0.1", port=13000, timeout=60)
+print("AltTesterClient initialized")
 driver = client.get_driver()
 input_controller = InputController(driver)
 time_controller = TimeController(driver)
 scene_controller = SceneController(driver)
-scene_controller.load_scene("SampleScene")
 frame_controller = GameFrameController(driver)
+frame_controller.resume()
+
+# Initialize ActionHandler for unified action execution
+action_handler = ActionHandler(driver)
 
 def image_to_bedrock_bytes(path, max_size=(1024, 1024), quality=75):
     img = Image.open(path).convert("RGB")
@@ -53,25 +68,31 @@ def image_file_to_base64(filepath, max_size=(1024, 1024), quality=75):
     return base64.b64encode(image_bytes).decode("utf-8")
 
 class Action(BaseModel):
-    action: Literal["do_nothing", "jump", "move_right", "move_left"] = Field(
-        description="This represents the action that the player should take. 'do_nothing' means the player should not take any action. Remember there is never a compulsion to make decision, you can always 'do_nothing' when action is not required."
+    action_type: Literal["key_press", "button_press"] = Field(
+        description="Represents the type of action to be performed. This can be a key press, button press."
+    )
+    key_name: str | None = Field(
+        description="Represents the name of the key to be pressed from the keyboard. All possible keys are listed in the last message. This is going to be N/A if the action is not a key press."
+    )
+    button_id: int | None = Field(
+        description="Represents the ID of the button to be clicked on the screen. This is a unique identifier for the button and you can find the available buttons in the last message. This is going to be N/A if the action is not a button press."
     )
     duration: float = Field(
         default=0.1,
-        description="The time measured in seconds to keep the button down. Default is 0.1 second. Duration is equally proportional to the number of blocks the player will move in some direction (right, left, top). Looking at the frame, you should be able to estimate the duration for the action."
+        description="Represents the duration of click. Default is 0.1 second. This might not be relevant for the button press actions."
     )
-    reason: str = Field(
-        description="The reason for the action taken by the player."
-    )
+
+# TODO: Add analyze last step and reason next step fields here as well
+class AgentOutput(BaseModel):
+    reason: str = Field( 
+        description="Use this field to reason about the current game state and your overall performance, observations, goals that will help you complete the game and figure out the next set of actions."
+    ),
     end_game: bool = Field(
         default=False,
         description="This represents whether the game has ended or not. If the game has ended, the player should not take any action."
-    )
-
-
-class ActionList(BaseModel):
+    ),
     actions: List[Action] = Field(
-        description="A list of actions to be executed sequentially."
+        description="A list of actions to be executed sequentially. This can be a combination of keyboard and button press actions."
     )
 
 
@@ -87,7 +108,7 @@ class GamePauseEvent(BaseModel):
 
 
 structured_model = model.with_structured_output(
-    schema=ActionList.model_json_schema(), method="json_schema"
+    schema=AgentOutput.model_json_schema(), method="json_schema"
 )
 
 # Global game state - maintains conversation history across pause events
@@ -96,150 +117,191 @@ game_state_messages = [
 ]
 game_state_lock = threading.Lock()
 
+async def agent_handler(event: GamePauseEvent):
+    print(f"\n🎮 Pause event - Step: {event.current_step}, Frames: {event.start_frame}-{event.end_frame}")
+    print(f"   Available: {event.available_frames}")
+    
+    # Select 3 evenly-spaced frames
+    frames = event.available_frames
 
-def reset_game_state():
-    """Reset the global game state to initial state with system prompt"""
-    global game_state_messages
-    with game_state_lock:
-        game_state_messages = [
-            SystemMessage(content=SYSTEM_PROMPT),
-        ]
-        print("🔄 Game state reset")
+    # Incase of turn based game, we only need 1 screenshot (current one).
+    # if event.required_screenshots == 1:
+    frames = []
+    frames.append(frame_controller.get_current_frame())
 
+    if len(frames) <= 3:
+        selected = frames
+    else:
+        step = (len(frames) - 1) / 2
+        selected = [frames[0], frames[int(step)], frames[-1]]
+    
+    # Create screenshots directory
+    screenshots_dir = os.path.join(os.path.dirname(__file__), "..", "agent", "screenshots")
+    os.makedirs(screenshots_dir, exist_ok=True)
+    saved_files = []
+    saved_filepaths = []
+    
+    # Fetch from Redis and save
+    for i, frame_num in enumerate(selected):
+        try:
+            if frame_num == selected[-1]:
+                # Get the screenshot directly from the game (current frame after pause)
+                filename = f"step_{event.current_step}_frame_{frame_num}_pos_{i+1}_current.png"
+                filepath = os.path.join(screenshots_dir, filename)
+                
+                # Capture screenshot directly from game
+                driver.get_png_screenshot(filepath)
+                
+                saved_files.append(filename)
+                saved_filepaths.append(filepath)
+                print(f"   💾 {filename} (captured from game)")
+                continue
+            else:
+                # Get from Redis
+                key = f"{event.key_prefix}{frame_num}"
+                raw_data = redis_client.get(key)
+                meta_data = redis_client.get(f"{key}_meta")
+                
+                if not raw_data or not meta_data:
+                    print(f"   ❌ Frame {frame_num} not found in Redis")
+                    continue
+                
+                # Convert raw RGB24 to image
+                width, height = map(int, meta_data.decode().split('x'))
+                img_array = np.frombuffer(raw_data, dtype=np.uint8).reshape((height, width, 3))
+                img = Image.fromarray(np.flipud(img_array), 'RGB')
+                
+                # Save
+                filename = f"step_{event.current_step}_frame_{frame_num}_pos_{i+1}.png"
+                filepath = os.path.join(screenshots_dir, filename)
+                img.save(filepath, format='PNG')
+                saved_files.append(filename)
+                saved_filepaths.append(filepath)
+                print(f"   💾 {filename}")
+            
+        except Exception as e:
+            print(f"   ❌ Error on frame {frame_num}: {e}")
+    
+    print(f"✅ Saved {len(saved_files)} screenshots")
+    
+    # If we have screenshots, call LLM and execute actions
+    if saved_filepaths:
+        try:
+            # Convert saved screenshots to base64
+            print("🔄 Converting screenshots to base64...")
+            screenshot_base64_list = []
+            for filepath in saved_filepaths:
+                screenshot_base64 = image_file_to_base64(filepath)
+                screenshot_base64_list.append(screenshot_base64)
+            
+            # Prepare message for LLM
+            message_content = [
+                {
+                    "type": "text",
+                    "text":f"Here is the current game state after your previous action execution. The state is represented by Screenshots of the game. "
+                           f"Your goal is to clearly identify the next set of actions or a single action depending upon the last screenshot. The initial screenshots are given to give the sense of direction of velocity. This is a 2d game."
+                           f"Remember to use the last screenshot as the current state and use the initial screenshots to get the sense of movement for better decision making."
+                           f"Here are {len(saved_filepaths)} screenshots showing the game state. Analyze and decide on the next actions."
+                }
+            ]
+            
+            # Add all screenshots to the message
+            for i, screenshot_base64 in enumerate(screenshot_base64_list):
+                message_content.append({
+                    "type": "image_url",
+                    "image_url": {
+                        "url": f"data:image/jpeg;base64,{screenshot_base64}"
+                    }
+                })
+            
+            current_game_state_indication_message = HumanMessage(content=[{
+                "type": "text",
+                "text": f"[CURRENT GAME STATE]"
+            }])
+            available_actions_message = await get_available_actions_message()
+            # Add human message to global game state
+            screenshot_message = HumanMessage(content=message_content)
+            with game_state_lock:
+                # # Removing the previous Current Game State indication message (third-to-last)
+                # if len(game_state_messages) >= 4:
+                #     # POP the third-to-last message (index -3)
+                #     game_state_messages.pop(-3)
 
-def get_screenshot_base64():
-    """Capture screenshot and return as base64 string"""
-    # Create snapshots directory if it doesn't exist
-    snapshots_dir = os.path.join(os.path.dirname(__file__), "snapshots")
-    os.makedirs(snapshots_dir, exist_ok=True)
-    
-    # Generate filename with timestamp
-    from datetime import datetime
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
-    filename = f"screenshot_{timestamp}.png"
-    filepath = os.path.join(snapshots_dir, filename)
-    
-    driver.get_png_screenshot(filepath)
-    
-    image_bytes = image_to_bedrock_bytes(filepath)
-    image_base64 = base64.b64encode(image_bytes).decode("utf-8")
-    
-    print(f"💾 Screenshot saved: {filepath}")
-    
-    return image_base64
+                game_state_messages.append(current_game_state_indication_message)
+                game_state_messages.append(screenshot_message)
 
+                # Add available actions message
+                game_state_messages.append(available_actions_message)
 
-async def perform_action_async(action: Action):
-    """Execute the action specified by the agent asynchronously"""
-    print(f"Performing action: {action.action} for {action.duration}s - Reason: {action.reason}")
-    
-    if action.action == "jump":
-        await input_controller.jump_async(hold_duration=action.duration)
-    elif action.action == "move_right":
-        await input_controller.move_right_async(duration=action.duration)
-    elif action.action == "move_left":
-        await input_controller.move_left_async(duration=action.duration)
-    elif action.action == "do_nothing":
-        await asyncio.sleep(action.duration)
+                # Create a copy of messages for this LLM call
+                messages = game_state_messages.copy()
+            
+            # Get agent decision
+            print("🤖 Getting agent decision from LLM...")
+            response = await asyncio.to_thread(structured_model.invoke, messages)
+            agent_output = AgentOutput(**response) if isinstance(response, dict) else response
+            
+            print(f"✅ Agent decision: {agent_output.model_dump()}")
+            
+            # Add AI response to global game state
+            with game_state_lock:
+                game_state_messages.append(AIMessage(content=str(agent_output.model_dump())))
 
-async def execute_actions_async(action_list: ActionList):
-    """
-    Execute actions asynchronously (like jump_and_move_right pattern).
-    Actions run concurrently, then keys are released.
-    """
-    executable_actions = [action for action in action_list.actions if not action.end_game]
+            # Check if game should end
+            if agent_output.end_game:
+                print("🛑 Agent signaled end of game")
+                return {"status": "ok", "saved": len(saved_files), "files": saved_files, "end_game": True}
+
+            # Resume the game before calling LLM and executing actions
+            try:
+                print("▶️ Resuming game...")
+                frame_controller.resume()
+                print("✅ Game resumed")
+            except Exception as e:
+                print(f"❌ Error resuming game: {e}")
+                return {"status": "error", "message": f"Failed to resume game: {e}"}
+            
+            # Execute actions asynchronously
+            print("🎮 Executing actions asynchronously...")
+            await action_handler.execute_actions_sequential(agent_output.actions)
+            print("✅ Actions executed successfully")
+            
+        except Exception as e:
+            print(f"❌ Error in LLM call or action execution: {e}")
+            import traceback
+            traceback.print_exception(type(e), e, e.__traceback__)
+            return {"status": "error", "message": f"Failed to process: {e}"}
+
+async def get_available_actions_message() -> HumanMessage:
+    available_actions = action_handler.get_available_actions()
+
+    action_message_content = "You can currently interact with the following controls on the screen: \n Buttons available to click:"
+    buttons = available_actions.get("buttons", [])
+    if buttons:
+        for index, button in enumerate(buttons):
+            name = button.get("name", "Unknown")
+            button_id = button.get("id", "N/A")
+            position = button.get("position")
+            enabled = button.get("enabled", True)
+            
+            # Format position
+            if position and len(position) == 2:
+                pos_str = f"{int(position[0])} × {int(position[1])}"
+            else:
+                pos_str = "N/A"
+            
+            # Format enabled status
+            enabled_str = "Enabled" if enabled else "Disabled"
+            
+            # Add formatted button info
+            action_message_content += f"\n- name = {name}     (Button ID: {button_id}, Position: {pos_str}, {enabled_str})"
     
-    if not executable_actions:
-        print("No executable actions")
-        return
+    available_keys = available_actions.get("keyboard", {}).get("key_press", {}).get("available_keys", [])
+    action_message_content += "\n Keys available to press:\n- " + ", ".join(available_keys)
     
-    # Release all keys first
-    print("🔧 Releasing all keys to reset state...")
-    input_controller.release_all_keys()
-    
-    # Create asyncio tasks for all actions - they run concurrently
-    print(f"🔧 Creating {len(executable_actions)} action tasks...")
-    tasks = []
-    for i, action in enumerate(executable_actions):
-        print(f"   Task {i+1}: {action.action} ({action.duration}s)")
-        tasks.append(asyncio.create_task(perform_action_async(action)))
-    
-    # Wait for all actions to complete
-    print("🔧 Waiting for all actions to complete...")
-    for task in tasks:
-        await task
-    
-    print("✅ All actions completed!")
-    
-    # Ensure all keys are released after inputs
-    print("🔧 Releasing all keys after actions...")
-    input_controller.release_all_keys()
-    print("✅ All keys released")
-    
-async def capture_screenshots_async(frames_per_action):
-    """
-    Capture screenshots at start, middle, and end frames in parallel with actions.
-    
-    Returns:
-        tuple: (screenshots list, screenshot_labels list)
-    """
-    screenshots = []
-    screenshot_labels = []
-    
-    try:
-        # Calculate frame positions
-        start_frame = frame_controller.get_current_frame()
-        middle_frame = start_frame + (frames_per_action // 2)
-        end_frame = start_frame + frames_per_action
-        
-        print(f"Capturing screenshots at frames: {start_frame}, {middle_frame}, {end_frame}")
-        
-        # Screenshot 1: Start (immediate) - Run in thread to avoid blocking
-        print(f"  📸 Capturing START screenshot at frame {start_frame}")
-        screenshot_start = await asyncio.to_thread(get_screenshot_base64)
-        screenshots.append(screenshot_start)
-        screenshot_labels.append(f"START (frame {start_frame})")
-        
-        # Wait for middle frame
-        timeout = 10  # seconds
-        start_time = time.time()
-        
-        while frame_controller.get_current_frame() < middle_frame:
-            if time.time() - start_time > timeout:
-                print("Warning: Timeout waiting for middle frame")
-                break
-            await asyncio.sleep(0.05)
-        
-        # Screenshot 2: Middle - Run in thread to avoid blocking
-        actual_middle_frame = frame_controller.get_current_frame()
-        print(f"  📸 Capturing MIDDLE screenshot at frame {actual_middle_frame}")
-        screenshot_middle = await asyncio.to_thread(get_screenshot_base64)
-        screenshots.append(screenshot_middle)
-        screenshot_labels.append(f"MIDDLE (frame {actual_middle_frame})")
-        
-        # Wait for end frame
-        start_time = time.time()
-        while frame_controller.get_current_frame() < end_frame:
-            if time.time() - start_time > timeout:
-                print("Warning: Timeout waiting for end frame")
-                break
-            await asyncio.sleep(0.05)
-        
-        # Screenshot 3: End - Run in thread to avoid blocking
-        actual_end_frame = frame_controller.get_current_frame()
-        print(f"  📸 Capturing END screenshot at frame {actual_end_frame}")
-        screenshot_end = await asyncio.to_thread(get_screenshot_base64)
-        screenshots.append(screenshot_end)
-        screenshot_labels.append(f"END (frame {actual_end_frame})")
-        
-        print(f"✅ Captured {len(screenshots)} screenshots")
-        
-        return screenshots, screenshot_labels
-        
-    except Exception as e:
-        print(f"❌ Exception in capture_screenshots_async: {e}")
-        print(f"   Exception type: {type(e).__name__}")
-        import traceback
-        traceback.print_exception(type(e), e, e.__traceback__)
-        # Return whatever screenshots we managed to capture
-        return screenshots, screenshot_labels
+    print(action_message_content)
+
+    return HumanMessage(content=[{
+        "type": "text",
+        "text": action_message_content
+    }])

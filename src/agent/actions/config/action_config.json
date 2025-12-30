@@ -1,0 +1,30 @@
+{
+  "input_types": {
+    "keyboard": {
+      "enabled": false,
+      "available_keys": [
+        "Space",
+        "A",
+        "D",
+        "W",
+        "S",
+        "LeftArrow",
+        "RightArrow",
+        "UpArrow",
+        "DownArrow"
+      ]
+    },
+    "buttons": {
+      "enabled": true,
+      "extract_on_demand": true,
+      "cache_ttl_seconds": 5.0
+    }
+  },
+  "element_extraction": {
+    "components": [
+      "UnityEngine.UI.Button"
+    ],
+    "refresh_strategy": "on_demand"
+  },
+  "sequential_actions": true
+}

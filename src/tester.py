@@ -27,8 +27,6 @@ class AltTesterClient:
         if self.driver:
             self.driver.stop()
 
-
-
 class InputController:
     """Handles all keyboard and input-related actions"""
     
@@ -244,7 +242,9 @@ class GameFrameController:
             alt_driver (AltDriver): The AltDriver instance
         """
         self.driver = alt_driver
+        print(f"🔍 Searching for FrameController...")
         self.controller = alt_driver.find_object(By.NAME, "FrameController")
+        print(f"🔍 FrameController found: {self.controller}")
     
     def get_current_frame(self):
         """
@@ -253,6 +253,7 @@ class GameFrameController:
         Returns:
             int: The current frame number
         """
+    
         return int(self.controller.call_component_method(
             "FrameController",
             "GetCurrentFrame",
@@ -263,6 +264,7 @@ class GameFrameController:
         """
         Resume the game by calling Resume() on FrameController.
         """
+        print(f"🔍 Resuming game...")
         self.controller.call_component_method(
             "FrameController",
             "Resume",
