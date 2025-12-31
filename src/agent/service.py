@@ -68,18 +68,44 @@ def image_file_to_base64(filepath, max_size=(1024, 1024), quality=75):
     return base64.b64encode(image_bytes).decode("utf-8")
 
 class Action(BaseModel):
-    action_type: Literal["key_press", "button_press"] = Field(
-        description="Represents the type of action to be performed. This can be a key press, button press."
+    action_type: Literal["key_press", "button_press", "swipe", "touch"] = Field(
+        description="Represents the type of action to be performed. This can be a key press, button press, swipe, or touch."
     )
     key_name: str | None = Field(
-        description="Represents the name of the key to be pressed from the keyboard. All possible keys are listed in the last message. This is going to be N/A if the action is not a key press."
+        default=None,
+        description="Represents the name of the key to be pressed. Relevant for key_press."
     )
     button_id: int | None = Field(
-        description="Represents the ID of the button to be clicked on the screen. This is a unique identifier for the button and you can find the available buttons in the last message. This is going to be N/A if the action is not a button press."
+        default=None,
+        description="Represents the ID of the button to be clicked. Relevant for button_press."
+    )
+    x: float | None = Field(
+        default=None,
+        description="X coordinate for touch action."
+    )
+    y: float | None = Field(
+        default=None,
+        description="Y coordinate for touch action."
+    )
+    start_x: float | None = Field(
+        default=None,
+        description="Start X coordinate for swipe action."
+    )
+    start_y: float | None = Field(
+        default=None,
+        description="Start Y coordinate for swipe action."
+    )
+    end_x: float | None = Field(
+        default=None,
+        description="End X coordinate for swipe action."
+    )
+    end_y: float | None = Field(
+        default=None,
+        description="End Y coordinate for swipe action."
     )
     duration: float = Field(
         default=0.1,
-        description="Represents the duration of click. Default is 0.1 second. This might not be relevant for the button press actions."
+        description="Represents the duration of the action. For swipes, this is the time to complete the move. Default is 0.1s."
     )
 
 # TODO: Add analyze last step and reason next step fields here as well

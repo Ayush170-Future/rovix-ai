@@ -170,6 +170,54 @@ class InputController:
         else:
             await self.hold_key_async(AltKeyCode.A, duration=0.1)
 
+    def tap(self, x, y, count=1, interval=0.1, wait=True):
+        """
+        Simulate a tap at specific screen coordinates.
+        
+        Args:
+            x (float): X coordinate
+            y (float): Y coordinate
+            count (int): Number of taps
+            interval (float): Interval between taps
+            wait (bool): Whether to wait for the tap to finish
+        """
+        print(f"👉 TAP at ({x}, {y}) count={count}")
+        self.driver.tap({"x": x, "y": y}, count=count, interval=interval, wait=wait)
+
+    async def tap_async(self, x, y, count=1, interval=0.1, wait=True):
+        """
+        Simulate a tap at specific screen coordinates (asynchronous).
+        """
+        # AltDriver.tap is synchronous in the library, but we wrap it in an async method for consistency
+        self.tap(x, y, count, interval, wait)
+
+    def swipe(self, start_x, start_y, end_x, end_y, duration=0.1, wait=True):
+        """
+        Simulate a swipe between two points.
+        
+        Args:
+            start_x (float): Starting X coordinate
+            start_y (float): Starting Y coordinate
+            end_x (float): Ending X coordinate
+            end_y (float): Ending Y coordinate
+            duration (float): Swipe duration in seconds
+            wait (bool): Whether to wait for the swipe to finish
+        """
+        print(f"↔️ SWIPE from ({start_x}, {start_y}) to ({end_x}, {end_y}) duration={duration}s")
+        self.driver.swipe(
+            {"x": start_x, "y": start_y},
+            {"x": end_x, "y": end_y},
+            duration=duration,
+            wait=wait
+        )
+
+    async def swipe_async(self, start_x, start_y, end_x, end_y, duration=0.1, wait=True):
+        """
+        Simulate a swipe between two points (asynchronous).
+        """
+        # AltDriver.swipe is synchronous in the library, but we wrap it in an async method for consistency
+        self.swipe(start_x, start_y, end_x, end_y, duration, wait)
+
 
 class TimeController:
     """Handles game time manipulation (pause, resume, time scale)"""

@@ -371,6 +371,31 @@ class ActionHandler:
         except Exception as e:
             print(f"   ❌ Error tapping {name}: {e}")
             raise
+
+    async def execute_touch(self, x: float, y: float) -> None:
+        """
+        Execute touch (tap) at coordinates.
+        
+        Args:
+            x: X screen coordinate
+            y: Y screen coordinate
+        """
+        print(f"👉 TOUCH: ({x}, {y})")
+        await self.input_controller.tap_async(x, y)
+
+    async def execute_swipe(self, start_x: float, start_y: float, end_x: float, end_y: float, duration: float = 0.5) -> None:
+        """
+        Execute swipe from start to end coordinates.
+        
+        Args:
+            start_x: Start X coordinate
+            start_y: Start Y coordinate
+            end_x: End X coordinate
+            end_y: End Y coordinate
+            duration: Duration of swipe in seconds
+        """
+        print(f"↔️ SWIPE: From ({start_x}, {start_y}) to ({end_x}, {end_y}) for {duration}s")
+        await self.input_controller.swipe_async(start_x, start_y, end_x, end_y, duration)
     
     async def execute_wait(self, duration: float) -> None:
         """
@@ -441,6 +466,27 @@ class ActionHandler:
                     else:
                         raise ValueError("button_press requires either 'button_id' or 'button_name'")
                 
+                elif action_type == "touch":
+                    x = action.get("x")
+                    y = action.get("y")
+                    if x is None or y is None:
+                        raise ValueError("touch requires 'x' and 'y'")
+                    tasks.append(asyncio.create_task(
+                        self.execute_touch(x, y)
+                    ))
+
+                elif action_type == "swipe":
+                    start_x = action.get("start_x")
+                    start_y = action.get("start_y")
+                    end_x = action.get("end_x")
+                    end_y = action.get("end_y")
+                    duration = action.get("duration", 0.5)
+                    if any(v is None for v in [start_x, start_y, end_x, end_y]):
+                        raise ValueError("swipe requires 'start_x', 'start_y', 'end_x', and 'end_y'")
+                    tasks.append(asyncio.create_task(
+                        self.execute_swipe(start_x, start_y, end_x, end_y, duration)
+                    ))
+
                 elif action_type == "wait":
                     duration = action.get("duration")
                     if duration is None:
@@ -500,6 +546,21 @@ class ActionHandler:
                     if button_id is None:
                         raise ValueError("button_press requires button_id")
                     await self.execute_button_press(str(button_id))
+                elif action_type == "touch":
+                    x = action.get("x")
+                    y = action.get("y")
+                    if x is None or y is None:
+                        raise ValueError("touch requires 'x' and 'y'")
+                    await self.execute_touch(x, y)
+                elif action_type == "swipe":
+                    start_x = action.get("start_x")
+                    start_y = action.get("start_y")
+                    end_x = action.get("end_x")
+                    end_y = action.get("end_y")
+                    duration = action.get("duration", 0.5)
+                    if any(v is None for v in [start_x, start_y, end_x, end_y]):
+                        raise ValueError("swipe requires 'start_x', 'start_y', 'end_x', and 'end_y'")
+                    await self.execute_swipe(start_x, start_y, end_x, end_y, duration)
                 elif action_type == "wait":
                     if duration is None:
                         raise ValueError("duration is required for wait")
