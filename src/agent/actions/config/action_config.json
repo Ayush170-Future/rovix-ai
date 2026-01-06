@@ -18,11 +18,26 @@
       "enabled": true,
       "extract_on_demand": true,
       "cache_ttl_seconds": 5.0
+    },
+    "sliders": {
+      "enabled": true
+    },
+    "interactable_2d": {
+      "enabled": true,
+      "components": [
+        {"name": "UnityEngine.BoxCollider2D", "assembly": "UnityEngine.CoreModule"},
+        {"name": "UnityEngine.CircleCollider2D", "assembly": "UnityEngine.CoreModule"},
+        {"name": "UnityEngine.PolygonCollider2D", "assembly": "UnityEngine.Physics2D"}
+      ]
     }
   },
   "element_extraction": {
     "components": [
-      "UnityEngine.UI.Button"
+      {"component_name": "UnityEngine.UI.Button", "assembly": "UnityEngine.UI"},
+      {"component_name": "UnityEngine.UI.Slider", "assembly": "UnityEngine.UI"},
+      {"component_name": "UnityEngine.BoxCollider2D", "assembly": "UnityEngine.CoreModule"},
+      {"component_name": "UnityEngine.CircleCollider2D", "assembly": "UnityEngine.CoreModule"},
+      {"component_name": "UnityEngine.PolygonCollider2D", "assembly": "UnityEngine.Physics2D"}
     ],
     "refresh_strategy": "on_demand"
   },

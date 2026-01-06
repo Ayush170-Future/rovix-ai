@@ -19,7 +19,7 @@ public class FrameController : MonoBehaviour
     
     private int currentStep = 0;
     private int lastPauseStep = 0;
-    private int pauseDuration = 300;
+    private int pauseDuration = 100;
     
     private string pythonServerUrl = "http://localhost:8000";
     // For testing with external endpoint, use:
@@ -54,6 +54,13 @@ public class FrameController : MonoBehaviour
         public int frameNumber;
         public int width;
         public int height;
+    }
+
+    void Awake()
+    {
+        Application.runInBackground = true;
+        // Prevent this GameObject from being destroyed on scene changes
+        DontDestroyOnLoad(gameObject);
     }
 
     void Start()
@@ -95,6 +102,7 @@ public class FrameController : MonoBehaviour
 
     void FixedUpdate()
     {
+        Debug.Log($"[FrameController] Inside FixedUpdate and current step is {currentStep}");
         if (Time.timeScale > 0 && currentState == FrameState.Paused)
         {
             currentState = FrameState.Running;
@@ -113,6 +121,7 @@ public class FrameController : MonoBehaviour
 
     private void Pause()
     {
+        Debug.Log($"[FrameController] Pausing at step {currentStep}");
         Time.timeScale = 0;
         currentState = FrameState.Paused;
         int actionEndFrame = Time.frameCount;
@@ -131,6 +140,7 @@ public class FrameController : MonoBehaviour
         Debug.Log($"[AI] Captured {capturedFramesDuringAction.Count} screenshots during action");
         
         NotifyPythonServer(actionStartFrame, actionEndFrame);
+        Debug.Log($"[FrameController] Notified Python server");
     }
 
     private void NotifyPythonServer(int startFrame, int endFrame)
@@ -145,15 +155,21 @@ public class FrameController : MonoBehaviour
         if (frames.Count == 0)
         {
             Debug.LogWarning("[AI] No screenshots captured during this action!");
-            return;
         }
         
         // Sort frames to ensure chronological order
         frames.Sort();
+        int startFrameKey = -1;
+        int endFrameKey = -1;
+        
+        if (frames.Count > 0) {
+            startFrameKey = frames[0];
+            endFrameKey = frames[frames.Count - 1];
+        }
         
         // Get first and last screenshot keys
-        string startScreenshotKey = $"{keyPrefix}{frames[0]}";
-        string endScreenshotKey = $"{keyPrefix}{frames[frames.Count - 1]}";
+        string startScreenshotKey = $"{keyPrefix}{startFrameKey}";
+        string endScreenshotKey = $"{keyPrefix}{endFrameKey}";
         
         Debug.Log($"[AI] Start screenshot: {startScreenshotKey}");
         Debug.Log($"[AI] End screenshot: {endScreenshotKey}");

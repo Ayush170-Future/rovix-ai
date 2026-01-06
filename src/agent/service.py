@@ -68,7 +68,7 @@ def image_file_to_base64(filepath, max_size=(1024, 1024), quality=75):
     return base64.b64encode(image_bytes).decode("utf-8")
 
 class Action(BaseModel):
-    action_type: Literal["key_press", "button_press"] = Field(
+    action_type: Literal["key_press", "button_press", "slider_move"] = Field(
         description="Represents the type of action to be performed. This can be a key press, button press."
     )
     key_name: str | None = Field(
@@ -76,6 +76,12 @@ class Action(BaseModel):
     )
     button_id: int | None = Field(
         description="Represents the ID of the button to be clicked on the screen. This is a unique identifier for the button and you can find the available buttons in the last message. This is going to be N/A if the action is not a button press."
+    )
+    slider_id: str | None = Field(
+        description="Represents the ID of the slider to be moved on the screen. This is a unique identifier for the slider and you can find the available sliders in the last message. This is going to be N/A if the action is not a slider move."
+    )
+    slider_value: float | None = Field(
+        description="Represents the value to be set on the slider. You can find the current value and the allowed range in the previous Game state message and you can find the available values in the last message. This is going to be N/A if the action is not a slider move."
     )
     duration: float = Field(
         default=0.1,
@@ -95,7 +101,6 @@ class AgentOutput(BaseModel):
         description="A list of actions to be executed sequentially. This can be a combination of keyboard and button press actions."
     )
 
-
 class GamePauseEvent(BaseModel):
     """Data sent from Unity when game pauses"""
     current_step: int
@@ -107,15 +112,38 @@ class GamePauseEvent(BaseModel):
     available_frames: List[int]
 
 
-structured_model = model.with_structured_output(
-    schema=AgentOutput.model_json_schema(), method="json_schema"
-)
+structured_model = model.with_structured_output(schema=AgentOutput.model_json_schema(), method="json_schema", include_raw=True)
 
 # Global game state - maintains conversation history across pause events
 game_state_messages = [
     SystemMessage(content=SYSTEM_PROMPT),
 ]
 game_state_lock = threading.Lock()
+
+def parse_llm_response(response: dict) -> AgentOutput:
+    agent_output = None
+    if isinstance(response, dict) and 'parsed' in response and 'raw' in response:
+        parsed_output = response['parsed']
+        raw_output = response['raw']
+        agent_output = AgentOutput(**parsed_output) if isinstance(parsed_output, dict) else parsed_output
+        
+        # Access token counts from raw output
+        if hasattr(raw_output, 'usage_metadata') and raw_output.usage_metadata:
+            token_counts = raw_output.usage_metadata
+            print(f"📊 Token counts: {token_counts}")
+            cached_tokens = raw_output.cachedContentTokenCount if hasattr(raw_output, 'cachedContentTokenCount') else 1
+            input_tokens = token_counts.get('input_tokens') if isinstance(token_counts, dict) else getattr(token_counts, 'input_tokens', None)
+            output_tokens = token_counts.get('output_tokens') if isinstance(token_counts, dict) else getattr(token_counts, 'output_tokens', None)
+            total_tokens = token_counts.get('total_tokens') if isinstance(token_counts, dict) else getattr(token_counts, 'total_tokens', None)
+            
+            if input_tokens is not None:
+                print(f"📊 Token usage - Input: {input_tokens}, Output: {output_tokens}, Total: {total_tokens}")
+                print(f"📊 Cached tokens: {cached_tokens}")
+    else:
+        # Fallback for older response format
+        agent_output = AgentOutput(**response) if isinstance(response, dict) else response
+
+    return agent_output
 
 async def agent_handler(event: GamePauseEvent):
     print(f"\n🎮 Pause event - Step: {event.current_step}, Frames: {event.start_frame}-{event.end_frame}")
@@ -239,8 +267,8 @@ async def agent_handler(event: GamePauseEvent):
             # Get agent decision
             print("🤖 Getting agent decision from LLM...")
             response = await asyncio.to_thread(structured_model.invoke, messages)
-            agent_output = AgentOutput(**response) if isinstance(response, dict) else response
-            
+
+            agent_output = parse_llm_response(response)
             print(f"✅ Agent decision: {agent_output.model_dump()}")
             
             # Add AI response to global game state
@@ -261,8 +289,8 @@ async def agent_handler(event: GamePauseEvent):
                 print(f"❌ Error resuming game: {e}")
                 return {"status": "error", "message": f"Failed to resume game: {e}"}
             
-            # Execute actions asynchronously
-            print("🎮 Executing actions asynchronously...")
+            # Execute actions syncronously
+            print("🎮 Executing actions syncronously...")
             await action_handler.execute_actions_sequential(agent_output.actions)
             print("✅ Actions executed successfully")
             
@@ -295,7 +323,72 @@ async def get_available_actions_message() -> HumanMessage:
             
             # Add formatted button info
             action_message_content += f"\n- name = {name}     (Button ID: {button_id}, Position: {pos_str}, {enabled_str})"
+    else:
+        action_message_content += "\n- No buttons available"
     
+    # Add sliders
+    sliders = available_actions.get("sliders", [])
+    if sliders:
+        action_message_content += "\n Sliders available to adjust:"
+        for slider in sliders:
+            name = slider.get("name", "Unknown")
+            slider_id = slider.get("id", "N/A")
+            position = slider.get("position")
+            enabled = slider.get("enabled", True)
+            min_value = slider.get("minValue")
+            max_value = slider.get("maxValue")
+            current_value = slider.get("value")
+            
+            # Format position
+            if position and len(position) == 2:
+                pos_str = f"{int(position[0])} × {int(position[1])}"
+            else:
+                pos_str = "N/A"
+            
+            # Format enabled status
+            enabled_str = "Enabled" if enabled else "Disabled"
+            
+            # Format min/max values and current value
+            if min_value is not None and max_value is not None:
+                range_str = f"Range: {min_value} - {max_value}"
+            else:
+                range_str = "Range: N/A"
+            
+            if current_value is not None:
+                value_str = f"Current: {current_value}"
+            else:
+                value_str = "Current: N/A"
+            
+            # Add formatted slider info
+            action_message_content += f"\n- name = {name}     (Slider ID: {slider_id}, Position: {pos_str}, {range_str}, {value_str}, {enabled_str})"
+    else:
+        action_message_content += "\n Sliders available to adjust:\n- No sliders available"
+    
+    # Add Interactable 2D
+    interactable_2ds = available_actions.get("interactable_2d", [])
+    if interactable_2ds:
+        action_message_content += "\n Interactable 2D available to interact with:"
+        for interactable_2d in interactable_2ds:
+            name = interactable_2d.get("name", "Unknown")
+            item_id = interactable_2d.get("id", "N/A")
+            position = interactable_2d.get("position")
+            enabled = interactable_2d.get("enabled", True)
+            collider = interactable_2d.get("type", "N/A")
+
+            # Format position
+            if position and len(position) == 2:
+                pos_str = f"{int(position[0])} × {int(position[1])}"
+            else:
+                pos_str = "N/A"
+
+            # Format enabled status
+            enabled_str = "Enabled" if enabled else "Disabled"
+
+            # Add formatted button info
+            action_message_content += f"\n- name = {name}     (Interactable 2D ID: {item_id}, Position: {pos_str}, {enabled_str}, Collider Type: {collider})"
+    else:
+        action_message_content += "\n Interactable 2D available to interact with:\n- No interactable 2D available"
+
     available_keys = available_actions.get("keyboard", {}).get("key_press", {}).get("available_keys", [])
     action_message_content += "\n Keys available to press:\n- " + ", ".join(available_keys)
     

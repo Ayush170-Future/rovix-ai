@@ -270,4 +270,5 @@ class GameFrameController:
             "Resume",
             assembly="Assembly-CSharp"
         )
+        print(f"🔍 Game resumed")
     

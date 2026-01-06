@@ -14,6 +14,10 @@ class ActionHandler:
     Extracts interactive elements on the fly and executes actions.
     """
     
+    # ToDo:
+    # At times the button name doesn't describe the button's functionality properly.
+    # Have to add child elements context to the button as well.
+    
     # Key name to AltKeyCode mapping
     KEY_MAPPING = {
         "Space": AltKeyCode.Space,
@@ -174,24 +178,26 @@ class ActionHandler:
             print("⚠️  No component types configured for extraction")
             return elements
         
-        for component_type in component_types:
+        for component_obj in component_types:
+            component_name = component_obj.get("component_name")
+            assembly = component_obj.get("assembly")
             try:
-                objects = self.driver.find_objects(By.COMPONENT, component_type)
+                objects = self.driver.find_objects(By.COMPONENT, component_name)
                 
                 if objects:
-                    print(f"   ✅ Found {len(objects)} {component_type} element(s)")
+                    print(f"   ✅ Found {len(objects)} {component_name} element(s)")
                     
                     for obj in objects:
                         try:
-                            element_info = self._extract_element_info(obj, component_type)
+                            element_info = self._extract_element_info(obj, component_name)
                             if element_info:
                                 elements.append(element_info)
                         except Exception as e:
                             print(f"   ⚠️  Error processing element: {e}")
                             continue
-                            
+
             except Exception as e:
-                print(f"   ⚠️  Error searching for {component_type}: {e}")
+                print(f"   ⚠️  Error searching for {component_name}: {e}")
                 continue
         
         # Remove duplicates by ID
@@ -249,15 +255,33 @@ class ActionHandler:
             if hasattr(obj, 'enabled'):
                 enabled = obj.enabled
             
-            return {
+            # Base element info
+            element_info = {
                 "id": element_id,
                 "name": name,
-                "type": component_type,
+                "type": component_type, # This will cover the Collider types as well
                 "position": position,
                 "text": text,
                 "enabled": enabled,
                 "object": obj  # Keep reference for execution
             }
+            
+            # Add component-specific properties
+            if component_type == "UnityEngine.UI.Slider":
+                try:
+                    min_val = obj.get_component_property("UnityEngine.UI.Slider", "minValue", "UnityEngine.UI")
+                    max_val = obj.get_component_property("UnityEngine.UI.Slider", "maxValue", "UnityEngine.UI")
+                    current_val = obj.get_component_property("UnityEngine.UI.Slider", "value", "UnityEngine.UI")
+                    element_info["minValue"] = float(min_val) if min_val is not None else None
+                    element_info["maxValue"] = float(max_val) if max_val is not None else None
+                    element_info["value"] = float(current_val) if current_val is not None else None
+                except Exception as e:
+                    print(f"      ⚠️  Error getting slider properties for {name}: {e}")
+                    element_info["minValue"] = None
+                    element_info["maxValue"] = None
+                    element_info["value"] = None
+
+            return element_info
             
         except Exception as e:
             print(f"      ⚠️  Error extracting info: {e}")
@@ -277,12 +301,18 @@ class ActionHandler:
                 "buttons": [
                     {"id": "...", "name": "...", ...},
                     ...
+                ],
+                "sliders": [
+                    {"id": "...", "name": "...", "minValue": ..., "maxValue": ..., "value": ..., ...},
+                    ...
                 ]
             }
         """
         available = {
             "keyboard": {},
-            "buttons": []
+            "buttons": [],
+            "sliders": [],
+            "interactable_2d": []
         }
         
         # Keyboard actions
@@ -293,23 +323,41 @@ class ActionHandler:
                 "key_hold": {"available_keys": available_keys}
             }
         
-        # Button actions
-        if self.config.get("input_types", {}).get("buttons", {}).get("enabled", False):
-            elements = self.extract_interactive_elements(force_refresh=True)
-            # Return simplified info (without object reference)
-            available["buttons"] = [
-                {
-                    "id": elem["id"],
-                    "name": elem["name"],
-                    "type": elem["type"],
-                    "position": elem["position"],
-                    "text": elem.get("text"),
-                    "enabled": elem["enabled"]
-                }
-                for elem in elements
-            ]
+        # Extract all interactive elements
+        elements = self.extract_interactive_elements(force_refresh=True)
         
-        print(f"✅ Available actions: {available}")
+        # Separate buttons and sliders
+        for elem in elements:
+            elem_type = elem.get("type", "")
+            simplified_elem = {
+                "id": elem["id"],
+                "name": elem["name"],
+                "type": elem["type"],
+                "position": elem["position"],
+                "text": elem.get("text"),
+                "enabled": elem["enabled"]
+            }
+            
+            if elem_type == "UnityEngine.UI.Slider":
+                # Add slider-specific properties
+                if self.config.get("input_types", {}).get("sliders", {}).get("enabled", False):
+                    simplified_elem["minValue"] = elem.get("minValue")
+                    simplified_elem["maxValue"] = elem.get("maxValue")
+                    simplified_elem["value"] = elem.get("value")
+                    available["sliders"].append(simplified_elem)
+            elif elem_type == "UnityEngine.UI.Button":
+                # Add button to buttons list
+                if self.config.get("input_types", {}).get("buttons", {}).get("enabled", False):
+                    available["buttons"].append(simplified_elem)
+            elif elem_type == "UnityEngine.BoxCollider2D" or elem_type == "UnityEngine.CircleCollider2D" or elem_type == "UnityEngine.PolygonCollider2D":
+                # Add collider to interactable_2d list
+                if self.config.get("input_types", {}).get("interactable_2d", {}).get("enabled", False):
+                    available["interactable_2d"].append(simplified_elem)
+            else:
+                # For other component types, add to buttons by default (backward compatibility)
+                if self.config.get("input_types", {}).get("buttons", {}).get("enabled", False):
+                    available["buttons"].append(simplified_elem)
+        
         return available
     
     def _map_key_to_altkeycode(self, key: str) -> AltKeyCode:
@@ -381,6 +429,28 @@ class ActionHandler:
         """
         print(f"⏳ WAIT: {duration}s")
         await asyncio.sleep(duration)
+
+    async def execute_slider_move(self, slider_id: str, value: float) -> None:
+        self.extract_interactive_elements()
+        element = self._elements_by_id.get(slider_id)
+        if element is None:
+            raise ValueError(f"Slider with ID '{slider_id}' not found")
+        if not element["enabled"]:
+            raise ValueError(f"Slider '{element['name']}' is not enabled")
+        obj = element["object"]
+        name = element["name"]
+        print(f"🔄 SLIDER_MOVE: {name} (ID: {slider_id}) to {value}")
+        try:
+            # Try without assembly first (Unity built-in components often don't need assembly)
+            try:
+                obj.set_component_property("UnityEngine.UI.Slider", "value", value)
+            except Exception:
+                # If that fails, try with UnityEngine assembly
+                obj.set_component_property("UnityEngine.UI.Slider", "value", value, "UnityEngine")
+            print(f"   ✅ Successfully moved {name} to {value}")
+        except Exception as e:
+            print(f"   ❌ Error moving {name} to {value}: {e}")
+            raise
     
     async def execute_actions_parallel(self, actions: List[Dict[str, Any]]) -> None:
         """
@@ -441,6 +511,14 @@ class ActionHandler:
                     else:
                         raise ValueError("button_press requires either 'button_id' or 'button_name'")
                 
+                elif action_type == "slider_move":
+                    slider_id = action.get("slider_id")
+                    slider_value = action.get("slider_value")
+                    if slider_id is None or slider_value is None:
+                        raise ValueError("slider_move requires 'slider_id' and 'slider_value'")
+                    tasks.append(asyncio.create_task(
+                        self.execute_slider_move(slider_id, slider_value)
+                    ))
                 elif action_type == "wait":
                     duration = action.get("duration")
                     if duration is None:
@@ -484,11 +562,15 @@ class ActionHandler:
                 action_type = action.action_type
                 key_name = action.key_name
                 button_id = action.button_id
+                slider_id = getattr(action, 'slider_id', None)
+                slider_value = getattr(action, 'slider_value', None)
                 duration = action.duration
             else:
                 action_type = action.get("type") or action.get("action_type")
                 key_name = action.get("key") or action.get("key_name")
                 button_id = action.get("button_id")
+                slider_id = action.get("slider_id")
+                slider_value = action.get("slider_value")
                 duration = action.get("duration", 0.1)
             
             try:
@@ -500,6 +582,10 @@ class ActionHandler:
                     if button_id is None:
                         raise ValueError("button_press requires button_id")
                     await self.execute_button_press(str(button_id))
+                elif action_type == "slider_move":
+                    if slider_id is None or slider_value is None:
+                        raise ValueError("slider_move requires 'slider_id' and 'slider_value'")
+                    await self.execute_slider_move(str(slider_id), float(slider_value))
                 elif action_type == "wait":
                     if duration is None:
                         raise ValueError("duration is required for wait")

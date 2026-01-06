@@ -263,3 +263,8 @@
 #     print("🔧 Releasing all keys after actions...")
 #     input_controller.release_all_keys()
 #     print("✅ All keys released")
+
+
+# Woordle game play:
+# 1. 📊 Token usage - Input: 2129, Output: 500, Total: 2700 
+# 2. 📊 Token usage - Input: 5568, Output: 2078, Total: 7646 
