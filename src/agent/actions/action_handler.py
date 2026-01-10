@@ -516,9 +516,19 @@ class ActionHandler:
                     slider_value = action.get("slider_value")
                     if slider_id is None or slider_value is None:
                         raise ValueError("slider_move requires 'slider_id' and 'slider_value'")
+                    
                     tasks.append(asyncio.create_task(
                         self.execute_slider_move(slider_id, slider_value)
                     ))
+                
+                elif action_type == "swipe":
+                    start_x = action.get("start_x")
+                    start_y = action.get("start_y")
+                    end_x = action.get("end_x")
+                    end_y = action.get("end_y")
+                    duration = action.get("duration")
+                    tasks.append(asyncio.create_task(self.execute_swipe(start_x, start_y, end_x, end_y, duration)))
+
                 elif action_type == "wait":
                     duration = action.get("duration")
                     if duration is None:
@@ -538,6 +548,7 @@ class ActionHandler:
         # Wait for all tasks to complete
         if tasks:
             print("🔧 Waiting for all actions to complete...")
+            # TODO: Investigate this logic because this is supposed to be sequential but we are using gather which is supposed to be parallel
             await asyncio.gather(*tasks, return_exceptions=True)
             
             # Check for exceptions
@@ -565,6 +576,10 @@ class ActionHandler:
                 slider_id = getattr(action, 'slider_id', None)
                 slider_value = getattr(action, 'slider_value', None)
                 duration = action.duration
+                start_x = action.start_x
+                start_y = action.start_y
+                end_x = action.end_x
+                end_y = action.end_y
             else:
                 action_type = action.get("type") or action.get("action_type")
                 key_name = action.get("key") or action.get("key_name")
@@ -572,6 +587,10 @@ class ActionHandler:
                 slider_id = action.get("slider_id")
                 slider_value = action.get("slider_value")
                 duration = action.get("duration", 0.1)
+                start_x = action.get("start_x")
+                start_y = action.get("start_y")
+                end_x = action.get("end_x")
+                end_y = action.get("end_y")
             
             try:
                 if action_type == "key_press":
@@ -586,6 +605,10 @@ class ActionHandler:
                     if slider_id is None or slider_value is None:
                         raise ValueError("slider_move requires 'slider_id' and 'slider_value'")
                     await self.execute_slider_move(str(slider_id), float(slider_value))
+                elif action_type == "swipe":
+                    if start_x is None or start_y is None or end_x is None or end_y is None:
+                        raise ValueError("Co-ordinates values are required") # TODO: See if these errors are going back to the LLM or not.
+                    await self.execute_swipe(start_x, start_y, end_x, end_y, duration)
                 elif action_type == "wait":
                     if duration is None:
                         raise ValueError("duration is required for wait")
@@ -595,6 +618,9 @@ class ActionHandler:
                 continue
         
         self.input_controller.release_all_keys()
+
+    async def execute_swipe(self, start_x: int, start_y: int, end_x: int, end_y: int, duration: float) -> None:
+        await self.input_controller.swipe_async(start_x, start_y, end_x, end_y, duration)
     
     def invalidate_element_cache(self) -> None:
         """Invalidate the element cache to force refresh on next extraction"""

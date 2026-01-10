@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -19,7 +20,7 @@ public class FrameController : MonoBehaviour
     
     private int currentStep = 0;
     private int lastPauseStep = 0;
-    private int pauseDuration = 100;
+    private int pauseDuration = 600;
     
     private string pythonServerUrl = "http://localhost:8000";
     // For testing with external endpoint, use:
@@ -122,9 +123,27 @@ public class FrameController : MonoBehaviour
     private void Pause()
     {
         Debug.Log($"[FrameController] Pausing at step {currentStep}");
+        StartCoroutine(PauseAfterPhysics());
+    }
+
+    private IEnumerator PauseAfterPhysics()
+    {
+        // Let current physics frame complete
+        yield return new WaitForFixedUpdate();
+        
+        if (EventSystem.current != null)
+        {
+            Debug.Log($"[FrameController] Clearing selected UI elements");
+            EventSystem.current.SetSelectedGameObject(null);
+        }
+        
+        // NOW pause
         Time.timeScale = 0;
         currentState = FrameState.Paused;
         int actionEndFrame = Time.frameCount;
+        
+        // Sync physics state - ensures all colliders are in final positions
+        Physics.SyncTransforms();
         
         // Wait for Redis queue to drain (give it time to write pending screenshots)
         int waitCount = 0;
@@ -343,6 +362,8 @@ public class FrameController : MonoBehaviour
 
     public void Resume()
     {
+        Physics.SyncTransforms();
+
         actionStartFrame = Time.frameCount;
         capturedFramesDuringAction.Clear();
         

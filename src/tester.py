@@ -101,6 +101,19 @@ class InputController:
         await asyncio.sleep(duration)
         print(f"  🔼 KEY_UP: {key_code.name}")
         self.driver.key_up(key_code)
+
+    async def swipe_async(self, start_x: int, start_y: int, end_x: int, end_y: int, duration: float):
+        print(f"🔄 SWIPE: Starting swipe from ({start_x}, {start_y}) to ({end_x}, {end_y}) for {duration}s")
+        finger_id = self.driver.begin_touch([start_x, start_y])
+        await asyncio.sleep(3)
+        self.driver.move_touch(finger_id, [start_x + 2, start_y + 2])
+        await asyncio.sleep(3)
+        self.driver.move_touch(finger_id, [end_x, end_y])
+        await asyncio.sleep(3)
+        self.driver.end_touch(finger_id)
+        await asyncio.sleep(3)
+        print(f"🔄 SWIPE: Completed") # TODO: See why alttester composite methods are not behaving correctly.
+        # Drag and Drop me kuch toh physics adjust nahi ho paa rahi hai. Mujhe manually cards ko hilana pad rha hai
     
     async def jump_async(self, hold_duration=2):
         """
@@ -263,6 +276,8 @@ class GameFrameController:
     def resume(self):
         """
         Resume the game by calling Resume() on FrameController.
+        NOTE: This method is kept for backward compatibility but may not be needed
+        in the new event-based flow without pausing.
         """
         print(f"🔍 Resuming game...")
         self.controller.call_component_method(
@@ -272,3 +287,27 @@ class GameFrameController:
         )
         print(f"🔍 Game resumed")
     
+    def mark_actions_executed(self):
+        """
+        Mark actions as executed by calling MarkActionsExecuted() on FrameController.
+        This allows Unity to send the next event.
+        """
+        print(f"✅ Marking actions as executed...")
+        self.controller.call_component_method(
+            "FrameController",
+            "MarkActionsExecuted",
+            assembly="Assembly-CSharp"
+        )
+        print(f"✅ Actions marked as executed")
+
+    def get_current_game_state(self):
+        objects = self.driver.find_objects(By.COMPONENT, "UnityEngine.UI.Button")
+        for obj in objects:
+            print(f"🔍 Button: {obj.name}")
+            print(f"🔍 Button: {obj.enabled}")
+            position = None
+            if hasattr(obj, 'x') and hasattr(obj, 'y'):
+                position = (float(obj.x), float(obj.worldY))
+            print(f"🔍 Button: {position}")
+
+        

@@ -15,15 +15,8 @@ import sys
 import time
 from langchain_aws import ChatBedrockConverse
 from langchain_google_genai import ChatGoogleGenerativeAI
-import numpy as np
-import redis
-
-redis_client = redis.Redis(host='localhost', port=6379, decode_responses=False)
-
-# Set up path for imports (must be before importing agent modules)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-# Import SYSTEM_PROMPT - works both as module and direct execution
 try:
     from .prompts import SYSTEM_PROMPT
 except ImportError:
@@ -50,9 +43,9 @@ input_controller = InputController(driver)
 time_controller = TimeController(driver)
 scene_controller = SceneController(driver)
 frame_controller = GameFrameController(driver)
-frame_controller.resume()
+frame_controller.mark_actions_executed()
+frame_controller.get_current_game_state()
 
-# Initialize ActionHandler for unified action execution
 action_handler = ActionHandler(driver)
 
 def image_to_bedrock_bytes(path, max_size=(1024, 1024), quality=75):
@@ -67,9 +60,10 @@ def image_file_to_base64(filepath, max_size=(1024, 1024), quality=75):
     image_bytes = image_to_bedrock_bytes(filepath, max_size=max_size, quality=quality)
     return base64.b64encode(image_bytes).decode("utf-8")
 
+# TODO: Can change this to XML later on.
 class Action(BaseModel):
-    action_type: Literal["key_press", "button_press", "slider_move"] = Field(
-        description="Represents the type of action to be performed. This can be a key press, button press."
+    action_type: Literal["key_press", "button_press", "slider_move", "swipe", "wait"] = Field(
+        description="Represents the type of action to be performed. This can be a key press, button press, slider move, or swipe."
     )
     key_name: str | None = Field(
         description="Represents the name of the key to be pressed from the keyboard. All possible keys are listed in the last message. This is going to be N/A if the action is not a key press."
@@ -83,14 +77,29 @@ class Action(BaseModel):
     slider_value: float | None = Field(
         description="Represents the value to be set on the slider. You can find the current value and the allowed range in the previous Game state message and you can find the available values in the last message. This is going to be N/A if the action is not a slider move."
     )
+    start_x: int | None = Field(
+        description="Represents the x coordinate of the start point of the swipe. This is going to be N/A if the action_type is not a swipe."
+    )
+    start_y: int | None = Field(
+        description="Represents the y coordinate of the start point of the swipe. This is going to be N/A if the action_type is not a swipe."
+    )
+    end_x: int | None = Field(
+        description="Represents the x coordinate of the end point of the swipe. This is going to be N/A if the action_type is not a swipe."
+    )
+    end_y: int | None = Field(
+        description="Represents the y coordinate of the end point of the swipe. This is going to be N/A if the action_type is not a swipe."
+    )
     duration: float = Field(
         default=0.1,
-        description="Represents the duration of click. Default is 0.1 second. This might not be relevant for the button press actions."
+        description="Represents the duration of the action in seconds. Default is 0.1 second. This might not be relevant for the button press actions."
     )
 
 # TODO: Add analyze last step and reason next step fields here as well
 class AgentOutput(BaseModel):
-    reason: str = Field( 
+    game_state_summary: str = Field(
+        description="A concise summary of the current game state, key observations, and important context that should be remembered for future steps. This summary will be preserved in the conversation history even when screenshots are removed. Include: current game situation, player status, important objects/entities, recent changes, and any critical information needed for decision-making."
+    ),
+    reason: str = Field(
         description="Use this field to reason about the current game state and your overall performance, observations, goals that will help you complete the game and figure out the next set of actions."
     ),
     end_game: bool = Field(
@@ -102,14 +111,9 @@ class AgentOutput(BaseModel):
     )
 
 class GamePauseEvent(BaseModel):
-    """Data sent from Unity when game pauses"""
+    """Data sent from Unity when event interval is reached"""
     current_step: int
-    start_frame: int
-    end_frame: int
-    start_screenshot: str
-    end_screenshot: str
-    key_prefix: str
-    available_frames: List[int]
+    current_frame: int
 
 
 structured_model = model.with_structured_output(schema=AgentOutput.model_json_schema(), method="json_schema", include_raw=True)
@@ -119,6 +123,34 @@ game_state_messages = [
     SystemMessage(content=SYSTEM_PROMPT),
 ]
 game_state_lock = threading.Lock()
+KEEP_FULL_STEPS = 4  # Number of complete steps to keep with full screenshots/actions
+step_counter = 0  # Global step counter
+
+def cleanup_old_messages():
+    """
+    1. Update the marker at index -4 to '[PAST GAME STATE - Step X]'
+    2. Remove screenshot and available actions from the oldest full step
+    """
+    with game_state_lock:
+        # Step 1: Update the marker at index -4 (always the most recent one)
+        game_state_messages[-4].content[0]["text"] = f"[PAST GAME STATE - Step {step_counter}]"
+        print(f"📝 Updated marker to [PAST GAME STATE - Step {step_counter}]")
+        
+        # Step 2: Cleanup old messages if we have more than KEEP_FULL_STEPS
+        total_messages = len(game_state_messages)
+        
+        if total_messages <= 1 + KEEP_FULL_STEPS * 4:
+            print(f"📊 {total_messages} messages - no cleanup needed yet")
+            return
+        
+        # Find the AIMessage of the oldest step that should be compressed
+        oldest_ai_index = total_messages - 1 - KEEP_FULL_STEPS * 4
+        
+        # Remove available actions and screenshot
+        game_state_messages.pop(oldest_ai_index - 1)  # Remove available actions
+        game_state_messages.pop(oldest_ai_index - 2)  # Remove screenshot
+        
+        print(f"🧹 Cleaned up old messages. Remaining: {len(game_state_messages)} messages")
 
 def parse_llm_response(response: dict) -> AgentOutput:
     agent_output = None
@@ -146,101 +178,49 @@ def parse_llm_response(response: dict) -> AgentOutput:
     return agent_output
 
 async def agent_handler(event: GamePauseEvent):
-    print(f"\n🎮 Pause event - Step: {event.current_step}, Frames: {event.start_frame}-{event.end_frame}")
-    print(f"   Available: {event.available_frames}")
-    
-    # Select 3 evenly-spaced frames
-    frames = event.available_frames
-
-    # Incase of turn based game, we only need 1 screenshot (current one).
-    # if event.required_screenshots == 1:
-    frames = []
-    frames.append(frame_controller.get_current_frame())
-
-    if len(frames) <= 3:
-        selected = frames
-    else:
-        step = (len(frames) - 1) / 2
-        selected = [frames[0], frames[int(step)], frames[-1]]
+    print(f"\n🎮 Event received - Step: {event.current_step}, Frame: {event.current_frame}")
     
     # Create screenshots directory
     screenshots_dir = os.path.join(os.path.dirname(__file__), "..", "agent", "screenshots")
     os.makedirs(screenshots_dir, exist_ok=True)
-    saved_files = []
-    saved_filepaths = []
     
-    # Fetch from Redis and save
-    for i, frame_num in enumerate(selected):
-        try:
-            if frame_num == selected[-1]:
-                # Get the screenshot directly from the game (current frame after pause)
-                filename = f"step_{event.current_step}_frame_{frame_num}_pos_{i+1}_current.png"
-                filepath = os.path.join(screenshots_dir, filename)
-                
-                # Capture screenshot directly from game
-                driver.get_png_screenshot(filepath)
-                
-                saved_files.append(filename)
-                saved_filepaths.append(filepath)
-                print(f"   💾 {filename} (captured from game)")
-                continue
-            else:
-                # Get from Redis
-                key = f"{event.key_prefix}{frame_num}"
-                raw_data = redis_client.get(key)
-                meta_data = redis_client.get(f"{key}_meta")
-                
-                if not raw_data or not meta_data:
-                    print(f"   ❌ Frame {frame_num} not found in Redis")
-                    continue
-                
-                # Convert raw RGB24 to image
-                width, height = map(int, meta_data.decode().split('x'))
-                img_array = np.frombuffer(raw_data, dtype=np.uint8).reshape((height, width, 3))
-                img = Image.fromarray(np.flipud(img_array), 'RGB')
-                
-                # Save
-                filename = f"step_{event.current_step}_frame_{frame_num}_pos_{i+1}.png"
-                filepath = os.path.join(screenshots_dir, filename)
-                img.save(filepath, format='PNG')
-                saved_files.append(filename)
-                saved_filepaths.append(filepath)
-                print(f"   💾 {filename}")
-            
-        except Exception as e:
-            print(f"   ❌ Error on frame {frame_num}: {e}")
+    # Capture screenshot directly from game (current state)
+    filename = f"step_{event.current_step}_frame_{event.current_frame}.png"
+    filepath = os.path.join(screenshots_dir, filename)
     
-    print(f"✅ Saved {len(saved_files)} screenshots")
+    try:
+        # Capture screenshot directly from game
+        driver.get_png_screenshot(filepath)
+        print(f"   💾 {filename} (captured from game)")
+        saved_filepaths = [filepath]
+    except Exception as e:
+        print(f"   ❌ Error capturing screenshot: {e}")
+        return {"status": "error", "message": f"Failed to capture screenshot: {e}"}
     
-    # If we have screenshots, call LLM and execute actions
+    print(f"✅ Saved screenshot")
+    
+    # Call LLM and execute actions
     if saved_filepaths:
         try:
-            # Convert saved screenshots to base64
-            print("🔄 Converting screenshots to base64...")
-            screenshot_base64_list = []
-            for filepath in saved_filepaths:
-                screenshot_base64 = image_file_to_base64(filepath)
-                screenshot_base64_list.append(screenshot_base64)
+            # Convert screenshot to base64
+            print("🔄 Converting screenshot to base64...")
+            screenshot_base64 = image_file_to_base64(saved_filepaths[0])
             
             # Prepare message for LLM
             message_content = [
                 {
                     "type": "text",
-                    "text":f"Here is the current game state after your previous action execution. The state is represented by Screenshots of the game. "
-                           f"Your goal is to clearly identify the next set of actions or a single action depending upon the last screenshot. The initial screenshots are given to give the sense of direction of velocity. This is a 2d game."
-                           f"Remember to use the last screenshot as the current state and use the initial screenshots to get the sense of movement for better decision making."
-                           f"Here are {len(saved_filepaths)} screenshots showing the game state. Analyze and decide on the next actions."
-                }
-            ]
-            
-            # Add all screenshots to the message
-            for i, screenshot_base64 in enumerate(screenshot_base64_list):
-                message_content.append({
+                    "text": f"Here is the current game state. This is a 2d game. "
+                           f"Your goal is to clearly identify the next set of actions or a single action. "
+                           f"Analyze the screenshot and decide on the next actions."
+                },
+                {
                     "type": "image_url",
                     "image_url": {
                         "url": f"data:image/jpeg;base64,{screenshot_base64}"
                     }
-                })
+                }
+            ]
             
             current_game_state_indication_message = HumanMessage(content=[{
                 "type": "text",
@@ -272,32 +252,50 @@ async def agent_handler(event: GamePauseEvent):
             print(f"✅ Agent decision: {agent_output.model_dump()}")
             
             # Add AI response to global game state
+            global step_counter
             with game_state_lock:
                 game_state_messages.append(AIMessage(content=str(agent_output.model_dump())))
+                step_counter += 1  # Increment step counter
 
             # Check if game should end
             if agent_output.end_game:
                 print("🛑 Agent signaled end of game")
-                return {"status": "ok", "saved": len(saved_files), "files": saved_files, "end_game": True}
-
-            # Resume the game before calling LLM and executing actions
-            try:
-                print("▶️ Resuming game...")
-                frame_controller.resume()
-                print("✅ Game resumed")
-            except Exception as e:
-                print(f"❌ Error resuming game: {e}")
-                return {"status": "error", "message": f"Failed to resume game: {e}"}
+                # Mark actions as executed even if ending game
+                try:
+                    frame_controller.mark_actions_executed()
+                except Exception as e:
+                    print(f"⚠️  Warning: Failed to mark actions executed: {e}")
+                return {"status": "ok", "saved": 1, "files": [filename], "end_game": True}
             
-            # Execute actions syncronously
-            print("🎮 Executing actions syncronously...")
+            # Execute actions synchronously
+            print("🎮 Executing actions synchronously...")
             await action_handler.execute_actions_sequential(agent_output.actions)
             print("✅ Actions executed successfully")
+            
+            # Cleanup old messages
+            cleanup_old_messages()
+            
+            # Mark actions as executed so Unity can send the next event
+            try:
+                print("✅ Marking actions as executed...")
+                frame_controller.mark_actions_executed()
+                print("✅ Actions marked as executed - Unity can send next event")
+            except Exception as e:
+                print(f"❌ Error marking actions executed: {e}")
+                return {"status": "error", "message": f"Failed to mark actions executed: {e}"}
+            
+            # Return success
+            return {"status": "ok", "saved": 1, "files": [filename]}
             
         except Exception as e:
             print(f"❌ Error in LLM call or action execution: {e}")
             import traceback
             traceback.print_exception(type(e), e, e.__traceback__)
+            # Even on error, mark actions as executed so Unity doesn't get stuck
+            try:
+                frame_controller.mark_actions_executed()
+            except Exception as mark_error:
+                print(f"⚠️  Warning: Failed to mark actions executed after error: {mark_error}")
             return {"status": "error", "message": f"Failed to process: {e}"}
 
 async def get_available_actions_message() -> HumanMessage:

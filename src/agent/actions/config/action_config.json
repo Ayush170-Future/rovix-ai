@@ -1,13 +1,35 @@
 {
   "input_types": {
     "keyboard": {
-      "enabled": false,
+      "enabled": true,
       "available_keys": [
         "Space",
         "A",
+        "B",
+        "C",
         "D",
-        "W",
+        "E",
+        "F",
+        "G",
+        "H",
+        "I",
+        "J",
+        "K",
+        "L",
+        "M",
+        "N",
+        "O",
+        "P",
+        "Q",
+        "R",
         "S",
+        "T",
+        "U",
+        "V",
+        "W",
+        "X",
+        "Y",
+        "Z",
         "LeftArrow",
         "RightArrow",
         "UpArrow",
@@ -20,10 +42,10 @@
       "cache_ttl_seconds": 5.0
     },
     "sliders": {
-      "enabled": true
+      "enabled": false
     },
     "interactable_2d": {
-      "enabled": true,
+      "enabled": false,
       "components": [
         {"name": "UnityEngine.BoxCollider2D", "assembly": "UnityEngine.CoreModule"},
         {"name": "UnityEngine.CircleCollider2D", "assembly": "UnityEngine.CoreModule"},
