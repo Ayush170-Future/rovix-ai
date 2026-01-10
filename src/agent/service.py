@@ -44,7 +44,6 @@ time_controller = TimeController(driver)
 scene_controller = SceneController(driver)
 frame_controller = GameFrameController(driver)
 frame_controller.mark_actions_executed()
-frame_controller.get_current_game_state()
 
 action_handler = ActionHandler(driver)
 
