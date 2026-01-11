@@ -10,7 +10,7 @@ public class FrameController : MonoBehaviour
     private int lastEventStep = 0;
     private int eventInterval = 600; // FixedUpdate steps between events
     
-    private string pythonServerUrl = "http://localhost:8000";
+    private string pythonServerUrl = "http://10.0.2.2:8000";
     // For testing with external endpoint, use:
     // private string pythonServerUrl = "https://fefjmoggmwawzhlkwzai667hx3dlbg08h.oast.fun";
     

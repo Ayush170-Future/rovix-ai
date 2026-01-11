@@ -23,6 +23,7 @@ except ImportError:
     from agent.prompts import SYSTEM_PROMPT
 from tester import InputController, AltTesterClient, GameFrameController, SceneController, TimeController
 from agent.actions import ActionHandler
+from agent.adb_manager import ADBManager
 
 load_dotenv()
 
@@ -45,7 +46,10 @@ scene_controller = SceneController(driver)
 frame_controller = GameFrameController(driver)
 frame_controller.mark_actions_executed()
 
-action_handler = ActionHandler(driver)
+print("Initializing ADB Manager...")
+adb_manager = ADBManager(host="127.0.0.1", port=5037)
+
+action_handler = ActionHandler(driver, adb_manager=adb_manager)
 
 def image_to_bedrock_bytes(path, max_size=(1024, 1024), quality=75):
     img = Image.open(path).convert("RGB")
@@ -61,36 +65,33 @@ def image_file_to_base64(filepath, max_size=(1024, 1024), quality=75):
 
 # TODO: Can change this to XML later on.
 class Action(BaseModel):
-    action_type: Literal["key_press", "button_press", "slider_move", "swipe", "wait"] = Field(
-        description="Represents the type of action to be performed. This can be a key press, button press, slider move, or swipe."
+    action_type: Literal["key_press", "click", "slider_move", "swipe", "wait"] = Field(
+        description="Represents the type of action to be performed. This can be a key press, click on a coordinate, slider move, or swipe."
     )
-    key_name: str | None = Field(
-        description="Represents the name of the key to be pressed from the keyboard. All possible keys are listed in the last message. This is going to be N/A if the action is not a key press."
+    x: int | None = Field(
+        description="X-coordinate on the screen. Required for 'click' action. For 'swipe' action, this is the starting X-coordinate."
     )
-    button_id: int | None = Field(
-        description="Represents the ID of the button to be clicked on the screen. This is a unique identifier for the button and you can find the available buttons in the last message. This is going to be N/A if the action is not a button press."
+    y: int | None = Field(
+        description="Y-coordinate on the screen. Required for 'click' action. For 'swipe' action, this is the starting Y-coordinate."
     )
     slider_id: str | None = Field(
-        description="Represents the ID of the slider to be moved on the screen. This is a unique identifier for the slider and you can find the available sliders in the last message. This is going to be N/A if the action is not a slider move."
+        description="ID of the slider to move. Required only for 'slider_move' action."
     )
     slider_value: float | None = Field(
-        description="Represents the value to be set on the slider. You can find the current value and the allowed range in the previous Game state message and you can find the available values in the last message. This is going to be N/A if the action is not a slider move."
-    )
-    start_x: int | None = Field(
-        description="Represents the x coordinate of the start point of the swipe. This is going to be N/A if the action_type is not a swipe."
-    )
-    start_y: int | None = Field(
-        description="Represents the y coordinate of the start point of the swipe. This is going to be N/A if the action_type is not a swipe."
+        description="Target value for the slider. Required only for 'slider_move' action."
     )
     end_x: int | None = Field(
-        description="Represents the x coordinate of the end point of the swipe. This is going to be N/A if the action_type is not a swipe."
+        description="Ending X-coordinate for 'swipe' action. Required only for swipes."
     )
     end_y: int | None = Field(
-        description="Represents the y coordinate of the end point of the swipe. This is going to be N/A if the action_type is not a swipe."
+        description="Ending Y-coordinate for 'swipe' action. Required only for swipes."
+    )
+    key_name: str | None = Field(
+        description="Name of the keyboard key to press. All possible keys are listed in the last message. Required only for 'key_press' action."
     )
     duration: float = Field(
         default=0.1,
-        description="Represents the duration of the action in seconds. Default is 0.1 second. This might not be relevant for the button press actions."
+        description="Duration of the action in seconds. For 'click': hold duration (0.1 = quick tap). For 'swipe': time to complete the swipe. For 'wait': how long to wait. Default: 0.1s."
     )
 
 # TODO: Add analyze last step and reason next step fields here as well
@@ -188,9 +189,8 @@ async def agent_handler(event: GamePauseEvent):
     filepath = os.path.join(screenshots_dir, filename)
     
     try:
-        # Capture screenshot directly from game
-        driver.get_png_screenshot(filepath)
-        print(f"   💾 {filename} (captured from game)")
+        adb_manager.get_screenshot(filepath)
+        print(f"   💾 {filename} (captured from ADB)")
         saved_filepaths = [filepath]
     except Exception as e:
         print(f"   ❌ Error capturing screenshot: {e}")
@@ -268,7 +268,7 @@ async def agent_handler(event: GamePauseEvent):
             
             # Execute actions synchronously
             print("🎮 Executing actions synchronously...")
-            await action_handler.execute_actions_sequential(agent_output.actions)
+            await adb_manager.execute_actions_sequential(agent_output.actions)
             print("✅ Actions executed successfully")
             
             # Cleanup old messages
@@ -306,46 +306,39 @@ async def get_available_actions_message() -> HumanMessage:
         for index, button in enumerate(buttons):
             name = button.get("name", "Unknown")
             button_id = button.get("id", "N/A")
-            position = button.get("position")
+            screen_position = button.get("screen_position")
             enabled = button.get("enabled", True)
             
-            # Format position
-            if position and len(position) == 2:
-                pos_str = f"{int(position[0])} × {int(position[1])}"
+            if screen_position and len(screen_position) == 2:
+                pos_str = f"{int(screen_position[0])} × {int(screen_position[1])}"
             else:
                 pos_str = "N/A"
             
-            # Format enabled status
             enabled_str = "Enabled" if enabled else "Disabled"
             
-            # Add formatted button info
             action_message_content += f"\n- name = {name}     (Button ID: {button_id}, Position: {pos_str}, {enabled_str})"
     else:
         action_message_content += "\n- No buttons available"
     
-    # Add sliders
     sliders = available_actions.get("sliders", [])
     if sliders:
         action_message_content += "\n Sliders available to adjust:"
         for slider in sliders:
             name = slider.get("name", "Unknown")
             slider_id = slider.get("id", "N/A")
-            position = slider.get("position")
+            screen_position = slider.get("screen_position")
             enabled = slider.get("enabled", True)
             min_value = slider.get("minValue")
             max_value = slider.get("maxValue")
             current_value = slider.get("value")
             
-            # Format position
-            if position and len(position) == 2:
-                pos_str = f"{int(position[0])} × {int(position[1])}"
+            if screen_position and len(screen_position) == 2:
+                pos_str = f"{int(screen_position[0])} × {int(screen_position[1])}"
             else:
                 pos_str = "N/A"
             
-            # Format enabled status
             enabled_str = "Enabled" if enabled else "Disabled"
             
-            # Format min/max values and current value
             if min_value is not None and max_value is not None:
                 range_str = f"Range: {min_value} - {max_value}"
             else:
@@ -356,32 +349,27 @@ async def get_available_actions_message() -> HumanMessage:
             else:
                 value_str = "Current: N/A"
             
-            # Add formatted slider info
             action_message_content += f"\n- name = {name}     (Slider ID: {slider_id}, Position: {pos_str}, {range_str}, {value_str}, {enabled_str})"
     else:
         action_message_content += "\n Sliders available to adjust:\n- No sliders available"
     
-    # Add Interactable 2D
     interactable_2ds = available_actions.get("interactable_2d", [])
     if interactable_2ds:
         action_message_content += "\n Interactable 2D available to interact with:"
         for interactable_2d in interactable_2ds:
             name = interactable_2d.get("name", "Unknown")
             item_id = interactable_2d.get("id", "N/A")
-            position = interactable_2d.get("position")
+            screen_position = interactable_2d.get("screen_position")
             enabled = interactable_2d.get("enabled", True)
             collider = interactable_2d.get("type", "N/A")
 
-            # Format position
-            if position and len(position) == 2:
-                pos_str = f"{int(position[0])} × {int(position[1])}"
+            if screen_position and len(screen_position) == 2:
+                pos_str = f"{int(screen_position[0])} × {int(screen_position[1])}"
             else:
                 pos_str = "N/A"
 
-            # Format enabled status
             enabled_str = "Enabled" if enabled else "Disabled"
 
-            # Add formatted button info
             action_message_content += f"\n- name = {name}     (Interactable 2D ID: {item_id}, Position: {pos_str}, {enabled_str}, Collider Type: {collider})"
     else:
         action_message_content += "\n Interactable 2D available to interact with:\n- No interactable 2D available"

@@ -60,20 +60,12 @@ class ActionHandler:
         "Alt": AltKeyCode.LeftAlt,
     }
     
-    def __init__(self, driver: AltDriver, config_path: Optional[str] = None):
-        """
-        Initialize ActionHandler.
-        
-        Args:
-            driver: AltDriver instance from service.py
-            config_path: Path to action config JSON. If None, uses default config.
-        """
+    def __init__(self, driver: AltDriver, adb_manager=None, config_path: Optional[str] = None):
         self.driver = driver
         self.input_controller = InputController(driver)
+        self.adb_manager = adb_manager
         
-        # Load configuration
         if config_path is None:
-            # Use default config path
             default_config = os.path.join(
                 os.path.dirname(__file__),
                 "config",
@@ -83,12 +75,10 @@ class ActionHandler:
         
         self.config = self._load_config(config_path)
         
-        # Element cache
         self._cached_elements: Optional[List[Dict[str, Any]]] = None
         self._element_cache_timestamp: Optional[float] = None
-        
-        # Fast lookup dictionaries
         self._elements_by_id: Dict[str, Dict[str, Any]] = {}
+        self._bounds: Optional[Dict[str, int]] = None
     
     def _load_config(self, config_path: str) -> Dict[str, Any]:
         """
@@ -223,50 +213,74 @@ class ActionHandler:
         print(f"✅ Extracted {len(unique_elements)} unique interactive elements")
         return unique_elements
     
-    def _extract_element_info(self, obj: Any, component_type: str) -> Optional[Dict[str, Any]]:
-        """
-        Extract information from an AltObject.
+    def _translate_coords(self, unity_x: float, unity_y: float, mobile_y: float, 
+                          bounds: Dict[str, int]) -> tuple[int, int]:
+        rotation = bounds.get('rotation', 0)
         
-        Args:
-            obj: AltObject instance
-            component_type: Type of component
-            
-        Returns:
-            Element info dictionary or None if extraction fails
-        """
+        if rotation == 0:
+            screen_x = int(round(unity_x + bounds['offset_x']))
+            screen_y = int(round(mobile_y + bounds['offset_y']))
+        
+        elif rotation == 1:
+            # screen_x = int(round(unity_y + bounds['offset_x']))
+            # screen_y = int(round(unity_x + bounds['offset_y']))
+            screen_x = int(round(unity_x + bounds['offset_y']))
+            screen_y = int(round(bounds['height'] - unity_y + bounds['offset_x']))
+        
+        elif rotation == 3:
+            screen_x = int(round(mobile_y + bounds['offset_x']))
+            screen_y = int(round(bounds['width'] - unity_x + bounds['offset_y']))
+        
+        elif rotation == 2:
+            screen_x = int(round(bounds['width'] - unity_x + bounds['offset_x']))
+            screen_y = int(round(bounds['height'] - mobile_y + bounds['offset_y']))
+        
+        else:
+            screen_x = int(round(unity_x + bounds['offset_x']))
+            screen_y = int(round(mobile_y + bounds['offset_y']))
+        
+        return screen_x, screen_y
+    
+    def _extract_element_info(self, obj: Any, component_type: str) -> Optional[Dict[str, Any]]:
         try:
             element_id = str(obj.id) if hasattr(obj, 'id') else None
             name = obj.name if hasattr(obj, 'name') else "Unknown"
             
-            # Get position
-            position = None
-            if hasattr(obj, 'x') and hasattr(obj, 'y'):
-                position = (float(obj.x), float(obj.y))
+            unity_x = float(obj.x) if hasattr(obj, 'x') else None
+            unity_y = float(obj.y) if hasattr(obj, 'y') else None
+            mobile_y = float(obj.mobileY) if hasattr(obj, 'mobileY') else None
             
-            # Get text if available
+            position = (unity_x, unity_y) if unity_x is not None and unity_y is not None else None
+            
+            screen_position = None
+            if self.adb_manager and unity_x is not None and unity_y is not None and mobile_y is not None:
+                if self._bounds:
+                    screen_x, screen_y = self._translate_coords(
+                        unity_x, unity_y, mobile_y, self._bounds
+                    )
+                    screen_position = (screen_x, screen_y)
+            
             text = None
             try:
                 text = obj.get_text()
             except:
                 pass
             
-            # Get enabled state
             enabled = True
             if hasattr(obj, 'enabled'):
                 enabled = obj.enabled
             
-            # Base element info
             element_info = {
                 "id": element_id,
                 "name": name,
-                "type": component_type, # This will cover the Collider types as well
+                "type": component_type,
                 "position": position,
+                "screen_position": screen_position,
                 "text": text,
                 "enabled": enabled,
-                "object": obj  # Keep reference for execution
+                "object": obj
             }
             
-            # Add component-specific properties
             if component_type == "UnityEngine.UI.Slider":
                 try:
                     min_val = obj.get_component_property("UnityEngine.UI.Slider", "minValue", "UnityEngine.UI")
@@ -288,26 +302,10 @@ class ActionHandler:
             return None
     
     def get_available_actions(self) -> Dict[str, Any]:
-        """
-        Get all available actions based on config and current game state.
-        
-        Returns:
-            Dictionary with available primitives:
-            {
-                "keyboard": {
-                    "key_press": {"available_keys": [...]},
-                    "key_hold": {"available_keys": [...]}
-                },
-                "buttons": [
-                    {"id": "...", "name": "...", ...},
-                    ...
-                ],
-                "sliders": [
-                    {"id": "...", "name": "...", "minValue": ..., "maxValue": ..., "value": ..., ...},
-                    ...
-                ]
-            }
-        """
+        self._bounds = self.adb_manager.get_unity_bounds()
+        if self._bounds is None:
+            raise ValueError("Failed to get Unity bounds")
+
         available = {
             "keyboard": {},
             "buttons": [],
@@ -334,6 +332,7 @@ class ActionHandler:
                 "name": elem["name"],
                 "type": elem["type"],
                 "position": elem["position"],
+                "screen_position": elem.get("screen_position"),
                 "text": elem.get("text"),
                 "enabled": elem["enabled"]
             }

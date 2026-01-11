@@ -268,3 +268,12 @@
 # Woordle game play:
 # 1. 📊 Token usage - Input: 2129, Output: 500, Total: 2700 
 # 2. 📊 Token usage - Input: 5568, Output: 2078, Total: 7646 
+
+# {"component_name": "UnityEngine.UI.Slider", "assembly": "UnityEngine.UI"},
+#       {"component_name": "UnityEngine.BoxCollider2D", "assembly": "UnityEngine.CoreModule"},
+#       {"component_name": "UnityEngine.CircleCollider2D", "assembly": "UnityEngine.CoreModule"},
+#       {"component_name": "UnityEngine.PolygonCollider2D", "assembly": "UnityEngine.Physics2D"}
+
+# button_id: int | None = Field(
+#         description="Represents the ID of the button to be clicked on the screen. This is a unique identifier for the button and you can find the available buttons in the last message. This is going to be N/A if the action is not a button press."
+#     )

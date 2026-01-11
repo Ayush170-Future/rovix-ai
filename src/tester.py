@@ -3,6 +3,8 @@ from alttester import By
 from alttester import AltKeyCode
 import time
 import asyncio
+print(f"AltTester version: {AltDriver.__version__}")
+
 
 class AltTesterClient:
     """Manages the AltTester driver connection"""
@@ -258,6 +260,15 @@ class GameFrameController:
         print(f"🔍 Searching for FrameController...")
         self.controller = alt_driver.find_object(By.NAME, "FrameController")
         print(f"🔍 FrameController found: {self.controller}")
+        
+        # DEBUG: List all components on this GameObject
+        try:
+            components = self.controller.get_all_components()
+            print(f"📋 Components found on FrameController GameObject:")
+            for comp in components:
+                print(f"🔍 Component: {comp}")
+        except Exception as e:
+            print(f"⚠️ Could not list components: {e}")
     
     def get_current_frame(self):
         """
@@ -266,18 +277,15 @@ class GameFrameController:
         Returns:
             int: The current frame number
         """
-    
         return int(self.controller.call_component_method(
-            "FrameController",
-            "GetCurrentFrame",
+            "FrameController",  # Component type name
+            "GetCurrentFrame",  # Method name
             assembly="Assembly-CSharp"
         ))
     
     def resume(self):
         """
         Resume the game by calling Resume() on FrameController.
-        NOTE: This method is kept for backward compatibility but may not be needed
-        in the new event-based flow without pausing.
         """
         print(f"🔍 Resuming game...")
         self.controller.call_component_method(

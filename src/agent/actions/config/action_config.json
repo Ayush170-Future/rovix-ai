@@ -1,7 +1,12 @@
 {
+  "adb": {
+    "enabled": true,
+    "host": "127.0.0.1",
+    "port": 5037
+  },
   "input_types": {
     "keyboard": {
-      "enabled": true,
+      "enabled": false,
       "available_keys": [
         "Space",
         "A",
@@ -45,7 +50,7 @@
       "enabled": false
     },
     "interactable_2d": {
-      "enabled": false,
+      "enabled": true,
       "components": [
         {"name": "UnityEngine.BoxCollider2D", "assembly": "UnityEngine.CoreModule"},
         {"name": "UnityEngine.CircleCollider2D", "assembly": "UnityEngine.CoreModule"},
@@ -56,7 +61,6 @@
   "element_extraction": {
     "components": [
       {"component_name": "UnityEngine.UI.Button", "assembly": "UnityEngine.UI"},
-      {"component_name": "UnityEngine.UI.Slider", "assembly": "UnityEngine.UI"},
       {"component_name": "UnityEngine.BoxCollider2D", "assembly": "UnityEngine.CoreModule"},
       {"component_name": "UnityEngine.CircleCollider2D", "assembly": "UnityEngine.CoreModule"},
       {"component_name": "UnityEngine.PolygonCollider2D", "assembly": "UnityEngine.Physics2D"}

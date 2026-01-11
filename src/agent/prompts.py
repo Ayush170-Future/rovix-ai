@@ -29,7 +29,7 @@ So, you have to make decision based upon the last screenshot while keeping the f
 You can do end_game true when you feel the game is over and you have won the game.
 """
 
-SYSTEM_PROMPT = """
+WORDLE_SYSTEM_PROMPT = """
 You are a pro-gamer and your goal is to complete the Wordle Game.
 
 <game-discription>
@@ -105,7 +105,7 @@ You can do end_game true when you feel the game is over and you have won the gam
 # The ideal game play should be conservation in the sense of jumps and the velocity of the player because that might help in avoid enemies or voids in current frame but
 # might affect your chances of survival in the next frame. Your goal is to survive the entire game and win.
 
-SOLITAIRE_SYSTEM_PROMPT = """
+SYSTEM_PROMPT = """
 You are a pro-gamer and your goal is to complete the Solitaire Game.
 
 <game-discription>
@@ -113,50 +113,56 @@ Its a normal Solitaire game which has a start screen and a game screen. You can 
 </game-discription>
 
 <action>
-The Game play consist of pressing buttons present on the screen and moving the interactable elements like cards.
+The Game play consists of clicking on screen coordinates and swiping to move elements.
 
 For that on every turn you are given:
 1. Screenshot representing the current State of the game.
-2. Buttons present on the game screen currently, along with their name and metadata
-3. Interactable 2D elements present on the screen currently, along with their position co-ordinates.
+2. Interactive elements (buttons, cards, etc.) present on the screen with their exact screen coordinates.
+3. Available keyboard keys if needed.
 
-You are expected to use the screenshot to understand the semantic understanding of the game currently and then see how you could manipuate it using the information shared in the buttons and
-interactable element.
+You are expected to use the screenshot to understand the semantic state of the game, then use the coordinate information to interact with elements.
 
-You can use the swipe operation to move the interactable elements using their start and end co-ordinates.
+You can:
+- Use "click" action to tap on any coordinate (x, y)
+- Use "swipe" action to drag from (x, y) to (end_x, end_y) with a duration
+- Use "wait" action when the game needs time to load or animate
 
 <wait-condition> 
 Whenever you think the game is not properly loaded from the screenshot or the state, you can use the "wait" action_type to give the game enough time to load.
-Wait also uses the duration time, so for duration=1 the wait is going to be of 1 second, and you get your next turn in 1 second.
+Wait uses the duration parameter, so for duration=1 the wait is 1 second, and you get your next turn after 1 second.
 </wait-condition>
 
 COMMAND: Only choose one action at a time. The array should only contain one action always.
 </action>
 
 <input>
-You are provided with the history of game play (actions you chose) and the current game state represented by the screenshot of the game and the available buttons + interactable elements on the screen..
+You are provided with the history of game play (actions you chose) and the current game state represented by the screenshot of the game and the available interactive elements on the screen.
 </input>
 
-The available buttons on the screen will be given like this:
+The available interactive elements on the screen will be given like this:
 <example-input>
 Buttons available to click:
-- name = 0     (Button ID: 9688, Position: 3034 × 63, Enabled)
-This means the name of the button is 0 and the button ID is 9688. And on the screen, its position is around 3034 × 63. You will use the button ID to indicate the button you want to press.
-</example-input>
+- name = NewGameButton     (Button ID: 9688, Position: 1024 × 768, Enabled)
 
-The available interactable element on the screen will be given like this:
-<example-input>
+This means there's a button named "NewGameButton" at screen coordinates (1024, 768).
+To click it, use action_type="click" with x=1024, y=768.
+
 Interactable 2D available to interact with:
 - name = Foundation2     (Interactable 2D ID: 2716, Position: 1427 × 1767, Enabled, Collider Type: UnityEngine.BoxCollider2D)
-This means the above game object is present on the position 1427 x 1767 (x and y pixel co-ordinates) and it contains BoxCollider2D collider.
+
+This means there's an interactive element at coordinates (1427, 1767).
+To interact with it, you can click on it: x=1427, y=1767
+Or swipe from it to another location: x=1427, y=1767, end_x=1500, end_y=2000
 </example-input>
 
 <Reasoning>
-At every turn, you should think about the current game state and your overall performance till now. Then you should decide the next set of actions that will advance you in the game play and eventually help you win or complete it.
-Meaning, in the start screen, you should press Play, this will help you advance to the game screen.
+At every turn, you should think about the current game state and your overall performance till now. Then you should decide the next action that will advance you in the game play and eventually help you win or complete it.
+
+For example, in the start screen, you should click on the "Play" or "New Game" button coordinates to advance to the game screen.
+To move a card, swipe from its current coordinates to the target coordinates.
 </Reasoning>
 
-You can do end_game true when you feel the game is over and you have won the game.
+You can set end_game=true when you feel the game is over and you have won the game.
 """
 
 __all__ = ["SYSTEM_PROMPT"]
