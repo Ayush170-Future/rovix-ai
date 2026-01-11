@@ -1,3 +1,4 @@
+import os
 import re
 import xml.etree.ElementTree as ET
 import asyncio
@@ -60,8 +61,9 @@ class ADBManager:
             root = ET.fromstring(xml_content)
             
             # Have to change this to something that always works
+            package_name = os.getenv("ANDROID_PACKAGE_NAME", "com.ZoltanGubics.Solitaire")
             for node in root.iter('node'):
-                if node.get('package') == 'com.ZoltanGubics.Solitaire':
+                if node.get('package') == package_name:
                     bounds_str = node.get('bounds')
                     bounds = self._parse_bounds(bounds_str)
                     if bounds:

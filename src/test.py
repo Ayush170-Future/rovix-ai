@@ -2,7 +2,7 @@ from alttester import AltDriver
 from alttester import By
 from alttester import AltKeyCode
 
-alt_driver = AltDriver(host="127.0.0.1", port=13000, timeout=60)
+alt_driver = AltDriver(app_name="Jai Mata Di", timeout=10)
 
 def get_interactable_2d_objects():
     interactable_2d = []

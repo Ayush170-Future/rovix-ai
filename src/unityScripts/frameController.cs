@@ -8,7 +8,7 @@ using StackExchange.Redis;
 using System;
 using System.Text;
 
-public class FrameController : MonoBehaviour
+public class frameController : MonoBehaviour
 {
     private enum FrameState
     {
@@ -103,7 +103,7 @@ public class FrameController : MonoBehaviour
 
     void FixedUpdate()
     {
-        Debug.Log($"[FrameController] Inside FixedUpdate and current step is {currentStep}");
+        Debug.Log($"[frameController] Inside FixedUpdate and current step is {currentStep}");
         if (Time.timeScale > 0 && currentState == FrameState.Paused)
         {
             currentState = FrameState.Running;
@@ -122,7 +122,7 @@ public class FrameController : MonoBehaviour
 
     private void Pause()
     {
-        Debug.Log($"[FrameController] Pausing at step {currentStep}");
+        Debug.Log($"[frameController] Pausing at step {currentStep}");
         StartCoroutine(PauseAfterPhysics());
     }
 
@@ -133,7 +133,7 @@ public class FrameController : MonoBehaviour
         
         if (EventSystem.current != null)
         {
-            Debug.Log($"[FrameController] Clearing selected UI elements");
+            Debug.Log($"[frameController] Clearing selected UI elements");
             EventSystem.current.SetSelectedGameObject(null);
         }
         
@@ -159,7 +159,7 @@ public class FrameController : MonoBehaviour
         Debug.Log($"[AI] Captured {capturedFramesDuringAction.Count} screenshots during action");
         
         NotifyPythonServer(actionStartFrame, actionEndFrame);
-        Debug.Log($"[FrameController] Notified Python server");
+        Debug.Log($"[frameController] Notified Python server");
     }
 
     private void NotifyPythonServer(int startFrame, int endFrame)

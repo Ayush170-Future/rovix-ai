@@ -3,13 +3,13 @@ from alttester import By
 from alttester import AltKeyCode
 import time
 import asyncio
-print(f"AltTester version: {AltDriver.__version__}")
+#print(f"AltTester version: {AltDriver.__version__}")
 
 
 class AltTesterClient:
     """Manages the AltTester driver connection"""
     
-    def __init__(self, host="127.0.0.1", port=13000, timeout=60):
+    def __init__(self, host="127.0.0.1", port=13000, timeout=60, app_name=None):
         """
         Initialize AltTester driver connection.
         
@@ -17,8 +17,14 @@ class AltTesterClient:
             host (str): Host address. Default is "127.0.0.1"
             port (int): Port number. Default is 13000
             timeout (int): Connection timeout in seconds. Default is 60
+            app_name (str, optional): App name for connection. If provided, host and port are ignored.
         """
-        self.driver = AltDriver(host=host, port=port, timeout=timeout)
+        if app_name:
+            print(f"🚀 Initializing AltDriver with app_name: {app_name}")
+            self.driver = AltDriver(app_name=app_name, timeout=timeout)
+        else:
+            print(f"🚀 Initializing AltDriver with host: {host}, port: {port}")
+            self.driver = AltDriver(host=host, port=port, timeout=timeout)
     
     def get_driver(self):
         """Get the underlying AltDriver instance"""
@@ -246,25 +252,25 @@ class SceneController:
     
 
 
-class GameFrameController:
-    """Handles frame-based game control using the FrameController component"""
+class GameframeController:
+    """Handles frame-based game control using the frameController component"""
     
     def __init__(self, alt_driver):
         """
-        Initialize GameFrameController.
+        Initialize GameframeController.
         
         Args:
             alt_driver (AltDriver): The AltDriver instance
         """
         self.driver = alt_driver
-        print(f"🔍 Searching for FrameController...")
-        self.controller = alt_driver.find_object(By.NAME, "FrameController")
-        print(f"🔍 FrameController found: {self.controller}")
+        print(f"🔍 Searching for frameController...")
+        self.controller = alt_driver.find_object(By.NAME, "Frame Controller")
+        print(f"🔍 frameController found: {self.controller}")
         
         # DEBUG: List all components on this GameObject
         try:
             components = self.controller.get_all_components()
-            print(f"📋 Components found on FrameController GameObject:")
+            print(f"📋 Components found on frameController GameObject:")
             for comp in components:
                 print(f"🔍 Component: {comp}")
         except Exception as e:
@@ -272,39 +278,39 @@ class GameFrameController:
     
     def get_current_frame(self):
         """
-        Get the current frame count from FrameController.
+        Get the current frame count from frameController.
         
         Returns:
             int: The current frame number
         """
         return int(self.controller.call_component_method(
-            "FrameController",  # Component type name
+            "frameController",  # Component type name
             "GetCurrentFrame",  # Method name
-            assembly="Assembly-CSharp"
+            assembly="Unity1a3ce3d71daf1f0d629c.Comrovixagentzero"
         ))
     
     def resume(self):
         """
-        Resume the game by calling Resume() on FrameController.
+        Resume the game by calling Resume() on frameController.
         """
         print(f"🔍 Resuming game...")
         self.controller.call_component_method(
-            "FrameController",
+            "frameController",
             "Resume",
-            assembly="Assembly-CSharp"
+            assembly="Unity1a3ce3d71daf1f0d629c.Comrovixagentzero"
         )
         print(f"🔍 Game resumed")
     
     def mark_actions_executed(self):
         """
-        Mark actions as executed by calling MarkActionsExecuted() on FrameController.
+        Mark actions as executed by calling MarkActionsExecuted() on frameController.
         This allows Unity to send the next event.
         """
         print(f"✅ Marking actions as executed...")
         self.controller.call_component_method(
-            "FrameController",
+            "frameController",
             "MarkActionsExecuted",
-            assembly="Assembly-CSharp"
+            assembly="Unity1a3ce3d71daf1f0d629c.Comrovixagentzero"
         )
         print(f"✅ Actions marked as executed")
 

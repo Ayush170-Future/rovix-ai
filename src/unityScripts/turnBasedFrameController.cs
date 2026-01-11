@@ -4,7 +4,7 @@ using System.Collections;
 using System;
 using System.Text;
 
-public class FrameController : MonoBehaviour
+public class frameController : MonoBehaviour
 {
     private int currentStep = 0;
     private int lastEventStep = 0;
@@ -27,7 +27,7 @@ public class FrameController : MonoBehaviour
     void Start()
     {
         actionsExecuted = true; // Start ready to send first event
-        Debug.Log("[FrameController] Initialized - ready to send events");
+        Debug.Log("[frameController] Initialized - ready to send events");
     }
 
     void FixedUpdate()
@@ -123,11 +123,11 @@ public class FrameController : MonoBehaviour
     public void SetEventInterval(int interval)
     {
         eventInterval = interval;
-        Debug.Log($"[FrameController] Event interval set to {interval} steps");
+        Debug.Log($"[frameController] Event interval set to {interval} steps");
     }
     
     void OnDestroy()
     {
-        Debug.Log("[FrameController] Destroyed");
+        Debug.Log("[frameController] Destroyed");
     }
 }

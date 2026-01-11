@@ -21,7 +21,7 @@ try:
     from .prompts import SYSTEM_PROMPT
 except ImportError:
     from agent.prompts import SYSTEM_PROMPT
-from tester import InputController, AltTesterClient, GameFrameController, SceneController, TimeController
+from tester import InputController, AltTesterClient, GameframeController, SceneController, TimeController
 from agent.actions import ActionHandler
 from agent.adb_manager import ADBManager
 
@@ -37,13 +37,17 @@ model = ChatGoogleGenerativeAI(
 )
 
 print("Initializing AltTesterClient...")
-client = AltTesterClient(host="127.0.0.1", port=13000, timeout=60)
+alt_host = os.getenv("ALT_TESTER_HOST", "127.0.0.1")
+alt_port = int(os.getenv("ALT_TESTER_PORT", 13000))
+alt_app_name = os.getenv("ALT_TESTER_APP_NAME")
+
+client = AltTesterClient(host=alt_host, port=alt_port, timeout=60, app_name=alt_app_name)
 print("AltTesterClient initialized")
 driver = client.get_driver()
 input_controller = InputController(driver)
 time_controller = TimeController(driver)
 scene_controller = SceneController(driver)
-frame_controller = GameFrameController(driver)
+frame_controller = GameframeController(driver)
 frame_controller.mark_actions_executed()
 
 print("Initializing ADB Manager...")
