@@ -139,22 +139,29 @@ You are provided with the history of game play (actions you chose) and the curre
 
 The available interactive elements on the screen will be given like this:
 <example-input>
-Buttons available to click:
-- name = NewGameButton     (Button ID: 9688, Position: 1024 × 768, Enabled)
+Detected interactive elements on screen:
+- new game button at (1024, 768) bbox: [1000, 750, 1048, 786] - Starts a new game
+- settings icon at (1800, 100) bbox: [1780, 80, 1820, 120] - Opens game settings menu
+- card element at (1427, 1767) bbox: [1400, 1700, 1454, 1834] - Solitaire card that can be moved
 
-This means there's a button named "NewGameButton" at screen coordinates (1024, 768).
-To click it, use action_type="click" with x=1024, y=768.
+This means there's a "new game button" detected with:
+- Center coordinates: (1024, 768) - use these for clicking
+- Bounding box: [x_min=1000, y_min=750, x_max=1048, y_max=786] - the full element area
 
-Interactable 2D available to interact with:
-- name = Foundation2     (Interactable 2D ID: 2716, Position: 1427 × 1767, Enabled, Collider Type: UnityEngine.BoxCollider2D)
+To click it, use action_type="click" with x=1024, y=768 (center coordinates).
 
-This means there's an interactive element at coordinates (1427, 1767).
-To interact with it, you can click on it: x=1427, y=1767
-Or swipe from it to another location: x=1427, y=1767, end_x=1500, end_y=2000
+For interactive elements like cards:
+- To click: use action_type="click" with x=1427, y=1767 (center)
+- To swipe: use action_type="swipe" with x=1427, y=1767, end_x=1500, end_y=2000
+- You can also use any coordinate within the bounding box area
+
+Note: Elements are detected via vision AI. Center coordinates are provided for easy clicking, and bounding boxes show the full element area.
 </example-input>
 
 <Reasoning>
 At every turn, you should think about the current game state and your overall performance till now. Then you should decide the next action that will advance you in the game play and eventually help you win or complete it.
+
+In case you are unable to infer the objects co-ordinates for your actions using the game state, you can use the wait operation and give the vision API a chance to detect the objects again.
 
 For example, in the start screen, you should click on the "Play" or "New Game" button coordinates to advance to the game screen.
 To move a card, swipe from its current coordinates to the target coordinates.

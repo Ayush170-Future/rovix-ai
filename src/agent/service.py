@@ -24,8 +24,13 @@ except ImportError:
 from tester import InputController, AltTesterClient, GameFrameController, SceneController, TimeController
 from agent.actions import ActionHandler
 from agent.adb_manager import ADBManager
+from agent.vision_element_detector import VisionElementDetector
 
 load_dotenv()
+
+SDK_ENABLED = os.getenv("SDK_ENABLED", "true").lower() == "true"
+POLLING_INTERVAL = float(os.getenv("POLLING_INTERVAL", "2.5"))
+MAX_STEPS = int(os.getenv("MAX_STEPS", "1000"))
 
 model = ChatGoogleGenerativeAI(
     model="gemini-3-pro-preview",
@@ -36,20 +41,40 @@ model = ChatGoogleGenerativeAI(
     api_key=os.getenv("GOOGLE_API_KEY")
 )
 
-print("Initializing AltTesterClient...")
-client = AltTesterClient(host="127.0.0.1", port=13000, timeout=60)
-print("AltTesterClient initialized")
-driver = client.get_driver()
-input_controller = InputController(driver)
-time_controller = TimeController(driver)
-scene_controller = SceneController(driver)
-frame_controller = GameFrameController(driver)
-frame_controller.mark_actions_executed()
-
-print("Initializing ADB Manager...")
-adb_manager = ADBManager(host="127.0.0.1", port=5037)
-
-action_handler = ActionHandler(driver, adb_manager=adb_manager)
+if SDK_ENABLED:
+    print("Initializing AltTesterClient...")
+    client = AltTesterClient(host="127.0.0.1", port=13000, timeout=60)
+    print("AltTesterClient initialized")
+    driver = client.get_driver()
+    input_controller = InputController(driver)
+    time_controller = TimeController(driver)
+    scene_controller = SceneController(driver)
+    frame_controller = GameFrameController(driver)
+    frame_controller.mark_actions_executed()
+    
+    print("Initializing ADB Manager...")
+    adb_manager = ADBManager(host="127.0.0.1", port=5037)
+    
+    action_handler = ActionHandler(driver, adb_manager=adb_manager)
+    vision_detector = None
+else:
+    print("Black box mode - skipping AltTester initialization")
+    client = None
+    driver = None
+    input_controller = None
+    time_controller = None
+    scene_controller = None
+    frame_controller = None
+    action_handler = None
+    
+    print("Initializing ADB Manager...")
+    adb_manager = ADBManager(host="127.0.0.1", port=5037)
+    
+    print("Initializing Vision Detector...")
+    vision_detector = VisionElementDetector(
+        api_key=os.getenv("GOOGLE_API_KEY"),
+        model_name="gemini-robotics-er-1.5-preview"
+    )
 
 def image_to_bedrock_bytes(path, max_size=(1024, 1024), quality=75):
     img = Image.open(path).convert("RGB")
@@ -65,7 +90,7 @@ def image_file_to_base64(filepath, max_size=(1024, 1024), quality=75):
 
 # TODO: Can change this to XML later on.
 class Action(BaseModel):
-    action_type: Literal["key_press", "click", "slider_move", "swipe", "wait"] = Field(
+    action_type: Literal["key_press", "click", "swipe", "wait"] = Field(
         description="Represents the type of action to be performed. This can be a key press, click on a coordinate, slider move, or swipe."
     )
     x: int | None = Field(
@@ -73,12 +98,6 @@ class Action(BaseModel):
     )
     y: int | None = Field(
         description="Y-coordinate on the screen. Required for 'click' action. For 'swipe' action, this is the starting Y-coordinate."
-    )
-    slider_id: str | None = Field(
-        description="ID of the slider to move. Required only for 'slider_move' action."
-    )
-    slider_value: float | None = Field(
-        description="Target value for the slider. Required only for 'slider_move' action."
     )
     end_x: int | None = Field(
         description="Ending X-coordinate for 'swipe' action. Required only for swipes."
@@ -225,8 +244,7 @@ async def agent_handler(event: GamePauseEvent):
                 "type": "text",
                 "text": f"[CURRENT GAME STATE]"
             }])
-            available_actions_message = await get_available_actions_message()
-            # Add human message to global game state
+            available_actions_message = await get_available_actions_message(saved_filepaths[0])
             screenshot_message = HumanMessage(content=message_content)
             with game_state_lock:
                 # # Removing the previous Current Game State indication message (third-to-last)
@@ -256,14 +274,15 @@ async def agent_handler(event: GamePauseEvent):
                 game_state_messages.append(AIMessage(content=str(agent_output.model_dump())))
                 step_counter += 1  # Increment step counter
 
-            # Check if game should end
             if agent_output.end_game:
                 print("🛑 Agent signaled end of game")
-                # Mark actions as executed even if ending game
-                try:
-                    frame_controller.mark_actions_executed()
-                except Exception as e:
-                    print(f"⚠️  Warning: Failed to mark actions executed: {e}")
+                if SDK_ENABLED:
+                    try:
+                        frame_controller.mark_actions_executed()
+                    except Exception as e:
+                        print(f"⚠️  Warning: Failed to mark actions executed: {e}")
+                else:
+                    await asyncio.sleep(POLLING_INTERVAL)
                 return {"status": "ok", "saved": 1, "files": [filename], "end_game": True}
             
             # Execute actions synchronously
@@ -271,17 +290,19 @@ async def agent_handler(event: GamePauseEvent):
             await adb_manager.execute_actions_sequential(agent_output.actions)
             print("✅ Actions executed successfully")
             
-            # Cleanup old messages
             cleanup_old_messages()
             
-            # Mark actions as executed so Unity can send the next event
-            try:
-                print("✅ Marking actions as executed...")
-                frame_controller.mark_actions_executed()
-                print("✅ Actions marked as executed - Unity can send next event")
-            except Exception as e:
-                print(f"❌ Error marking actions executed: {e}")
-                return {"status": "error", "message": f"Failed to mark actions executed: {e}"}
+            if SDK_ENABLED:
+                try:
+                    print("✅ Marking actions as executed...")
+                    frame_controller.mark_actions_executed()
+                    print("✅ Actions marked as executed - Unity can send next event")
+                except Exception as e:
+                    print(f"❌ Error marking actions executed: {e}")
+                    return {"status": "error", "message": f"Failed to mark actions executed: {e}"}
+            else:
+                print(f"⏳ Waiting {POLLING_INTERVAL}s for game to process actions...")
+                await asyncio.sleep(POLLING_INTERVAL)
             
             # Return success
             return {"status": "ok", "saved": 1, "files": [filename]}
@@ -290,14 +311,33 @@ async def agent_handler(event: GamePauseEvent):
             print(f"❌ Error in LLM call or action execution: {e}")
             import traceback
             traceback.print_exception(type(e), e, e.__traceback__)
-            # Even on error, mark actions as executed so Unity doesn't get stuck
-            try:
-                frame_controller.mark_actions_executed()
-            except Exception as mark_error:
-                print(f"⚠️  Warning: Failed to mark actions executed after error: {mark_error}")
+            if SDK_ENABLED:
+                try:
+                    frame_controller.mark_actions_executed()
+                except Exception as mark_error:
+                    print(f"⚠️  Warning: Failed to mark actions executed after error: {mark_error}")
             return {"status": "error", "message": f"Failed to process: {e}"}
 
-async def get_available_actions_message() -> HumanMessage:
+async def get_available_actions_message(screenshot_path: str = None) -> HumanMessage:
+    if not SDK_ENABLED:
+        elements = await vision_detector.detect_elements(screenshot_path)
+        
+        action_message_content = "Detected interactive elements on screen:"
+        if elements:
+            for element in elements:
+                name = element['name']
+                desc = element['description']
+                pos = element['screen_position']
+                bbox = element['bounding_box']
+                action_message_content += f"\n- {name} at ({pos[0]}, {pos[1]}) bbox: [{bbox[0]}, {bbox[1]}, {bbox[2]}, {bbox[3]}] - {desc}"
+        else:
+            action_message_content += "\n- No elements detected. Analyze the screenshot to identify clickable areas."
+        
+        return HumanMessage(content=[{
+            "type": "text",
+            "text": action_message_content
+        }])
+    
     available_actions = action_handler.get_available_actions()
 
     action_message_content = "You can currently interact with the following controls on the screen: \n Buttons available to click:"
@@ -383,3 +423,28 @@ async def get_available_actions_message() -> HumanMessage:
         "type": "text",
         "text": action_message_content
     }])
+
+async def run_blackbox_loop():
+    print("🎮 Starting black box polling loop")
+    step = 0
+    
+    while step < MAX_STEPS:
+        print(f"\n🔄 Black box iteration {step}")
+        
+        fake_event = GamePauseEvent(current_step=step, current_frame=step)
+        result = await agent_handler(fake_event)
+        
+        if result.get("end_game"):
+            print("🛑 Game ended")
+            break
+            
+        step += 1
+    
+    print(f"✅ Completed {step} steps")
+
+if __name__ == "__main__":
+    if not SDK_ENABLED:
+        print("🎯 Black box mode - starting polling loop")
+        asyncio.run(run_blackbox_loop())
+    else:
+        print("🔌 SDK mode - waiting for Unity events")

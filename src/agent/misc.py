@@ -277,3 +277,10 @@
 # button_id: int | None = Field(
 #         description="Represents the ID of the button to be clicked on the screen. This is a unique identifier for the button and you can find the available buttons in the last message. This is going to be N/A if the action is not a button press."
 #     )
+
+# slider_id: str | None = Field(
+#         description="ID of the slider to move. Required only for 'slider_move' action."
+#     )
+#     slider_value: float | None = Field(
+#         description="Target value for the slider. Required only for 'slider_move' action."
+#     )
