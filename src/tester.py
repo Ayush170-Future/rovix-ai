@@ -3,7 +3,6 @@ from alttester import By
 from alttester import AltKeyCode
 import time
 import asyncio
-print(f"AltTester version: {AltDriver.__version__}")
 
 
 class AltTesterClient:
@@ -250,15 +249,9 @@ class GameFrameController:
     """Handles frame-based game control using the FrameController component"""
     
     def __init__(self, alt_driver):
-        """
-        Initialize GameFrameController.
-        
-        Args:
-            alt_driver (AltDriver): The AltDriver instance
-        """
         self.driver = alt_driver
         print(f"🔍 Searching for FrameController...")
-        self.controller = alt_driver.find_object(By.NAME, "FrameController")
+        self.controller = alt_driver.find_object(By.NAME, "frameController")
         print(f"🔍 FrameController found: {self.controller}")
         
         # DEBUG: List all components on this GameObject
@@ -271,38 +264,25 @@ class GameFrameController:
             print(f"⚠️ Could not list components: {e}")
     
     def get_current_frame(self):
-        """
-        Get the current frame count from FrameController.
-        
-        Returns:
-            int: The current frame number
-        """
         return int(self.controller.call_component_method(
-            "FrameController",  # Component type name
+            "frameController",  # Component type name
             "GetCurrentFrame",  # Method name
             assembly="Assembly-CSharp"
         ))
     
     def resume(self):
-        """
-        Resume the game by calling Resume() on FrameController.
-        """
         print(f"🔍 Resuming game...")
         self.controller.call_component_method(
-            "FrameController",
+            "frameController",
             "Resume",
             assembly="Assembly-CSharp"
         )
         print(f"🔍 Game resumed")
     
     def mark_actions_executed(self):
-        """
-        Mark actions as executed by calling MarkActionsExecuted() on FrameController.
-        This allows Unity to send the next event.
-        """
         print(f"✅ Marking actions as executed...")
         self.controller.call_component_method(
-            "FrameController",
+            "frameController",
             "MarkActionsExecuted",
             assembly="Assembly-CSharp"
         )

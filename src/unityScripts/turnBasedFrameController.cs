@@ -3,38 +3,47 @@ using UnityEngine.Networking;
 using System.Collections;
 using System;
 using System.Text;
+using UnityEngine.Scripting; // Add this import
 
-public class FrameController : MonoBehaviour
+[Preserve] // Add this attribute to the class
+public class frameController : MonoBehaviour
 {
     private int currentStep = 0;
     private int lastEventStep = 0;
-    private int eventInterval = 600; // FixedUpdate steps between events
+    private int eventInterval = 600;
     
     private string pythonServerUrl = "http://10.0.2.2:8000";
-    // For testing with external endpoint, use:
-    // private string pythonServerUrl = "https://fefjmoggmwawzhlkwzai667hx3dlbg08h.oast.fun";
     
-    // State tracking: only send event when actions are executed
-    private bool actionsExecuted = true; // Start as true so first event can be sent
+    // Make this public AND add [Preserve]
+    [Preserve]
+    public bool actionsExecuted = true;
 
     void Awake()
     {
         Application.runInBackground = true;
-        // Prevent this GameObject from being destroyed on scene changes
-        DontDestroyOnLoad(gameObject);
     }
 
     void Start()
     {
-        actionsExecuted = true; // Start ready to send first event
+        DontDestroyOnLoad(gameObject);
+        actionsExecuted = true;
         Debug.Log("[FrameController] Initialized - ready to send events");
+        // Log the actual assembly name at runtime
+        var assembly = this.GetType().Assembly;
+        Debug.Log($"[FrameController] Runtime Assembly Name: {assembly.FullName}");
+        Debug.Log($"[FrameController] Type Full Name: {this.GetType().FullName}");
+        Debug.Log($"[FrameController] Assembly Location: {assembly.Location}");
+        
+        MarkActionsExecuted();
+        int currentStep = GetCurrentStep();
+        int currentFrame = GetCurrentFrame();
+        Debug.Log($"[FrameController] Current Step: {currentStep}, Current Frame: {currentFrame}");
     }
 
     void FixedUpdate()
     {
         currentStep++;
         
-        // Only send event if interval reached AND actions from previous event are executed
         if (currentStep - lastEventStep >= eventInterval && actionsExecuted)
         {
             SendEventToPython();
@@ -43,22 +52,18 @@ public class FrameController : MonoBehaviour
 
     private void SendEventToPython()
     {
-        // Mark that we're waiting for actions to be executed
         actionsExecuted = false;
         lastEventStep = currentStep;
         
         int currentFrame = Time.frameCount;
         
-        // Build simplified JSON payload (no screenshot data)
         string jsonPayload = $@"{{
             ""current_step"": {currentStep},
             ""current_frame"": {currentFrame}
         }}";
         
         Debug.Log($"[AI] Sending event to Python server at step {currentStep}, frame {currentFrame}");
-        Debug.Log($"[AI] Payload: {jsonPayload}");
         
-        // Start coroutine to send HTTP POST
         StartCoroutine(SendPostRequest(jsonPayload));
     }
     
@@ -72,8 +77,6 @@ public class FrameController : MonoBehaviour
             request.uploadHandler = new UploadHandlerRaw(bodyRaw);
             request.downloadHandler = new DownloadHandlerBuffer();
             request.SetRequestHeader("Content-Type", "application/json");
-            
-            // Allow insecure HTTP connections for testing
             request.certificateHandler = new AcceptAllCertificatesHandler();
             
             yield return request.SendWebRequest();
@@ -85,13 +88,11 @@ public class FrameController : MonoBehaviour
             else
             {
                 Debug.LogError($"[AI] ❌ Event send failed: {request.error}");
-                // On failure, mark actions as executed so we can try again next interval
                 actionsExecuted = true;
             }
         }
     }
     
-    // Certificate handler to allow insecure connections (for testing only!)
     private class AcceptAllCertificatesHandler : CertificateHandler
     {
         protected override bool ValidateCertificate(byte[] certificateData)
@@ -102,24 +103,27 @@ public class FrameController : MonoBehaviour
     
     /// <summary>
     /// Called by Python server via AltTester after actions are executed.
-    /// This marks actions as executed, allowing the next event to be sent.
     /// </summary>
+    [Preserve] // Add this to preserve the method
     public void MarkActionsExecuted()
     {
         actionsExecuted = true;
         Debug.Log($"[AI] Actions marked as executed at step {currentStep}, frame {Time.frameCount}");
     }
     
+    [Preserve]
     public int GetCurrentStep()
     {
         return currentStep;
     }
     
+    [Preserve]
     public int GetCurrentFrame()
     {
         return Time.frameCount;
     }
     
+    [Preserve]
     public void SetEventInterval(int interval)
     {
         eventInterval = interval;

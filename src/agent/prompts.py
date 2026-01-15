@@ -131,8 +131,6 @@ You can:
 Whenever you think the game is not properly loaded from the screenshot or the state, you can use the "wait" action_type to give the game enough time to load.
 Wait uses the duration parameter, so for duration=1 the wait is 1 second, and you get your next turn after 1 second.
 </wait-condition>
-
-COMMAND: Only choose one action at a time. The array should only contain one action always.
 </action>
 
 <input>
@@ -163,6 +161,8 @@ To move a card, swipe from its current coordinates to the target coordinates.
 </Reasoning>
 
 You can set end_game=true when you feel the game is over and you have won the game.
+
+Note: You can make multiple actions at the same time if you want to. They will be executed one after the other in the order they are provided in the actions list.
 """
 
 __all__ = ["SYSTEM_PROMPT"]
