@@ -22,3 +22,6 @@ redis>=5.0.0
 # ADB integration
 pure-python-adb>=0.3.0
 
+# Appium integration (optional)
+Appium-Python-Client>=3.0.0
+

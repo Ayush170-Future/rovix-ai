@@ -24,11 +24,13 @@ except ImportError:
 from tester import InputController, AltTesterClient, GameFrameController, SceneController, TimeController
 from agent.actions import ActionHandler
 from agent.adb_manager import ADBManager
+from agent.appium_manager import AppiumManager
 from agent.vision_element_detector import VisionElementDetector
 
 load_dotenv()
 
 SDK_ENABLED = os.getenv("SDK_ENABLED", "true").lower() == "true"
+USE_APPIUM = os.getenv("USE_APPIUM", "false").lower() == "true"
 POLLING_INTERVAL = float(os.getenv("POLLING_INTERVAL", "2.5"))
 MAX_STEPS = int(os.getenv("MAX_STEPS", "1000"))
 
@@ -52,10 +54,19 @@ if SDK_ENABLED:
     frame_controller = GameFrameController(driver)
     frame_controller.mark_actions_executed()
     
-    print("Initializing ADB Manager...")
-    adb_manager = ADBManager(host="127.0.0.1", port=5037)
+    if USE_APPIUM:
+        print("Initializing Appium Manager...")
+        action_executor = AppiumManager(
+            appium_url=os.getenv("APPIUM_URL", "http://localhost:4723"),
+            device_name=os.getenv("DEVICE_NAME"),
+            app_package=os.getenv("APP_PACKAGE"),
+            app_activity=os.getenv("APP_ACTIVITY")
+        )
+    else:
+        print("Initializing ADB Manager...")
+        action_executor = ADBManager(host="127.0.0.1", port=5037)
     
-    action_handler = ActionHandler(driver, adb_manager=adb_manager)
+    action_handler = ActionHandler(driver, adb_manager=action_executor)
     vision_detector = None
 else:
     print("Black box mode - skipping AltTester initialization")
@@ -67,8 +78,17 @@ else:
     frame_controller = None
     action_handler = None
     
-    print("Initializing ADB Manager...")
-    adb_manager = ADBManager(host="127.0.0.1", port=5037)
+    if USE_APPIUM:
+        print("Initializing Appium Manager...")
+        action_executor = AppiumManager(
+            appium_url=os.getenv("APPIUM_URL", "http://localhost:4723"),
+            device_name=os.getenv("DEVICE_NAME"),
+            app_package=os.getenv("APP_PACKAGE"),
+            app_activity=os.getenv("APP_ACTIVITY")
+        )
+    else:
+        print("Initializing ADB Manager...")
+        action_executor = ADBManager(host="127.0.0.1", port=5037)
     
     print("Initializing Vision Detector...")
     vision_detector = VisionElementDetector(
@@ -88,29 +108,31 @@ def image_file_to_base64(filepath, max_size=(1024, 1024), quality=75):
     image_bytes = image_to_bedrock_bytes(filepath, max_size=max_size, quality=quality)
     return base64.b64encode(image_bytes).decode("utf-8")
 
-# TODO: Can change this to XML later on.
 class Action(BaseModel):
-    action_type: Literal["key_press", "click", "swipe", "wait"] = Field(
-        description="Represents the type of action to be performed. This can be a key press, click on a coordinate, slider move, or swipe."
+    action_type: Literal["key_press", "click", "swipe", "multi_swipe", "wait"] = Field(
+        description="Represents the type of action to be performed. This can be a key press, click on a coordinate, swipe, multi-point swipe, or wait."
     )
     x: int | None = Field(
-        description="X-coordinate on the screen. Required for 'click' action. For 'swipe' action, this is the starting X-coordinate."
+        description="X-coordinate on the screen. Required for 'click' action. For 'swipe' action, this is the starting X-coordinate. Not used for 'multi_swipe'."
     )
     y: int | None = Field(
-        description="Y-coordinate on the screen. Required for 'click' action. For 'swipe' action, this is the starting Y-coordinate."
+        description="Y-coordinate on the screen. Required for 'click' action. For 'swipe' action, this is the starting Y-coordinate. Not used for 'multi_swipe'."
     )
     end_x: int | None = Field(
-        description="Ending X-coordinate for 'swipe' action. Required only for swipes."
+        description="Ending X-coordinate for 'swipe' action. Required only for 'swipe'. Not used for 'multi_swipe'."
     )
     end_y: int | None = Field(
-        description="Ending Y-coordinate for 'swipe' action. Required only for swipes."
+        description="Ending Y-coordinate for 'swipe' action. Required only for 'swipe'. Not used for 'multi_swipe'."
+    )
+    waypoints: List[tuple[int, int]] | None = Field(
+        description="List of (x, y) coordinate tuples for 'multi_swipe' action ONLY. The gesture will follow this path smoothly from first point to last. Includes start, middle, and end points. Example: [(100, 100), (200, 150), (300, 100)] creates a curved path starting at (100,100) and ending at (300,100). Required for 'multi_swipe', ignored for other actions."
     )
     key_name: str | None = Field(
         description="Name of the keyboard key to press. All possible keys are listed in the last message. Required only for 'key_press' action."
     )
     duration: float = Field(
         default=0.1,
-        description="Duration of the action in seconds. For 'click': hold duration (0.1 = quick tap). For 'swipe': time to complete the swipe. For 'wait': how long to wait. Default: 0.1s."
+        description="Duration of the action in seconds. For 'click': hold duration (0.1 = quick tap). For 'swipe': time to complete the swipe. For 'multi_swipe': total time for entire path. For 'wait': how long to wait. Default: 0.1s."
     )
 
 # TODO: Add analyze last step and reason next step fields here as well
@@ -208,8 +230,8 @@ async def agent_handler(event: GamePauseEvent):
     filepath = os.path.join(screenshots_dir, filename)
     
     try:
-        adb_manager.get_screenshot(filepath)
-        print(f"   💾 {filename} (captured from ADB)")
+        action_executor.get_screenshot(filepath)
+        print(f"   💾 {filename} (captured)")
         saved_filepaths = [filepath]
     except Exception as e:
         print(f"   ❌ Error capturing screenshot: {e}")
@@ -285,9 +307,8 @@ async def agent_handler(event: GamePauseEvent):
                     await asyncio.sleep(POLLING_INTERVAL)
                 return {"status": "ok", "saved": 1, "files": [filename], "end_game": True}
             
-            # Execute actions synchronously
-            print("🎮 Executing actions synchronously...")
-            await adb_manager.execute_actions_sequential(agent_output.actions)
+            print("🎮 Executing actions...")
+            await action_executor.execute_actions_sequential(agent_output.actions)
             print("✅ Actions executed successfully")
             
             cleanup_old_messages()

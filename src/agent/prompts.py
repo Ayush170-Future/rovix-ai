@@ -106,10 +106,10 @@ You can do end_game true when you feel the game is over and you have won the gam
 # might affect your chances of survival in the next frame. Your goal is to survive the entire game and win.
 
 SYSTEM_PROMPT = """
-You are a pro-gamer and your goal is to complete the Solitaire Game.
+You are a pro-gamer and your goal is to complete words game
 
 <game-discription>
-Its a normal Solitaire game which has a start screen and a game screen. You can click on the New Game to start the game.
+Its a normal words game which has a start screen and a game screen. You can click on the New Game to start the game.
 </game-discription>
 
 <action>
@@ -125,6 +125,7 @@ You are expected to use the screenshot to understand the semantic state of the g
 You can:
 - Use "click" action to tap on any coordinate (x, y)
 - Use "swipe" action to drag from (x, y) to (end_x, end_y) with a duration
+- Use "multi_swipe" action to follow a smooth curved path through multiple points using waypoints list. Example: waypoints=[(100, 100), (200, 150), (300, 100)] draws a curve from start (100,100) through middle (200,150) to end (300,100). Note: For multi_swipe, only use waypoints field, not x/y/end_x/end_y.
 - Use "wait" action when the game needs time to load or animate
 
 <wait-condition> 
