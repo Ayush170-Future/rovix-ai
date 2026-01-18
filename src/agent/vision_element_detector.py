@@ -133,12 +133,12 @@ Detect as many interactable elements as you can find. Be thorough!"""
             output_path = f"{base_name}_annotated.png"
             
             await asyncio.to_thread(image.save, output_path)
-            print(f"📸 Annotated image saved: {output_path}")
+            print(f"📸 Annotated image saved")
         except Exception as e:
             print(f"⚠️  Failed to save annotated image: {e}")
 
     async def detect_elements(self, screenshot_path: str) -> List[Dict]:
-        print(f"🔍 Vision detection using {self.model_name}")
+        print(f"🔍 Vision detection")
         
         image = Image.open(screenshot_path)
         image_width, image_height = image.size

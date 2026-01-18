@@ -54,12 +54,27 @@ def todo_write_handler(input_str: str, session_id: str) -> str:
         
         merge = parsed_input["merge"]
         
+        # If merge=true, we need to load existing todos for reference
+        existing_todos_dict = {}
+        if merge:
+            existing_todos = TodoPersistenceService.get_todo_list(session_id)
+            existing_todos_dict = {todo.id: todo for todo in existing_todos}
+        
         # 3. Convert to TodoItem objects and validate
         todos = []
         validation_errors = []
         
         for todo_dict in parsed_input["todos"]:
             try:
+                # For merge operations, fill in missing fields from existing todos
+                if merge and todo_dict.get("id") in existing_todos_dict:
+                    existing_todo = existing_todos_dict[todo_dict["id"]]
+                    # Use existing values for any missing fields
+                    todo_dict.setdefault("content", existing_todo.content)
+                    todo_dict.setdefault("todo_type", existing_todo.todo_type.value)
+                    todo_dict.setdefault("dependencies", existing_todo.dependencies)
+                    todo_dict.setdefault("status", existing_todo.status.value)
+                
                 # Create TodoItem from dict
                 todo = TodoItem(
                     id=todo_dict["id"],
@@ -77,7 +92,7 @@ def todo_write_handler(input_str: str, session_id: str) -> str:
                     todos.append(todo)
                     
             except (KeyError, ValueError) as e:
-                validation_errors.append(f"Invalid todo format: {str(e)}")
+                validation_errors.append(f"Invalid todo format - missing or invalid field '{str(e)}'. Received todo: {json.dumps(todo_dict)}")
         
         if validation_errors:
             return json.dumps({

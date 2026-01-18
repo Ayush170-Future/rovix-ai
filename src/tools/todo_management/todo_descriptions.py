@@ -170,6 +170,19 @@ Input should be a JSON string with the following structure:
   ]
 }
 
+### Field Requirements
+- When merge=false: ALL fields are required (id, content, status, todo_type, dependencies)
+- When merge=true: Only 'id' is required. Other fields are optional and will use existing values if not provided.
+
+### Examples of merge=true (partial updates):
+{
+  "merge": true,
+  "todos": [
+    {"id": "1", "status": "completed"},
+    {"id": "2", "status": "in_progress"}
+  ]
+}
+
 ### When to create a new list? (merge: false)
 1. Starting a completely new test scenario
 2. Previous test is fully completed (all tasks completed/cancelled)

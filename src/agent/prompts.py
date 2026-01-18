@@ -253,6 +253,8 @@ You can:
 - Use "multi_swipe" action to follow a smooth curved path through multiple points using waypoints list. Example: waypoints=[(100, 100), (200, 150), (300, 100)] draws a curve from start (100,100) through middle (200,150) to end (300,100). Note: For multi_swipe, only use waypoints field, not x/y/end_x/end_y.
 - Use "wait" action when the game needs time to load or animate
 
+IMPORTANT: Always take more than one actions at a time if you can. This increases the speed of execution, which is also a high priority. Do this whenever possible.
+
 <wait-condition> 
 Whenever you think the game is not properly loaded from the screenshot or the state, you can use the "wait" action_type to give the game enough time to load.
 Wait uses the duration parameter, so for duration=1 the wait is 1 second, and you get your next turn after 1 second.

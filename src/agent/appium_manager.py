@@ -9,9 +9,10 @@ from selenium.webdriver.common.actions.pointer_input import PointerInput
 
 
 class AppiumManager:
-    def __init__(self, appium_url: str = "http://localhost:4723", device_name: str = None, app_package: str = None, app_activity: str = None):
+    def __init__(self, appium_url: str = "http://localhost:4723", device_name: str = None, udid: str = None, app_package: str = None, app_activity: str = None):
         self.appium_url = appium_url
         self.device_name = device_name
+        self.udid = udid
         self.app_package = app_package
         self.app_activity = app_activity or "com.unity3d.player.UnityPlayerActivity"
         self.driver = None
@@ -22,6 +23,9 @@ class AppiumManager:
             options = UiAutomator2Options()
             options.platform_name = "Android"
             options.device_name = self.device_name or "Android Emulator"
+            if self.udid:
+                options.udid = self.udid
+                print(f"📱 Using device with UDID: {self.udid}")
             options.no_reset = True
             options.full_reset = False
             options.new_command_timeout = 3600

@@ -64,6 +64,7 @@ if SDK_ENABLED:
         action_executor = AppiumManager(
             appium_url=os.getenv("APPIUM_URL", "http://localhost:4723"),
             device_name=os.getenv("DEVICE_NAME"),
+            udid=os.getenv("DEVICE_UDID"),
             app_package=os.getenv("APP_PACKAGE"),
             app_activity=os.getenv("APP_ACTIVITY")
         )
@@ -88,6 +89,7 @@ else:
         action_executor = AppiumManager(
             appium_url=os.getenv("APPIUM_URL", "http://localhost:4723"),
             device_name=os.getenv("DEVICE_NAME"),
+            udid=os.getenv("DEVICE_UDID"),
             app_package=os.getenv("APP_PACKAGE"),
             app_activity=os.getenv("APP_ACTIVITY")
         )
@@ -245,15 +247,15 @@ def parse_llm_response(response: dict) -> AgentOutput:
         # Access token counts from raw output
         if hasattr(raw_output, 'usage_metadata') and raw_output.usage_metadata:
             token_counts = raw_output.usage_metadata
-            print(f"📊 Token counts: {token_counts}")
+            # print(f"📊 Token counts: {token_counts}")
             cached_tokens = raw_output.cachedContentTokenCount if hasattr(raw_output, 'cachedContentTokenCount') else 1
             input_tokens = token_counts.get('input_tokens') if isinstance(token_counts, dict) else getattr(token_counts, 'input_tokens', None)
             output_tokens = token_counts.get('output_tokens') if isinstance(token_counts, dict) else getattr(token_counts, 'output_tokens', None)
             total_tokens = token_counts.get('total_tokens') if isinstance(token_counts, dict) else getattr(token_counts, 'total_tokens', None)
             
-            if input_tokens is not None:
-                print(f"📊 Token usage - Input: {input_tokens}, Output: {output_tokens}, Total: {total_tokens}")
-                print(f"📊 Cached tokens: {cached_tokens}")
+            # if input_tokens is not None:
+            #     # print(f"📊 Token usage - Input: {input_tokens}, Output: {output_tokens}, Total: {total_tokens}")
+            #     # print(f"📊 Cached tokens: {cached_tokens}")
     else:
         # Fallback for older response format
         agent_output = AgentOutput(**response) if isinstance(response, dict) else response
@@ -363,6 +365,7 @@ async def execute_agent_actions(actions: List[Action]):
         if action.action_type == "todo_write":
             import json
             print(f"\n📝 Executing todo_write action ({idx}/{len(actions)})")
+            print(f"   📋 Todo input received: {action.todo_input}")
             result = todo_write_handler(action.todo_input, SESSION_ID)
             result_dict = json.loads(result)
             
