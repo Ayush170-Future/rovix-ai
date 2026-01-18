@@ -19,3 +19,9 @@ numpy>=1.24.0
 python-dotenv>=1.0.0
 redis>=5.0.0
 
+# ADB integration
+pure-python-adb>=0.3.0
+
+# Appium integration (optional)
+Appium-Python-Client>=3.0.0
+

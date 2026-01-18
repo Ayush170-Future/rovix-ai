@@ -14,6 +14,10 @@ class ActionHandler:
     Extracts interactive elements on the fly and executes actions.
     """
     
+    # ToDo:
+    # At times the button name doesn't describe the button's functionality properly.
+    # Have to add child elements context to the button as well.
+    
     # Key name to AltKeyCode mapping
     KEY_MAPPING = {
         "Space": AltKeyCode.Space,
@@ -56,20 +60,12 @@ class ActionHandler:
         "Alt": AltKeyCode.LeftAlt,
     }
     
-    def __init__(self, driver: AltDriver, config_path: Optional[str] = None):
-        """
-        Initialize ActionHandler.
-        
-        Args:
-            driver: AltDriver instance from service.py
-            config_path: Path to action config JSON. If None, uses default config.
-        """
+    def __init__(self, driver: AltDriver, adb_manager=None, config_path: Optional[str] = None):
         self.driver = driver
         self.input_controller = InputController(driver)
+        self.adb_manager = adb_manager
         
-        # Load configuration
         if config_path is None:
-            # Use default config path
             default_config = os.path.join(
                 os.path.dirname(__file__),
                 "config",
@@ -79,12 +75,10 @@ class ActionHandler:
         
         self.config = self._load_config(config_path)
         
-        # Element cache
         self._cached_elements: Optional[List[Dict[str, Any]]] = None
         self._element_cache_timestamp: Optional[float] = None
-        
-        # Fast lookup dictionaries
         self._elements_by_id: Dict[str, Dict[str, Any]] = {}
+        self._bounds: Optional[Dict[str, int]] = None
     
     def _load_config(self, config_path: str) -> Dict[str, Any]:
         """
@@ -174,24 +168,26 @@ class ActionHandler:
             print("⚠️  No component types configured for extraction")
             return elements
         
-        for component_type in component_types:
+        for component_obj in component_types:
+            component_name = component_obj.get("component_name")
+            assembly = component_obj.get("assembly")
             try:
-                objects = self.driver.find_objects(By.COMPONENT, component_type)
+                objects = self.driver.find_objects(By.COMPONENT, component_name)
                 
                 if objects:
-                    print(f"   ✅ Found {len(objects)} {component_type} element(s)")
+                    print(f"   ✅ Found {len(objects)} {component_name} element(s)")
                     
                     for obj in objects:
                         try:
-                            element_info = self._extract_element_info(obj, component_type)
+                            element_info = self._extract_element_info(obj, component_name)
                             if element_info:
                                 elements.append(element_info)
                         except Exception as e:
                             print(f"   ⚠️  Error processing element: {e}")
                             continue
-                            
+
             except Exception as e:
-                print(f"   ⚠️  Error searching for {component_type}: {e}")
+                print(f"   ⚠️  Error searching for {component_name}: {e}")
                 continue
         
         # Remove duplicates by ID
@@ -217,72 +213,104 @@ class ActionHandler:
         print(f"✅ Extracted {len(unique_elements)} unique interactive elements")
         return unique_elements
     
-    def _extract_element_info(self, obj: Any, component_type: str) -> Optional[Dict[str, Any]]:
-        """
-        Extract information from an AltObject.
+    def _translate_coords(self, unity_x: float, unity_y: float, mobile_y: float, 
+                          bounds: Dict[str, int]) -> tuple[int, int]:
+        rotation = bounds.get('rotation', 0)
         
-        Args:
-            obj: AltObject instance
-            component_type: Type of component
-            
-        Returns:
-            Element info dictionary or None if extraction fails
-        """
+        if rotation == 0:
+            screen_x = int(round(unity_x + bounds['offset_x']))
+            screen_y = int(round(mobile_y + bounds['offset_y']))
+        
+        elif rotation == 1:
+            # screen_x = int(round(unity_y + bounds['offset_x']))
+            # screen_y = int(round(unity_x + bounds['offset_y']))
+            screen_x = int(round(unity_x + bounds['offset_y']))
+            screen_y = int(round(bounds['height'] - unity_y + bounds['offset_x']))
+        
+        elif rotation == 3:
+            screen_x = int(round(mobile_y + bounds['offset_x']))
+            screen_y = int(round(bounds['width'] - unity_x + bounds['offset_y']))
+        
+        elif rotation == 2:
+            screen_x = int(round(bounds['width'] - unity_x + bounds['offset_x']))
+            screen_y = int(round(bounds['height'] - mobile_y + bounds['offset_y']))
+        
+        else:
+            screen_x = int(round(unity_x + bounds['offset_x']))
+            screen_y = int(round(mobile_y + bounds['offset_y']))
+        
+        return screen_x, screen_y
+    
+    def _extract_element_info(self, obj: Any, component_type: str) -> Optional[Dict[str, Any]]:
         try:
             element_id = str(obj.id) if hasattr(obj, 'id') else None
             name = obj.name if hasattr(obj, 'name') else "Unknown"
             
-            # Get position
-            position = None
-            if hasattr(obj, 'x') and hasattr(obj, 'y'):
-                position = (float(obj.x), float(obj.y))
+            unity_x = float(obj.x) if hasattr(obj, 'x') else None
+            unity_y = float(obj.y) if hasattr(obj, 'y') else None
+            mobile_y = float(obj.mobileY) if hasattr(obj, 'mobileY') else None
             
-            # Get text if available
+            position = (unity_x, unity_y) if unity_x is not None and unity_y is not None else None
+            
+            screen_position = None
+            if self.adb_manager and unity_x is not None and unity_y is not None and mobile_y is not None:
+                if self._bounds:
+                    screen_x, screen_y = self._translate_coords(
+                        unity_x, unity_y, mobile_y, self._bounds
+                    )
+                    screen_position = (screen_x, screen_y)
+            
             text = None
             try:
                 text = obj.get_text()
             except:
                 pass
             
-            # Get enabled state
             enabled = True
             if hasattr(obj, 'enabled'):
                 enabled = obj.enabled
             
-            return {
+            element_info = {
                 "id": element_id,
                 "name": name,
                 "type": component_type,
                 "position": position,
+                "screen_position": screen_position,
                 "text": text,
                 "enabled": enabled,
-                "object": obj  # Keep reference for execution
+                "object": obj
             }
+            
+            if component_type == "UnityEngine.UI.Slider":
+                try:
+                    min_val = obj.get_component_property("UnityEngine.UI.Slider", "minValue", "UnityEngine.UI")
+                    max_val = obj.get_component_property("UnityEngine.UI.Slider", "maxValue", "UnityEngine.UI")
+                    current_val = obj.get_component_property("UnityEngine.UI.Slider", "value", "UnityEngine.UI")
+                    element_info["minValue"] = float(min_val) if min_val is not None else None
+                    element_info["maxValue"] = float(max_val) if max_val is not None else None
+                    element_info["value"] = float(current_val) if current_val is not None else None
+                except Exception as e:
+                    print(f"      ⚠️  Error getting slider properties for {name}: {e}")
+                    element_info["minValue"] = None
+                    element_info["maxValue"] = None
+                    element_info["value"] = None
+
+            return element_info
             
         except Exception as e:
             print(f"      ⚠️  Error extracting info: {e}")
             return None
     
     def get_available_actions(self) -> Dict[str, Any]:
-        """
-        Get all available actions based on config and current game state.
-        
-        Returns:
-            Dictionary with available primitives:
-            {
-                "keyboard": {
-                    "key_press": {"available_keys": [...]},
-                    "key_hold": {"available_keys": [...]}
-                },
-                "buttons": [
-                    {"id": "...", "name": "...", ...},
-                    ...
-                ]
-            }
-        """
+        self._bounds = self.adb_manager.get_unity_bounds()
+        if self._bounds is None:
+            raise ValueError("Failed to get Unity bounds")
+
         available = {
             "keyboard": {},
-            "buttons": []
+            "buttons": [],
+            "sliders": [],
+            "interactable_2d": []
         }
         
         # Keyboard actions
@@ -293,23 +321,42 @@ class ActionHandler:
                 "key_hold": {"available_keys": available_keys}
             }
         
-        # Button actions
-        if self.config.get("input_types", {}).get("buttons", {}).get("enabled", False):
-            elements = self.extract_interactive_elements(force_refresh=True)
-            # Return simplified info (without object reference)
-            available["buttons"] = [
-                {
-                    "id": elem["id"],
-                    "name": elem["name"],
-                    "type": elem["type"],
-                    "position": elem["position"],
-                    "text": elem.get("text"),
-                    "enabled": elem["enabled"]
-                }
-                for elem in elements
-            ]
+        # Extract all interactive elements
+        elements = self.extract_interactive_elements(force_refresh=True)
         
-        print(f"✅ Available actions: {available}")
+        # Separate buttons and sliders
+        for elem in elements:
+            elem_type = elem.get("type", "")
+            simplified_elem = {
+                "id": elem["id"],
+                "name": elem["name"],
+                "type": elem["type"],
+                "position": elem["position"],
+                "screen_position": elem.get("screen_position"),
+                "text": elem.get("text"),
+                "enabled": elem["enabled"]
+            }
+            
+            if elem_type == "UnityEngine.UI.Slider":
+                # Add slider-specific properties
+                if self.config.get("input_types", {}).get("sliders", {}).get("enabled", False):
+                    simplified_elem["minValue"] = elem.get("minValue")
+                    simplified_elem["maxValue"] = elem.get("maxValue")
+                    simplified_elem["value"] = elem.get("value")
+                    available["sliders"].append(simplified_elem)
+            elif elem_type == "UnityEngine.UI.Button":
+                # Add button to buttons list
+                if self.config.get("input_types", {}).get("buttons", {}).get("enabled", False):
+                    available["buttons"].append(simplified_elem)
+            elif elem_type == "UnityEngine.BoxCollider2D" or elem_type == "UnityEngine.CircleCollider2D" or elem_type == "UnityEngine.PolygonCollider2D":
+                # Add collider to interactable_2d list
+                if self.config.get("input_types", {}).get("interactable_2d", {}).get("enabled", False):
+                    available["interactable_2d"].append(simplified_elem)
+            else:
+                # For other component types, add to buttons by default (backward compatibility)
+                if self.config.get("input_types", {}).get("buttons", {}).get("enabled", False):
+                    available["buttons"].append(simplified_elem)
+        
         return available
     
     def _map_key_to_altkeycode(self, key: str) -> AltKeyCode:
@@ -381,6 +428,28 @@ class ActionHandler:
         """
         print(f"⏳ WAIT: {duration}s")
         await asyncio.sleep(duration)
+
+    async def execute_slider_move(self, slider_id: str, value: float) -> None:
+        self.extract_interactive_elements()
+        element = self._elements_by_id.get(slider_id)
+        if element is None:
+            raise ValueError(f"Slider with ID '{slider_id}' not found")
+        if not element["enabled"]:
+            raise ValueError(f"Slider '{element['name']}' is not enabled")
+        obj = element["object"]
+        name = element["name"]
+        print(f"🔄 SLIDER_MOVE: {name} (ID: {slider_id}) to {value}")
+        try:
+            # Try without assembly first (Unity built-in components often don't need assembly)
+            try:
+                obj.set_component_property("UnityEngine.UI.Slider", "value", value)
+            except Exception:
+                # If that fails, try with UnityEngine assembly
+                obj.set_component_property("UnityEngine.UI.Slider", "value", value, "UnityEngine")
+            print(f"   ✅ Successfully moved {name} to {value}")
+        except Exception as e:
+            print(f"   ❌ Error moving {name} to {value}: {e}")
+            raise
     
     async def execute_actions_parallel(self, actions: List[Dict[str, Any]]) -> None:
         """
@@ -441,6 +510,24 @@ class ActionHandler:
                     else:
                         raise ValueError("button_press requires either 'button_id' or 'button_name'")
                 
+                elif action_type == "slider_move":
+                    slider_id = action.get("slider_id")
+                    slider_value = action.get("slider_value")
+                    if slider_id is None or slider_value is None:
+                        raise ValueError("slider_move requires 'slider_id' and 'slider_value'")
+                    
+                    tasks.append(asyncio.create_task(
+                        self.execute_slider_move(slider_id, slider_value)
+                    ))
+                
+                elif action_type == "swipe":
+                    start_x = action.get("start_x")
+                    start_y = action.get("start_y")
+                    end_x = action.get("end_x")
+                    end_y = action.get("end_y")
+                    duration = action.get("duration")
+                    tasks.append(asyncio.create_task(self.execute_swipe(start_x, start_y, end_x, end_y, duration)))
+
                 elif action_type == "wait":
                     duration = action.get("duration")
                     if duration is None:
@@ -460,6 +547,7 @@ class ActionHandler:
         # Wait for all tasks to complete
         if tasks:
             print("🔧 Waiting for all actions to complete...")
+            # TODO: Investigate this logic because this is supposed to be sequential but we are using gather which is supposed to be parallel
             await asyncio.gather(*tasks, return_exceptions=True)
             
             # Check for exceptions
@@ -484,12 +572,24 @@ class ActionHandler:
                 action_type = action.action_type
                 key_name = action.key_name
                 button_id = action.button_id
+                slider_id = getattr(action, 'slider_id', None)
+                slider_value = getattr(action, 'slider_value', None)
                 duration = action.duration
+                start_x = action.start_x
+                start_y = action.start_y
+                end_x = action.end_x
+                end_y = action.end_y
             else:
                 action_type = action.get("type") or action.get("action_type")
                 key_name = action.get("key") or action.get("key_name")
                 button_id = action.get("button_id")
+                slider_id = action.get("slider_id")
+                slider_value = action.get("slider_value")
                 duration = action.get("duration", 0.1)
+                start_x = action.get("start_x")
+                start_y = action.get("start_y")
+                end_x = action.get("end_x")
+                end_y = action.get("end_y")
             
             try:
                 if action_type == "key_press":
@@ -500,6 +600,14 @@ class ActionHandler:
                     if button_id is None:
                         raise ValueError("button_press requires button_id")
                     await self.execute_button_press(str(button_id))
+                elif action_type == "slider_move":
+                    if slider_id is None or slider_value is None:
+                        raise ValueError("slider_move requires 'slider_id' and 'slider_value'")
+                    await self.execute_slider_move(str(slider_id), float(slider_value))
+                elif action_type == "swipe":
+                    if start_x is None or start_y is None or end_x is None or end_y is None:
+                        raise ValueError("Co-ordinates values are required") # TODO: See if these errors are going back to the LLM or not.
+                    await self.execute_swipe(start_x, start_y, end_x, end_y, duration)
                 elif action_type == "wait":
                     if duration is None:
                         raise ValueError("duration is required for wait")
@@ -509,6 +617,9 @@ class ActionHandler:
                 continue
         
         self.input_controller.release_all_keys()
+
+    async def execute_swipe(self, start_x: int, start_y: int, end_x: int, end_y: int, duration: float) -> None:
+        await self.input_controller.swipe_async(start_x, start_y, end_x, end_y, duration)
     
     def invalidate_element_cache(self) -> None:
         """Invalidate the element cache to force refresh on next extraction"""

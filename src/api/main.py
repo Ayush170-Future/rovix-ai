@@ -3,6 +3,7 @@ import sys
 import asyncio
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 import uvicorn
 import redis
 import numpy as np
@@ -19,8 +20,16 @@ from agent.service import (
     game_state_messages,
     game_state_lock,
     structured_model,
-    agent_handler
+    agent_handler,
+    action_handler
 )
+
+class SwipeRequest(BaseModel):
+    x1: int
+    y1: int
+    x2: int
+    y2: int
+    duration: float = 0.5
 
 app = FastAPI(title="Unity AI Agent Server")
 app.add_middleware(
@@ -50,6 +59,11 @@ async def on_game_pause(event: GamePauseEvent):
     await agent_handler(event)
     return {"status": "ok"}
 
+@app.post("/ai/swipe")
+async def swipe_operation(request: SwipeRequest):
+    """Perform a swipe operation"""
+    await action_handler.execute_swipe(request.x1, request.y1, request.x2, request.y2, request.duration)
+    return {"status": "ok", "message": f"Swiped from ({request.x1}, {request.y1}) to ({request.x2}, {request.y2})"}
 
 def start_server(host="0.0.0.0", port=8000):
     uvicorn.run(app, host=host, port=port)

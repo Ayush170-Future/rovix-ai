@@ -4,6 +4,7 @@ from alttester import AltKeyCode
 import time
 import asyncio
 
+
 class AltTesterClient:
     """Manages the AltTester driver connection"""
     
@@ -101,6 +102,19 @@ class InputController:
         await asyncio.sleep(duration)
         print(f"  🔼 KEY_UP: {key_code.name}")
         self.driver.key_up(key_code)
+
+    async def swipe_async(self, start_x: int, start_y: int, end_x: int, end_y: int, duration: float):
+        print(f"🔄 SWIPE: Starting swipe from ({start_x}, {start_y}) to ({end_x}, {end_y}) for {duration}s")
+        finger_id = self.driver.begin_touch([start_x, start_y])
+        await asyncio.sleep(3)
+        self.driver.move_touch(finger_id, [start_x + 2, start_y + 2])
+        await asyncio.sleep(3)
+        self.driver.move_touch(finger_id, [end_x, end_y])
+        await asyncio.sleep(3)
+        self.driver.end_touch(finger_id)
+        await asyncio.sleep(3)
+        print(f"🔄 SWIPE: Completed") # TODO: See why alttester composite methods are not behaving correctly.
+        # Drag and Drop me kuch toh physics adjust nahi ho paa rahi hai. Mujhe manually cards ko hilana pad rha hai
     
     async def jump_async(self, hold_duration=2):
         """
@@ -235,39 +249,53 @@ class GameFrameController:
     """Handles frame-based game control using the FrameController component"""
     
     def __init__(self, alt_driver):
-        """
-        Initialize GameFrameController.
-        
-        Args:
-            alt_driver (AltDriver): The AltDriver instance
-        """
         self.driver = alt_driver
         print(f"🔍 Searching for FrameController...")
-        self.controller = alt_driver.find_object(By.NAME, "FrameController")
+        self.controller = alt_driver.find_object(By.NAME, "frameController")
         print(f"🔍 FrameController found: {self.controller}")
+        
+        # DEBUG: List all components on this GameObject
+        try:
+            components = self.controller.get_all_components()
+            print(f"📋 Components found on FrameController GameObject:")
+            for comp in components:
+                print(f"🔍 Component: {comp}")
+        except Exception as e:
+            print(f"⚠️ Could not list components: {e}")
     
     def get_current_frame(self):
-        """
-        Get the current frame count from FrameController.
-        
-        Returns:
-            int: The current frame number
-        """
-    
         return int(self.controller.call_component_method(
-            "FrameController",
-            "GetCurrentFrame",
+            "frameController",  # Component type name
+            "GetCurrentFrame",  # Method name
             assembly="Assembly-CSharp"
         ))
     
     def resume(self):
-        """
-        Resume the game by calling Resume() on FrameController.
-        """
         print(f"🔍 Resuming game...")
         self.controller.call_component_method(
-            "FrameController",
+            "frameController",
             "Resume",
             assembly="Assembly-CSharp"
         )
+        print(f"🔍 Game resumed")
     
+    def mark_actions_executed(self):
+        print(f"✅ Marking actions as executed...")
+        self.controller.call_component_method(
+            "frameController",
+            "MarkActionsExecuted",
+            assembly="Assembly-CSharp"
+        )
+        print(f"✅ Actions marked as executed")
+
+    def get_current_game_state(self):
+        objects = self.driver.find_objects(By.COMPONENT, "UnityEngine.UI.Button")
+        for obj in objects:
+            print(f"🔍 Button: {obj.name}")
+            print(f"🔍 Button: {obj.enabled}")
+            position = None
+            if hasattr(obj, 'x') and hasattr(obj, 'y'):
+                position = (float(obj.x), float(obj.worldY))
+            print(f"🔍 Button: {position}")
+
+        

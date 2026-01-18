@@ -15,23 +15,29 @@ import sys
 import time
 from langchain_aws import ChatBedrockConverse
 from langchain_google_genai import ChatGoogleGenerativeAI
-import numpy as np
-import redis
-
-redis_client = redis.Redis(host='localhost', port=6379, decode_responses=False)
-
-# Set up path for imports (must be before importing agent modules)
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-# Import SYSTEM_PROMPT - works both as module and direct execution
 try:
-    from .prompts import SYSTEM_PROMPT
+    from .prompts import SYSTEM_PROMPT, SYSTEM_PROMPT_WITH_TODO
 except ImportError:
-    from agent.prompts import SYSTEM_PROMPT
+    from agent.prompts import SYSTEM_PROMPT, SYSTEM_PROMPT_WITH_TODO
+
 from tester import InputController, AltTesterClient, GameFrameController, SceneController, TimeController
 from agent.actions import ActionHandler
+from agent.adb_manager import ADBManager
+from agent.appium_manager import AppiumManager
+from agent.vision_element_detector import VisionElementDetector
+from agent.context import ContextService
+from tools.todo_management import todo_write_handler, TODO_WRITE_INPUT_DESCRIPTION, get_todo_list_for_context
+from tools.todo_management.todo_service import TodoPersistenceService
 
 load_dotenv()
+
+SDK_ENABLED = os.getenv("SDK_ENABLED", "true").lower() == "true"
+USE_APPIUM = os.getenv("USE_APPIUM", "false").lower() == "true"
+POLLING_INTERVAL = float(os.getenv("POLLING_INTERVAL", "2.5"))
+MAX_STEPS = int(os.getenv("MAX_STEPS", "1000"))
+SESSION_ID = "game_session_main"
 
 model = ChatGoogleGenerativeAI(
     model="gemini-3-pro-preview",
@@ -42,49 +48,177 @@ model = ChatGoogleGenerativeAI(
     api_key=os.getenv("GOOGLE_API_KEY")
 )
 
-print("Initializing AltTesterClient...")
-client = AltTesterClient(host="127.0.0.1", port=13000, timeout=60)
-print("AltTesterClient initialized")
-driver = client.get_driver()
-input_controller = InputController(driver)
-time_controller = TimeController(driver)
-scene_controller = SceneController(driver)
-frame_controller = GameFrameController(driver)
-frame_controller.resume()
+if SDK_ENABLED:
+    print("Initializing AltTesterClient...")
+    client = AltTesterClient(host="127.0.0.1", port=13000, timeout=60)
+    print("AltTesterClient initialized")
+    driver = client.get_driver()
+    input_controller = InputController(driver)
+    time_controller = TimeController(driver)
+    scene_controller = SceneController(driver)
+    frame_controller = GameFrameController(driver)
+    frame_controller.mark_actions_executed()
+    
+    if USE_APPIUM:
+        print("Initializing Appium Manager...")
+        action_executor = AppiumManager(
+            appium_url=os.getenv("APPIUM_URL", "http://localhost:4723"),
+            device_name=os.getenv("DEVICE_NAME"),
+            udid=os.getenv("DEVICE_UDID"),
+            app_package=os.getenv("APP_PACKAGE"),
+            app_activity=os.getenv("APP_ACTIVITY")
+        )
+    else:
+        print("Initializing ADB Manager...")
+        action_executor = ADBManager(host="127.0.0.1", port=5037)
+    
+    action_handler = ActionHandler(driver, adb_manager=action_executor)
+    vision_detector = None
+else:
+    print("Black box mode - skipping AltTester initialization")
+    client = None
+    driver = None
+    input_controller = None
+    time_controller = None
+    scene_controller = None
+    frame_controller = None
+    action_handler = None
+    
+    if USE_APPIUM:
+        print("Initializing Appium Manager...")
+        action_executor = AppiumManager(
+            appium_url=os.getenv("APPIUM_URL", "http://localhost:4723"),
+            device_name=os.getenv("DEVICE_NAME"),
+            udid=os.getenv("DEVICE_UDID"),
+            app_package=os.getenv("APP_PACKAGE"),
+            app_activity=os.getenv("APP_ACTIVITY")
+        )
+    else:
+        print("Initializing ADB Manager...")
+        action_executor = ADBManager(host="127.0.0.1", port=5037)
+    
+    print("Initializing Vision Detector...")
+    vision_detector = VisionElementDetector(
+        api_key=os.getenv("GOOGLE_API_KEY"),
+        model_name="gemini-robotics-er-1.5-preview"
+    )
 
-# Initialize ActionHandler for unified action execution
-action_handler = ActionHandler(driver)
+context_service = ContextService(
+    system_prompt=SYSTEM_PROMPT_WITH_TODO,
+    keep_full_steps=4
+)
 
-def image_to_bedrock_bytes(path, max_size=(1024, 1024), quality=75):
-    img = Image.open(path).convert("RGB")
-    img.thumbnail(max_size)
-    buf = io.BytesIO()
-    img.save(buf, format="JPEG", quality=quality, optimize=True)
-    return buf.getvalue()
+def initialize_game_todos():
+    """Initialize the todo list for completing 6 levels of the word game"""
+    import json
+    
+    initial_todos = {
+        "merge": False,
+        "todos": [
+            {
+                "id": "1",
+                "content": "Start and complete level 1",
+                "status": "pending",
+                "todo_type": "action",
+                "dependencies": []
+            },
+            {
+                "id": "2",
+                "content": "Start and complete level 2",
+                "status": "pending",
+                "todo_type": "action",
+                "dependencies": ["1"]
+            },
+            {
+                "id": "3",
+                "content": "Start and complete level 3",
+                "status": "pending",
+                "todo_type": "action",
+                "dependencies": ["2"]
+            },
+            {
+                "id": "4",
+                "content": "Start and complete level 4",
+                "status": "pending",
+                "todo_type": "action",
+                "dependencies": ["3"]
+            },
+            {
+                "id": "5",
+                "content": "Start and complete level 5",
+                "status": "pending",
+                "todo_type": "action",
+                "dependencies": ["4"]
+            },
+            {
+                "id": "6",
+                "content": "Start and complete level 6",
+                "status": "pending",
+                "todo_type": "action",
+                "dependencies": ["5"]
+            }
+        ]
+    }
+    
+    todo_input_json = json.dumps(initial_todos)
+    result = todo_write_handler(todo_input_json, SESSION_ID)
+    result_dict = json.loads(result)
+    print(f"✅ Initial todos created: {result_dict.get('totalTasks')} tasks")
+    print(f"   📋 Task counts: {result_dict.get('taskCounts')}")
+    return result
 
-def image_file_to_base64(filepath, max_size=(1024, 1024), quality=75):
-    """Convert a saved image file to base64 string"""
-    image_bytes = image_to_bedrock_bytes(filepath, max_size=max_size, quality=quality)
-    return base64.b64encode(image_bytes).decode("utf-8")
+def print_current_todos(session_id: str):
+    """Print the current todo list in a readable format"""
+    todo_list_text = get_todo_list_for_context(session_id)
+    print("\n" + "="*60)
+    print("📋 CURRENT TODO LIST:")
+    print("="*60)
+    print(todo_list_text)
+    print("="*60 + "\n")
 
 class Action(BaseModel):
-    action_type: Literal["key_press", "button_press"] = Field(
-        description="Represents the type of action to be performed. This can be a key press, button press."
+    action_type: Literal["key_press", "click", "swipe", "multi_swipe", "wait", "todo_write"] = Field(
+        description="Represents the type of action to be performed. This can be a key press, click on a coordinate, swipe, multi-point swipe, wait, or todo_write for managing task lists."
+    )
+    x: int | None = Field(
+        default=None,
+        description="X-coordinate on the screen. Required for 'click' action. For 'swipe' action, this is the starting X-coordinate. Not used for 'multi_swipe' or 'todo_write'."
+    )
+    y: int | None = Field(
+        default=None,
+        description="Y-coordinate on the screen. Required for 'click' action. For 'swipe' action, this is the starting Y-coordinate. Not used for 'multi_swipe' or 'todo_write'."
+    )
+    end_x: int | None = Field(
+        default=None,
+        description="Ending X-coordinate for 'swipe' action. Required only for 'swipe'. Not used for 'multi_swipe' or 'todo_write'."
+    )
+    end_y: int | None = Field(
+        default=None,
+        description="Ending Y-coordinate for 'swipe' action. Required only for 'swipe'. Not used for 'multi_swipe' or 'todo_write'."
+    )
+    waypoints: List[tuple[int, int]] | None = Field(
+        default=None,
+        description="List of (x, y) coordinate tuples for 'multi_swipe' action ONLY. The gesture will follow this path smoothly from first point to last. Includes start, middle, and end points. Example: [(100, 100), (200, 150), (300, 100)] creates a curved path starting at (100,100) and ending at (300,100). Required for 'multi_swipe', ignored for other actions."
     )
     key_name: str | None = Field(
-        description="Represents the name of the key to be pressed from the keyboard. All possible keys are listed in the last message. This is going to be N/A if the action is not a key press."
-    )
-    button_id: int | None = Field(
-        description="Represents the ID of the button to be clicked on the screen. This is a unique identifier for the button and you can find the available buttons in the last message. This is going to be N/A if the action is not a button press."
+        default=None,
+        description="Name of the keyboard key to press. All possible keys are listed in the last message. Required only for 'key_press' action."
     )
     duration: float = Field(
         default=0.1,
-        description="Represents the duration of click. Default is 0.1 second. This might not be relevant for the button press actions."
+        description="Duration of the action in seconds. For 'click': hold duration (0.1 = quick tap). For 'swipe': time to complete the swipe. For 'multi_swipe': total time for entire path. For 'wait': how long to wait. Not used for 'todo_write'. Default: 0.1s."
+    )
+    todo_input: str | None = Field(
+        default=None,
+        description=TODO_WRITE_INPUT_DESCRIPTION
     )
 
 # TODO: Add analyze last step and reason next step fields here as well
 class AgentOutput(BaseModel):
-    reason: str = Field( 
+    game_state_summary: str = Field(
+        description="A concise summary of the current game state, key observations, and important context that should be remembered for future steps. This summary will be preserved in the conversation history even when screenshots are removed. Include: current game situation, player status, important objects/entities, recent changes, and any critical information needed for decision-making."
+    ),
+    reason: str = Field(
         description="Use this field to reason about the current game state and your overall performance, observations, goals that will help you complete the game and figure out the next set of actions."
     ),
     end_game: bool = Field(
@@ -95,213 +229,186 @@ class AgentOutput(BaseModel):
         description="A list of actions to be executed sequentially. This can be a combination of keyboard and button press actions."
     )
 
-
 class GamePauseEvent(BaseModel):
-    """Data sent from Unity when game pauses"""
+    """Data sent from Unity when event interval is reached"""
     current_step: int
-    start_frame: int
-    end_frame: int
-    start_screenshot: str
-    end_screenshot: str
-    key_prefix: str
-    available_frames: List[int]
+    current_frame: int
 
 
-structured_model = model.with_structured_output(
-    schema=AgentOutput.model_json_schema(), method="json_schema"
-)
+structured_model = model.with_structured_output(schema=AgentOutput.model_json_schema(), method="json_schema", include_raw=True)
 
-# Global game state - maintains conversation history across pause events
-game_state_messages = [
-    SystemMessage(content=SYSTEM_PROMPT),
-]
-game_state_lock = threading.Lock()
+def parse_llm_response(response: dict) -> AgentOutput:
+    agent_output = None
+    if isinstance(response, dict) and 'parsed' in response and 'raw' in response:
+        parsed_output = response['parsed']
+        raw_output = response['raw']
+        agent_output = AgentOutput(**parsed_output) if isinstance(parsed_output, dict) else parsed_output
+        
+        # Access token counts from raw output
+        if hasattr(raw_output, 'usage_metadata') and raw_output.usage_metadata:
+            token_counts = raw_output.usage_metadata
+            # print(f"📊 Token counts: {token_counts}")
+            cached_tokens = raw_output.cachedContentTokenCount if hasattr(raw_output, 'cachedContentTokenCount') else 1
+            input_tokens = token_counts.get('input_tokens') if isinstance(token_counts, dict) else getattr(token_counts, 'input_tokens', None)
+            output_tokens = token_counts.get('output_tokens') if isinstance(token_counts, dict) else getattr(token_counts, 'output_tokens', None)
+            total_tokens = token_counts.get('total_tokens') if isinstance(token_counts, dict) else getattr(token_counts, 'total_tokens', None)
+            
+            # if input_tokens is not None:
+            #     # print(f"📊 Token usage - Input: {input_tokens}, Output: {output_tokens}, Total: {total_tokens}")
+            #     # print(f"📊 Cached tokens: {cached_tokens}")
+    else:
+        # Fallback for older response format
+        agent_output = AgentOutput(**response) if isinstance(response, dict) else response
+
+    return agent_output
 
 async def agent_handler(event: GamePauseEvent):
-    print(f"\n🎮 Pause event - Step: {event.current_step}, Frames: {event.start_frame}-{event.end_frame}")
-    print(f"   Available: {event.available_frames}")
+    print(f"\n{'='*80}")
+    print(f"🎮 Step {event.current_step} | Frame {event.current_frame}")
+    print(f"{'='*80}")
     
-    # Select 3 evenly-spaced frames
-    frames = event.available_frames
-
-    # Incase of turn based game, we only need 1 screenshot (current one).
-    # if event.required_screenshots == 1:
-    frames = []
-    frames.append(frame_controller.get_current_frame())
-
-    if len(frames) <= 3:
-        selected = frames
-    else:
-        step = (len(frames) - 1) / 2
-        selected = [frames[0], frames[int(step)], frames[-1]]
+    # Print current todos at the start of each step
+    print_current_todos(SESSION_ID)
     
-    # Create screenshots directory
     screenshots_dir = os.path.join(os.path.dirname(__file__), "..", "agent", "screenshots")
     os.makedirs(screenshots_dir, exist_ok=True)
-    saved_files = []
-    saved_filepaths = []
     
-    # Fetch from Redis and save
-    for i, frame_num in enumerate(selected):
-        try:
-            if frame_num == selected[-1]:
-                # Get the screenshot directly from the game (current frame after pause)
-                filename = f"step_{event.current_step}_frame_{frame_num}_pos_{i+1}_current.png"
-                filepath = os.path.join(screenshots_dir, filename)
-                
-                # Capture screenshot directly from game
-                driver.get_png_screenshot(filepath)
-                
-                saved_files.append(filename)
-                saved_filepaths.append(filepath)
-                print(f"   💾 {filename} (captured from game)")
-                continue
-            else:
-                # Get from Redis
-                key = f"{event.key_prefix}{frame_num}"
-                raw_data = redis_client.get(key)
-                meta_data = redis_client.get(f"{key}_meta")
-                
-                if not raw_data or not meta_data:
-                    print(f"   ❌ Frame {frame_num} not found in Redis")
-                    continue
-                
-                # Convert raw RGB24 to image
-                width, height = map(int, meta_data.decode().split('x'))
-                img_array = np.frombuffer(raw_data, dtype=np.uint8).reshape((height, width, 3))
-                img = Image.fromarray(np.flipud(img_array), 'RGB')
-                
-                # Save
-                filename = f"step_{event.current_step}_frame_{frame_num}_pos_{i+1}.png"
-                filepath = os.path.join(screenshots_dir, filename)
-                img.save(filepath, format='PNG')
-                saved_files.append(filename)
-                saved_filepaths.append(filepath)
-                print(f"   💾 {filename}")
-            
-        except Exception as e:
-            print(f"   ❌ Error on frame {frame_num}: {e}")
+    filename = f"step_{event.current_step}_frame_{event.current_frame}.png"
+    filepath = os.path.join(screenshots_dir, filename)
     
-    print(f"✅ Saved {len(saved_files)} screenshots")
+    try:
+        action_executor.get_screenshot(filepath)
+        print(f"   💾 {filename} (captured)")
+        saved_filepaths = [filepath]
+    except Exception as e:
+        print(f"   ❌ Error capturing screenshot: {e}")
+        return {"status": "error", "message": f"Failed to capture screenshot: {e}"}
     
-    # If we have screenshots, call LLM and execute actions
+    print(f"✅ Saved screenshot")
+    
     if saved_filepaths:
         try:
-            # Convert saved screenshots to base64
-            print("🔄 Converting screenshots to base64...")
-            screenshot_base64_list = []
-            for filepath in saved_filepaths:
-                screenshot_base64 = image_file_to_base64(filepath)
-                screenshot_base64_list.append(screenshot_base64)
+            if SDK_ENABLED:
+                available_actions = action_handler.get_available_actions()
+            else:
+                available_actions = {}
             
-            # Prepare message for LLM
-            message_content = [
-                {
-                    "type": "text",
-                    "text":f"Here is the current game state after your previous action execution. The state is represented by Screenshots of the game. "
-                           f"Your goal is to clearly identify the next set of actions or a single action depending upon the last screenshot. The initial screenshots are given to give the sense of direction of velocity. This is a 2d game."
-                           f"Remember to use the last screenshot as the current state and use the initial screenshots to get the sense of movement for better decision making."
-                           f"Here are {len(saved_filepaths)} screenshots showing the game state. Analyze and decide on the next actions."
-                }
-            ]
+            await context_service.add_new_step(
+                session_id=SESSION_ID,
+                screenshot_path=saved_filepaths[0],
+                available_actions=available_actions,
+                step=event.current_step,
+                frame=event.current_frame,
+                vision_detector=vision_detector,
+                action_handler=action_handler,
+                sdk_enabled=SDK_ENABLED
+            )
             
-            # Add all screenshots to the message
-            for i, screenshot_base64 in enumerate(screenshot_base64_list):
-                message_content.append({
-                    "type": "image_url",
-                    "image_url": {
-                        "url": f"data:image/jpeg;base64,{screenshot_base64}"
-                    }
-                })
+            messages = context_service.get_messages_for_llm(SESSION_ID)
             
-            current_game_state_indication_message = HumanMessage(content=[{
-                "type": "text",
-                "text": f"[CURRENT GAME STATE]"
-            }])
-            available_actions_message = await get_available_actions_message()
-            # Add human message to global game state
-            screenshot_message = HumanMessage(content=message_content)
-            with game_state_lock:
-                # # Removing the previous Current Game State indication message (third-to-last)
-                # if len(game_state_messages) >= 4:
-                #     # POP the third-to-last message (index -3)
-                #     game_state_messages.pop(-3)
-
-                game_state_messages.append(current_game_state_indication_message)
-                game_state_messages.append(screenshot_message)
-
-                # Add available actions message
-                game_state_messages.append(available_actions_message)
-
-                # Create a copy of messages for this LLM call
-                messages = game_state_messages.copy()
-            
-            # Get agent decision
             print("🤖 Getting agent decision from LLM...")
             response = await asyncio.to_thread(structured_model.invoke, messages)
-            agent_output = AgentOutput(**response) if isinstance(response, dict) else response
-            
-            print(f"✅ Agent decision: {agent_output.model_dump()}")
-            
-            # Add AI response to global game state
-            with game_state_lock:
-                game_state_messages.append(AIMessage(content=str(agent_output.model_dump())))
 
-            # Check if game should end
+            agent_output = parse_llm_response(response)
+            print(f"✅ Agent decision received")
+            print(f"   📝 Game state: {agent_output.game_state_summary[:100]}..." if len(agent_output.game_state_summary) > 100 else f"   📝 Game state: {agent_output.game_state_summary}")
+            print(f"   🤔 Reasoning: {agent_output.reason[:100]}..." if len(agent_output.reason) > 100 else f"   🤔 Reasoning: {agent_output.reason}")
+            print(f"   🎯 Actions count: {len(agent_output.actions)}")
+            print(f"   🏁 End game: {agent_output.end_game}")
+            
+            context_service.add_ai_response(SESSION_ID, agent_output)
+
             if agent_output.end_game:
                 print("🛑 Agent signaled end of game")
-                return {"status": "ok", "saved": len(saved_files), "files": saved_files, "end_game": True}
-
-            # Resume the game before calling LLM and executing actions
-            try:
-                print("▶️ Resuming game...")
-                frame_controller.resume()
-                print("✅ Game resumed")
-            except Exception as e:
-                print(f"❌ Error resuming game: {e}")
-                return {"status": "error", "message": f"Failed to resume game: {e}"}
+                if SDK_ENABLED:
+                    try:
+                        frame_controller.mark_actions_executed()
+                    except Exception as e:
+                        print(f"⚠️  Warning: Failed to mark actions executed: {e}")
+                else:
+                    await asyncio.sleep(POLLING_INTERVAL)
+                return {"status": "ok", "saved": 1, "files": [filename], "end_game": True}
             
-            # Execute actions asynchronously
-            print("🎮 Executing actions asynchronously...")
-            await action_handler.execute_actions_sequential(agent_output.actions)
+            print("🎮 Executing actions...")
+            await execute_agent_actions(agent_output.actions)
             print("✅ Actions executed successfully")
+            
+            context_service.cleanup_old_messages(SESSION_ID)
+            
+            if SDK_ENABLED:
+                try:
+                    print("✅ Marking actions as executed...")
+                    frame_controller.mark_actions_executed()
+                    print("✅ Actions marked as executed - Unity can send next event")
+                except Exception as e:
+                    print(f"❌ Error marking actions executed: {e}")
+                    return {"status": "error", "message": f"Failed to mark actions executed: {e}"}
+            else:
+                print(f"⏳ Waiting {POLLING_INTERVAL}s for game to process actions...")
+                await asyncio.sleep(POLLING_INTERVAL)
+            
+            return {"status": "ok", "saved": 1, "files": [filename]}
             
         except Exception as e:
             print(f"❌ Error in LLM call or action execution: {e}")
             import traceback
             traceback.print_exception(type(e), e, e.__traceback__)
+            if SDK_ENABLED:
+                try:
+                    frame_controller.mark_actions_executed()
+                except Exception as mark_error:
+                    print(f"⚠️  Warning: Failed to mark actions executed after error: {mark_error}")
             return {"status": "error", "message": f"Failed to process: {e}"}
 
-async def get_available_actions_message() -> HumanMessage:
-    available_actions = action_handler.get_available_actions()
-
-    action_message_content = "You can currently interact with the following controls on the screen: \n Buttons available to click:"
-    buttons = available_actions.get("buttons", [])
-    if buttons:
-        for index, button in enumerate(buttons):
-            name = button.get("name", "Unknown")
-            button_id = button.get("id", "N/A")
-            position = button.get("position")
-            enabled = button.get("enabled", True)
+async def execute_agent_actions(actions: List[Action]):
+    for idx, action in enumerate(actions, 1):
+        if action.action_type == "todo_write":
+            import json
+            print(f"\n📝 Executing todo_write action ({idx}/{len(actions)})")
+            print(f"   📋 Todo input received: {action.todo_input}")
+            result = todo_write_handler(action.todo_input, SESSION_ID)
+            result_dict = json.loads(result)
             
-            # Format position
-            if position and len(position) == 2:
-                pos_str = f"{int(position[0])} × {int(position[1])}"
+            if result_dict.get("success"):
+                print(f"   ✅ Todo list updated successfully")
+                print(f"   📊 Total tasks: {result_dict.get('totalTasks')}")
+                print(f"   📈 Task counts: {result_dict.get('taskCounts')}")
+                
+                # Print the updated todo list
+                print_current_todos(SESSION_ID)
             else:
-                pos_str = "N/A"
+                print(f"   ❌ Todo update failed: {result_dict.get('message')}")
             
-            # Format enabled status
-            enabled_str = "Enabled" if enabled else "Disabled"
-            
-            # Add formatted button info
-            action_message_content += f"\n- name = {name}     (Button ID: {button_id}, Position: {pos_str}, {enabled_str})"
-    
-    available_keys = available_actions.get("keyboard", {}).get("key_press", {}).get("available_keys", [])
-    action_message_content += "\n Keys available to press:\n- " + ", ".join(available_keys)
-    
-    print(action_message_content)
+            context_service.add_todo_result(SESSION_ID, result)
+        else:
+            print(f"   🎮 Executing {action.action_type} action ({idx}/{len(actions)})")
+            await action_executor.execute_actions_sequential([action])
 
-    return HumanMessage(content=[{
-        "type": "text",
-        "text": action_message_content
-    }])
+async def run_blackbox_loop():
+    print("🎮 Starting black box polling loop")
+    step = 0
+    
+    while step < MAX_STEPS:
+        print(f"\n🔄 Black box iteration {step}")
+        
+        fake_event = GamePauseEvent(current_step=step, current_frame=step)
+        result = await agent_handler(fake_event)
+        
+        if result.get("end_game"):
+            print("🛑 Game ended")
+            break
+            
+        step += 1
+    
+    print(f"✅ Completed {step} steps")
+
+if __name__ == "__main__":
+    # Initialize the todo list for the 6-level word game
+    print("🎯 Initializing game todos for 6 levels...")
+    initialize_game_todos()
+    
+    if not SDK_ENABLED:
+        print("🎯 Black box mode - starting polling loop")
+        asyncio.run(run_blackbox_loop())
+    else:
+        print("🔌 SDK mode - waiting for Unity events")
