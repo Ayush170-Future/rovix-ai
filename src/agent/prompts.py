@@ -234,7 +234,11 @@ Use merge=false only when starting a completely new test scenario.
 </todo-methodology>
 
 <game-discription>
-You are testing a words game which has a start screen and a game screen. You can click on the New Game to start the game.
+Hitwicket is not a reflex game where you swing a bat at a ball. 
+It is a Cricket Strategy RPG. Think of it as "Football Manager meets Cricket," but with superhero-like abilities. 
+You play the combined role of Owner, Coach, and Captain.
+
+Your goal is to play the obvious gameplay till level 10 and follow the tutorial. In the way please prepare the todo list to track progress.
 </game-discription>
 
 <action>

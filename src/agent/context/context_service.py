@@ -176,18 +176,27 @@ class ContextService:
     ) -> HumanMessage:
         
         if not sdk_enabled and vision_detector:
-            elements = await vision_detector.detect_elements(screenshot_path)
+            detection_result = await vision_detector.detect_elements(screenshot_path)
             
-            action_message_content = "Detected interactive elements on screen:"
-            if elements:
-                for element in elements:
-                    name = element['name']
-                    desc = element['description']
-                    pos = element['screen_position']
-                    bbox = element['bounding_box']
-                    action_message_content += f"\n- {name} at ({pos[0]}, {pos[1]}) bbox: [{bbox[0]}, {bbox[1]}, {bbox[2]}, {bbox[3]}] - {desc}"
+            if detection_result.success:
+                action_message_content = "Detected interactive elements on screen:"
+                if detection_result.elements:
+                    for element in detection_result.elements:
+                        name = element['name']
+                        desc = element['description']
+                        pos = element['screen_position']
+                        bbox = element['bounding_box']
+                        action_message_content += f"\n- {name} at ({pos[0]}, {pos[1]}) bbox: [{bbox[0]}, {bbox[1]}, {bbox[2]}, {bbox[3]}] - {desc}"
+                else:
+                    action_message_content += "\n- No elements detected. Analyze the screenshot to identify clickable areas."
             else:
-                action_message_content += "\n- No elements detected. Analyze the screenshot to identify clickable areas."
+                # Vision detection failed - provide fallback message
+                action_message_content = (
+                    f"⚠️ Vision detection failed after {detection_result.retry_count} attempts: "
+                    f"{detection_result.error_message}\n"
+                    "Fallback: Analyze the screenshot carefully to identify clickable areas and their positions."
+                )
+                print(f"⚠️ Context service: Vision detection failed, providing fallback message")
             
             return HumanMessage(content=[{"type": "text", "text": action_message_content}])
         

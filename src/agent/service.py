@@ -40,13 +40,14 @@ MAX_STEPS = int(os.getenv("MAX_STEPS", "1000"))
 SESSION_ID = "game_session_main"
 
 model = ChatGoogleGenerativeAI(
-    model="gemini-3-pro-preview",
+    model="gemini-3-flash-preview",
     temperature=1.0,
     max_tokens=None,
     timeout=None,
     max_retries=2,
     api_key=os.getenv("GOOGLE_API_KEY")
 )
+print(f"🤖 Using model: gemini-3-flash-preview")
 
 if SDK_ENABLED:
     print("Initializing AltTesterClient...")
@@ -66,11 +67,18 @@ if SDK_ENABLED:
             device_name=os.getenv("DEVICE_NAME"),
             udid=os.getenv("DEVICE_UDID"),
             app_package=os.getenv("APP_PACKAGE"),
-            app_activity=os.getenv("APP_ACTIVITY")
+            app_activity=os.getenv("APP_ACTIVITY"),
+            screenshot_timeout=float(os.getenv("SCREENSHOT_TIMEOUT", "10.0")),
+            screenshot_max_retries=int(os.getenv("SCREENSHOT_MAX_RETRIES", "3"))
         )
     else:
         print("Initializing ADB Manager...")
-        action_executor = ADBManager(host="127.0.0.1", port=5037)
+        action_executor = ADBManager(
+            host="127.0.0.1", 
+            port=5037,
+            screenshot_timeout=float(os.getenv("SCREENSHOT_TIMEOUT", "10.0")),
+            screenshot_max_retries=int(os.getenv("SCREENSHOT_MAX_RETRIES", "3"))
+        )
     
     action_handler = ActionHandler(driver, adb_manager=action_executor)
     vision_detector = None
@@ -91,16 +99,25 @@ else:
             device_name=os.getenv("DEVICE_NAME"),
             udid=os.getenv("DEVICE_UDID"),
             app_package=os.getenv("APP_PACKAGE"),
-            app_activity=os.getenv("APP_ACTIVITY")
+            app_activity=os.getenv("APP_ACTIVITY"),
+            screenshot_timeout=float(os.getenv("SCREENSHOT_TIMEOUT", "10.0")),
+            screenshot_max_retries=int(os.getenv("SCREENSHOT_MAX_RETRIES", "3"))
         )
     else:
         print("Initializing ADB Manager...")
-        action_executor = ADBManager(host="127.0.0.1", port=5037)
+        action_executor = ADBManager(
+            host="127.0.0.1", 
+            port=5037,
+            screenshot_timeout=float(os.getenv("SCREENSHOT_TIMEOUT", "10.0")),
+            screenshot_max_retries=int(os.getenv("SCREENSHOT_MAX_RETRIES", "3"))
+        )
     
     print("Initializing Vision Detector...")
     vision_detector = VisionElementDetector(
         api_key=os.getenv("GOOGLE_API_KEY"),
-        model_name="gemini-robotics-er-1.5-preview"
+        model_name="gemini-robotics-er-1.5-preview",
+        timeout=float(os.getenv("VISION_TIMEOUT", "45.0")),
+        max_retries=int(os.getenv("VISION_MAX_RETRIES", "3"))
     )
 
 context_service = ContextService(
@@ -247,15 +264,15 @@ def parse_llm_response(response: dict) -> AgentOutput:
         # Access token counts from raw output
         if hasattr(raw_output, 'usage_metadata') and raw_output.usage_metadata:
             token_counts = raw_output.usage_metadata
-            # print(f"📊 Token counts: {token_counts}")
+            print(f"📊 Token counts: {token_counts}")
             cached_tokens = raw_output.cachedContentTokenCount if hasattr(raw_output, 'cachedContentTokenCount') else 1
             input_tokens = token_counts.get('input_tokens') if isinstance(token_counts, dict) else getattr(token_counts, 'input_tokens', None)
             output_tokens = token_counts.get('output_tokens') if isinstance(token_counts, dict) else getattr(token_counts, 'output_tokens', None)
             total_tokens = token_counts.get('total_tokens') if isinstance(token_counts, dict) else getattr(token_counts, 'total_tokens', None)
             
-            # if input_tokens is not None:
-            #     # print(f"📊 Token usage - Input: {input_tokens}, Output: {output_tokens}, Total: {total_tokens}")
-            #     # print(f"📊 Cached tokens: {cached_tokens}")
+            if input_tokens is not None:
+                print(f"📊 Token usage - Input: {input_tokens}, Output: {output_tokens}, Total: {total_tokens}")
+                print(f"📊 Cached tokens: {cached_tokens}")
     else:
         # Fallback for older response format
         agent_output = AgentOutput(**response) if isinstance(response, dict) else response
@@ -276,14 +293,26 @@ async def agent_handler(event: GamePauseEvent):
     filename = f"step_{event.current_step}_frame_{event.current_frame}.png"
     filepath = os.path.join(screenshots_dir, filename)
     
-    try:
-        action_executor.get_screenshot(filepath)
-        print(f"   💾 {filename} (captured)")
-        saved_filepaths = [filepath]
-    except Exception as e:
-        print(f"   ❌ Error capturing screenshot: {e}")
-        return {"status": "error", "message": f"Failed to capture screenshot: {e}"}
+    # Capture screenshot with retry logic
+    screenshot_result = action_executor.get_screenshot(filepath)
     
+    if not screenshot_result.success:
+        error_details = f"{screenshot_result.error_message} (type: {screenshot_result.error_type}, retries: {screenshot_result.retry_count})"
+        print(f"   ❌ Screenshot capture failed: {error_details}")
+        
+        # Return error with detailed information
+        return {
+            "status": "error", 
+            "message": f"Failed to capture screenshot: {error_details}",
+            "error_type": str(screenshot_result.error_type),
+            "retry_count": screenshot_result.retry_count
+        }
+    
+    print(f"   💾 {filename} (captured in {screenshot_result.elapsed_time:.2f}s)")
+    if screenshot_result.retry_count > 0:
+        print(f"   🔄 Required {screenshot_result.retry_count} retry(ies)")
+    
+    saved_filepaths = [filepath]
     print(f"✅ Saved screenshot")
     
     if saved_filepaths:
@@ -307,12 +336,15 @@ async def agent_handler(event: GamePauseEvent):
             messages = context_service.get_messages_for_llm(SESSION_ID)
             
             print("🤖 Getting agent decision from LLM...")
+            start_time = time.time()
             response = await asyncio.to_thread(structured_model.invoke, messages)
+            elapsed = time.time() - start_time
+            print(f"⏱️  LLM response time: {elapsed:.2f}s")
 
             agent_output = parse_llm_response(response)
             print(f"✅ Agent decision received")
-            print(f"   📝 Game state: {agent_output.game_state_summary[:100]}..." if len(agent_output.game_state_summary) > 100 else f"   📝 Game state: {agent_output.game_state_summary}")
-            print(f"   🤔 Reasoning: {agent_output.reason[:100]}..." if len(agent_output.reason) > 100 else f"   🤔 Reasoning: {agent_output.reason}")
+            print(f"   📝 Game state: {agent_output.game_state_summary}")
+            print(f"   🤔 Reasoning: {agent_output.reason}")
             print(f"   🎯 Actions count: {len(agent_output.actions)}")
             print(f"   🏁 End game: {agent_output.end_game}")
             
@@ -405,7 +437,7 @@ async def run_blackbox_loop():
 if __name__ == "__main__":
     # Initialize the todo list for the 6-level word game
     print("🎯 Initializing game todos for 6 levels...")
-    initialize_game_todos()
+    # initialize_game_todos()
     
     if not SDK_ENABLED:
         print("🎯 Black box mode - starting polling loop")

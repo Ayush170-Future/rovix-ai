@@ -5,13 +5,32 @@ import os
 from PIL import Image, ImageDraw, ImageFont
 from google import genai
 from google.genai import types
-from typing import List, Dict
+from typing import List, Dict, Optional
+from dataclasses import dataclass
+
+
+@dataclass
+class VisionDetectionResult:
+    """Result of vision element detection"""
+    success: bool
+    elements: List[Dict]
+    error_message: Optional[str] = None
+    retry_count: int = 0
+    elapsed_time: float = 0.0
 
 
 class VisionElementDetector:
-    def __init__(self, api_key: str, model_name: str = "gemini-robotics-er-1.5-preview"):
+    def __init__(
+        self, 
+        api_key: str, 
+        model_name: str = "gemini-robotics-er-1.5-preview",
+        timeout: float = 45.0,
+        max_retries: int = 3
+    ):
         self.api_key = api_key
         self.model_name = model_name
+        self.timeout = timeout
+        self.max_retries = max_retries
         self.client = genai.Client(api_key=api_key)
         
         self.prompt = """
@@ -137,43 +156,126 @@ Detect as many interactable elements as you can find. Be thorough!"""
         except Exception as e:
             print(f"⚠️  Failed to save annotated image: {e}")
 
-    async def detect_elements(self, screenshot_path: str) -> List[Dict]:
+    async def detect_elements(self, screenshot_path: str) -> VisionDetectionResult:
+        """
+        Detect interactive elements in a screenshot with retry logic and timeout.
+        
+        Returns:
+            VisionDetectionResult with success status, elements list, and error info
+        """
         print(f"🔍 Vision detection")
         
+        try:
+            # Wrap entire detection with timeout
+            result = await asyncio.wait_for(
+                self._detect_elements_with_retry(screenshot_path),
+                timeout=self.timeout
+            )
+            return result
+        except asyncio.TimeoutError:
+            error_msg = f"Vision detection timed out after {self.timeout}s"
+            print(f"❌ [TIMEOUT] {error_msg}")
+            return VisionDetectionResult(
+                success=False,
+                elements=[],
+                error_message=error_msg,
+                retry_count=self.max_retries
+            )
+        except Exception as e:
+            error_msg = f"Unexpected error in vision detection: {e}"
+            print(f"❌ [FATAL] {error_msg}")
+            return VisionDetectionResult(
+                success=False,
+                elements=[],
+                error_message=error_msg,
+                retry_count=0
+            )
+    
+    async def _detect_elements_with_retry(self, screenshot_path: str) -> VisionDetectionResult:
+        """Internal method with retry logic"""
         image = Image.open(screenshot_path)
         image_width, image_height = image.size
         
         with open(screenshot_path, 'rb') as f:
             image_bytes = f.read()
         
-        start_time = time.time()
+        last_error = None
+        overall_start = time.time()
         
-        try:
-            response = self.client.models.generate_content(
-                model=self.model_name,
-                contents=[
-                    types.Part.from_bytes(
-                        data=image_bytes,
-                        mime_type='image/png',
-                    ),
-                    self.prompt
-                ],
-                config=types.GenerateContentConfig(
-                    temperature=0.5,
-                    thinking_config=types.ThinkingConfig(thinking_budget=0)
+        for attempt in range(self.max_retries):
+            try:
+                start_time = time.time()
+                
+                response = self.client.models.generate_content(
+                    model=self.model_name,
+                    contents=[
+                        types.Part.from_bytes(
+                            data=image_bytes,
+                            mime_type='image/png',
+                        ),
+                        self.prompt
+                    ],
+                    config=types.GenerateContentConfig(
+                        temperature=0.5,
+                        thinking_config=types.ThinkingConfig(thinking_budget=0)
+                    )
                 )
-            )
-            
-            output = response.text
-            elapsed = time.time() - start_time
-            print(f"⏱️  Vision API response time: {elapsed:.2f}s")
-            
-        except Exception as e:
-            print(f"❌ Vision API error: {e}")
-            return []
+                
+                output = response.text
+                elapsed = time.time() - start_time
+                print(f"⏱️  Vision API response time: {elapsed:.2f}s")
+                
+                # Successfully got response, parse it
+                detections = self._parse_gemini_response(output)
+                results = self._build_results(detections, image_width, image_height)
+                
+                total_elapsed = time.time() - overall_start
+                print(f"✅ Detected {len(results)} elements via vision")
+                
+                # Draw bounding boxes asynchronously
+                if results:
+                    asyncio.create_task(self._draw_bounding_boxes_async(screenshot_path, results))
+                
+                return VisionDetectionResult(
+                    success=True,
+                    elements=results,
+                    retry_count=attempt,
+                    elapsed_time=total_elapsed
+                )
+                
+            except Exception as e:
+                last_error = e
+                attempt_num = attempt + 1
+                
+                if attempt_num < self.max_retries:
+                    # Exponential backoff: 2^attempt seconds
+                    wait_time = 2 ** attempt
+                    print(f"⚠️  [RETRY {attempt_num}/{self.max_retries}] Vision API error: {e}")
+                    print(f"   🔄 Retrying in {wait_time}s...")
+                    await asyncio.sleep(wait_time)
+                else:
+                    error_msg = f"Vision API failed after {self.max_retries} attempts: {last_error}"
+                    print(f"❌ [FATAL] {error_msg}")
+                    
+                    total_elapsed = time.time() - overall_start
+                    return VisionDetectionResult(
+                        success=False,
+                        elements=[],
+                        error_message=error_msg,
+                        retry_count=attempt_num,
+                        elapsed_time=total_elapsed
+                    )
         
-        detections = self._parse_gemini_response(output)
-        
+        # Should never reach here, but just in case
+        return VisionDetectionResult(
+            success=False,
+            elements=[],
+            error_message="Unknown error in retry loop",
+            retry_count=self.max_retries
+        )
+    
+    def _build_results(self, detections: List[Dict], image_width: int, image_height: int) -> List[Dict]:
+        """Build results list from detections"""
         results = []
         for detection in detections:
             bbox_norm = detection.get('bounding_box', [0, 0, 0, 0])
@@ -188,10 +290,5 @@ Detect as many interactable elements as you can find. Be thorough!"""
                 'screen_position': bbox_data['center'],
                 'bounding_box': bbox_data['bbox']
             })
-        
-        print(f"✅ Detected {len(results)} elements via vision")
-        
-        if results:
-            asyncio.create_task(self._draw_bounding_boxes_async(screenshot_path, results))
         
         return results

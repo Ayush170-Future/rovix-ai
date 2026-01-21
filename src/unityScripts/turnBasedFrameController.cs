@@ -11,6 +11,7 @@ public class frameController : MonoBehaviour
     private int currentStep = 0;
     private int lastEventStep = 0;
     private int eventInterval = 600;
+    private bool autoPauseEnabled = true;
     
     private string pythonServerUrl = "http://10.0.2.2:8000";
     
@@ -44,7 +45,7 @@ public class frameController : MonoBehaviour
     {
         currentStep++;
         
-        if (currentStep - lastEventStep >= eventInterval && actionsExecuted)
+        if (autoPauseEnabled && currentStep - lastEventStep >= eventInterval && actionsExecuted)
         {
             SendEventToPython();
         }
@@ -128,6 +129,26 @@ public class frameController : MonoBehaviour
     {
         eventInterval = interval;
         Debug.Log($"[FrameController] Event interval set to {interval} steps");
+    }
+    
+    [Preserve]
+    public void EnableAutoPause()
+    {
+        autoPauseEnabled = true;
+        Debug.Log("[FrameController] Auto-pause enabled");
+    }
+    
+    [Preserve]
+    public void DisableAutoPause()
+    {
+        autoPauseEnabled = false;
+        Debug.Log("[FrameController] Auto-pause disabled - game will run continuously");
+    }
+    
+    [Preserve]
+    public bool IsAutoPauseEnabled()
+    {
+        return autoPauseEnabled;
     }
     
     void OnDestroy()

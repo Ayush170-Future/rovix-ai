@@ -1,4 +1,6 @@
 import asyncio
+import time
+import os
 from typing import List, Any, Optional, Tuple
 from appium import webdriver
 from appium.options.android import UiAutomator2Options
@@ -6,15 +8,49 @@ from appium.webdriver.common.appiumby import AppiumBy
 from selenium.webdriver.common.actions import interaction
 from selenium.webdriver.common.actions.action_builder import ActionBuilder
 from selenium.webdriver.common.actions.pointer_input import PointerInput
+from dataclasses import dataclass
+from enum import Enum
+
+
+class ErrorType(str, Enum):
+    """Types of errors that can occur"""
+    DEVICE_DISCONNECTED = "device_disconnected"
+    TIMEOUT = "timeout"
+    PERMISSION_DENIED = "permission_denied"
+    FILE_IO_ERROR = "file_io_error"
+    NETWORK_ERROR = "network_error"
+    UNKNOWN = "unknown"
+
+
+@dataclass
+class ScreenshotResult:
+    """Result of screenshot capture operation"""
+    success: bool
+    filepath: Optional[str] = None
+    error_message: Optional[str] = None
+    error_type: Optional[ErrorType] = None
+    retry_count: int = 0
+    elapsed_time: float = 0.0
 
 
 class AppiumManager:
-    def __init__(self, appium_url: str = "http://localhost:4723", device_name: str = None, udid: str = None, app_package: str = None, app_activity: str = None):
+    def __init__(
+        self, 
+        appium_url: str = "http://localhost:4723", 
+        device_name: str = None, 
+        udid: str = None, 
+        app_package: str = None, 
+        app_activity: str = None,
+        screenshot_timeout: float = 10.0,
+        screenshot_max_retries: int = 3
+    ):
         self.appium_url = appium_url
         self.device_name = device_name
         self.udid = udid
         self.app_package = app_package
         self.app_activity = app_activity or "com.unity3d.player.UnityPlayerActivity"
+        self.screenshot_timeout = screenshot_timeout
+        self.screenshot_max_retries = screenshot_max_retries
         self.driver = None
         self._initialize_session()
     
@@ -93,11 +129,117 @@ class AppiumManager:
         waypoints_str = " → ".join([f"({x},{y})" for x, y in waypoints])
         print(f"🔄 MULTI-SWIPE (Appium): {waypoints_str} duration={duration}s")
     
-    def get_screenshot(self, filepath: str):
-        if not self.driver:
-            raise RuntimeError("No Appium session active")
+    def get_screenshot(self, filepath: str) -> ScreenshotResult:
+        """
+        Capture screenshot with retry logic.
         
-        self.driver.save_screenshot(filepath)
+        Args:
+            filepath: Path where screenshot should be saved
+            
+        Returns:
+            ScreenshotResult with success status and error details
+        """
+        if not self.driver:
+            return ScreenshotResult(
+                success=False,
+                filepath=None,
+                error_message="No Appium session active",
+                error_type=ErrorType.DEVICE_DISCONNECTED,
+                retry_count=0
+            )
+        
+        overall_start = time.time()
+        last_error = None
+        last_error_type = ErrorType.UNKNOWN
+        
+        for attempt in range(self.screenshot_max_retries):
+            try:
+                start_time = time.time()
+                
+                # Capture screenshot with Appium
+                self.driver.save_screenshot(filepath)
+                
+                # Verify file was written
+                if not os.path.exists(filepath) or os.path.getsize(filepath) == 0:
+                    raise RuntimeError("Screenshot file not created or empty")
+                
+                elapsed = time.time() - start_time
+                total_elapsed = time.time() - overall_start
+                
+                if attempt > 0:
+                    print(f"   ✅ Screenshot captured after {attempt + 1} attempts")
+                
+                return ScreenshotResult(
+                    success=True,
+                    filepath=filepath,
+                    retry_count=attempt,
+                    elapsed_time=total_elapsed
+                )
+                
+            except ConnectionError as e:
+                last_error = e
+                last_error_type = ErrorType.NETWORK_ERROR
+                error_msg = f"Connection error: {e}"
+                
+            except PermissionError as e:
+                last_error = e
+                last_error_type = ErrorType.PERMISSION_DENIED
+                error_msg = f"Permission denied: {e}"
+                
+            except IOError as e:
+                last_error = e
+                last_error_type = ErrorType.FILE_IO_ERROR
+                error_msg = f"File I/O error: {e}"
+                
+            except Exception as e:
+                last_error = e
+                # Check if it's a session-related error
+                if "session" in str(e).lower() or "driver" in str(e).lower():
+                    last_error_type = ErrorType.DEVICE_DISCONNECTED
+                else:
+                    last_error_type = ErrorType.UNKNOWN
+                error_msg = f"Screenshot error: {e}"
+            
+            attempt_num = attempt + 1
+            
+            if attempt_num < self.screenshot_max_retries:
+                # Exponential backoff: 1s, 2s, 4s
+                wait_time = 2 ** attempt
+                print(f"⚠️  [RETRY {attempt_num}/{self.screenshot_max_retries}] {error_msg}")
+                print(f"   🔄 Retrying in {wait_time}s...")
+                time.sleep(wait_time)
+                
+                # Try to reconnect if session issue
+                if last_error_type == ErrorType.DEVICE_DISCONNECTED:
+                    print(f"   🔌 Attempting to reconnect session...")
+                    try:
+                        self._initialize_session()
+                        if not self.driver:
+                            print(f"   ❌ Reconnection failed")
+                    except Exception as reconnect_error:
+                        print(f"   ❌ Reconnection error: {reconnect_error}")
+            else:
+                total_elapsed = time.time() - overall_start
+                final_error_msg = f"Screenshot capture failed after {self.screenshot_max_retries} attempts: {last_error}"
+                print(f"❌ [FATAL] {final_error_msg}")
+                
+                return ScreenshotResult(
+                    success=False,
+                    filepath=None,
+                    error_message=final_error_msg,
+                    error_type=last_error_type,
+                    retry_count=attempt_num,
+                    elapsed_time=total_elapsed
+                )
+        
+        # Should never reach here
+        return ScreenshotResult(
+            success=False,
+            filepath=None,
+            error_message="Unknown error in retry loop",
+            error_type=ErrorType.UNKNOWN,
+            retry_count=self.screenshot_max_retries
+        )
     
     async def execute_actions_sequential(self, actions: List[Any]) -> None:
         if not actions:
