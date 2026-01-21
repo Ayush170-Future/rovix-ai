@@ -11,7 +11,7 @@ public class frameController : MonoBehaviour
     private int currentStep = 0;
     private int lastEventStep = 0;
     private int eventInterval = 600;
-    private bool autoPauseEnabled = true;
+    private bool eventSendEnabled = true;
     
     private string pythonServerUrl = "http://10.0.2.2:8000";
     
@@ -45,7 +45,7 @@ public class frameController : MonoBehaviour
     {
         currentStep++;
         
-        if (autoPauseEnabled && currentStep - lastEventStep >= eventInterval && actionsExecuted)
+        if (eventSendEnabled && currentStep - lastEventStep >= eventInterval && actionsExecuted)
         {
             SendEventToPython();
         }
@@ -132,23 +132,56 @@ public class frameController : MonoBehaviour
     }
     
     [Preserve]
-    public void EnableAutoPause()
+    public void EnableEventSend()
     {
-        autoPauseEnabled = true;
-        Debug.Log("[FrameController] Auto-pause enabled");
+        eventSendEnabled = true;
+        Debug.Log("[FrameController] Event sending enabled");
     }
     
     [Preserve]
-    public void DisableAutoPause()
+    public void DisableEventSend()
     {
-        autoPauseEnabled = false;
-        Debug.Log("[FrameController] Auto-pause disabled - game will run continuously");
+        eventSendEnabled = false;
+        Debug.Log("[FrameController] Event sending disabled - no events will be sent to Python");
     }
     
     [Preserve]
-    public bool IsAutoPauseEnabled()
+    public bool IsEventSendEnabled()
     {
-        return autoPauseEnabled;
+        return eventSendEnabled;
+    }
+    
+    [Preserve]
+    public void PauseGame()
+    {
+        Time.timeScale = 0f;
+        Debug.Log("[FrameController] Game paused (timeScale = 0)");
+    }
+    
+    [Preserve]
+    public void ResumeGame()
+    {
+        Time.timeScale = 1f;
+        Debug.Log("[FrameController] Game resumed (timeScale = 1)");
+    }
+    
+    [Preserve]
+    public bool IsGamePaused()
+    {
+        return Time.timeScale == 0f;
+    }
+    
+    [Preserve]
+    public float GetTimeScale()
+    {
+        return Time.timeScale;
+    }
+    
+    [Preserve]
+    public void SetTimeScale(float scale)
+    {
+        Time.timeScale = scale;
+        Debug.Log($"[FrameController] Time scale set to {scale}");
     }
     
     void OnDestroy()
