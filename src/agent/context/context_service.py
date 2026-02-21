@@ -18,12 +18,21 @@ class ContextService:
         self._sessions: Dict[str, Dict] = {}
         self._lock = threading.Lock()
     
-    def _ensure_session(self, session_id: str):
+    def _ensure_session(self, session_id: str, game_description: Optional[str] = None, gameplay_details: Optional[str] = None, test_plan: Optional[str] = None) -> bool:
         if session_id not in self._sessions:
+            # These parameters are required when creating a new session
+            if game_description is None or gameplay_details is None or test_plan is None:
+                return False
+            system_prompt = self.system_prompt.format(
+                game_description=game_description,
+                gameplay_details=gameplay_details,
+                test_plan=test_plan
+            )
             self._sessions[session_id] = {
-                'messages': [SystemMessage(content=self.system_prompt)],
+                'messages': [SystemMessage(content=system_prompt)],
                 'step_counter': 0
             }
+        return True
     
     async def add_new_step(
         self,

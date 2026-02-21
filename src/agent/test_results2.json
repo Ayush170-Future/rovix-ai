@@ -1,0 +1,362 @@
+[
+  {
+    "test_case_id": "1.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Country selection screen appeared and India was selectable.",
+    "screenshot_id": "step_2_frame_2.png",
+    "timestamp": "2026-02-17T19:30:40.932157Z"
+  },
+  {
+    "test_case_id": "1.2",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Verified that Back button returns to country selection and Submit button works after city selection.",
+    "screenshot_id": "step_3_frame_3.png",
+    "timestamp": "2026-02-17T19:31:02.138510Z"
+  },
+  {
+    "test_case_id": "1.3",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Narrative slides appeared with functional Next and Skip buttons.",
+    "screenshot_id": "step_4_frame_4.png",
+    "timestamp": "2026-02-17T19:31:23.752362Z"
+  },
+  {
+    "test_case_id": "2.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Harsha's dialogue regarding scouting for a new player appeared as expected.",
+    "screenshot_id": "step_7_frame_7.png",
+    "timestamp": "2026-02-17T19:32:21.809698Z"
+  },
+  {
+    "test_case_id": "2.2",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Only the 'Reliable Player' scout option was active and highlighted, confirming restricted scouting during the tutorial.",
+    "screenshot_id": "step_9_frame_9.png",
+    "timestamp": "2026-02-17T19:33:01.737869Z"
+  },
+  {
+    "test_case_id": "2.3",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Master Blaster player card with name and info appeared after scouting animation.",
+    "screenshot_id": "step_11_frame_11.png",
+    "timestamp": "2026-02-17T19:33:42.144402Z"
+  },
+  {
+    "test_case_id": "2.4",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "The game transitioned to the match screen after scouting.",
+    "screenshot_id": "step_12_frame_12.png",
+    "timestamp": "2026-02-17T19:34:03.258752Z"
+  },
+  {
+    "test_case_id": "2.5",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Harsha's dialogue correctly states the goal: 'Score 18 runs in 2 overs.'",
+    "screenshot_id": "step_12_frame_12.png",
+    "timestamp": "2026-02-17T19:34:03.258752Z"
+  },
+  {
+    "test_case_id": "2.6",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Hand pointer nudge correctly appeared on Master Blaster during opener selection.",
+    "screenshot_id": "step_13_frame_13.png",
+    "timestamp": "2026-02-17T19:34:25.268510Z"
+  },
+  {
+    "test_case_id": "2.7",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Harsha's dialogue regarding play cards appeared and cards were highlighted.",
+    "screenshot_id": "step_16_frame_16.png",
+    "timestamp": "2026-02-17T19:36:29.319332Z"
+  },
+  {
+    "test_case_id": "2.8",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Success rate percentages (e.g., 86%, 88%) are visible above the play cards.",
+    "screenshot_id": "step_16_frame_16.png",
+    "timestamp": "2026-02-17T19:36:29.319332Z"
+  },
+  {
+    "test_case_id": "2.9",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "A six was successfully hit with Master Blaster on the first ball.",
+    "screenshot_id": "step_19_frame_19.png",
+    "timestamp": "2026-02-17T19:38:01.743325Z"
+  },
+  {
+    "test_case_id": "2.10",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Verified that the bowler and available opponent lineup consist of common players and no opponent SA is active.",
+    "screenshot_id": "step_19_frame_19.png",
+    "timestamp": "2026-02-17T19:38:01.743325Z"
+  },
+  {
+    "test_case_id": "2.11",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Harsha's dialogue about charging the Special Ability appeared correctly.",
+    "screenshot_id": "step_21_frame_21.png",
+    "timestamp": "2026-02-17T19:39:08.759374Z"
+  },
+  {
+    "test_case_id": "2.12",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "The SA button (Smash) was clicked when the mana meter was full.",
+    "screenshot_id": "step_22_frame_22.png",
+    "timestamp": "2026-02-17T19:39:38.312539Z"
+  },
+  {
+    "test_case_id": "2.13",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "The SA info box explaining the boost to 4s and 6s appeared after clicking the Smash button.",
+    "screenshot_id": "step_23_frame_23.png",
+    "timestamp": "2026-02-17T19:40:06.061679Z"
+  },
+  {
+    "test_case_id": "2.14",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "A six was hit to reach the target, fulfilling the condition to check for animations.",
+    "screenshot_id": "step_24_frame_24.png",
+    "timestamp": "2026-02-17T19:40:36.846512Z"
+  },
+  {
+    "test_case_id": "2.14",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Fire animation observed on successful boundaries with SA activated.",
+    "screenshot_id": "step_25_frame_25.png",
+    "timestamp": "2026-02-17T19:41:01.091932Z"
+  },
+  {
+    "test_case_id": "2.15",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Player dance animation is clearly visible on the Match 1 victory screen.",
+    "screenshot_id": "step_25_frame_25.png",
+    "timestamp": "2026-02-17T19:41:01.091932Z"
+  },
+  {
+    "test_case_id": "3.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Dialogue explaining Training Points usage appeared on the victory screen.",
+    "screenshot_id": "step_25_frame_25.png",
+    "timestamp": "2026-02-17T19:41:01.091932Z"
+  },
+  {
+    "test_case_id": "3.2",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Tutorial dialogue correctly instructed that TP are used for training.",
+    "screenshot_id": "step_26_frame_26.png",
+    "timestamp": "2026-02-17T19:41:21.967248Z"
+  },
+  {
+    "test_case_id": "3.3",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "A hand pointer correctly highlighted a player on the dashboard for the training tutorial.",
+    "screenshot_id": "step_28_frame_28.png",
+    "timestamp": "2026-02-17T19:42:08.454733Z"
+  },
+  {
+    "test_case_id": "3.4",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Harsha's dialogue regarding training appeared on the Player Detail screen.",
+    "screenshot_id": "step_29_frame_29.png",
+    "timestamp": "2026-02-17T19:42:36.223384Z"
+  },
+  {
+    "test_case_id": "3.5",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "The hand pointer guided training until Level 5 was reached.",
+    "screenshot_id": "step_33_frame_33.png",
+    "timestamp": "2026-02-17T19:44:28.613605Z"
+  },
+  {
+    "test_case_id": "3.6",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Verified that other UI buttons like the Back button were not interactable during the forced tutorial phase.",
+    "screenshot_id": "step_33_frame_33.png",
+    "timestamp": "2026-02-17T19:44:28.613605Z"
+  },
+  {
+    "test_case_id": "4.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "The UI and progress bar clearly state the requirement to win 3 more matches to unlock the league.",
+    "screenshot_id": "step_38_frame_38.png",
+    "timestamp": "2026-02-17T19:46:53.352357Z"
+  },
+  {
+    "test_case_id": "4.2",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "The hand pointer correctly highlighted the Play button on the dashboard after the league unlock dialogue.",
+    "screenshot_id": "step_44_frame_44.png",
+    "timestamp": "2026-02-17T19:49:16.708817Z"
+  },
+  {
+    "test_case_id": "4.3",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Verified that player training/boost is accessible directly from the VS screen cards.",
+    "screenshot_id": "step_45_frame_45.png",
+    "timestamp": "2026-02-17T19:49:49.839068Z"
+  },
+  {
+    "test_case_id": "4.4",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Play and Lineup buttons were clearly visible and interactable on the VS screen.",
+    "screenshot_id": "step_45_frame_45.png",
+    "timestamp": "2026-02-17T19:49:49.839068Z"
+  },
+  {
+    "test_case_id": "4.5",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Harsha Bhogle's dialogue for commentary language selection appeared correctly during the match.",
+    "screenshot_id": "step_51_frame_51.png",
+    "timestamp": "2026-02-17T19:52:11.725135Z"
+  },
+  {
+    "test_case_id": "4.6",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Match 2 was successfully completed. The SA tutorial trigger condition (mana threshold) was monitored during the chase.",
+    "screenshot_id": "step_64_frame_64.png",
+    "timestamp": "2026-02-17T19:58:49.026108Z"
+  },
+  {
+    "test_case_id": "4.7",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Tutorial dialogue and slides regarding player training, shards, and increasing success odds appeared after Match 2.",
+    "screenshot_id": "step_67_frame_67.png",
+    "timestamp": "2026-02-17T19:59:48.624200Z"
+  },
+  {
+    "test_case_id": "5.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Hand pointer correctly appeared on the Store icon after Match 2 tutorial.",
+    "screenshot_id": "step_68_frame_68.png",
+    "timestamp": "2026-02-17T20:00:09.304496Z"
+  },
+  {
+    "test_case_id": "5.2",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Harsha Bhogle's dialogue correctly introduces the Super Chest in the store.",
+    "screenshot_id": "step_69_frame_69.png",
+    "timestamp": "2026-02-17T20:00:33.986974Z"
+  },
+  {
+    "test_case_id": "5.3",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Hand pointer correctly appeared on the Buy button for the Super Chest during the tutorial.",
+    "screenshot_id": "step_70_frame_70.png",
+    "timestamp": "2026-02-17T20:01:05.369970Z"
+  },
+  {
+    "test_case_id": "5.4",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Hard Currency remained at 12 after opening the Super Chest, confirming it was free as intended for the tutorial.",
+    "screenshot_id": "step_71_frame_71.png",
+    "timestamp": "2026-02-17T20:01:32.676086Z"
+  },
+  {
+    "test_case_id": "5.5",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "The Super Chest opening animation triggered and displayed the rewards correctly.",
+    "screenshot_id": "step_71_frame_71.png",
+    "timestamp": "2026-02-17T20:01:32.676086Z"
+  },
+  {
+    "test_case_id": "5.6",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Redirection will be verified in the next state after clicking Done.",
+    "screenshot_id": "step_72_frame_72.png",
+    "timestamp": "2026-02-17T20:01:59.671186Z"
+  },
+  {
+    "test_case_id": "5.7",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Verified that player training/upgrade buttons are visible and interactable on the VS screen for Match 3.",
+    "screenshot_id": "step_73_frame_73.png",
+    "timestamp": "2026-02-17T20:02:45.551794Z"
+  },
+  {
+    "test_case_id": "5.8",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Verified that Back, Lineup, and Play buttons on the VS screen are interactable.",
+    "screenshot_id": "step_74_frame_74.png",
+    "timestamp": "2026-02-17T20:03:16.879953Z"
+  }
+]

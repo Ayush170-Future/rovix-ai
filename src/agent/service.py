@@ -5,6 +5,8 @@ import tempfile
 import io
 import asyncio
 import threading
+import json
+from datetime import datetime
 from PIL import Image
 from pydantic import BaseModel, Field
 from typing import Literal, List, Optional
@@ -18,9 +20,9 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 try:
-    from .prompts import SYSTEM_PROMPT, SYSTEM_PROMPT_WITH_TODO
+    from .prompts import SYSTEM_PROMPT, SYSTEM_PROMPT_WITH_TODO, HITWICKET_GAME_DESCRIPTION, HITWICKET_GAMEPLAY_DETAILS
 except ImportError:
-    from agent.prompts import SYSTEM_PROMPT, SYSTEM_PROMPT_WITH_TODO
+    from agent.prompts import SYSTEM_PROMPT, SYSTEM_PROMPT_WITH_TODO, HITWICKET_GAME_DESCRIPTION, HITWICKET_GAMEPLAY_DETAILS
 
 from tester import InputController, AltTesterClient, GameFrameController, SceneController, TimeController
 from agent.actions import ActionHandler
@@ -124,6 +126,105 @@ context_service = ContextService(
     system_prompt=SYSTEM_PROMPT_WITH_TODO,
     keep_full_steps=4
 )
+
+test_plan = """
+Execute the following test cases in order. Report each result with test_case_id matching the id below (e.g. 1.1, 2.3).
+
+Note: You have already completed testing till 5.8 and currently the match 3 is running. So just complete it and do the testing from 5.9 onwards only till the end.
+
+1. Initial Setup
+1.1 Country Selection: Ensure country selection works properly.
+1.2 City Selection: Verify the Back and Submit buttons work correctly.
+1.3 Narrative Slides: Ensure slides appear with functional Skip and Next buttons.
+
+2. Scouting Flow and Match 1
+2.1 Verify Natasha/Harsha's dialogue appears when scouting a player.
+2.2 Ensure only **one player (Master Blaster)** is available for scouting.
+2.3 Verify **Master Blaster** appears on screen with player info after the scrolling animation.
+2.4 Confirm **Match 1 starts** after scouting Master Blaster.
+2.5 Verify Natasha/Harsha's dialogue: **"Score 18 runs in 2 overs."**
+2.6 Check that a **soft nudge** appears on **Master Blaster** and a **common player**.
+2.7 Verify Natasha/Harsha's dialogue with a **hand pointer** highlighting the play cards (**0, 1, 2, 4, 6**).
+2.8 Ensure the **success rate** is highlighted on the **play cards, striker, and bowler**.
+2.9 Check the **screen shatter animation** triggers when a successful **six (Straight Drive)** is hit.
+2.10 Ensure the opponent team consists of **only common players**, with **no wicket loss** and **no SA active time** for the opponent.
+2.11 Verify Natasha/Harsha's dialogue appears when the **SA meter fills with mana**.
+2.12 Confirm a **hand pointer with blinking animation** appears on the **SA button** (if activated).
+2.13 Verify the **SA info screen** appears after activating the SA (if activated).
+2.14 Check that the **fire animation** triggers on **4s and 6s** (if activated).
+2.15 Verify the **player dance animation** plays on the **victory screen** after completing **Match 1**.
+
+3. Training Tutorial
+3.1 Natasha/Harsha's dialogue provides information about Training Points (TP).
+3.2 Natasha/Harsha's dialogue instructs to use TP to train a player.
+3.3 Hand pointer appears on the player on the dashboard.
+3.4 Natasha/Harsha's dialogue appears on the Player Detail screen.
+3.5 Hand pointer highlights the Train button until Level 5 is reached.
+3.6 Ensure Back button or other UI buttons are not interactable during dialogue.
+
+4. Match 2 Flow
+4.1 Natasha/Harsha's dialogue instructs to play 3 more matches to unlock the League.
+4.2 Hand pointer appears on the Play button.
+4.3 Edge case: Verify the user can train the player from the VS screen.
+4.4 Ensure Play and Lineup buttons are visible on the VS screen.
+4.5 Natasha/Harsha's dialogue for Commentary appears (in match).
+4.6 FTUE Match 2: Verify SA tutorial appears inside the match (if mana filled).
+4.7 On victory screen, Natasha/Harsha's dialogue about player shards and its use.
+4.8 Edge case: If the user loses the match, ensure the match is replayable and the goal does not update until the user wins.
+
+5. Store and Super Chest Flow
+5.1 Hand pointer appears on the Store icon.
+5.2 Natasha/Harsha's dialogue introduces the Super Chest.
+5.3 Hand pointer appears on the Buy button with 0 HC (shows 50 HC but allows direct access).
+5.4 Ensure no HC is deducted for free Super Chest opening.
+5.5 Verify Chest Opening animation plays properly.
+5.6 Verify user is redirected directly to the VS screen.
+5.7 Ensure the user can train any player from the VS screen.
+5.8 Check if user can tap Back, Play and Lineup buttons.
+5.9 Ensure Match 3 is playable without any issue.
+
+6. ESP Trigger and Dashboard State
+6.1 ESP (Ultimate Finisher Pack) triggers after Match 3.
+6.2 Verify arrow animation on the Play button.
+6.3 Ensure ESP icon appears on the dashboard.
+6.4 PK icon should blink on the dashboard.
+6.5 Ensure Events, PvP, and League remain locked (base case).
+6.6 Verify Store with Golden glow shows Free tag if a free item is available.
+6.7 Ensure Net 2 is locked and requires 400 HC to unlock.
+6.8 Verify Match 4 is playable without any issue.
+
+7. League Unlock Flow
+7.1 Natasha/Harsha's dialogue appears on dashboard for League Unlock.
+7.2 Hand pointer highlights the League button.
+7.3 Natasha/Harsha's dialogue appears on the League page about the league journey.
+7.4 Hand pointer highlights the Play button on the League screen.
+7.5 Verify tapping Play redirects correctly to the VS screen.
+7.6 Verify PK Match is playable.
+7.7 If user loses the PK Match, verify a 5-minute timer starts and the match becomes playable again.
+7.8 Verify PK Match rewards (after winning) and flow (Haryana Hurricane and Athena).
+7.9 Verify selected players are added to the squad.
+
+8. Post-League Unlock Flows
+8.1 Verify Events tab unlocks after League unlock.
+8.2 Verify My Team unlocks after League unlock.
+8.3 Ensure Fast Mode is accessible in LM1 (first innings screen).
+8.4 Verify Leaderboard appears after winning LM1.
+8.5 Verify SP/Quest Challenges are visible on the victory screen - LM1.
+8.6 Hand pointer appears on Trophy Road for reward claim.
+8.7 Verify Season Pass unlocks after LM1.
+8.8 Verify Banner Unlock event (base case) or Thala Epics event.
+8.9 Verify All HUD icons are visible.
+8.10 EQ Unlocks (Player Card): Ensure equipment unlock flow works correctly.
+8.11 Verify Inventory unlocks after League unlock.
+
+9. Fast Mode and LM2 Flow
+9.1 Verify Fast Mode Tutorial triggers during LM2 if the user did not interact in LM1.
+9.2 Ensure the user can play in Fast Mode if active.
+9.3 Verify LM2 is playable without any issues.
+9.4 Check if Leaderboard updates correctly after user wins.
+9.5 Verify Spitfire tutorial appears correctly.
+9.6 Lineup tutorial at LM3 if a powerful player is available.
+"""
 
 def initialize_game_todos():
     """Initialize the todo list for completing 6 levels of the word game"""
@@ -230,6 +331,23 @@ class Action(BaseModel):
         description=TODO_WRITE_INPUT_DESCRIPTION
     )
 
+class TestResult(BaseModel):
+    test_case_id: str = Field(
+        description="The id of the test case that you are reporting the result for."
+    )
+    completion: bool = Field(
+        description="True if you were able to complete the test case successfully, false if you failed to achieve the condition required to run the test case."
+    )
+    failure_reason: str = Field(
+        description="If completion is false, provide a brief explanation of why you failed to complete the test case. Otherwise NA."
+    )
+    virdict: Literal["pass", "fail"] = Field(
+        description="Pass if the actual outcome matches the expected outcome, fail if it does not."
+    )
+    comment: str = Field(
+        description="Free field to comment on the test case. You can use this to provide information about how the actual outcome differed from the expected outcome."
+    )
+
 # TODO: Add analyze last step and reason next step fields here as well
 class AgentOutput(BaseModel):
     game_state_summary: str = Field(
@@ -244,6 +362,9 @@ class AgentOutput(BaseModel):
     ),
     actions: List[Action] = Field(
         description="A list of actions to be executed sequentially. This can be a combination of keyboard and button press actions."
+    )
+    test_results: List[TestResult] = Field(
+        description="List of test results. You are not expected to fill this always. Only fill it when you have executed atleast one test case and have a result to report otherwise keep it empty."
     )
 
 class GamePauseEvent(BaseModel):
@@ -278,6 +399,27 @@ def parse_llm_response(response: dict) -> AgentOutput:
         agent_output = AgentOutput(**response) if isinstance(response, dict) else response
 
     return agent_output
+
+
+_test_results_file_lock = threading.Lock()
+
+
+def _append_test_results_to_file(filepath: str, rows: List[dict]) -> None:
+    """Append test result rows to JSON file. Runs off the main thread. Uses a lock so concurrent appends do not overwrite each other."""
+    with _test_results_file_lock:
+        existing = []
+        if os.path.exists(filepath):
+            try:
+                with open(filepath, "r", encoding="utf-8") as f:
+                    existing = json.load(f)
+            except (json.JSONDecodeError, OSError):
+                existing = []
+        if not isinstance(existing, list):
+            existing = []
+        existing.extend(rows)
+        with open(filepath, "w", encoding="utf-8") as f:
+            json.dump(existing, f, indent=2, default=str)
+
 
 async def agent_handler(event: GamePauseEvent):
     print(f"\n{'='*80}")
@@ -347,7 +489,21 @@ async def agent_handler(event: GamePauseEvent):
             print(f"   🤔 Reasoning: {agent_output.reason}")
             print(f"   🎯 Actions count: {len(agent_output.actions)}")
             print(f"   🏁 End game: {agent_output.end_game}")
-            
+            print(f"   📋 Test results: {agent_output.test_results}")
+
+            # Append test results to file in background (does not block agent execution)
+            if agent_output.test_results:
+                now_iso = datetime.utcnow().isoformat() + "Z"
+                test_results_dir = os.path.join(os.path.dirname(__file__), "..", "agent")
+                os.makedirs(test_results_dir, exist_ok=True)
+                test_results_path = os.path.join(test_results_dir, "test_results.json")
+                rows = [
+                    {**r.model_dump(), "screenshot_id": filename, "timestamp": now_iso}
+                    for r in agent_output.test_results
+                ]
+                asyncio.create_task(asyncio.to_thread(_append_test_results_to_file, test_results_path, rows))
+                print(f"   📄 Appending {len(agent_output.test_results)} test result(s) to {test_results_path} (async)")
+
             context_service.add_ai_response(SESSION_ID, agent_output)
 
             if agent_output.end_game:
@@ -420,6 +576,7 @@ async def run_blackbox_loop():
     print("🎮 Starting black box polling loop")
     step = 0
     
+    context_service._ensure_session(SESSION_ID, HITWICKET_GAME_DESCRIPTION, HITWICKET_GAMEPLAY_DETAILS, test_plan)
     while step < MAX_STEPS:
         print(f"\n🔄 Black box iteration {step}")
         

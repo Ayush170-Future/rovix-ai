@@ -1,0 +1,101 @@
+[
+  {
+    "test_case_id": "5.9",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Match 3 was completed successfully without issues.",
+    "screenshot_id": "step_21_frame_21.png",
+    "timestamp": "2026-02-17T21:02:41.357664Z"
+  },
+  {
+    "test_case_id": "6.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Ultimate Finisher Pack (ESP) triggered correctly after Match 3.",
+    "screenshot_id": "step_25_frame_25.png",
+    "timestamp": "2026-02-17T21:04:20.819468Z"
+  },
+  {
+    "test_case_id": "6.2",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Yellow arrow animation is visible on the Play button.",
+    "screenshot_id": "step_26_frame_26.png",
+    "timestamp": "2026-02-17T21:04:53.968309Z"
+  },
+  {
+    "test_case_id": "6.3",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "ESP icon (Ultimate Finisher Pack) is visible on the dashboard.",
+    "screenshot_id": "step_26_frame_26.png",
+    "timestamp": "2026-02-17T21:04:53.968309Z"
+  },
+  {
+    "test_case_id": "6.6",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Store icon shows a golden glow with a 'FREE!' tag.",
+    "screenshot_id": "step_26_frame_26.png",
+    "timestamp": "2026-02-17T21:04:53.968309Z"
+  },
+  {
+    "test_case_id": "6.7",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Net 2 is confirmed to be locked and requires 400 HC to unlock.",
+    "screenshot_id": "step_27_frame_27.png",
+    "timestamp": "2026-02-17T21:05:20.182445Z"
+  },
+  {
+    "test_case_id": "6.5",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Events, PvP, and League are not accessible/locked as expected.",
+    "screenshot_id": "step_28_frame_28.png",
+    "timestamp": "2026-02-17T21:05:49.593828Z"
+  },
+  {
+    "test_case_id": "6.8",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Match 4 was completed successfully without issues.",
+    "screenshot_id": "step_67_frame_67.png",
+    "timestamp": "2026-02-17T21:23:49.196668Z"
+  },
+  {
+    "test_case_id": "7.3",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Harsha's dialogue about the league journey appeared correctly on the League page.",
+    "screenshot_id": "step_73_frame_73.png",
+    "timestamp": "2026-02-17T21:26:07.745355Z"
+  },
+  {
+    "test_case_id": "7.4",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Hand pointer correctly highlights the Play button on the League screen.",
+    "screenshot_id": "step_78_frame_78.png",
+    "timestamp": "2026-02-17T21:28:40.244953Z"
+  },
+  {
+    "test_case_id": "7.5",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Tapping Play on the League screen correctly redirected to the VS screen.",
+    "screenshot_id": "step_79_frame_79.png",
+    "timestamp": "2026-02-17T21:29:08.270660Z"
+  }
+]
