@@ -1,4 +1,4 @@
-import threading
+import asyncio
 import base64
 import io
 import sys
@@ -16,7 +16,7 @@ class ContextService:
         self.system_prompt = system_prompt
         self.keep_full_steps = keep_full_steps
         self._sessions: Dict[str, Dict] = {}
-        self._lock = threading.Lock()
+        self._lock = asyncio.Lock()
     
     def _ensure_session(self, session_id: str, game_description: Optional[str] = None, gameplay_details: Optional[str] = None, test_plan: Optional[str] = None) -> bool:
         if session_id not in self._sessions:
@@ -30,7 +30,9 @@ class ContextService:
             )
             self._sessions[session_id] = {
                 'messages': [SystemMessage(content=system_prompt)],
-                'step_counter': 0
+                'step_counter': 0,
+                'cached_vision_elements': None,
+                'latest_bingo_state': 'unspecified'
             }
         return True
     
@@ -45,12 +47,13 @@ class ContextService:
         action_handler=None,
         sdk_enabled: bool = True
     ):
-        with self._lock:
+        async with self._lock:
             self._ensure_session(session_id)
             
             marker_msg = self._build_marker_message(is_current=True)
             screenshot_msg = self._build_screenshot_message(screenshot_path, step, frame)
             actions_msg = await self._build_available_actions_message(
+                session_id,
                 screenshot_path,
                 available_actions,
                 vision_detector,
@@ -65,29 +68,37 @@ class ContextService:
             self._sessions[session_id]['messages'].append(todo_msg)
     
     def add_ai_response(self, session_id: str, agent_output):
-        with self._lock:
-            self._ensure_session(session_id)
+        # We need this to be sync as per existing usage, but we should use a non-blocking way 
+        # or convert it to async. For now, let's use a try_lock or just acknowledge sessions is a dict.
+        # Since service.py calls this without await, we keep it sync but remove the lock if possible
+        # or use a re-entrant lock. However, asyncio.Lock cannot be used in sync def.
+        # Let's revert this specific one to just use the dict directly since it's single threaded loop.
+        self._ensure_session(session_id)
+        
+        messages = self._sessions[session_id]['messages']
             
-            messages = self._sessions[session_id]['messages']
-            
-            if len(messages) >= 5 and isinstance(messages[-5], HumanMessage):
-                content = str(messages[-5].content)
-                if "todo_write result:" in content:
-                    messages.pop(-5)
-            
-            self._sessions[session_id]['messages'].append(
-                AIMessage(content=str(agent_output.model_dump()))
-            )
-            
-            if len(self._sessions[session_id]['messages']) >= 2:
-                self._sessions[session_id]['messages'].pop(-2)
-            
-            self._sessions[session_id]['step_counter'] += 1
+        if len(messages) >= 5 and isinstance(messages[-5], HumanMessage):
+            content = str(messages[-5].content)
+            if "todo_write result:" in content:
+                messages.pop(-5)
+        
+        self._sessions[session_id]['messages'].append(
+            AIMessage(content=str(agent_output.model_dump()))
+        )
+        
+        if len(self._sessions[session_id]['messages']) >= 2:
+            self._sessions[session_id]['messages'].pop(-2)
+        
+        self._sessions[session_id]['step_counter'] += 1
+        
+        if hasattr(agent_output, 'bingo_state'):
+            self._sessions[session_id]['latest_bingo_state'] = agent_output.bingo_state
+        elif isinstance(agent_output, dict) and 'bingo_state' in agent_output:
+            self._sessions[session_id]['latest_bingo_state'] = agent_output['bingo_state']
     
     def add_todo_result(self, session_id: str, result: str):
-        with self._lock:
-            self._ensure_session(session_id)
-            self._sessions[session_id]['messages'].append(
+        self._ensure_session(session_id)
+        self._sessions[session_id]['messages'].append(
                 HumanMessage(content=[{
                     "type": "text",
                     "text": f"todo_write result: {result}"
@@ -95,57 +106,51 @@ class ContextService:
             )
     
     def get_messages_for_llm(self, session_id: str) -> List:
-        with self._lock:
-            self._ensure_session(session_id)
-            return self._sessions[session_id]['messages'].copy()
+        self._ensure_session(session_id)
+        return self._sessions[session_id]['messages'].copy()
     
     def cleanup_old_messages(self, session_id: str):
-        with self._lock:
-            self._ensure_session(session_id)
-            
-            messages = self._sessions[session_id]['messages']
-            step_counter = self._sessions[session_id]['step_counter']
-            
-            has_todo_result = False
-            if len(messages) >= 1 and isinstance(messages[-1], HumanMessage):
-                content = str(messages[-1].content)
-                if "todo_write result:" in content:
-                    has_todo_result = True
-            
-            marker_offset = -5 if has_todo_result else -4
-            
-            if len(messages) >= abs(marker_offset):
-                messages[marker_offset].content[0]["text"] = f"[PAST GAME STATE - Step {step_counter}]"
-            
-            total_messages = len(messages)
-            adjusted_total = total_messages - 1 if has_todo_result else total_messages
-            
-            if adjusted_total <= 1 + self.keep_full_steps * 4:
-                return
-            
-            oldest_ai_index = adjusted_total - 1 - self.keep_full_steps * 4
-            
-            messages.pop(oldest_ai_index - 1)
-            messages.pop(oldest_ai_index - 2)
+        self._ensure_session(session_id)
+        
+        messages = self._sessions[session_id]['messages']
+        step_counter = self._sessions[session_id]['step_counter']
+        
+        has_todo_result = False
+        if len(messages) >= 1 and isinstance(messages[-1], HumanMessage):
+            content = str(messages[-1].content)
+            if "todo_write result:" in content:
+                has_todo_result = True
+        
+        marker_offset = -5 if has_todo_result else -4
+        
+        if len(messages) >= abs(marker_offset):
+            messages[marker_offset].content[0]["text"] = f"[PAST GAME STATE - Step {step_counter}]"
+        
+        total_messages = len(messages)
+        adjusted_total = total_messages - 1 if has_todo_result else total_messages
+        
+        if adjusted_total <= 1 + self.keep_full_steps * 4:
+            return
+        
+        oldest_ai_index = adjusted_total - 1 - self.keep_full_steps * 4
+        
+        messages.pop(oldest_ai_index - 1)
+        messages.pop(oldest_ai_index - 2)
     
     def get_message_count(self, session_id: str) -> int:
-        with self._lock:
-            self._ensure_session(session_id)
-            return len(self._sessions[session_id]['messages'])
+        self._ensure_session(session_id)
+        return len(self._sessions[session_id]['messages'])
     
     def get_step_counter(self, session_id: str) -> int:
-        with self._lock:
-            self._ensure_session(session_id)
-            return self._sessions[session_id]['step_counter']
+        self._ensure_session(session_id)
+        return self._sessions[session_id]['step_counter']
     
     def reset(self, session_id: str):
-        with self._lock:
-            if session_id in self._sessions:
-                del self._sessions[session_id]
+        if session_id in self._sessions:
+            del self._sessions[session_id]
     
     def get_all_sessions(self) -> List[str]:
-        with self._lock:
-            return list(self._sessions.keys())
+        return list(self._sessions.keys())
     
     def _build_marker_message(self, is_current: bool, step: Optional[int] = None) -> HumanMessage:
         if is_current:
@@ -177,6 +182,7 @@ class ContextService:
     
     async def _build_available_actions_message(
         self,
+        session_id: str,
         screenshot_path: str,
         available_actions: Dict[str, Any],
         vision_detector,
@@ -184,10 +190,39 @@ class ContextService:
         sdk_enabled: bool
     ) -> HumanMessage:
         
+        session = self._sessions.get(session_id, {})
+        latest_bingo_state = session.get('latest_bingo_state', 'unspecified')
+        cached_elements = session.get('cached_vision_elements')
+
+        is_bingo_blitz = os.getenv("GAME_NAME", "").lower() == "bingo_blitz"
+        optimize_bingo = os.getenv("OPTIMIZED_BINGO_MODE", "true").lower() == "true"
+        use_cached_vision = is_bingo_blitz and optimize_bingo and latest_bingo_state == "in_game" and cached_elements is not None
+
         if not sdk_enabled and vision_detector:
+            if use_cached_vision:
+                print(f"🚀 Using cached vision elements for Bingo Blitz (skipping detection)")
+                detection_result_elements = cached_elements
+                action_message_content = "Detected interactive elements on screen (CACHED TICKET from start of round):"
+                action_message_content += "\n⚠️ NOTE: You are in OPTIMIZED IN-GAME MODE. The coordinates below map to the elements detected at the start of the round (e.g., your Bingo cards). Look at the top of the current screen to read the newly called numbers, and check if they match any of the cached elements below to click them."
+                if detection_result_elements:
+                    for element in detection_result_elements:
+                        name = element['name']
+                        desc = element['description']
+                        pos = element['screen_position']
+                        bbox = element['bounding_box']
+                        action_message_content += f"\n- {name} at ({pos[0]}, {pos[1]}) bbox: [{bbox[0]}, {bbox[1]}, {bbox[2]}, {bbox[3]}] - {desc}"
+                else:
+                    action_message_content += "\n- No cached elements."
+                
+                return HumanMessage(content=[{"type": "text", "text": action_message_content}])
+
             detection_result = await vision_detector.detect_elements(screenshot_path)
             
             if detection_result.success:
+                # Save to cache
+                if is_bingo_blitz and optimize_bingo:
+                    session['cached_vision_elements'] = detection_result.elements
+
                 action_message_content = "Detected interactive elements on screen:"
                 if detection_result.elements:
                     for element in detection_result.elements:

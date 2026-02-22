@@ -16,9 +16,6 @@ from agent.service import (
     GamePauseEvent,
     frame_controller,
     driver,
-    image_file_to_base64,
-    game_state_messages,
-    game_state_lock,
     structured_model,
     agent_handler,
     action_handler

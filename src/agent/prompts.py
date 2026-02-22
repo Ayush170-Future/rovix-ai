@@ -349,4 +349,43 @@ You can set end_game=true when you feel the test is complete (all critical todos
 </end-game-condition>
 """
 
-__all__ = ["SYSTEM_PROMPT", "SYSTEM_PROMPT_WITH_TODO", "HITWICKET_GAME_DESCRIPTION", "HITWICKET_GAMEPLAY_DETAILS", "build_system_prompt_with_game_config"]
+
+# Bingo Blitz configuration
+BINGO_BLITZ_GAME_DESCRIPTION = """Bingo Blitz is a fast-paced, social bingo game. 
+Players travel around the world playing in different cities, collecting items, and completing rooms. 
+The gameplay involves identifying numbers called out and daubing them on bingo cards quickly."""
+
+BINGO_BLITZ_GAMEPLAY_DETAILS = """
+During a round, numbers are called out randomly. The player must find these numbers on their bingo cards and tap them (daub). 
+Power-ups can be used to gain advantages. Winning requires completing specific patterns (line, four corners, etc.) or a full house. 
+The UI contains various buttons for starting rounds, using power-ups, and navigating the world map.
+"""
+
+def build_system_prompt_with_game_config(game_description: str, gameplay_details: str, test_plan: str) -> str:
+    return SYSTEM_PROMPT_WITH_TODO.format(
+        game_description=game_description,
+        gameplay_details=gameplay_details,
+        test_plan=test_plan
+    )
+
+GAME_CONFIGS = {
+    "hitwicket": {
+        "description": HITWICKET_GAME_DESCRIPTION,
+        "details": HITWICKET_GAMEPLAY_DETAILS
+    },
+    "bingo_blitz": {
+        "description": BINGO_BLITZ_GAME_DESCRIPTION,
+        "details": BINGO_BLITZ_GAMEPLAY_DETAILS
+    }
+}
+
+__all__ = [
+    "SYSTEM_PROMPT", 
+    "SYSTEM_PROMPT_WITH_TODO", 
+    "HITWICKET_GAME_DESCRIPTION", 
+    "HITWICKET_GAMEPLAY_DETAILS", 
+    "BINGO_BLITZ_GAME_DESCRIPTION",
+    "BINGO_BLITZ_GAMEPLAY_DETAILS",
+    "GAME_CONFIGS",
+    "build_system_prompt_with_game_config"
+]

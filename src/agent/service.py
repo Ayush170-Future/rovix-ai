@@ -20,9 +20,9 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 try:
-    from .prompts import SYSTEM_PROMPT, SYSTEM_PROMPT_WITH_TODO, HITWICKET_GAME_DESCRIPTION, HITWICKET_GAMEPLAY_DETAILS
+    from .prompts import SYSTEM_PROMPT, SYSTEM_PROMPT_WITH_TODO, GAME_CONFIGS
 except ImportError:
-    from agent.prompts import SYSTEM_PROMPT, SYSTEM_PROMPT_WITH_TODO, HITWICKET_GAME_DESCRIPTION, HITWICKET_GAMEPLAY_DETAILS
+    from agent.prompts import SYSTEM_PROMPT, SYSTEM_PROMPT_WITH_TODO, GAME_CONFIGS
 
 from tester import InputController, AltTesterClient, GameFrameController, SceneController, TimeController
 from agent.actions import ActionHandler
@@ -114,13 +114,18 @@ else:
             screenshot_max_retries=int(os.getenv("SCREENSHOT_MAX_RETRIES", "3"))
         )
     
-    print("Initializing Vision Detector...")
-    vision_detector = VisionElementDetector(
-        api_key=os.getenv("GOOGLE_API_KEY"),
-        model_name="gemini-robotics-er-1.5-preview",
-        timeout=float(os.getenv("VISION_TIMEOUT", "45.0")),
-        max_retries=int(os.getenv("VISION_MAX_RETRIES", "3"))
-    )
+# Determine game configuration based on .env
+GAME_NAME = os.getenv("GAME_NAME", "hitwicket").lower()
+game_config = GAME_CONFIGS.get(GAME_NAME, GAME_CONFIGS["hitwicket"])
+
+print(f"🎮 Target Game: {GAME_NAME.upper()}")
+
+vision_detector = VisionElementDetector(
+    api_key=os.getenv("GOOGLE_API_KEY"),
+    model_name="gemini-robotics-er-1.5-preview",
+    timeout=float(os.getenv("VISION_TIMEOUT", "45.0")),
+    max_retries=int(os.getenv("VISION_MAX_RETRIES", "3"))
+)
 
 context_service = ContextService(
     system_prompt=SYSTEM_PROMPT_WITH_TODO,
@@ -352,14 +357,18 @@ class TestResult(BaseModel):
 class AgentOutput(BaseModel):
     game_state_summary: str = Field(
         description="A concise summary of the current game state, key observations, and important context that should be remembered for future steps. This summary will be preserved in the conversation history even when screenshots are removed. Include: current game situation, player status, important objects/entities, recent changes, and any critical information needed for decision-making."
-    ),
+    )
+    bingo_state: Literal["menu", "in_game", "unspecified"] = Field(
+        default="unspecified",
+        description="For Bingo Blitz ONLY: Set to 'in_game' when the bingo board is fully visible and a round is actively being played. Set to 'menu' for all other screens (menus, popups, loading, results). Default is 'unspecified'."
+    )
     reason: str = Field(
         description="Use this field to reason about the current game state and your overall performance, observations, goals that will help you complete the game and figure out the next set of actions."
-    ),
+    )
     end_game: bool = Field(
         default=False,
         description="This represents whether the game has ended or not. If the game has ended, the player should not take any action."
-    ),
+    )
     actions: List[Action] = Field(
         description="A list of actions to be executed sequentially. This can be a combination of keyboard and button press actions."
     )
@@ -576,7 +585,7 @@ async def run_blackbox_loop():
     print("🎮 Starting black box polling loop")
     step = 0
     
-    context_service._ensure_session(SESSION_ID, HITWICKET_GAME_DESCRIPTION, HITWICKET_GAMEPLAY_DETAILS, test_plan)
+    context_service._ensure_session(SESSION_ID, game_config["description"], game_config["details"], test_plan)
     while step < MAX_STEPS:
         print(f"\n🔄 Black box iteration {step}")
         

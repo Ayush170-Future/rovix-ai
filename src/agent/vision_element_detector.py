@@ -206,7 +206,8 @@ Detect as many interactable elements as you can find. Be thorough!"""
             try:
                 start_time = time.time()
                 
-                response = self.client.models.generate_content(
+                response = await asyncio.to_thread(
+                    self.client.models.generate_content,
                     model=self.model_name,
                     contents=[
                         types.Part.from_bytes(

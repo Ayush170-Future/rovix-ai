@@ -97,5 +97,23 @@
     "comment": "Tapping Play on the League screen correctly redirected to the VS screen.",
     "screenshot_id": "step_79_frame_79.png",
     "timestamp": "2026-02-17T21:29:08.270660Z"
+  },
+  {
+    "test_case_id": "5.9",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Match 3 was playable without issues and a Bingo was successfully achieved.",
+    "screenshot_id": "step_11_frame_11.png",
+    "timestamp": "2026-02-21T19:43:10.529210Z"
+  },
+  {
+    "test_case_id": "5.9",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Match 3 was playable and completed successfully, transitioning back to the city menu.",
+    "screenshot_id": "step_8_frame_8.png",
+    "timestamp": "2026-02-22T04:05:23.355678Z"
   }
 ]
