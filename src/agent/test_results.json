@@ -115,5 +115,95 @@
     "comment": "Match 3 was playable and completed successfully, transitioning back to the city menu.",
     "screenshot_id": "step_8_frame_8.png",
     "timestamp": "2026-02-22T04:05:23.355678Z"
+  },
+  {
+    "test_case_id": "5.9",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Match 3 was playable and completed successfully.",
+    "screenshot_id": "step_10_frame_10.png",
+    "timestamp": "2026-02-22T05:26:49.408769Z"
+  },
+  {
+    "test_case_id": "5.9",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Match 3 was played through and reached the reward screen without any issues.",
+    "screenshot_id": "step_40_frame_40.png",
+    "timestamp": "2026-02-22T06:45:20.254958Z"
+  },
+  {
+    "test_case_id": "5.9",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Successfully completed a full bingo round (Match 3) and collected rewards.",
+    "screenshot_id": "step_40_frame_40.png",
+    "timestamp": "2026-02-22T08:18:18.197026Z"
+  },
+  {
+    "test_case_id": "6.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "A special 'Shining Start Sale' (ESP) triggered immediately upon returning to the dashboard after Match 3.",
+    "screenshot_id": "step_42_frame_42.png",
+    "timestamp": "2026-02-22T08:22:15.570278Z"
+  },
+  {
+    "test_case_id": "6.2",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Hand pointer animation is clearly visible on the dashboard pointing to the next available city (New York).",
+    "screenshot_id": "step_58_frame_58.png",
+    "timestamp": "2026-02-22T08:30:21.889348Z"
+  },
+  {
+    "test_case_id": "6.3",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Sale indicators (representing the ESP/Sale trigger) are visible on the dashboard UI.",
+    "screenshot_id": "step_58_frame_58.png",
+    "timestamp": "2026-02-22T08:30:21.889348Z"
+  },
+  {
+    "test_case_id": "6.6",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Successfully verified that the Store contains a 'Free' tag item (Power Pack) in the Bingo Boosts section.",
+    "screenshot_id": "step_88_frame_88.png",
+    "timestamp": "2026-02-22T08:41:16.719194Z"
+  },
+  {
+    "test_case_id": "6.8",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Match 4 (New York) round successfully started and is playable with no issues.",
+    "screenshot_id": "step_158_frame_158.png",
+    "timestamp": "2026-02-22T09:05:59.190659Z"
+  },
+  {
+    "test_case_id": "5.9",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Match 3 was played successfully without any technical issues or gameplay blockers.",
+    "screenshot_id": "step_35_frame_35.png",
+    "timestamp": "2026-02-22T11:12:30.475073Z"
+  },
+  {
+    "test_case_id": "5.9",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Match 3 was completed successfully without any issues.",
+    "screenshot_id": "step_36_frame_36.png",
+    "timestamp": "2026-02-22T11:26:15.268198Z"
   }
 ]

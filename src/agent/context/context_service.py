@@ -32,7 +32,8 @@ class ContextService:
                 'messages': [SystemMessage(content=system_prompt)],
                 'step_counter': 0,
                 'cached_vision_elements': None,
-                'latest_bingo_state': 'unspecified'
+                'latest_bingo_state': 'unspecified',
+                'last_powerup_time': 0
             }
         return True
     
@@ -151,6 +152,22 @@ class ContextService:
     
     def get_all_sessions(self) -> List[str]:
         return list(self._sessions.keys())
+    
+    def get_latest_bingo_state(self, session_id: str) -> str:
+        session = self._sessions.get(session_id, {})
+        return session.get('latest_bingo_state', 'unspecified')
+    
+    def get_cached_vision_elements(self, session_id: str) -> List[Dict]:
+        session = self._sessions.get(session_id, {})
+        return session.get('cached_vision_elements')
+
+    def get_last_powerup_time(self, session_id: str) -> float:
+        session = self._sessions.get(session_id, {})
+        return session.get('last_powerup_time', 0)
+
+    def set_last_powerup_time(self, session_id: str, t: float):
+        if session_id in self._sessions:
+            self._sessions[session_id]['last_powerup_time'] = t
     
     def _build_marker_message(self, is_current: bool, step: Optional[int] = None) -> HumanMessage:
         if is_current:

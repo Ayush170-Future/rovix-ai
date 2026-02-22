@@ -24,7 +24,7 @@ class VisionElementDetector:
         self, 
         api_key: str, 
         model_name: str = "gemini-robotics-er-1.5-preview",
-        timeout: float = 45.0,
+        timeout: float = 90.0,
         max_retries: int = 3
     ):
         self.api_key = api_key
@@ -34,47 +34,16 @@ class VisionElementDetector:
         self.client = genai.Client(api_key=api_key)
         
         self.prompt = """
-You are a helpful assistant and your job is identify ALL INTERACTABLE UI elements in this screenshot. An interactable element is something a user can tap, click, swipe, or interact with.
-The dectected objects have be exhaustive and the bounding boxes has to be accurate. This information will be used to interact with the game. And any wrong detection, missed object or incorrect bounding boxes
-will lead to the failure of the game play, which is not acceptable.
+Identify all interactable elements in this Bingo Blitz screenshot.
+CRITICAL:
+1. BALL_HISTORY_BAR: Identify the ENTIRE horizontal area at the top where called balls appear (capture the full width).
+2. POWERUP_BUTTON: Identify the power-up activation button.
+3. BINGO_NUMBERS: Identify each individual number on the bingo cards. Label them as "Card X - Number Y".
 
-Examples of interactable elements to detect:
-- Buttons (submit, cancel, back, menu, navigation, etc.)
-- Icons (settings, share, home, search, profile, etc.)
-- Text input fields and text boxes
-- Checkboxes, radio buttons, toggles, switches
-- Dropdown menus and selectors
-- Tabs and navigation items
-- Clickable cards or tiles
-- Links and clickable text
-- Sliders and scroll bars
-- Game pieces or interactive objects (if it's a game)
-- Any other elements users can interact with
-
-DO NOT include:
-- Static text labels (unless they're clickable)
-- Background images
-- Decorative elements
-- Non-interactive text
-
-For each interactable element, provide:
-1. Its bounding box location
-2. A brief label identifying what it is
-3. A short description of what it does when interacted with
-
-The answer should follow this JSON format:
-[
-  {
-    "bounding_box": [y_min, x_min, y_max, x_max],
-    "label": "Brief identifying name (e.g., 'settings button', 'username input field', 'login button')",
-    "description": "Short description of what this element does (e.g., 'Opens settings menu', 'Enter username here', 'Submit login form')"
-  },
-  ...
-]
-
-The bounding boxes are in [y_min, x_min, y_max, x_max] format normalized to 0-1000.
-
-Detect as many interactable elements as you can find. Be thorough!"""
+Format: JSON list of objects with [bounding_box, label, description].
+Bounding boxes: [y_min, x_min, y_max, x_max] normalized (0-1000).
+Be exhaustive.
+"""
 
     def _parse_gemini_response(self, response_text: str) -> List[Dict]:
         cleaned = response_text.replace("```json", "").replace("```", "").strip()
@@ -275,6 +244,85 @@ Detect as many interactable elements as you can find. Be thorough!"""
             retry_count=self.max_retries
         )
     
+    async def targeted_ocr(self, screenshot_path: str, bbox_norm: List[int], prompt: str) -> str:
+        """Perform OCR on a specific cropped region using the VLM"""
+        try:
+            image = Image.open(screenshot_path)
+            w, h = image.size
+            
+            # Crop using normalized coordinates [y1, x1, y2, x2]
+            left = int(bbox_norm[1] * w / 1000)
+            top = int(bbox_norm[0] * h / 1000)
+            right = int(bbox_norm[3] * w / 1000)
+            bottom = int(bbox_norm[2] * h / 1000)
+            
+            crop = image.crop((left, top, right, bottom))
+            import io
+            img_byte_arr = io.BytesIO()
+            crop.save(img_byte_arr, format='PNG')
+            image_bytes = img_byte_arr.getvalue()
+            
+            groq_key = os.getenv("GROQ_API_KEY")
+            if groq_key:
+                import base64
+                import requests
+                base64_image = base64.b64encode(image_bytes).decode('utf-8')
+                headers = {
+                    "Authorization": f"Bearer {groq_key}",
+                    "Content-Type": "application/json"
+                }
+                payload = {
+                    "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+                    "messages": [
+                        {
+                            "role": "user",
+                            "content": [
+                                {"type": "text", "text": prompt},
+                                {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{base64_image}"}}
+                            ]
+                        }
+                    ],
+                    "temperature": 0.0
+                }
+                
+                loop = asyncio.get_event_loop()
+                api_response = await loop.run_in_executor(
+                    None, 
+                    lambda: requests.post("https://api.groq.com/openai/v1/chat/completions", headers=headers, json=payload, timeout=10)
+                )
+                if api_response.status_code == 200:
+                    data = api_response.json()
+                    if "choices" in data and len(data["choices"]) > 0:
+                        return data["choices"][0]["message"]["content"].strip()
+                else:
+                    print(f"⚠️ Groq API error: {api_response.status_code} - {api_response.text}")
+            
+            # Use explicit gemini-3-flash-preview since 1.5 is causing 404s on this v1beta
+            fast_model = "gemini-3-flash-preview"
+            
+            response = await asyncio.to_thread(
+                self.client.models.generate_content,
+                model=fast_model, 
+                contents=[
+                    types.Part.from_bytes(
+                        data=image_bytes,
+                        mime_type='image/png',
+                    ),
+                    prompt
+                ],
+                config=types.GenerateContentConfig(
+                    temperature=0.0, # Greedier for OCR
+                )
+            )
+            
+            if not response or getattr(response, 'text', None) is None:
+                return ""
+                
+            return response.text.strip()
+        except Exception as e:
+            print(f"⚠️ Targeted VLM OCR failed: {e}")
+            return ""
+
     def _build_results(self, detections: List[Dict], image_width: int, image_height: int) -> List[Dict]:
         """Build results list from detections"""
         results = []

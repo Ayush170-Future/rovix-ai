@@ -30,6 +30,7 @@ from agent.adb_manager import ADBManager
 from agent.appium_manager import AppiumManager
 from agent.vision_element_detector import VisionElementDetector
 from agent.context import ContextService
+from agent.local_ocr import detect_bingo_numbers, detect_text, is_powerup_ready
 from tools.todo_management import todo_write_handler, TODO_WRITE_INPUT_DESCRIPTION, get_todo_list_for_context
 from tools.todo_management.todo_service import TodoPersistenceService
 
@@ -41,15 +42,16 @@ POLLING_INTERVAL = float(os.getenv("POLLING_INTERVAL", "2.5"))
 MAX_STEPS = int(os.getenv("MAX_STEPS", "1000"))
 SESSION_ID = "game_session_main"
 
+AGENT_MODEL = os.getenv("AGENT_MODEL", "gemini-1.5-flash")
 model = ChatGoogleGenerativeAI(
-    model="gemini-3-flash-preview",
+    model=AGENT_MODEL,
     temperature=1.0,
     max_tokens=None,
     timeout=None,
     max_retries=2,
     api_key=os.getenv("GOOGLE_API_KEY")
 )
-print(f"🤖 Using model: gemini-3-flash-preview")
+print(f"🤖 Using model: {AGENT_MODEL}")
 
 if SDK_ENABLED:
     print("Initializing AltTesterClient...")
@@ -122,8 +124,8 @@ print(f"🎮 Target Game: {GAME_NAME.upper()}")
 
 vision_detector = VisionElementDetector(
     api_key=os.getenv("GOOGLE_API_KEY"),
-    model_name="gemini-robotics-er-1.5-preview",
-    timeout=float(os.getenv("VISION_TIMEOUT", "45.0")),
+    model_name=os.getenv("VISION_MODEL", "gemini-robotics-er-1.5-preview"),
+    timeout=float(os.getenv("VISION_TIMEOUT", "90.0")),
     max_retries=int(os.getenv("VISION_MAX_RETRIES", "3"))
 )
 
@@ -473,6 +475,111 @@ async def agent_handler(event: GamePauseEvent):
             else:
                 available_actions = {}
             
+            # --- LOCAL OCR OPTIMIZATION FOR BINGO BLITZ ---
+            optimize_bingo = os.getenv("OPTIMIZED_BINGO_MODE", "true").lower() == "true"
+            is_bingo_blitz = GAME_NAME == "bingo_blitz"
+            latest_bingo_state = context_service.get_latest_bingo_state(SESSION_ID)
+            
+            # Optimization ONLY runs during active 'in_game' play (not in menus)
+            if is_bingo_blitz and optimize_bingo and latest_bingo_state == "in_game":
+                try:
+                    import ast
+                    with Image.open(saved_filepaths[0]) as img:
+                        w, h = img.size
+                    
+                    quick_actions = []
+                    cached_elements = context_service.get_cached_vision_elements(SESSION_ID)
+                    p_ready = False
+                    
+                    # --- DYNAMIC ANCHORING ---
+                    # Look for ball history and powerup in the cached elements
+                    dynamic_ball_bbox = None
+                    dynamic_power_bbox = None
+                    
+                    if cached_elements:
+                        for el in cached_elements:
+                            name = el['name'].lower()
+                            if any(x in name for x in ["ball history", "called number", "drawn number", "top bar"]):
+                                dynamic_ball_bbox = el['bounding_box']
+                            if any(x in name for x in ["power-up", "powerup", "booster button"]):
+                                dynamic_power_bbox = el['bounding_box']
+
+                    # 1. CHECK POWER-UP
+                    p_ready = False
+                    powerup_bbox_str = os.getenv("BINGO_POWERUP_BBOX")
+                    if powerup_bbox_str:
+                        p_bbox_norm = ast.literal_eval(powerup_bbox_str)
+                        p_pixel_bbox = [int(p_bbox_norm[1]*w/1000), int(p_bbox_norm[0]*h/1000), int(p_bbox_norm[3]*w/1000), int(p_bbox_norm[2]*h/1000)]
+                        
+                        # Use color analysis to check for readiness
+                        p_ready = await asyncio.to_thread(is_powerup_ready, saved_filepaths[0], p_pixel_bbox)
+                        
+                        # Cooldown
+                        last_p_time = context_service.get_last_powerup_time(SESSION_ID)
+                        current_time = time.time()
+                        
+                        if p_ready and (current_time - last_p_time > 10):
+                            print(f"🎯 Power-up is READY! Clicking...")
+                            quick_actions.append(Action(
+                                action_type="click",
+                                x=p_pixel_bbox[0] + (p_pixel_bbox[2]-p_pixel_bbox[0])//2,
+                                y=p_pixel_bbox[1] + (p_pixel_bbox[3]-p_pixel_bbox[1])//2
+                            ))
+                            context_service.set_last_powerup_time(SESSION_ID, current_time)
+
+                    # 2. CHECK BINGO NUMBERS
+                    called_numbers = []
+                    ball_bbox_str = os.getenv("BINGO_CALLED_NUMBER_BBOX")
+                    if ball_bbox_str:
+                        b_bbox_norm = ast.literal_eval(ball_bbox_str)
+                        prompt = "List all Bingo numbers visible in this Ball History Bar. Return ONLY the numbers separated by commas. Example: 32, 16, 69"
+                        res_text = await vision_detector.targeted_ocr(saved_filepaths[0], b_bbox_norm, prompt)
+                        import re
+                        called_numbers = [n.strip() for n in re.findall(r'\d+', res_text)] if res_text else []
+                        
+                        # --- LOG OCR RESULTS ---
+                        numbers_str = ", ".join(called_numbers) if called_numbers else "Missed"
+                        tally_entry = f"[{datetime.now().strftime('%H:%M:%S')}] Frame: {event.current_frame} | Ball OCR: [{numbers_str}] | Powerup Ready: {p_ready} | Method: GroqVLM\n"
+                        try:
+                            with open("ocr_tally.txt", "a") as f:
+                                f.write(tally_entry)
+                        except: pass
+
+                        if called_numbers:
+                            if cached_elements:
+                                for num in called_numbers:
+                                    matching_element = None
+                                    for element in cached_elements:
+                                        name = element.get('name', '').lower()
+                                        desc = element.get('description', '').lower()
+                                        
+                                        # Enforce that the element is a card number, not a player profile/rank
+                                        if "card" in name or "number" in name or "bingo" in name:
+                                            # Relaxed match: check last word in name or desc
+                                            if num == name.split()[-1] or (desc and num == desc.split()[-1]):
+                                                matching_element = element
+                                                break
+                                    
+                                    if matching_element:
+                                        print(f"🚀 MATCH FOUND! Clicking {matching_element['name']} (Number: {num})")
+                                        quick_actions.append(Action(
+                                            action_type="click",
+                                            x=matching_element['screen_position'][0],
+                                            y=matching_element['screen_position'][1]
+                                        ))
+                    
+                    if quick_actions:
+                        print(f"⚡ Executing {len(quick_actions)} optimized actions (bypassing LLM)")
+                        await execute_agent_actions(quick_actions)
+                        if SDK_ENABLED:
+                            try: frame_controller.mark_actions_executed()
+                            except Exception: pass
+                        return {"status": "ok", "optimized": True, "method": "local_ocr", "actions_count": len(quick_actions)}
+                        
+                except Exception as e:
+                    print(f"⚠️ Local OCR optimization failed: {e}")
+            # --- END OPTIMIZATION ---
+
             await context_service.add_new_step(
                 session_id=SESSION_ID,
                 screenshot_path=saved_filepaths[0],

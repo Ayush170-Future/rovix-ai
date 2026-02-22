@@ -26,3 +26,6 @@ pure-python-adb>=0.3.0
 # Appium integration (optional)
 Appium-Python-Client>=3.0.0
 
+# OCR dependencies
+pytesseract>=0.3.10
+
