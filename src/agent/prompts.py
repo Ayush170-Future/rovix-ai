@@ -198,6 +198,54 @@ Only press the Hit or Smash button if the SA is activated and the meter is full.
 Remember, each shot (0, 1, 2, 4, 6) has a probability.
 """
 
+BINGO_BLITZ_GAME_DESCRIPTION = """Bingo Blitz is a freemium social bingo game developed by Playtika, available on iOS and Android. 
+It is the #1 Free Online Bingo Game and has been running since 2012.
+
+The game is themed around world travel — you move through a world map made up of themed bingo rooms inspired by cities and countries around the globe. 
+Each room has its own collection items to gather, and completing a room lets you advance to the next destination on the map.
+
+Beyond the bingo rounds themselves, the game is packed with mini-games, seasonal events, treasure chests, and social features — 
+you can join teams, trade collection items with friends, chat inside bingo rooms, and send/receive gifts.
+
+Your goal is to follow the tutorial, get familiar with the core bingo loop, and advance through the initial rooms on the world map."""
+
+BINGO_BLITZ_GAMEPLAY_DETAILS = """
+Core Bingo Loop:
+- Each bingo card is a 5x5 grid with 24 numbered spaces and one FREE space in the center.
+- Before a round starts, you purchase cards — you can play 1, 2, 3, or 4 cards at a time. More cards = more chances to win, but also more to track.
+- Numbers are drawn randomly and displayed on screen. Tap (daub) them on your cards as they are called.
+- The Number Display Board on the right side of the screen tracks all called numbers in the current round.
+- Winning patterns: complete a line of 5 numbers in a vertical, horizontal, or diagonal row, OR mark all four corners of a card.
+- A round ends when someone claims the last available bingo — there is no final number call. Once all bingos are taken, the round is over.
+- After each round, a Round Summary screen appears where you open Treasure Chests you won, view XP gained, and see rewards collected.
+
+Power-Ups (9 total):
+Single-use per round — Treasure Chest, Double Payout, Instant Win, Triple Daub, Super Charger, Double XP, Wild Daub.
+Multi-use per round — Single Daub, Double Daub.
+Power-ups are activated by tapping them before or during a round. If all single-use power-ups have been used, the bar shows "Click to buy more."
+Note: some power-ups like Instant Win are not available in special room types (e.g., Blackout rooms).
+
+Map Rooms & Collection Items:
+- The world map contains themed bingo rooms (e.g., Paris, Tokyo, New York, etc.).
+- Each room has unique Collection Items that drop during rounds. Collect all items in a room to complete it and unlock the next one.
+- You can choose a Boost before playing — a higher boost means more Collection Items per round and bigger Trivia prizes, but costs more credits.
+- Some cards in a round are Trivia cards. When you daub a Trivia number, wait until the end of the round — you will then be asked a trivia question. Answer correctly to win Credit prizes.
+- Completing an Island (group of rooms) on the map rewards you with Completion Prizes.
+
+UI & Interactions:
+- The game is primarily tap-based. Tap buttons, cards, and UI elements to interact.
+- Swipe or scroll to navigate through menus, room lists, or the world map.
+- During a bingo round, numbers are daubed by tapping directly on the matching cell on your card (auto-daub may also be available).
+- The main navigation includes: Map (bingo rooms), Mini-games, Social (teams, friends, gifts), and Store.
+- Mini-games accessible from the main screen include: Prize Peak, Mission Mania, Streak Blitz, Adventure Book, Cannon, Shore Catch, and IncrediBall.
+
+Social Features:
+- Join a team to participate in group rewards and team events.
+- Trade duplicate collection items with friends or team members to complete sets faster.
+- Use the Gift Center to send and receive free gifts daily.
+- Chat with other players inside bingo rooms during rounds.
+"""
+
 SYSTEM_PROMPT_WITH_TODO = """
 You are a QA testing agent specialized in automated mobile/game application testing. Your goal is to execute test scenarios by following a structured todo list that breaks down complex test flows into manageable steps.
 
@@ -349,4 +397,4 @@ You can set end_game=true when you feel the test is complete (all critical todos
 </end-game-condition>
 """
 
-__all__ = ["SYSTEM_PROMPT", "SYSTEM_PROMPT_WITH_TODO", "HITWICKET_GAME_DESCRIPTION", "HITWICKET_GAMEPLAY_DETAILS", "build_system_prompt_with_game_config"]
+__all__ = ["SYSTEM_PROMPT", "SYSTEM_PROMPT_WITH_TODO", "HITWICKET_GAME_DESCRIPTION", "HITWICKET_GAMEPLAY_DETAILS", "BINGO_BLITZ_GAME_DESCRIPTION", "BINGO_BLITZ_GAMEPLAY_DETAILS", "build_system_prompt_with_game_config"]

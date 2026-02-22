@@ -4,8 +4,14 @@ import io
 import sys
 import os
 from typing import Dict, List, Optional, Any
+import imagehash
 from PIL import Image
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
+
+ANNOTATION_CACHE_THRESHOLD = 10  # dhash Hamming distance below which we reuse cached annotations
+
+# TODO: Add a `force_vision_refresh: bool` field to AgentOutput so the LLM can request
+# fresh annotation when cached elements don't match what it sees on screen.
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
 from tools.todo_management import get_todo_list_for_context
@@ -30,7 +36,10 @@ class ContextService:
             )
             self._sessions[session_id] = {
                 'messages': [SystemMessage(content=system_prompt)],
-                'step_counter': 0
+                'step_counter': 0,
+                'last_annotation_hash': None,
+                'last_annotation_step': None,
+                'last_annotation_message': None,
             }
         return True
     
@@ -51,11 +60,13 @@ class ContextService:
             marker_msg = self._build_marker_message(is_current=True)
             screenshot_msg = self._build_screenshot_message(screenshot_path, step, frame)
             actions_msg = await self._build_available_actions_message(
+                session_id,
                 screenshot_path,
                 available_actions,
                 vision_detector,
                 action_handler,
-                sdk_enabled
+                sdk_enabled,
+                step
             )
             todo_msg = self._build_todo_context_message(session_id)
             
@@ -177,14 +188,34 @@ class ContextService:
     
     async def _build_available_actions_message(
         self,
+        session_id: str,
         screenshot_path: str,
         available_actions: Dict[str, Any],
         vision_detector,
         action_handler,
-        sdk_enabled: bool
+        sdk_enabled: bool,
+        step: int = 0
     ) -> HumanMessage:
         
         if not sdk_enabled and vision_detector:
+            session = self._sessions[session_id]
+            current_hash = imagehash.dhash(Image.open(screenshot_path))
+
+            if session['last_annotation_hash'] is not None:
+                distance = current_hash - session['last_annotation_hash']
+                print(f"🔍 Annotation cache: dhash distance={distance} (threshold={ANNOTATION_CACHE_THRESHOLD})")
+
+                if distance < ANNOTATION_CACHE_THRESHOLD:
+                    cached_step = session['last_annotation_step']
+                    print(f"♻️  Reusing cached annotations from step {cached_step} (distance={distance} < {ANNOTATION_CACHE_THRESHOLD})")
+                    cached_text = session['last_annotation_message'].content[0]["text"]
+                    reused_text = cached_text + f"\n\n(Cached from step {cached_step} — screen unchanged, dhash distance={distance})"
+                    return HumanMessage(content=[{"type": "text", "text": reused_text}])
+                else:
+                    print(f"🆕 Screen changed (distance={distance} >= {ANNOTATION_CACHE_THRESHOLD}), running fresh annotation")
+            else:
+                print("🆕 No cached annotation yet, running first annotation")
+
             detection_result = await vision_detector.detect_elements(screenshot_path)
             
             if detection_result.success:
@@ -199,7 +230,6 @@ class ContextService:
                 else:
                     action_message_content += "\n- No elements detected. Analyze the screenshot to identify clickable areas."
             else:
-                # Vision detection failed - provide fallback message
                 action_message_content = (
                     f"⚠️ Vision detection failed after {detection_result.retry_count} attempts: "
                     f"{detection_result.error_message}\n"
@@ -207,7 +237,15 @@ class ContextService:
                 )
                 print(f"⚠️ Context service: Vision detection failed, providing fallback message")
             
-            return HumanMessage(content=[{"type": "text", "text": action_message_content}])
+            built_message = HumanMessage(content=[{"type": "text", "text": action_message_content}])
+
+            if detection_result.success:
+                session['last_annotation_hash'] = current_hash
+                session['last_annotation_step'] = step
+                session['last_annotation_message'] = built_message
+                print(f"💾 Annotation cache updated for step {step}")
+
+            return built_message
         
         action_message_content = "You can currently interact with the following controls on the screen: \n Buttons available to click:"
         buttons = available_actions.get("buttons", [])
