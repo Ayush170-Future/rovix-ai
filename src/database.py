@@ -1,7 +1,11 @@
+import os
 from motor.motor_asyncio import AsyncIOMotorClient
 from beanie import init_beanie
 from models.test_case import TestCase
 from models.test_run import TestRun
+from agent.logger import get_logger
+
+logger = get_logger("agent.database")
 
 MONGODB_URL = os.getenv("MONGODB_URL")
 DATABASE_NAME = os.getenv("DATABASE_NAME")
@@ -17,7 +21,7 @@ async def init_db():
         ]
     )
     
-    print(f"Connected to MongoDB database: {DATABASE_NAME}")
+    logger.info(f"Connected to MongoDB database: {DATABASE_NAME}")
 
 
 async def close_db():
