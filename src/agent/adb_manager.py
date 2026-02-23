@@ -8,6 +8,13 @@ from ppadb.client import Client as AdbClient
 from dataclasses import dataclass
 from enum import Enum
 
+try:
+    from .logger import get_logger
+except ImportError:
+    from agent.logger import get_logger
+
+logger = get_logger("agent.adb_manager")
+
 
 class ErrorType(str, Enum):
     """Types of errors that can occur"""
@@ -52,15 +59,15 @@ class ADBManager:
             devices = self.client.devices()
             
             if not devices:
-                print("⚠️  No ADB devices connected")
+                logger.warning("⚠️  No ADB devices connected")
                 return
             
             self.device = devices[0]
-            print(f"✅ Connected to ADB device: {self.device.serial}")
+            logger.info(f"✅ Connected to ADB device: {self.device.serial}")
             
         except Exception as e:
-            print(f"❌ Failed to connect to ADB: {e}")
-            print(f"   Make sure ADB server is running: adb start-server")
+            logger.error(f"❌ Failed to connect to ADB: {e}")
+            logger.error(f"   Make sure ADB server is running: adb start-server")
             self.client = None
             self.device = None
     
@@ -77,7 +84,7 @@ class ADBManager:
                 return rotation_map.get(rotation_value, 0)
             return 0
         except Exception as e:
-            print(f"⚠️  Error getting rotation: {e}")
+            logger.warning(f"⚠️  Error getting rotation: {e}")
             return 0
     
     def get_unity_bounds(self) -> Optional[Dict[str, int]]:
@@ -101,11 +108,11 @@ class ADBManager:
                         bounds['rotation'] = rotation
                         return bounds
             
-            print("⚠️  Could not find SurfaceView in UI hierarchy")
+            logger.warning("⚠️  Could not find SurfaceView in UI hierarchy")
             return None
             
         except Exception as e:
-            print(f"❌ Error getting Unity bounds: {e}")
+            logger.error(f"❌ Error getting Unity bounds: {e}")
             return None
     
     def _parse_bounds(self, bounds_str: str) -> Optional[Dict[str, int]]:
@@ -114,7 +121,7 @@ class ADBManager:
             return None
         
         left, top, right, bottom = map(int, match.groups())
-        print(f"🔍 Width: {right - left}, Height: {bottom - top}")
+        logger.debug(f"🔍 Width: {right - left}, Height: {bottom - top}")
         
         return {
             'left': left,
@@ -143,7 +150,7 @@ class ADBManager:
         
         duration_ms = int(duration * 1000)
         self.device.shell(f"input swipe {x1} {y1} {x2} {y2} {duration_ms}")
-        print(f"🔄 SWIPE (ADB): ({x1}, {y1}) → ({x2}, {y2}) duration={duration}s")
+        logger.info(f"🔄 SWIPE (ADB): ({x1}, {y1}) → ({x2}, {y2}) duration={duration}s")
     
     def get_screenshot(self, filepath: str) -> ScreenshotResult:
         """
@@ -190,7 +197,7 @@ class ADBManager:
                 total_elapsed = time.time() - overall_start
                 
                 if attempt > 0:
-                    print(f"   ✅ Screenshot captured after {attempt + 1} attempts")
+                    logger.info(f"   ✅ Screenshot captured after {attempt + 1} attempts")
                 
                 return ScreenshotResult(
                     success=True,
@@ -224,20 +231,20 @@ class ADBManager:
             if attempt_num < self.screenshot_max_retries:
                 # Exponential backoff: 1s, 2s, 4s
                 wait_time = 2 ** attempt
-                print(f"⚠️  [RETRY {attempt_num}/{self.screenshot_max_retries}] {error_msg}")
-                print(f"   🔄 Retrying in {wait_time}s...")
+                logger.warning(f"⚠️  [RETRY {attempt_num}/{self.screenshot_max_retries}] {error_msg}")
+                logger.warning(f"   🔄 Retrying in {wait_time}s...")
                 time.sleep(wait_time)
                 
                 # Try to reconnect if device issue
                 if last_error_type == ErrorType.DEVICE_DISCONNECTED:
-                    print(f"   🔌 Attempting to reconnect to device...")
+                    logger.info(f"   🔌 Attempting to reconnect to device...")
                     self._initialize_connection()
                     if not self.device:
-                        print(f"   ❌ Reconnection failed")
+                        logger.error(f"   ❌ Reconnection failed")
             else:
                 total_elapsed = time.time() - overall_start
                 final_error_msg = f"Screenshot capture failed after {self.screenshot_max_retries} attempts: {last_error}"
-                print(f"❌ [FATAL] {final_error_msg}")
+                logger.error(f"❌ [FATAL] {final_error_msg}")
                 
                 return ScreenshotResult(
                     success=False,
@@ -273,24 +280,24 @@ class ADBManager:
                 if action_type == "click":
                     if x is None or y is None:
                         raise ValueError("x and y are required for click action")
-                    print(f"👆 CLICK (ADB): ({x}, {y}) duration={duration}s")
+                    logger.info(f"👆 CLICK (ADB): ({x}, {y}) duration={duration}s")
                     self.press(x, y, duration)
                 
                 elif action_type == "swipe":
                     if x is None or y is None or end_x is None or end_y is None:
                         raise ValueError("x, y, end_x, end_y are required for swipe action")
-                    print(f"🔄 SWIPE (ADB): ({x}, {y}) → ({end_x}, {end_y}) duration={duration}s")
+                    logger.info(f"🔄 SWIPE (ADB): ({x}, {y}) → ({end_x}, {end_y}) duration={duration}s")
                     self.swipe(x, y, end_x, end_y, duration)
                 
                 elif action_type == "wait":
-                    print(f"⏳ WAIT: {duration}s")
+                    logger.info(f"⏳ WAIT: {duration}s")
                     await asyncio.sleep(duration)
                 
                 else:
-                    print(f"⚠️  Unsupported action type for ADB: {action_type}")
+                    logger.warning(f"⚠️  Unsupported action type for ADB: {action_type}")
                     continue
                     
             except Exception as e:
-                print(f"❌ Action failed: {e}")
+                logger.error(f"❌ Action failed: {e}")
                 raise
 

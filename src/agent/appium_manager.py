@@ -11,6 +11,13 @@ from selenium.webdriver.common.actions.pointer_input import PointerInput
 from dataclasses import dataclass
 from enum import Enum
 
+try:
+    from .logger import get_logger
+except ImportError:
+    from agent.logger import get_logger
+
+logger = get_logger("agent.appium_manager")
+
 
 class ErrorType(str, Enum):
     """Types of errors that can occur"""
@@ -61,7 +68,7 @@ class AppiumManager:
             options.device_name = self.device_name or "Android Emulator"
             if self.udid:
                 options.udid = self.udid
-                print(f"📱 Using device with UDID: {self.udid}")
+                logger.info(f"📱 Using device with UDID: {self.udid}")
             options.no_reset = True
             options.full_reset = False
             options.new_command_timeout = 3600
@@ -69,17 +76,17 @@ class AppiumManager:
             if self.app_package:
                 options.app_package = self.app_package
                 options.app_activity = self.app_activity
-                print(f"🎯 Appium will launch app: {self.app_package}")
+                logger.info(f"🎯 Appium will launch app: {self.app_package}")
             else:
-                print(f"🖥️  Appium will control current screen (no app launch)")
+                logger.info(f"🖥️  Appium will control current screen (no app launch)")
             
-            print(f"🔌 Connecting to Appium server at {self.appium_url}...")
+            logger.info(f"🔌 Connecting to Appium server at {self.appium_url}...")
             self.driver = webdriver.Remote(self.appium_url, options=options)
-            print(f"✅ Appium session started: {self.driver.session_id}")
+            logger.info(f"✅ Appium session started: {self.driver.session_id}")
             
         except Exception as e:
-            print(f"❌ Failed to start Appium session: {e}")
-            print(f"   Make sure Appium server is running: appium")
+            logger.error(f"❌ Failed to start Appium session: {e}")
+            logger.error(f"   Make sure Appium server is running: appium")
             self.driver = None
     
     def is_connected(self) -> bool:
@@ -101,7 +108,7 @@ class AppiumManager:
         
         duration_ms = int(duration * 1000)
         self.driver.swipe(x1, y1, x2, y2, duration_ms)
-        print(f"🔄 SWIPE (Appium): ({x1}, {y1}) → ({x2}, {y2}) duration={duration}s")
+        logger.info(f"🔄 SWIPE (Appium): ({x1}, {y1}) → ({x2}, {y2}) duration={duration}s")
     
     def multi_point_swipe(self, waypoints: List[Tuple[int, int]], duration: float):
         if not self.driver:
@@ -127,7 +134,7 @@ class AppiumManager:
         actions.perform()
         
         waypoints_str = " → ".join([f"({x},{y})" for x, y in waypoints])
-        print(f"🔄 MULTI-SWIPE (Appium): {waypoints_str} duration={duration}s")
+        logger.info(f"🔄 MULTI-SWIPE (Appium): {waypoints_str} duration={duration}s")
     
     def get_screenshot(self, filepath: str) -> ScreenshotResult:
         """
@@ -167,7 +174,7 @@ class AppiumManager:
                 total_elapsed = time.time() - overall_start
                 
                 if attempt > 0:
-                    print(f"   ✅ Screenshot captured after {attempt + 1} attempts")
+                    logger.info(f"   ✅ Screenshot captured after {attempt + 1} attempts")
                 
                 return ScreenshotResult(
                     success=True,
@@ -205,23 +212,23 @@ class AppiumManager:
             if attempt_num < self.screenshot_max_retries:
                 # Exponential backoff: 1s, 2s, 4s
                 wait_time = 2 ** attempt
-                print(f"⚠️  [RETRY {attempt_num}/{self.screenshot_max_retries}] {error_msg}")
-                print(f"   🔄 Retrying in {wait_time}s...")
+                logger.warning(f"⚠️  [RETRY {attempt_num}/{self.screenshot_max_retries}] {error_msg}")
+                logger.warning(f"   🔄 Retrying in {wait_time}s...")
                 time.sleep(wait_time)
                 
                 # Try to reconnect if session issue
                 if last_error_type == ErrorType.DEVICE_DISCONNECTED:
-                    print(f"   🔌 Attempting to reconnect session...")
+                    logger.info(f"   🔌 Attempting to reconnect session...")
                     try:
                         self._initialize_session()
                         if not self.driver:
-                            print(f"   ❌ Reconnection failed")
+                            logger.error(f"   ❌ Reconnection failed")
                     except Exception as reconnect_error:
-                        print(f"   ❌ Reconnection error: {reconnect_error}")
+                        logger.error(f"   ❌ Reconnection error: {reconnect_error}")
             else:
                 total_elapsed = time.time() - overall_start
                 final_error_msg = f"Screenshot capture failed after {self.screenshot_max_retries} attempts: {last_error}"
-                print(f"❌ [FATAL] {final_error_msg}")
+                logger.error(f"❌ [FATAL] {final_error_msg}")
                 
                 return ScreenshotResult(
                     success=False,
@@ -258,13 +265,13 @@ class AppiumManager:
                 if action_type == "click":
                     if x is None or y is None:
                         raise ValueError("x and y are required for click action")
-                    print(f"👆 CLICK (Appium): ({x}, {y}) duration={duration}s")
+                    logger.info(f"👆 CLICK (Appium): ({x}, {y}) duration={duration}s")
                     self.press(x, y, duration)
                 
                 elif action_type == "swipe":
                     if x is None or y is None or end_x is None or end_y is None:
                         raise ValueError("x, y, end_x, end_y are required for swipe action")
-                    print(f"🔄 SWIPE (Appium): ({x}, {y}) → ({end_x}, {end_y}) duration={duration}s")
+                    logger.info(f"🔄 SWIPE (Appium): ({x}, {y}) → ({end_x}, {end_y}) duration={duration}s")
                     self.swipe(x, y, end_x, end_y, duration)
                 
                 elif action_type == "multi_swipe":
@@ -273,20 +280,20 @@ class AppiumManager:
                     self.multi_point_swipe(waypoints, duration)
                 
                 elif action_type == "wait":
-                    print(f"⏳ WAIT: {duration}s")
+                    logger.info(f"⏳ WAIT: {duration}s")
                     await asyncio.sleep(duration)
                 
                 else:
-                    print(f"⚠️  Unsupported action type for Appium: {action_type}")
+                    logger.warning(f"⚠️  Unsupported action type for Appium: {action_type}")
                     continue
                     
             except Exception as e:
-                print(f"❌ Action failed: {e}")
+                logger.error(f"❌ Action failed: {e}")
                 raise
     
     def close(self):
         if self.driver:
-            print("🔌 Closing Appium session...")
+            logger.info("🔌 Closing Appium session...")
             self.driver.quit()
             self.driver = None
     

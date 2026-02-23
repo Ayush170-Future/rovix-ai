@@ -8,6 +8,13 @@ import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 from tester import InputController
 
+try:
+    from ..logger import get_logger
+except ImportError:
+    from agent.logger import get_logger
+
+logger = get_logger("agent.actions.action_handler")
+
 class ActionHandler:
     """
     Unified handler for all game actions.
@@ -98,16 +105,16 @@ class ActionHandler:
             if "input_types" not in config:
                 raise ValueError("Config must contain 'input_types' key")
             
-            print(f"✅ Loaded action config from: {config_path}")
+            logger.info(f"✅ Loaded action config from: {config_path}")
             return config
             
         except FileNotFoundError:
-            print(f"⚠️  Config file not found: {config_path}")
-            print("   Using default configuration")
+            logger.warning(f"⚠️  Config file not found: {config_path}")
+            logger.warning("   Using default configuration")
             return self._get_default_config()
         except json.JSONDecodeError as e:
-            print(f"❌ Error parsing config JSON: {e}")
-            print("   Using default configuration")
+            logger.error(f"❌ Error parsing config JSON: {e}")
+            logger.error("   Using default configuration")
             return self._get_default_config()
     
     def _get_default_config(self) -> Dict[str, Any]:
@@ -156,16 +163,16 @@ class ActionHandler:
         if not force_refresh and self._cached_elements is not None:
             cache_ttl = self.config.get("input_types", {}).get("buttons", {}).get("cache_ttl_seconds", 5.0)
             if time.time() - self._element_cache_timestamp < cache_ttl:
-                print(f"📋 Using cached elements ({len(self._cached_elements)} elements)")
+                logger.debug(f"📋 Using cached elements ({len(self._cached_elements)} elements)")
                 return self._cached_elements
         
-        print("🔍 Extracting interactive elements from game...")
+        logger.info("🔍 Extracting interactive elements from game...")
         
         elements = []
         component_types = self.config.get("element_extraction", {}).get("components", [])
         
         if not component_types:
-            print("⚠️  No component types configured for extraction")
+            logger.warning("⚠️  No component types configured for extraction")
             return elements
         
         for component_obj in component_types:
@@ -175,7 +182,7 @@ class ActionHandler:
                 objects = self.driver.find_objects(By.COMPONENT, component_name)
                 
                 if objects:
-                    print(f"   ✅ Found {len(objects)} {component_name} element(s)")
+                    logger.info(f"   ✅ Found {len(objects)} {component_name} element(s)")
                     
                     for obj in objects:
                         try:
@@ -183,11 +190,11 @@ class ActionHandler:
                             if element_info:
                                 elements.append(element_info)
                         except Exception as e:
-                            print(f"   ⚠️  Error processing element: {e}")
+                            logger.warning(f"   ⚠️  Error processing element: {e}")
                             continue
 
             except Exception as e:
-                print(f"   ⚠️  Error searching for {component_name}: {e}")
+                logger.warning(f"   ⚠️  Error searching for {component_name}: {e}")
                 continue
         
         # Remove duplicates by ID
@@ -210,7 +217,7 @@ class ActionHandler:
             if elem_id:
                 self._elements_by_id[str(elem_id)] = elem
         
-        print(f"✅ Extracted {len(unique_elements)} unique interactive elements")
+        logger.info(f"✅ Extracted {len(unique_elements)} unique interactive elements")
         return unique_elements
     
     def _translate_coords(self, unity_x: float, unity_y: float, mobile_y: float, 
@@ -290,7 +297,7 @@ class ActionHandler:
                     element_info["maxValue"] = float(max_val) if max_val is not None else None
                     element_info["value"] = float(current_val) if current_val is not None else None
                 except Exception as e:
-                    print(f"      ⚠️  Error getting slider properties for {name}: {e}")
+                    logger.warning(f"      ⚠️  Error getting slider properties for {name}: {e}")
                     element_info["minValue"] = None
                     element_info["maxValue"] = None
                     element_info["value"] = None
@@ -298,7 +305,7 @@ class ActionHandler:
             return element_info
             
         except Exception as e:
-            print(f"      ⚠️  Error extracting info: {e}")
+            logger.warning(f"      ⚠️  Error extracting info: {e}")
             return None
     
     def get_available_actions(self) -> Dict[str, Any]:
@@ -391,7 +398,7 @@ class ActionHandler:
             duration: Duration to hold key before release (default 0.1s)
         """
         key_code = self._map_key_to_altkeycode(key)
-        print(f"⌨️  KEY_PRESS: {key} for {duration}s")
+        logger.info(f"⌨️  KEY_PRESS: {key} for {duration}s")
         await self.input_controller.hold_key_async(key_code, duration)
     
     async def execute_button_press(self, button_id: str) -> None:
@@ -410,13 +417,13 @@ class ActionHandler:
         obj = element["object"]
         name = element["name"]
         
-        print(f"🔘 BUTTON_PRESS: {name} (ID: {button_id})")
+        logger.info(f"🔘 BUTTON_PRESS: {name} (ID: {button_id})")
         
         try:
             obj.tap()
-            print(f"   ✅ Successfully tapped {name}")
+            logger.info(f"   ✅ Successfully tapped {name}")
         except Exception as e:
-            print(f"   ❌ Error tapping {name}: {e}")
+            logger.error(f"   ❌ Error tapping {name}: {e}")
             raise
     
     async def execute_wait(self, duration: float) -> None:
@@ -426,7 +433,7 @@ class ActionHandler:
         Args:
             duration: Duration to wait in seconds
         """
-        print(f"⏳ WAIT: {duration}s")
+        logger.info(f"⏳ WAIT: {duration}s")
         await asyncio.sleep(duration)
 
     async def execute_slider_move(self, slider_id: str, value: float) -> None:
@@ -438,7 +445,7 @@ class ActionHandler:
             raise ValueError(f"Slider '{element['name']}' is not enabled")
         obj = element["object"]
         name = element["name"]
-        print(f"🔄 SLIDER_MOVE: {name} (ID: {slider_id}) to {value}")
+        logger.info(f"🔄 SLIDER_MOVE: {name} (ID: {slider_id}) to {value}")
         try:
             # Try without assembly first (Unity built-in components often don't need assembly)
             try:
@@ -446,9 +453,9 @@ class ActionHandler:
             except Exception:
                 # If that fails, try with UnityEngine assembly
                 obj.set_component_property("UnityEngine.UI.Slider", "value", value, "UnityEngine")
-            print(f"   ✅ Successfully moved {name} to {value}")
+            logger.info(f"   ✅ Successfully moved {name} to {value}")
         except Exception as e:
-            print(f"   ❌ Error moving {name} to {value}: {e}")
+            logger.error(f"   ❌ Error moving {name} to {value}: {e}")
             raise
     
     async def execute_actions_parallel(self, actions: List[Dict[str, Any]]) -> None:
@@ -468,13 +475,13 @@ class ActionHandler:
                 }
         """
         if not actions:
-            print("No actions to execute")
+            logger.info("No actions to execute")
             return
         
-        print(f"🎮 Executing {len(actions)} action(s) in parallel...")
+        logger.info(f"🎮 Executing {len(actions)} action(s) in parallel...")
         
         # Release all keys first to reset state
-        print("🔧 Releasing all keys to reset state...")
+        logger.debug("🔧 Releasing all keys to reset state...")
         self.input_controller.release_all_keys()
         
         # Create tasks for all actions
@@ -483,7 +490,7 @@ class ActionHandler:
             action_type = action.get("type")
             reason = action.get("reason", "")
             
-            print(f"   [{i+1}/{len(actions)}] {action_type}: {reason}")
+            logger.info(f"   [{i+1}/{len(actions)}] {action_type}: {reason}")
             
             try:
                 if action_type == "key_press":
@@ -537,29 +544,29 @@ class ActionHandler:
                     ))
                 
                 else:
-                    print(f"   ⚠️  Unknown action type: {action_type}")
+                    logger.warning(f"   ⚠️  Unknown action type: {action_type}")
                     continue
                     
             except Exception as e:
-                print(f"   ❌ Error creating task for action {i+1}: {e}")
+                logger.error(f"   ❌ Error creating task for action {i+1}: {e}")
                 continue
         
         # Wait for all tasks to complete
         if tasks:
-            print("🔧 Waiting for all actions to complete...")
+            logger.debug("🔧 Waiting for all actions to complete...")
             # TODO: Investigate this logic because this is supposed to be sequential but we are using gather which is supposed to be parallel
             await asyncio.gather(*tasks, return_exceptions=True)
             
             # Check for exceptions
             for i, task in enumerate(tasks):
                 if task.exception():
-                    print(f"   ❌ Action {i+1} failed: {task.exception()}")
+                    logger.error(f"   ❌ Action {i+1} failed: {task.exception()}")
         
         # Ensure all keys are released after execution
-        print("🔧 Releasing all keys after actions...")
+        logger.debug("🔧 Releasing all keys after actions...")
         self.input_controller.release_all_keys()
         
-        print("✅ All actions completed!")
+        logger.info("✅ All actions completed!")
     
     async def execute_actions_sequential(self, actions: List[Any]) -> None:
         if not actions:
@@ -613,7 +620,7 @@ class ActionHandler:
                         raise ValueError("duration is required for wait")
                     await self.execute_wait(duration)
             except Exception as e:
-                print(f"Action failed: {e}")
+                logger.error(f"Action failed: {e}")
                 continue
         
         self.input_controller.release_all_keys()
@@ -626,5 +633,5 @@ class ActionHandler:
         self._cached_elements = None
         self._element_cache_timestamp = None
         self._elements_by_id.clear()
-        print("🔄 Element cache invalidated")
+        logger.info("🔄 Element cache invalidated")
 

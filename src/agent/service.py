@@ -21,8 +21,12 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 try:
     from .prompts import SYSTEM_PROMPT, SYSTEM_PROMPT_WITH_TODO, HITWICKET_GAME_DESCRIPTION, HITWICKET_GAMEPLAY_DETAILS
+    from .logger import get_logger
 except ImportError:
     from agent.prompts import SYSTEM_PROMPT, SYSTEM_PROMPT_WITH_TODO, HITWICKET_GAME_DESCRIPTION, HITWICKET_GAMEPLAY_DETAILS
+    from agent.logger import get_logger
+
+logger = get_logger("agent.service")
 
 from tester import InputController, AltTesterClient, GameFrameController, SceneController, TimeController
 from agent.actions import ActionHandler
@@ -50,12 +54,12 @@ model = ChatGoogleGenerativeAI(
     max_retries=2,
     api_key=os.getenv("GOOGLE_API_KEY")
 )
-print(f"🤖 Using model: gemini-3-flash-preview")
+logger.info("🤖 Using model: gemini-3-flash-preview")
 
 if SDK_ENABLED:
-    print("Initializing AltTesterClient...")
+    logger.info("Initializing AltTesterClient...")
     client = AltTesterClient(host="127.0.0.1", port=13000, timeout=60)
-    print("AltTesterClient initialized")
+    logger.info("AltTesterClient initialized")
     driver = client.get_driver()
     input_controller = InputController(driver)
     time_controller = TimeController(driver)
@@ -64,7 +68,7 @@ if SDK_ENABLED:
     frame_controller.mark_actions_executed()
     
     if USE_APPIUM:
-        print("Initializing Appium Manager...")
+        logger.info("Initializing Appium Manager...")
         action_executor = AppiumManager(
             appium_url=os.getenv("APPIUM_URL", "http://localhost:4723"),
             device_name=os.getenv("DEVICE_NAME"),
@@ -75,7 +79,7 @@ if SDK_ENABLED:
             screenshot_max_retries=int(os.getenv("SCREENSHOT_MAX_RETRIES", "3"))
         )
     else:
-        print("Initializing ADB Manager...")
+        logger.info("Initializing ADB Manager...")
         action_executor = ADBManager(
             host="127.0.0.1", 
             port=5037,
@@ -86,7 +90,7 @@ if SDK_ENABLED:
     action_handler = ActionHandler(driver, adb_manager=action_executor)
     vision_detector = None
 else:
-    print("Black box mode - skipping AltTester initialization")
+    logger.info("Black box mode - skipping AltTester initialization")
     client = None
     driver = None
     input_controller = None
@@ -96,7 +100,7 @@ else:
     action_handler = None
     
     if USE_APPIUM:
-        print("Initializing Appium Manager...")
+        logger.info("Initializing Appium Manager...")
         action_executor = AppiumManager(
             appium_url=os.getenv("APPIUM_URL", "http://localhost:4723"),
             device_name=os.getenv("DEVICE_NAME"),
@@ -107,7 +111,7 @@ else:
             screenshot_max_retries=int(os.getenv("SCREENSHOT_MAX_RETRIES", "3"))
         )
     else:
-        print("Initializing ADB Manager...")
+        logger.info("Initializing ADB Manager...")
         action_executor = ADBManager(
             host="127.0.0.1", 
             port=5037,
@@ -115,7 +119,7 @@ else:
             screenshot_max_retries=int(os.getenv("SCREENSHOT_MAX_RETRIES", "3"))
         )
     
-    print("Initializing Vision Detector...")
+    logger.info("Initializing Vision Detector...")
     vision_detector = VisionElementDetector(
         api_key=os.getenv("GOOGLE_API_KEY"),
         model_name="gemini-robotics-er-1.5-preview",
@@ -168,18 +172,14 @@ def initialize_game_todos():
     todo_input_json = json.dumps(initial_todos)
     result = todo_write_handler(todo_input_json, SESSION_ID)
     result_dict = json.loads(result)
-    print(f"✅ Initial todos created: {result_dict.get('totalTasks')} tasks")
-    print(f"   📋 Task counts: {result_dict.get('taskCounts')}")
+    logger.info(f"✅ Initial todos created: {result_dict.get('totalTasks')} tasks")
+    logger.info(f"   📋 Task counts: {result_dict.get('taskCounts')}")
     return result
 
 def print_current_todos(session_id: str):
-    """Print the current todo list in a readable format"""
+    """Log the current todo list in a readable format"""
     todo_list_text = get_todo_list_for_context(session_id)
-    print("\n" + "="*60)
-    print("📋 CURRENT TODO LIST:")
-    print("="*60)
-    print(todo_list_text)
-    print("="*60 + "\n")
+    logger.info("\n" + "="*60 + "\n📋 CURRENT TODO LIST:\n" + "="*60 + "\n" + todo_list_text + "\n" + "="*60)
 
 class Action(BaseModel):
     action_type: Literal["key_press", "click", "swipe", "multi_swipe", "wait", "todo_write"] = Field(
@@ -276,15 +276,15 @@ def parse_llm_response(response: dict) -> AgentOutput:
         # Access token counts from raw output
         if hasattr(raw_output, 'usage_metadata') and raw_output.usage_metadata:
             token_counts = raw_output.usage_metadata
-            print(f"📊 Token counts: {token_counts}")
+            logger.debug(f"📊 Token counts: {token_counts}")
             cached_tokens = raw_output.cachedContentTokenCount if hasattr(raw_output, 'cachedContentTokenCount') else 1
             input_tokens = token_counts.get('input_tokens') if isinstance(token_counts, dict) else getattr(token_counts, 'input_tokens', None)
             output_tokens = token_counts.get('output_tokens') if isinstance(token_counts, dict) else getattr(token_counts, 'output_tokens', None)
             total_tokens = token_counts.get('total_tokens') if isinstance(token_counts, dict) else getattr(token_counts, 'total_tokens', None)
             
             if input_tokens is not None:
-                print(f"📊 Token usage - Input: {input_tokens}, Output: {output_tokens}, Total: {total_tokens}")
-                print(f"📊 Cached tokens: {cached_tokens}")
+                logger.info(f"📊 Token usage - Input: {input_tokens}, Output: {output_tokens}, Total: {total_tokens}")
+                logger.debug(f"📊 Cached tokens: {cached_tokens}")
     else:
         # Fallback for older response format
         agent_output = AgentOutput(**response) if isinstance(response, dict) else response
@@ -312,9 +312,7 @@ def _append_test_results_to_file(filepath: str, rows: List[dict]) -> None:
 
 async def agent_handler(event: GamePauseEvent):
     global FORCE_ANNOTATE
-    print(f"\n{'='*80}")
-    print(f"🎮 Step {event.current_step} | Frame {event.current_frame}")
-    print(f"{'='*80}")
+    logger.info(f"\n{'='*80}\n🎮 Step {event.current_step} | Frame {event.current_frame}\n{'='*80}")
     
     # Print current todos at the start of each step
     print_current_todos(SESSION_ID)
@@ -330,9 +328,7 @@ async def agent_handler(event: GamePauseEvent):
     
     if not screenshot_result.success:
         error_details = f"{screenshot_result.error_message} (type: {screenshot_result.error_type}, retries: {screenshot_result.retry_count})"
-        print(f"   ❌ Screenshot capture failed: {error_details}")
-        
-        # Return error with detailed information
+        logger.error(f"❌ Screenshot capture failed: {error_details}")
         return {
             "status": "error", 
             "message": f"Failed to capture screenshot: {error_details}",
@@ -340,12 +336,12 @@ async def agent_handler(event: GamePauseEvent):
             "retry_count": screenshot_result.retry_count
         }
     
-    print(f"   💾 {filename} (captured in {screenshot_result.elapsed_time:.2f}s)")
+    logger.info(f"💾 {filename} (captured in {screenshot_result.elapsed_time:.2f}s)")
     if screenshot_result.retry_count > 0:
-        print(f"   🔄 Required {screenshot_result.retry_count} retry(ies)")
+        logger.warning(f"🔄 Screenshot required {screenshot_result.retry_count} retry(ies)")
     
     saved_filepaths = [filepath]
-    print(f"✅ Saved screenshot")
+    logger.info("✅ Saved screenshot")
     
     if saved_filepaths:
         try:
@@ -368,20 +364,20 @@ async def agent_handler(event: GamePauseEvent):
             
             messages = context_service.get_messages_for_llm(SESSION_ID)
             
-            print("🤖 Getting agent decision from LLM...")
+            logger.info("🤖 Getting agent decision from LLM...")
             start_time = time.time()
             response = await asyncio.to_thread(structured_model.invoke, messages)
             elapsed = time.time() - start_time
-            print(f"⏱️  LLM response time: {elapsed:.2f}s")
+            logger.info(f"⏱️  LLM response time: {elapsed:.2f}s")
 
             agent_output = parse_llm_response(response)
-            print(f"✅ Agent decision received")
-            print(f"   📝 Game state: {agent_output.game_state_summary}")
-            print(f"   🤔 Reasoning: {agent_output.reason}")
-            print(f"   🔍 Force annotate: {agent_output.force_annotate}")
-            print(f"   🎯 Actions count: {len(agent_output.actions)}")
-            print(f"   🏁 End game: {agent_output.end_game}")
-            print(f"   📋 Test results: {agent_output.test_results}")
+            logger.info("✅ Agent decision received")
+            logger.info(f"   📝 Game state: {agent_output.game_state_summary}")
+            logger.info(f"   🤔 Reasoning: {agent_output.reason}")
+            logger.info(f"   🔍 Force annotate: {agent_output.force_annotate}")
+            logger.info(f"   🎯 Actions count: {len(agent_output.actions)}")
+            logger.info(f"   🏁 End game: {agent_output.end_game}")
+            logger.info(f"   📋 Test results: {agent_output.test_results}")
 
             FORCE_ANNOTATE = agent_output.force_annotate
 
@@ -396,17 +392,17 @@ async def agent_handler(event: GamePauseEvent):
                     for r in agent_output.test_results
                 ]
                 asyncio.create_task(asyncio.to_thread(_append_test_results_to_file, test_results_path, rows))
-                print(f"   📄 Appending {len(agent_output.test_results)} test result(s) to {test_results_path} (async)")
+                logger.info(f"   📄 Appending {len(agent_output.test_results)} test result(s) to {test_results_path} (async)")
 
             context_service.add_ai_response(SESSION_ID, agent_output)
 
             if agent_output.end_game:
-                print("🛑 Agent signaled end of game")
+                logger.info("🛑 Agent signaled end of game")
                 if SDK_ENABLED:
                     try:
                         frame_controller.mark_actions_executed()
                     except Exception as e:
-                        print(f"⚠️  Warning: Failed to mark actions executed: {e}")
+                        logger.warning(f"⚠️  Warning: Failed to mark actions executed: {e}")
                 else:
                     await asyncio.sleep(POLLING_INTERVAL)
                 return {"status": "ok", "saved": 1, "files": [filename], "end_game": True}
@@ -417,27 +413,25 @@ async def agent_handler(event: GamePauseEvent):
             
             if SDK_ENABLED:
                 try:
-                    print("✅ Marking actions as executed...")
+                    logger.info("✅ Marking actions as executed...")
                     frame_controller.mark_actions_executed()
-                    print("✅ Actions marked as executed - Unity can send next event")
+                    logger.info("✅ Actions marked as executed - Unity can send next event")
                 except Exception as e:
-                    print(f"❌ Error marking actions executed: {e}")
+                    logger.error(f"❌ Error marking actions executed: {e}")
                     return {"status": "error", "message": f"Failed to mark actions executed: {e}"}
             else:
-                print(f"⏳ Waiting {POLLING_INTERVAL}s for game to process actions...")
+                logger.debug(f"⏳ Waiting {POLLING_INTERVAL}s for game to process actions...")
                 await asyncio.sleep(POLLING_INTERVAL)
             
             return {"status": "ok", "saved": 1, "files": [filename]}
             
         except Exception as e:
-            print(f"❌ Error in LLM call or action execution: {e}")
-            import traceback
-            traceback.print_exception(type(e), e, e.__traceback__)
+            logger.error(f"❌ Error in LLM call or action execution: {e}", exc_info=True)
             if SDK_ENABLED:
                 try:
                     frame_controller.mark_actions_executed()
                 except Exception as mark_error:
-                    print(f"⚠️  Warning: Failed to mark actions executed after error: {mark_error}")
+                    logger.warning(f"⚠️  Warning: Failed to mark actions executed after error: {mark_error}")
             return {"status": "error", "message": f"Failed to process: {e}"}
 
 async def execute_agent_actions(actions: List[Action]):
@@ -448,42 +442,41 @@ async def execute_agent_actions(actions: List[Action]):
             result_dict = json.loads(result)
             
             if result_dict.get("success"):
-                print(f"todo_write ({idx}/{len(actions)}): updated {result_dict.get('totalTasks')} tasks {result_dict.get('taskCounts')}")
+                logger.info(f"todo_write ({idx}/{len(actions)}): updated {result_dict.get('totalTasks')} tasks {result_dict.get('taskCounts')}")
                 print_current_todos(SESSION_ID)
             else:
-                print(f"todo_write ({idx}/{len(actions)}): failed - {result_dict.get('message')}")
+                logger.warning(f"todo_write ({idx}/{len(actions)}): failed - {result_dict.get('message')}")
             
             context_service.add_todo_result(SESSION_ID, result)
         else:
-            print(f"action ({idx}/{len(actions)}): {action.action_type} x={action.x} y={action.y} duration={action.duration}")
+            logger.info(f"action ({idx}/{len(actions)}): {action.action_type} x={action.x} y={action.y} duration={action.duration}")
             await action_executor.execute_actions_sequential([action])
 
 async def run_blackbox_loop():
-    print("🎮 Starting black box polling loop")
+    logger.info("🎮 Starting black box polling loop")
     step = 0
     
     context_service._ensure_session(SESSION_ID, HITWICKET_GAME_DESCRIPTION, HITWICKET_GAMEPLAY_DETAILS, test_plan)
     while step < MAX_STEPS:
-        print(f"\n🔄 Black box iteration {step}")
+        logger.info(f"🔄 Black box iteration {step}")
         
         fake_event = GamePauseEvent(current_step=step, current_frame=step)
         result = await agent_handler(fake_event)
         
         if result.get("end_game"):
-            print("🛑 Game ended")
+            logger.info("🛑 Game ended")
             break
             
         step += 1
     
-    print(f"✅ Completed {step} steps")
+    logger.info(f"✅ Completed {step} steps")
 
 if __name__ == "__main__":
-    # Initialize the todo list for the 6-level word game
-    print("🎯 Initializing game todos for 6 levels...")
+    logger.info("🎯 Initializing game todos for 6 levels...")
     # initialize_game_todos()
     
     if not SDK_ENABLED:
-        print("🎯 Black box mode - starting polling loop")
+        logger.info("🎯 Black box mode - starting polling loop")
         asyncio.run(run_blackbox_loop())
     else:
-        print("🔌 SDK mode - waiting for Unity events")
+        logger.info("🔌 SDK mode - waiting for Unity events")

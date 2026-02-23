@@ -8,6 +8,13 @@ from google.genai import types
 from typing import List, Dict, Optional
 from dataclasses import dataclass
 
+try:
+    from .logger import get_logger
+except ImportError:
+    from agent.logger import get_logger
+
+logger = get_logger("agent.vision_element_detector")
+
 
 @dataclass
 class VisionDetectionResult:
@@ -97,7 +104,7 @@ Detect as many interactable elements as you can find. Be thorough!"""
                 return [parsed]
             return parsed
         except json.JSONDecodeError as e:
-            print(f"Error parsing JSON: {e}")
+            logger.error(f"Error parsing JSON: {e}")
             return []
 
     def _convert_normalized_bbox_to_pixels(self, bbox_norm: List[int], image_width: int, image_height: int) -> dict:
@@ -152,9 +159,9 @@ Detect as many interactable elements as you can find. Be thorough!"""
             output_path = f"{base_name}_annotated.png"
             
             await asyncio.to_thread(image.save, output_path)
-            print(f"📸 Annotated image saved")
+            logger.info(f"📸 Annotated image saved")
         except Exception as e:
-            print(f"⚠️  Failed to save annotated image: {e}")
+            logger.warning(f"⚠️  Failed to save annotated image: {e}")
 
     async def detect_elements(self, screenshot_path: str) -> VisionDetectionResult:
         """
@@ -163,7 +170,7 @@ Detect as many interactable elements as you can find. Be thorough!"""
         Returns:
             VisionDetectionResult with success status, elements list, and error info
         """
-        print(f"🔍 Vision detection")
+        logger.info(f"🔍 Vision detection")
         
         try:
             # Wrap entire detection with timeout
@@ -174,7 +181,7 @@ Detect as many interactable elements as you can find. Be thorough!"""
             return result
         except asyncio.TimeoutError:
             error_msg = f"Vision detection timed out after {self.timeout}s"
-            print(f"❌ [TIMEOUT] {error_msg}")
+            logger.error(f"❌ [TIMEOUT] {error_msg}")
             return VisionDetectionResult(
                 success=False,
                 elements=[],
@@ -183,7 +190,7 @@ Detect as many interactable elements as you can find. Be thorough!"""
             )
         except Exception as e:
             error_msg = f"Unexpected error in vision detection: {e}"
-            print(f"❌ [FATAL] {error_msg}")
+            logger.error(f"❌ [FATAL] {error_msg}")
             return VisionDetectionResult(
                 success=False,
                 elements=[],
@@ -223,14 +230,14 @@ Detect as many interactable elements as you can find. Be thorough!"""
                 
                 output = response.text
                 elapsed = time.time() - start_time
-                print(f"⏱️  Vision API response time: {elapsed:.2f}s")
+                logger.info(f"⏱️  Vision API response time: {elapsed:.2f}s")
                 
                 # Successfully got response, parse it
                 detections = self._parse_gemini_response(output)
                 results = self._build_results(detections, image_width, image_height)
                 
                 total_elapsed = time.time() - overall_start
-                print(f"✅ Detected {len(results)} elements via vision")
+                logger.info(f"✅ Detected {len(results)} elements via vision")
                 
                 # Draw bounding boxes asynchronously
                 if results:
@@ -250,12 +257,12 @@ Detect as many interactable elements as you can find. Be thorough!"""
                 if attempt_num < self.max_retries:
                     # Exponential backoff: 2^attempt seconds
                     wait_time = 2 ** attempt
-                    print(f"⚠️  [RETRY {attempt_num}/{self.max_retries}] Vision API error: {e}")
-                    print(f"   🔄 Retrying in {wait_time}s...")
+                    logger.warning(f"⚠️  [RETRY {attempt_num}/{self.max_retries}] Vision API error: {e}")
+                    logger.warning(f"   🔄 Retrying in {wait_time}s...")
                     await asyncio.sleep(wait_time)
                 else:
                     error_msg = f"Vision API failed after {self.max_retries} attempts: {last_error}"
-                    print(f"❌ [FATAL] {error_msg}")
+                    logger.error(f"❌ [FATAL] {error_msg}")
                     
                     total_elapsed = time.time() - overall_start
                     return VisionDetectionResult(

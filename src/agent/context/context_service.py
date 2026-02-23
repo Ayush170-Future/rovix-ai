@@ -16,6 +16,13 @@ ANNOTATION_CACHE_THRESHOLD = 15  # dhash Hamming distance below which we reuse c
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
 from tools.todo_management import get_todo_list_for_context
 
+try:
+    from ..logger import get_logger
+except ImportError:
+    from agent.logger import get_logger
+
+logger = get_logger("agent.context.context_service")
+
 
 class ContextService:
     def __init__(self, system_prompt: str, keep_full_steps: int = 4):
@@ -205,22 +212,22 @@ class ContextService:
             current_hash = imagehash.dhash(Image.open(screenshot_path))
 
             if force_annotate:
-                print(f"🔄 Force annotation requested, bypassing cache")
+                logger.info(f"🔄 Force annotation requested, bypassing cache")
             elif session['last_annotation_hash'] is None:
-                print("🆕 No cached annotation yet, running first annotation")
+                logger.info("🆕 No cached annotation yet, running first annotation")
             else:
                 distance = current_hash - session['last_annotation_hash']
-                print(f"🔍 Annotation cache: dhash distance={distance} (threshold={ANNOTATION_CACHE_THRESHOLD})")
+                logger.debug(f"🔍 Annotation cache: dhash distance={distance} (threshold={ANNOTATION_CACHE_THRESHOLD})")
 
                 if distance < ANNOTATION_CACHE_THRESHOLD:
                     cached_step = session['last_annotation_step']
                     cached_text = session['last_annotation_message'].content[0]["text"]
-                    print(f"♻️  Reusing cached annotations from step {cached_step} (distance={distance} < {ANNOTATION_CACHE_THRESHOLD})")
-                    print(f"   Cached text: {cached_text}")
+                    logger.info(f"♻️  Reusing cached annotations from step {cached_step} (distance={distance} < {ANNOTATION_CACHE_THRESHOLD})")
+                    logger.debug(f"   Cached text: {cached_text}")
                     reused_text = cached_text + f"\n\n(Cached from step {cached_step} — screen unchanged, dhash distance={distance})"
                     return HumanMessage(content=[{"type": "text", "text": reused_text}])
                 else:
-                    print(f"🆕 Screen changed (distance={distance} >= {ANNOTATION_CACHE_THRESHOLD}), running fresh annotation")
+                    logger.info(f"🆕 Screen changed (distance={distance} >= {ANNOTATION_CACHE_THRESHOLD}), running fresh annotation")
 
             detection_result = await vision_detector.detect_elements(screenshot_path)
             
@@ -241,7 +248,7 @@ class ContextService:
                     f"{detection_result.error_message}\n"
                     "Fallback: Analyze the screenshot carefully to identify clickable areas and their positions."
                 )
-                print(f"⚠️ Context service: Vision detection failed, providing fallback message")
+                logger.warning(f"⚠️ Context service: Vision detection failed, providing fallback message")
             
             built_message = HumanMessage(content=[{"type": "text", "text": action_message_content}])
 
@@ -249,7 +256,7 @@ class ContextService:
                 session['last_annotation_hash'] = current_hash
                 session['last_annotation_step'] = step
                 session['last_annotation_message'] = built_message
-                print(f"💾 Annotation cache updated for step {step}")
+                logger.debug(f"💾 Annotation cache updated for step {step}")
 
             return built_message
         
