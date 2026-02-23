@@ -397,4 +397,10 @@ You can set end_game=true when you feel the test is complete (all critical todos
 </end-game-condition>
 """
 
-__all__ = ["SYSTEM_PROMPT", "SYSTEM_PROMPT_WITH_TODO", "HITWICKET_GAME_DESCRIPTION", "HITWICKET_GAMEPLAY_DETAILS", "BINGO_BLITZ_GAME_DESCRIPTION", "BINGO_BLITZ_GAMEPLAY_DETAILS", "build_system_prompt_with_game_config"]
+__all__ = [
+    "SYSTEM_PROMPT", 
+    "SYSTEM_PROMPT_WITH_TODO", 
+    "HITWICKET_GAME_DESCRIPTION", 
+    "HITWICKET_GAMEPLAY_DETAILS", 
+    "BINGO_BLITZ_GAME_DESCRIPTION", 
+    "BINGO_BLITZ_GAMEPLAY_DETAILS"]

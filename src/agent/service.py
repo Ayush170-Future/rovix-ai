@@ -40,6 +40,7 @@ USE_APPIUM = os.getenv("USE_APPIUM", "false").lower() == "true"
 POLLING_INTERVAL = float(os.getenv("POLLING_INTERVAL", "2.5"))
 MAX_STEPS = int(os.getenv("MAX_STEPS", "1000"))
 SESSION_ID = "game_session_main"
+FORCE_ANNOTATE = False
 
 model = ChatGoogleGenerativeAI(
     model="gemini-3-flash-preview",
@@ -160,41 +161,6 @@ def initialize_game_todos():
                 "status": "pending",
                 "todo_type": "action",
                 "dependencies": []
-            },
-            {
-                "id": "2",
-                "content": "Start and complete level 2",
-                "status": "pending",
-                "todo_type": "action",
-                "dependencies": ["1"]
-            },
-            {
-                "id": "3",
-                "content": "Start and complete level 3",
-                "status": "pending",
-                "todo_type": "action",
-                "dependencies": ["2"]
-            },
-            {
-                "id": "4",
-                "content": "Start and complete level 4",
-                "status": "pending",
-                "todo_type": "action",
-                "dependencies": ["3"]
-            },
-            {
-                "id": "5",
-                "content": "Start and complete level 5",
-                "status": "pending",
-                "todo_type": "action",
-                "dependencies": ["4"]
-            },
-            {
-                "id": "6",
-                "content": "Start and complete level 6",
-                "status": "pending",
-                "todo_type": "action",
-                "dependencies": ["5"]
             }
         ]
     }
@@ -273,14 +239,18 @@ class TestResult(BaseModel):
 class AgentOutput(BaseModel):
     game_state_summary: str = Field(
         description="A concise summary of the current game state, key observations, and important context that should be remembered for future steps. This summary will be preserved in the conversation history even when screenshots are removed. Include: current game situation, player status, important objects/entities, recent changes, and any critical information needed for decision-making."
-    ),
+    )
     reason: str = Field(
         description="Use this field to reason about the current game state and your overall performance, observations, goals that will help you complete the game and figure out the next set of actions."
-    ),
+    )
     end_game: bool = Field(
         default=False,
         description="This represents whether the game has ended or not. If the game has ended, the player should not take any action."
-    ),
+    )
+    force_annotate: bool = Field(
+        default=False,
+        description="'true' if you think the cached annotation does not match the current game screen, otherwise 'false'. No need to execute any actions when this is 'true'."
+    )
     actions: List[Action] = Field(
         description="A list of actions to be executed sequentially. This can be a combination of keyboard and button press actions."
     )
@@ -321,9 +291,7 @@ def parse_llm_response(response: dict) -> AgentOutput:
 
     return agent_output
 
-
 _test_results_file_lock = threading.Lock()
-
 
 def _append_test_results_to_file(filepath: str, rows: List[dict]) -> None:
     """Append test result rows to JSON file. Runs off the main thread. Uses a lock so concurrent appends do not overwrite each other."""
@@ -343,6 +311,7 @@ def _append_test_results_to_file(filepath: str, rows: List[dict]) -> None:
 
 
 async def agent_handler(event: GamePauseEvent):
+    global FORCE_ANNOTATE
     print(f"\n{'='*80}")
     print(f"🎮 Step {event.current_step} | Frame {event.current_frame}")
     print(f"{'='*80}")
@@ -393,7 +362,8 @@ async def agent_handler(event: GamePauseEvent):
                 frame=event.current_frame,
                 vision_detector=vision_detector,
                 action_handler=action_handler,
-                sdk_enabled=SDK_ENABLED
+                sdk_enabled=SDK_ENABLED,
+                force_annotate=FORCE_ANNOTATE
             )
             
             messages = context_service.get_messages_for_llm(SESSION_ID)
@@ -408,9 +378,12 @@ async def agent_handler(event: GamePauseEvent):
             print(f"✅ Agent decision received")
             print(f"   📝 Game state: {agent_output.game_state_summary}")
             print(f"   🤔 Reasoning: {agent_output.reason}")
+            print(f"   🔍 Force annotate: {agent_output.force_annotate}")
             print(f"   🎯 Actions count: {len(agent_output.actions)}")
             print(f"   🏁 End game: {agent_output.end_game}")
             print(f"   📋 Test results: {agent_output.test_results}")
+
+            FORCE_ANNOTATE = agent_output.force_annotate
 
             # Append test results to file in background (does not block agent execution)
             if agent_output.test_results:
@@ -438,9 +411,7 @@ async def agent_handler(event: GamePauseEvent):
                     await asyncio.sleep(POLLING_INTERVAL)
                 return {"status": "ok", "saved": 1, "files": [filename], "end_game": True}
             
-            print("🎮 Executing actions...")
             await execute_agent_actions(agent_output.actions)
-            print("✅ Actions executed successfully")
             
             context_service.cleanup_old_messages(SESSION_ID)
             
@@ -473,24 +444,18 @@ async def execute_agent_actions(actions: List[Action]):
     for idx, action in enumerate(actions, 1):
         if action.action_type == "todo_write":
             import json
-            print(f"\n📝 Executing todo_write action ({idx}/{len(actions)})")
-            print(f"   📋 Todo input received: {action.todo_input}")
             result = todo_write_handler(action.todo_input, SESSION_ID)
             result_dict = json.loads(result)
             
             if result_dict.get("success"):
-                print(f"   ✅ Todo list updated successfully")
-                print(f"   📊 Total tasks: {result_dict.get('totalTasks')}")
-                print(f"   📈 Task counts: {result_dict.get('taskCounts')}")
-                
-                # Print the updated todo list
+                print(f"todo_write ({idx}/{len(actions)}): updated {result_dict.get('totalTasks')} tasks {result_dict.get('taskCounts')}")
                 print_current_todos(SESSION_ID)
             else:
-                print(f"   ❌ Todo update failed: {result_dict.get('message')}")
+                print(f"todo_write ({idx}/{len(actions)}): failed - {result_dict.get('message')}")
             
             context_service.add_todo_result(SESSION_ID, result)
         else:
-            print(f"   🎮 Executing {action.action_type} action ({idx}/{len(actions)})")
+            print(f"action ({idx}/{len(actions)}): {action.action_type} x={action.x} y={action.y} duration={action.duration}")
             await action_executor.execute_actions_sequential([action])
 
 async def run_blackbox_loop():

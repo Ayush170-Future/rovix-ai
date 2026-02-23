@@ -8,7 +8,7 @@ import imagehash
 from PIL import Image
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 
-ANNOTATION_CACHE_THRESHOLD = 10  # dhash Hamming distance below which we reuse cached annotations
+ANNOTATION_CACHE_THRESHOLD = 15  # dhash Hamming distance below which we reuse cached annotations
 
 # TODO: Add a `force_vision_refresh: bool` field to AgentOutput so the LLM can request
 # fresh annotation when cached elements don't match what it sees on screen.
@@ -52,7 +52,8 @@ class ContextService:
         frame: int,
         vision_detector=None,
         action_handler=None,
-        sdk_enabled: bool = True
+        sdk_enabled: bool = True,
+        force_annotate: bool = False
     ):
         with self._lock:
             self._ensure_session(session_id)
@@ -66,7 +67,8 @@ class ContextService:
                 vision_detector,
                 action_handler,
                 sdk_enabled,
-                step
+                step,
+                force_annotate
             )
             todo_msg = self._build_todo_context_message(session_id)
             
@@ -194,27 +196,31 @@ class ContextService:
         vision_detector,
         action_handler,
         sdk_enabled: bool,
-        step: int = 0
+        step: int = 0,
+        force_annotate: bool = False
     ) -> HumanMessage:
         
         if not sdk_enabled and vision_detector:
             session = self._sessions[session_id]
             current_hash = imagehash.dhash(Image.open(screenshot_path))
 
-            if session['last_annotation_hash'] is not None:
+            if force_annotate:
+                print(f"🔄 Force annotation requested, bypassing cache")
+            elif session['last_annotation_hash'] is None:
+                print("🆕 No cached annotation yet, running first annotation")
+            else:
                 distance = current_hash - session['last_annotation_hash']
                 print(f"🔍 Annotation cache: dhash distance={distance} (threshold={ANNOTATION_CACHE_THRESHOLD})")
 
                 if distance < ANNOTATION_CACHE_THRESHOLD:
                     cached_step = session['last_annotation_step']
-                    print(f"♻️  Reusing cached annotations from step {cached_step} (distance={distance} < {ANNOTATION_CACHE_THRESHOLD})")
                     cached_text = session['last_annotation_message'].content[0]["text"]
+                    print(f"♻️  Reusing cached annotations from step {cached_step} (distance={distance} < {ANNOTATION_CACHE_THRESHOLD})")
+                    print(f"   Cached text: {cached_text}")
                     reused_text = cached_text + f"\n\n(Cached from step {cached_step} — screen unchanged, dhash distance={distance})"
                     return HumanMessage(content=[{"type": "text", "text": reused_text}])
                 else:
                     print(f"🆕 Screen changed (distance={distance} >= {ANNOTATION_CACHE_THRESHOLD}), running fresh annotation")
-            else:
-                print("🆕 No cached annotation yet, running first annotation")
 
             detection_result = await vision_detector.detect_elements(screenshot_path)
             
