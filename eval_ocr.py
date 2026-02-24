@@ -16,7 +16,7 @@ from agent.vision_element_detector import VisionElementDetector
 load_dotenv()
 
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
-GROQ_API_KEY = "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"
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 async def openrouter_ocr(filepath, bbox_norm, prompt, model_name):
     from PIL import Image

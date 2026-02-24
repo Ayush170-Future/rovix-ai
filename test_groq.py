@@ -3,8 +3,8 @@ from dotenv import load_dotenv
 import base64
 import os
 
-GROQ_API_KEY = "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"
-
+load_dotenv()
+GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 headers = {
     "Authorization": f"Bearer {GROQ_API_KEY}",
     "Content-Type": "application/json"
