@@ -1,0 +1,803 @@
+🤖 Using model: gemini-3-flash-preview
+Black box mode - skipping AltTester initialization
+Initializing Appium Manager...
+🖥️  Appium will control current screen (no app launch)
+🔌 Connecting to Appium server at http://localhost:4723...
+✅ Appium session started: 240684fe-0c4b-4405-ba89-f13bf7ca9108
+🎮 Target Game: BINGO_BLITZ
+🎯 Initializing game todos for 6 levels...
+🎯 Black box mode - starting polling loop
+🎮 Starting black box polling loop
+
+🔄 Black box iteration 0
+
+================================================================================
+🎮 Step 0 | Frame 0
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_0_frame_0.png (captured in 0.66s)
+✅ Saved screenshot
+⚡ Fast State Check (GroqVLM) [0.26s]: YES
+🎯 Groq detected 'in_game' state! Forcing immediate optimized transition.
+🔄 Starting background ER 1.5 detection task...
+🔍 Vision detection
+🎯 Power-up is READY! Clicking...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 1
+⚡ Executing 1 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/1)
+👆 CLICK (Appium): (2527, 143) duration=0.1s
+
+🔄 Black box iteration 1
+
+================================================================================
+🎮 Step 1 | Frame 1
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_1_frame_1.png (captured in 0.64s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 2
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 2 pending balls.
+
+🔄 Black box iteration 2
+
+================================================================================
+🎮 Step 2 | Frame 2
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_2_frame_2.png (captured in 0.68s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 2
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 2 pending balls.
+
+🔄 Black box iteration 3
+
+================================================================================
+🎮 Step 3 | Frame 3
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_3_frame_3.png (captured in 0.65s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 3
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 3 pending balls.
+
+🔄 Black box iteration 4
+
+================================================================================
+🎮 Step 4 | Frame 4
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_4_frame_4.png (captured in 0.69s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+🎯 Power-up is READY! Clicking...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 4
+⚡ Executing 1 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/1)
+👆 CLICK (Appium): (2527, 143) duration=0.1s
+
+🔄 Black box iteration 5
+
+================================================================================
+🎮 Step 5 | Frame 5
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_5_frame_5.png (captured in 0.66s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 4
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 4 pending balls.
+
+🔄 Black box iteration 6
+
+================================================================================
+🎮 Step 6 | Frame 6
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_6_frame_6.png (captured in 0.66s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+🚀 Running Groq for ball capture...
+⏱️  Vision API response time: 20.02s
+✅ Detected 28 elements via vision
+✅ Background vision task completed successfully. Elements cached.
+📸 Annotated image saved
+🎱 Balls saved: 5
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 5 pending balls.
+
+🔄 Black box iteration 7
+
+================================================================================
+🎮 Step 7 | Frame 7
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_7_frame_7.png (captured in 0.68s)
+✅ Saved screenshot
+🎯 Power-up is READY! Clicking...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 6
+🔍 Processing retroactively 6 pending balls: ['19', '71', '48', '38', '15', '26']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 71)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 15)
+⚡ Executing 3 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/3)
+👆 CLICK (Appium): (2527, 143) duration=0.1s
+   🎮 Executing click action (2/3)
+👆 CLICK (Appium): (1690, 571) duration=0.1s
+   🎮 Executing click action (3/3)
+👆 CLICK (Appium): (1090, 865) duration=0.1s
+
+🔄 Black box iteration 8
+
+================================================================================
+🎮 Step 8 | Frame 8
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_8_frame_8.png (captured in 0.67s)
+✅ Saved screenshot
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['5', '26', '15', '38', '48', '71', '19']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 15)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 71)
+⚡ Executing 2 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/2)
+👆 CLICK (Appium): (1090, 865) duration=0.1s
+   🎮 Executing click action (2/2)
+👆 CLICK (Appium): (1690, 571) duration=0.1s
+
+🔄 Black box iteration 9
+
+================================================================================
+🎮 Step 9 | Frame 9
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_9_frame_9.png (captured in 0.73s)
+✅ Saved screenshot
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['5', '26', '15', '38', '48', '71', '19']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 15)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 71)
+⚡ Executing 2 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/2)
+👆 CLICK (Appium): (1090, 865) duration=0.1s
+   🎮 Executing click action (2/2)
+👆 CLICK (Appium): (1690, 571) duration=0.1s
+
+🔄 Black box iteration 10
+
+================================================================================
+🎮 Step 10 | Frame 10
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_10_frame_10.png (captured in 0.70s)
+✅ Saved screenshot
+🎯 Power-up is READY! Clicking...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['34', '5', '26', '15', '38', '48', '71']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 15)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 71)
+⚡ Executing 3 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/3)
+👆 CLICK (Appium): (2527, 143) duration=0.1s
+   🎮 Executing click action (2/3)
+👆 CLICK (Appium): (1090, 865) duration=0.1s
+   🎮 Executing click action (3/3)
+👆 CLICK (Appium): (1690, 571) duration=0.1s
+
+🔄 Black box iteration 11
+
+================================================================================
+🎮 Step 11 | Frame 11
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_11_frame_11.png (captured in 0.68s)
+✅ Saved screenshot
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['32', '34', '5', '26', '15', '38', '48']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 32)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 15)
+⚡ Executing 2 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/2)
+👆 CLICK (Appium): (1396, 1015) duration=0.1s
+   🎮 Executing click action (2/2)
+👆 CLICK (Appium): (1090, 865) duration=0.1s
+
+🔄 Black box iteration 12
+
+================================================================================
+🎮 Step 12 | Frame 12
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_12_frame_12.png (captured in 0.70s)
+✅ Saved screenshot
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['49', '32', '34', '5', '26', '15', '38']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 32)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 15)
+⚡ Executing 2 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/2)
+👆 CLICK (Appium): (1396, 1015) duration=0.1s
+   🎮 Executing click action (2/2)
+👆 CLICK (Appium): (1090, 865) duration=0.1s
+
+🔄 Black box iteration 13
+
+================================================================================
+🎮 Step 13 | Frame 13
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_13_frame_13.png (captured in 0.70s)
+✅ Saved screenshot
+🎯 Power-up is READY! Clicking...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['11', '49', '32', '34', '5', '26', '15']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 32)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 15)
+⚡ Executing 3 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/3)
+👆 CLICK (Appium): (2527, 143) duration=0.1s
+   🎮 Executing click action (2/3)
+👆 CLICK (Appium): (1396, 1015) duration=0.1s
+   🎮 Executing click action (3/3)
+👆 CLICK (Appium): (1090, 865) duration=0.1s
+
+🔄 Black box iteration 14
+
+================================================================================
+🎮 Step 14 | Frame 14
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_14_frame_14.png (captured in 0.69s)
+✅ Saved screenshot
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['11', '49', '32', '34', '5', '26', '15']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 32)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 15)
+⚡ Executing 2 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/2)
+👆 CLICK (Appium): (1396, 1015) duration=0.1s
+   🎮 Executing click action (2/2)
+👆 CLICK (Appium): (1090, 865) duration=0.1s
+
+🔄 Black box iteration 15
+
+================================================================================
+🎮 Step 15 | Frame 15
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_15_frame_15.png (captured in 0.68s)
+✅ Saved screenshot
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['54', '11', '49', '32', '34', '5', '26']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 32)
+⚡ Executing 1 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/1)
+👆 CLICK (Appium): (1396, 1015) duration=0.1s
+
+🔄 Black box iteration 16
+
+================================================================================
+🎮 Step 16 | Frame 16
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_16_frame_16.png (captured in 0.69s)
+✅ Saved screenshot
+🎯 Power-up is READY! Clicking...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['28', '54', '11', '49', '32', '34', '5']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 32)
+⚡ Executing 2 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/2)
+👆 CLICK (Appium): (2527, 143) duration=0.1s
+   🎮 Executing click action (2/2)
+👆 CLICK (Appium): (1396, 1015) duration=0.1s
+
+🔄 Black box iteration 17
+
+================================================================================
+🎮 Step 17 | Frame 17
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_17_frame_17.png (captured in 0.68s)
+✅ Saved screenshot
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['20', '28', '54', '11', '49', '32', '34']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 20)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 32)
+⚡ Executing 2 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/2)
+👆 CLICK (Appium): (1246, 715) duration=0.1s
+   🎮 Executing click action (2/2)
+👆 CLICK (Appium): (1396, 1015) duration=0.1s
+
+🔄 Black box iteration 18
+
+================================================================================
+🎮 Step 18 | Frame 18
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_18_frame_18.png (captured in 0.68s)
+✅ Saved screenshot
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['20', '28', '54', '11', '49', '32', '34']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 20)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 32)
+⚡ Executing 2 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/2)
+👆 CLICK (Appium): (1246, 715) duration=0.1s
+   🎮 Executing click action (2/2)
+👆 CLICK (Appium): (1396, 1015) duration=0.1s
+
+🔄 Black box iteration 19
+
+================================================================================
+🎮 Step 19 | Frame 19
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_19_frame_19.png (captured in 0.68s)
+✅ Saved screenshot
+🎯 Power-up is READY! Clicking...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['22', '20', '28', '54', '11', '49', '32']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 22)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 20)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 32)
+⚡ Executing 4 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/4)
+👆 CLICK (Appium): (2527, 143) duration=0.1s
+   🎮 Executing click action (2/4)
+👆 CLICK (Appium): (1246, 1015) duration=0.1s
+   🎮 Executing click action (3/4)
+👆 CLICK (Appium): (1246, 715) duration=0.1s
+   🎮 Executing click action (4/4)
+👆 CLICK (Appium): (1396, 1015) duration=0.1s
+
+🔄 Black box iteration 20
+
+================================================================================
+🎮 Step 20 | Frame 20
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_20_frame_20.png (captured in 0.67s)
+✅ Saved screenshot
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['57', '22', '20', '28', '54', '11', '49']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 22)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 20)
+⚡ Executing 2 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/2)
+👆 CLICK (Appium): (1246, 1015) duration=0.1s
+   🎮 Executing click action (2/2)
+👆 CLICK (Appium): (1246, 715) duration=0.1s
+
+🔄 Black box iteration 21
+
+================================================================================
+🎮 Step 21 | Frame 21
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_21_frame_21.png (captured in 0.68s)
+✅ Saved screenshot
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['30', '57', '22', '20', '28', '54', '11']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 30)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 22)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 20)
+⚡ Executing 3 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/3)
+👆 CLICK (Appium): (1246, 865) duration=0.1s
+   🎮 Executing click action (2/3)
+👆 CLICK (Appium): (1246, 1015) duration=0.1s
+   🎮 Executing click action (3/3)
+👆 CLICK (Appium): (1246, 715) duration=0.1s
+
+🔄 Black box iteration 22
+
+================================================================================
+🎮 Step 22 | Frame 22
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_22_frame_22.png (captured in 0.68s)
+✅ Saved screenshot
+🎯 Power-up is READY! Clicking...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['36', '30', '57', '22', '20', '28', '54']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 36)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 30)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 22)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 20)
+⚡ Executing 5 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/5)
+👆 CLICK (Appium): (2527, 143) duration=0.1s
+   🎮 Executing click action (2/5)
+👆 CLICK (Appium): (1396, 865) duration=0.1s
+   🎮 Executing click action (3/5)
+👆 CLICK (Appium): (1246, 865) duration=0.1s
+   🎮 Executing click action (4/5)
+👆 CLICK (Appium): (1246, 1015) duration=0.1s
+   🎮 Executing click action (5/5)
+👆 CLICK (Appium): (1246, 715) duration=0.1s
+
+🔄 Black box iteration 23
+
+================================================================================
+🎮 Step 23 | Frame 23
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_23_frame_23.png (captured in 0.68s)
+✅ Saved screenshot
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['53', '36', '30', '57', '22', '20', '28']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 36)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 30)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 22)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 20)
+⚡ Executing 4 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/4)
+👆 CLICK (Appium): (1396, 865) duration=0.1s
+   🎮 Executing click action (2/4)
+👆 CLICK (Appium): (1246, 865) duration=0.1s
+   🎮 Executing click action (3/4)
+👆 CLICK (Appium): (1246, 1015) duration=0.1s
+   🎮 Executing click action (4/4)
+👆 CLICK (Appium): (1246, 715) duration=0.1s
+
+🔄 Black box iteration 24
+
+================================================================================
+🎮 Step 24 | Frame 24
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_24_frame_24.png (captured in 0.69s)
+✅ Saved screenshot
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['75', '53', '36', '30', '57', '22', '20']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 36)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 30)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 22)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 20)
+⚡ Executing 4 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/4)
+👆 CLICK (Appium): (1396, 865) duration=0.1s
+   🎮 Executing click action (2/4)
+👆 CLICK (Appium): (1246, 865) duration=0.1s
+   🎮 Executing click action (3/4)
+👆 CLICK (Appium): (1246, 1015) duration=0.1s
+   🎮 Executing click action (4/4)
+👆 CLICK (Appium): (1246, 715) duration=0.1s
+
+🔄 Black box iteration 25
+
+================================================================================
+🎮 Step 25 | Frame 25
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_25_frame_25.png (captured in 0.70s)
+✅ Saved screenshot
+🎯 Power-up is READY! Clicking...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['42', '75', '53', '36', '30', '57', '22']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 36)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 30)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 22)
+⚡ Executing 4 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/4)
+👆 CLICK (Appium): (2527, 143) duration=0.1s
+   🎮 Executing click action (2/4)
+👆 CLICK (Appium): (1396, 865) duration=0.1s
+   🎮 Executing click action (3/4)
+👆 CLICK (Appium): (1246, 865) duration=0.1s
+   🎮 Executing click action (4/4)
+👆 CLICK (Appium): (1246, 1015) duration=0.1s
+
+🔄 Black box iteration 26
+
+================================================================================
+🎮 Step 26 | Frame 26
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_26_frame_26.png (captured in 0.69s)
+✅ Saved screenshot
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['23', '42', '75', '53', '36', '30', '57']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 36)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 30)
+⚡ Executing 2 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/2)
+👆 CLICK (Appium): (1396, 865) duration=0.1s
+   🎮 Executing click action (2/2)
+👆 CLICK (Appium): (1246, 865) duration=0.1s
+
+🔄 Black box iteration 27
+
+================================================================================
+🎮 Step 27 | Frame 27
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_27_frame_27.png (captured in 0.70s)
+✅ Saved screenshot
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['50', '23', '42', '75', '53', '36', '30']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 50)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 36)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 30)
+⚡ Executing 3 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/3)
+👆 CLICK (Appium): (1541, 715) duration=0.1s
+   🎮 Executing click action (2/3)
+👆 CLICK (Appium): (1396, 865) duration=0.1s
+   🎮 Executing click action (3/3)
+👆 CLICK (Appium): (1246, 865) duration=0.1s
+
+🔄 Black box iteration 28
+
+================================================================================
+🎮 Step 28 | Frame 28
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_28_frame_28.png (captured in 0.68s)
+✅ Saved screenshot
+🎯 Power-up is READY! Clicking...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['50', '23', '42', '75', '53', '36', '30']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 50)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 36)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 30)
+⚡ Executing 4 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/4)
+👆 CLICK (Appium): (2527, 143) duration=0.1s
+   🎮 Executing click action (2/4)
+👆 CLICK (Appium): (1541, 715) duration=0.1s
+   🎮 Executing click action (3/4)
+👆 CLICK (Appium): (1396, 865) duration=0.1s
+   🎮 Executing click action (4/4)
+👆 CLICK (Appium): (1246, 865) duration=0.1s
+
+🔄 Black box iteration 29
+
+================================================================================
+🎮 Step 29 | Frame 29
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_29_frame_29.png (captured in 0.77s)
+✅ Saved screenshot
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['1', '50', '23', '42', '75', '53', '36']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 1)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 50)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 36)
+⚡ Executing 3 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/3)
+👆 CLICK (Appium): (946, 421) duration=0.1s
+   🎮 Executing click action (2/3)
+👆 CLICK (Appium): (1541, 715) duration=0.1s
+   🎮 Executing click action (3/3)
+👆 CLICK (Appium): (1396, 865) duration=0.1s
+
+🔄 Black box iteration 30
+
+================================================================================
+🎮 Step 30 | Frame 30
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_30_frame_30.png (captured in 0.55s)
+✅ Saved screenshot
+🚀 Running Groq for ball capture...
+🚀 Using cached vision elements for Bingo Blitz (skipping detection)
+🤖 Getting agent decision from LLM...

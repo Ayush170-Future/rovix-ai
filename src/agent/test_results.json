@@ -502,5 +502,59 @@
     "comment": "Successfully navigated to Catalina City.",
     "screenshot_id": "step_0_frame_0.png",
     "timestamp": "2026-02-24T11:26:55.451288Z"
+  },
+  {
+    "test_case_id": "1.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Already logged in and past the onboarding flow.",
+    "screenshot_id": "step_0_frame_0.png",
+    "timestamp": "2026-02-24T11:42:26.098093Z"
+  },
+  {
+    "test_case_id": "1.2",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Regulations accepted or already dismissed.",
+    "screenshot_id": "step_0_frame_0.png",
+    "timestamp": "2026-02-24T11:42:26.098093Z"
+  },
+  {
+    "test_case_id": "2.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Successfully navigated to Catalina City room entry screen.",
+    "screenshot_id": "step_0_frame_0.png",
+    "timestamp": "2026-02-24T11:42:26.098093Z"
+  },
+  {
+    "test_case_id": "1.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Already logged in and in the game.",
+    "screenshot_id": "step_0_frame_0.png",
+    "timestamp": "2026-02-24T11:46:17.913583Z"
+  },
+  {
+    "test_case_id": "1.2",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Regulations accepted or already dismissed.",
+    "screenshot_id": "step_0_frame_0.png",
+    "timestamp": "2026-02-24T11:46:17.913583Z"
+  },
+  {
+    "test_case_id": "2.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Successfully navigated to Catalina City.",
+    "screenshot_id": "step_0_frame_0.png",
+    "timestamp": "2026-02-24T11:46:17.913583Z"
   }
 ]

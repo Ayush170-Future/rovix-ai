@@ -89,11 +89,17 @@ class AppiumManager:
         if not self.driver:
             raise RuntimeError("No Appium session active")
         
-        if duration <= 0.1:
-            self.driver.tap([(x, y)])
-        else:
-            duration_ms = int(duration * 1000)
-            self.driver.tap([(x, y)], duration_ms)
+        # Use robust W3C Pointer Action for more reliable clicks in Unity
+        actions = ActionBuilder(self.driver, mouse=PointerInput(interaction.POINTER_TOUCH, "touch"))
+        actions.pointer_action.move_to_location(x, y)
+        actions.pointer_action.pointer_down()
+        
+        # Wait at least 50ms to ensure the game engine registers a valid human touch
+        actual_duration = max(duration, 0.05)
+        actions.pointer_action.pause(actual_duration)
+        
+        actions.pointer_action.pointer_up()
+        actions.perform()
     
     def swipe(self, x1: int, y1: int, x2: int, y2: int, duration: float):
         if not self.driver:
