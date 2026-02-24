@@ -169,7 +169,7 @@ Fastest and easiest setup for Android. No extra installation required if you hav
 2.  **Start AltTester Desktop** (only if `SDK_ENABLED=true`) and ensure it's connected to the game.
 3.  **Run the Python server**:
     ```bash
-    python src/api/main.py
+    python3 src/api/main.py
     ```
     The server will start on `http://0.0.0.0:8000`.
 

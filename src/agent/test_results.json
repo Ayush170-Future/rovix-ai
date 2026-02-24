@@ -430,5 +430,32 @@
     "comment": "Account is active, regulations were previously accepted.",
     "screenshot_id": "step_0_frame_0.png",
     "timestamp": "2026-02-24T07:26:25.816436Z"
+  },
+  {
+    "test_case_id": "2.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Successfully navigated to the Catalina City card selection screen.",
+    "screenshot_id": "step_2_frame_2.png",
+    "timestamp": "2026-02-24T08:24:51.041869Z"
+  },
+  {
+    "test_case_id": "3.3",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Round summary and level-up rewards were processed successfully.",
+    "screenshot_id": "step_78_frame_78.png",
+    "timestamp": "2026-02-24T09:42:19.711701Z"
+  },
+  {
+    "test_case_id": "4.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Successfully returned to the main world map after completing a round in Catalina City.",
+    "screenshot_id": "step_79_frame_79.png",
+    "timestamp": "2026-02-24T09:42:49.211530Z"
   }
 ]

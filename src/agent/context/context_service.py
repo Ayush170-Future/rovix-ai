@@ -34,6 +34,7 @@ class ContextService:
                 'cached_vision_elements': None,
                 'latest_bingo_state': 'unspecified',
                 'last_powerup_time': 0,
+                'last_groq_time': 0,
                 'vision_task': None,
                 'pending_balls': []
             }
@@ -187,6 +188,14 @@ class ContextService:
     def set_last_powerup_time(self, session_id: str, t: float):
         if session_id in self._sessions:
             self._sessions[session_id]['last_powerup_time'] = t
+
+    def get_last_groq_time(self, session_id: str) -> float:
+        session = self._sessions.get(session_id, {})
+        return session.get('last_groq_time', 0)
+
+    def set_last_groq_time(self, session_id: str, t: float):
+        if session_id in self._sessions:
+            self._sessions[session_id]['last_groq_time'] = t
 
     def get_vision_task(self, session_id: str):
         session = self._sessions.get(session_id, {})

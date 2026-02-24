@@ -522,27 +522,35 @@ async def agent_handler(event: GamePauseEvent):
                     called_numbers = []
                     ball_bbox_str = os.getenv("BINGO_CALLED_NUMBER_BBOX")
                     if ball_bbox_str:
-                        b_bbox_norm = ast.literal_eval(ball_bbox_str)
-                        prompt = "List all Bingo numbers visible in this Ball History Bar. Return ONLY the numbers separated by commas. Example: 32, 16, 69"
-                        res_text = await vision_detector.targeted_ocr(saved_filepaths[0], b_bbox_norm, prompt)
-                        import re
-                        called_numbers = [n.strip() for n in re.findall(r'\d+', res_text)] if res_text else []
+                        current_time = time.time()
+                        last_groq_time = context_service.get_last_groq_time(SESSION_ID)
                         
-                        # --- LOG OCR RESULTS ---
-                        numbers_str = ", ".join(called_numbers) if called_numbers else "Missed"
-                        tally_entry = f"[{datetime.now().strftime('%H:%M:%S')}] Frame: {event.current_frame} | Ball OCR: [{numbers_str}] | Powerup Ready: {p_ready} | Method: GroqVLM\n"
-                        try:
-                            with open("ocr_tally.txt", "a") as f:
-                                f.write(tally_entry)
-                        except: pass
-
-                        if called_numbers:
-                            # Add to pending balls
-                            context_service.add_pending_balls(SESSION_ID, called_numbers)
+                        # Apply ~2.5 second cooldown (24 calls/min) for Groq targeted OCR
+                        if current_time - last_groq_time >= 2.5:
+                            b_bbox_norm = ast.literal_eval(ball_bbox_str)
+                            prompt = "List all Bingo numbers visible in this Ball History Bar. Return ONLY the numbers separated by commas. Example: 32, 16, 69"
+                            res_text = await vision_detector.targeted_ocr(saved_filepaths[0], b_bbox_norm, prompt)
+                            context_service.set_last_groq_time(SESSION_ID, current_time)
                             
-                            if cached_elements:
-                                # Retrieve ALL pending balls to process them retroactively
-                                all_pending = context_service.get_pending_balls(SESSION_ID)
+                            import re
+                            called_numbers = [n.strip() for n in re.findall(r'\d+', res_text)] if res_text else []
+                            
+                            # --- LOG OCR RESULTS ---
+                            numbers_str = ", ".join(called_numbers) if called_numbers else "Missed"
+                            tally_entry = f"[{datetime.now().strftime('%H:%M:%S')}] Frame: {event.current_frame} | Ball OCR: [{numbers_str}] | Powerup Ready: {p_ready} | Method: GroqVLM\n"
+                            try:
+                                with open("ocr_tally.txt", "a") as f:
+                                    f.write(tally_entry)
+                            except: pass
+
+                            if called_numbers:
+                                # Add to pending balls
+                                context_service.add_pending_balls(SESSION_ID, called_numbers)
+                        
+                        if cached_elements:
+                            # Retrieve ALL pending balls to process them retroactively
+                            all_pending = context_service.get_pending_balls(SESSION_ID)
+                            if all_pending:
                                 print(f"🔍 Processing retroactively {len(all_pending)} pending balls: {all_pending}")
                                 
                                 balls_processed = 0
