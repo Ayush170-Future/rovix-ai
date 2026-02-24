@@ -432,15 +432,22 @@ async def agent_handler(event: GamePauseEvent):
             
             # --- FAST STATE PRE-CHECK VIA GROQ ---
             if is_bingo_blitz and optimize_bingo and latest_bingo_state != "in_game":
-                # Check if we transitioned to in_game quickly
-                is_in_game_now = await vision_detector.check_bingo_state_groq(saved_filepaths[0])
-                if is_in_game_now:
+                # Check if we transitioned to in_game, lobby, or menu quickly
+                check_state_str = await vision_detector.check_bingo_state_groq(saved_filepaths[0])
+                
+                if check_state_str == "in_game":
                     print(f"🎯 Groq detected 'in_game' state! Forcing immediate optimized transition.")
                     context_service._sessions[SESSION_ID]['latest_bingo_state'] = "in_game"
                     context_service._sessions[SESSION_ID]['cached_vision_elements'] = None
                     context_service._sessions[SESSION_ID]['pending_balls'] = []
                     context_service._sessions[SESSION_ID]['vision_task'] = None
                     latest_bingo_state = "in_game"
+                elif check_state_str == "lobby":
+                    print(f"⌛ Groq detected 'lobby' state. Waiting 2.5s before next check.")
+                    if not SDK_ENABLED:
+                        # Blackbox mode sleep
+                        await asyncio.sleep(2.5)
+                    return {"status": "ok", "optimized": True, "method": "lobby_wait"}
             
             # Optimization ONLY runs during active 'in_game' play (not in menus)
             if is_bingo_blitz and optimize_bingo and latest_bingo_state == "in_game":
@@ -558,7 +565,8 @@ async def agent_handler(event: GamePauseEvent):
                                 
                                 balls_processed = 0
                                 for num in all_pending:
-                                    matching_element = None
+                                    # We can have multiple matches (e.g. same number on two tickets)
+                                    matching_elements = []
                                     for element in cached_elements:
                                         name = element.get('name', '').lower()
                                         desc = element.get('description', '').lower()
@@ -567,10 +575,10 @@ async def agent_handler(event: GamePauseEvent):
                                         if "card" in name or "number" in name or "bingo" in name:
                                             # Relaxed match: check last word in name or desc
                                             if num == name.split()[-1] or (desc and num == desc.split()[-1]):
-                                                matching_element = element
-                                                break
+                                                matching_elements.append(element)
+                                                # We do NOT break here, because we want to find all occurrences
                                     
-                                    if matching_element:
+                                    for matching_element in matching_elements:
                                         print(f"🚀 MATCH FOUND! Clicking {matching_element['name']} (Number: {num})")
                                         quick_actions.append(Action(
                                             action_type="click",

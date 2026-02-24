@@ -367,7 +367,12 @@ Be exhaustive.
                     "Content-Type": "application/json"
                 }
                 
-                prompt = "Look carefully at this image. Are there 1 or 2 bingo cards visible on the screen with numbers on them? This indicates we are in an active game of Bingo. Ignore any popups or menus blocking part of the screen. Reply ONLY 'YES' if 1 or 2 Bingo cards are clearly visible, otherwise reply 'NO'."
+                prompt = (
+                    "Look carefully at this image. "
+                    "1. If you see Bingo cards with numbers on them, reply ONLY with 'IN_GAME'. "
+                    "2. If you see a waiting screen with text like 'Waiting for players...', 'Game starts in', or a countdown timer before the bingo cards appear, reply ONLY with 'LOBBY'. "
+                    "3. For all other menus, pop-ups, or map screens, reply ONLY with 'MENU'."
+                )
                 
                 payload = {
                     "model": "meta-llama/llama-4-scout-17b-16e-instruct",
@@ -397,15 +402,21 @@ Be exhaustive.
                     if "choices" in data and len(data["choices"]) > 0:
                         ans = data["choices"][0]["message"]["content"].strip().upper()
                         print(f"⚡ Fast State Check (GroqVLM) [{elapsed:.2f}s]: {ans}")
-                        return "YES" in ans
+                        
+                        if "IN_GAME" in ans:
+                            return "in_game"
+                        elif "LOBBY" in ans:
+                            return "lobby"
+                        else:
+                            return "menu"
                 else:
                     print(f"⚠️ Groq state check error: {api_response.status_code} - {api_response.text}")
             
-            return False
+            return "menu"
             
         except Exception as e:
             print(f"⚠️ Fast state check failed: {e}")
-            return False
+            return "menu"
 
     def _build_results(self, detections: List[Dict], image_width: int, image_height: int) -> List[Dict]:
         """Build results list from detections"""
