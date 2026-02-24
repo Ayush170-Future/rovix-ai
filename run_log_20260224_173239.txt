@@ -1,0 +1,1364 @@
+🤖 Using model: gemini-3-flash-preview
+Black box mode - skipping AltTester initialization
+Initializing Appium Manager...
+🖥️  Appium will control current screen (no app launch)
+🔌 Connecting to Appium server at http://localhost:4723...
+✅ Appium session started: fafa0f8d-d429-49d6-b693-ef6b3e3708cf
+🎮 Target Game: BINGO_BLITZ
+🎯 Initializing game todos for 6 levels...
+🎯 Black box mode - starting polling loop
+🎮 Starting black box polling loop
+
+🔄 Black box iteration 0
+
+================================================================================
+🎮 Step 0 | Frame 0
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_0_frame_0.png (captured in 0.58s)
+✅ Saved screenshot
+⚡ Fast State Check (GroqVLM) [0.63s]: NO
+🔍 Vision detection
+⏱️  Vision API response time: 18.22s
+✅ Detected 28 elements via vision
+🤖 Getting agent decision from LLM...
+📸 Annotated image saved
+⏱️  LLM response time: 7.53s
+📊 Token counts: {'input_tokens': 4886, 'output_tokens': 1012, 'total_tokens': 5898, 'input_token_details': {'cache_read': 2807}, 'output_token_details': {'reasoning': 466}}
+📊 Token usage - Input: 4886, Output: 1012, Total: 5898
+📊 Cached tokens: 1
+✅ Agent decision received
+   📝 Game state: I am currently on the main world map screen. Several locations like New York, Madrid, Sydney, and Hong Kong are visible, but mostly locked. Catalina City is available and is the starting point for the tutorial and gameplay.
+   🤔 Reasoning: I will initialize the todo list based on the test plan and then proceed to click on Catalina City to start the tutorial and bingo round as per test case 2.1.
+   🎯 Actions count: 2
+   🏁 End game: False
+   📋 Test results: []
+🎮 Executing actions...
+
+📝 Executing todo_write action (1/2)
+   📋 Todo input received: {"merge": false, "todos": [{"id": "1.1", "content": "New Player Login", "status": "completed", "todo_type": "verify", "dependencies": []}, {"id": "1.2", "content": "Accept Regulations", "status": "completed", "todo_type": "verify", "dependencies": ["1.1"]}, {"id": "2.1", "content": "Go to Catalina City", "status": "in_progress", "todo_type": "action", "dependencies": ["1.2"]}, {"id": "2.2", "content": "How to Play Tutorial", "status": "pending", "todo_type": "action", "dependencies": ["2.1"]}, {"id": "3.1", "content": "Select 2 Cards", "status": "pending", "todo_type": "action", "dependencies": ["2.2"]}, {"id": "3.2", "content": "Daub Matched Numbers", "status": "pending", "todo_type": "action", "dependencies": ["3.1"]}, {"id": "3.3", "content": "Complete the Round", "status": "pending", "todo_type": "verify", "dependencies": ["3.2"]}, {"id": "4.1", "content": "Return to Main Map", "status": "pending", "todo_type": "action", "dependencies": ["3.3"]}]}
+   ✅ Todo list updated successfully
+   📊 Total tasks: 8
+   📈 Task counts: {'pending': 5, 'in_progress': 1, 'completed': 2, 'cancelled': 0, 'actions': 5, 'verifications': 3}
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[IN_PROGRESS] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[PENDING] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[PENDING] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   🎮 Executing click action (2/2)
+👆 CLICK (Appium): (852, 822) duration=0.1s
+✅ Actions executed successfully
+⏳ Waiting 2.5s for game to process actions...
+
+🔄 Black box iteration 1
+
+================================================================================
+🎮 Step 1 | Frame 1
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[IN_PROGRESS] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[PENDING] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[PENDING] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_1_frame_1.png (captured in 0.54s)
+✅ Saved screenshot
+⚡ Fast State Check (GroqVLM) [0.32s]: NO
+🔍 Vision detection
+⏱️  Vision API response time: 12.60s
+✅ Detected 9 elements via vision
+🤖 Getting agent decision from LLM...
+📸 Annotated image saved
+⏱️  LLM response time: 4.89s
+📊 Token counts: {'input_tokens': 7371, 'output_tokens': 288, 'total_tokens': 7659, 'input_token_details': {'cache_read': 0}, 'output_token_details': {'reasoning': 130}}
+📊 Token usage - Input: 7371, Output: 288, Total: 7659
+📊 Cached tokens: 1
+✅ Agent decision received
+   📝 Game state: I have clicked on Catalina City and the game is currently transitioning with a cloud animation over a coastal background. The main UI elements are still visible.
+   🤔 Reasoning: The game is currently in a transition state after clicking Catalina City. I will wait for the screen to fully load the Catalina City room before proceeding with the tutorial.
+   🎯 Actions count: 1
+   🏁 End game: False
+   📋 Test results: []
+🎮 Executing actions...
+   🎮 Executing wait action (1/1)
+⏳ WAIT: 2.0s
+✅ Actions executed successfully
+⏳ Waiting 2.5s for game to process actions...
+
+🔄 Black box iteration 2
+
+================================================================================
+🎮 Step 2 | Frame 2
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[IN_PROGRESS] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[PENDING] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[PENDING] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_2_frame_2.png (captured in 0.54s)
+✅ Saved screenshot
+⚡ Fast State Check (GroqVLM) [0.42s]: NO
+🔍 Vision detection
+⏱️  Vision API response time: 18.85s
+✅ Detected 25 elements via vision
+🤖 Getting agent decision from LLM...
+📸 Annotated image saved
+⏱️  LLM response time: 10.14s
+📊 Token counts: {'input_tokens': 9849, 'output_tokens': 1154, 'total_tokens': 11003, 'input_token_details': {'cache_read': 0}, 'output_token_details': {'reasoning': 806}}
+📊 Token usage - Input: 9849, Output: 1154, Total: 11003
+📊 Cached tokens: 1
+✅ Agent decision received
+   📝 Game state: I have successfully navigated to the Catalina City room entry screen. The current card selection is set to 1. To proceed with the test plan, I need to select 2 cards and then start the round. No tutorial prompts are currently visible, so I will move towards starting the game to see if the tutorial triggers then.
+   🤔 Reasoning: I am marking 'Go to Catalina City' as completed and moving to 'Select 2 Cards'. I will click the plus button to increase the card count to 2, and then click the Classic purchase button to start the round with 2 cards.
+   🎯 Actions count: 3
+   🏁 End game: False
+   📋 Test results: []
+🎮 Executing actions...
+
+📝 Executing todo_write action (1/3)
+   📋 Todo input received: {"merge": true, "todos": [{"id": "2.1", "status": "completed"}, {"id": "3.1", "status": "in_progress"}]}
+   ✅ Todo list updated successfully
+   📊 Total tasks: 8
+   📈 Task counts: {'pending': 4, 'in_progress': 1, 'completed': 3, 'cancelled': 0, 'actions': 5, 'verifications': 3}
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[IN_PROGRESS] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[PENDING] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   🎮 Executing click action (2/3)
+👆 CLICK (Appium): (2030, 319) duration=0.1s
+   🎮 Executing click action (3/3)
+👆 CLICK (Appium): (1176, 919) duration=0.1s
+✅ Actions executed successfully
+⏳ Waiting 2.5s for game to process actions...
+
+🔄 Black box iteration 3
+
+================================================================================
+🎮 Step 3 | Frame 3
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[IN_PROGRESS] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[PENDING] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_3_frame_3.png (captured in 0.51s)
+✅ Saved screenshot
+⚡ Fast State Check (GroqVLM) [0.40s]: NO
+🔍 Vision detection
+⏱️  Vision API response time: 16.62s
+✅ Detected 20 elements via vision
+🤖 Getting agent decision from LLM...
+📸 Annotated image saved
+⏱️  LLM response time: 9.16s
+📊 Token counts: {'input_tokens': 12490, 'output_tokens': 846, 'total_tokens': 13336, 'input_token_details': {'cache_read': 0}, 'output_token_details': {'reasoning': 665}}
+📊 Token usage - Input: 12490, Output: 846, Total: 13336
+📊 Cached tokens: 1
+✅ Agent decision received
+   📝 Game state: I am on the card selection screen for Catalina. I have selected 2 cards as indicated by the '2 Classic' tab. However, the purchase buttons that were previously visible are currently missing from the screen, possibly due to a loading state or transition.
+   🤔 Reasoning: I have successfully selected 2 cards, but the buttons to start the round (purchase the cards) are not currently visible on the screen. I will wait for a short duration to see if the UI populates or if a tutorial prompt appears.
+   🎯 Actions count: 1
+   🏁 End game: False
+   📋 Test results: []
+🎮 Executing actions...
+   🎮 Executing wait action (1/1)
+⏳ WAIT: 2.0s
+✅ Actions executed successfully
+⏳ Waiting 2.5s for game to process actions...
+
+🔄 Black box iteration 4
+
+================================================================================
+🎮 Step 4 | Frame 4
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[IN_PROGRESS] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[PENDING] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_4_frame_4.png (captured in 0.57s)
+✅ Saved screenshot
+⚡ Fast State Check (GroqVLM) [0.26s]: NO
+🔍 Vision detection
+⏱️  Vision API response time: 23.25s
+✅ Detected 25 elements via vision
+🤖 Getting agent decision from LLM...
+📸 Annotated image saved
+⏱️  LLM response time: 10.77s
+📊 Token counts: {'input_tokens': 15074, 'output_tokens': 1079, 'total_tokens': 16153, 'input_token_details': {'cache_read': 0}, 'output_token_details': {'reasoning': 895}}
+📊 Token usage - Input: 15074, Output: 1079, Total: 16153
+📊 Cached tokens: 1
+✅ Agent decision received
+   📝 Game state: The game is in a 5-second countdown to start the bingo round in Catalina City with 2 cards selected. No tutorial has appeared yet.
+   🤔 Reasoning: I have selected 2 cards and the round is starting. I will mark task 3.1 as completed and wait for the round to begin. Once the round starts, I will look for the tutorial and begin daubing numbers.
+   🎯 Actions count: 2
+   🏁 End game: False
+   📋 Test results: []
+🎮 Executing actions...
+
+📝 Executing todo_write action (1/2)
+   📋 Todo input received: {"merge": true, "todos": [{"id": "3.1", "status": "completed"}, {"id": "3.2", "status": "in_progress"}]}
+   ✅ Todo list updated successfully
+   📊 Total tasks: 8
+   📈 Task counts: {'pending': 3, 'in_progress': 1, 'completed': 4, 'cancelled': 0, 'actions': 5, 'verifications': 3}
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   🎮 Executing wait action (2/2)
+⏳ WAIT: 5.0s
+✅ Actions executed successfully
+⏳ Waiting 2.5s for game to process actions...
+
+🔄 Black box iteration 5
+
+================================================================================
+🎮 Step 5 | Frame 5
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+⚠️  [RETRY 1/3] Screenshot error: Message: 'GET /screenshot' cannot be proxied to UiAutomator2 server because the instrumentation process is not running (probably crashed). Check the server log and/or the logcat output for more details
+Stacktrace:
+UnknownError: 'GET /screenshot' cannot be proxied to UiAutomator2 server because the instrumentation process is not running (probably crashed). Check the server log and/or the logcat output for more details
+    at UIA2Proxy.command (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/build/lib/jsonwp-proxy/proxy.js:310:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async AndroidUiautomator2Driver.getScreenshot (/Users/ashwanikottapalli/.appium/node_modules/appium-uiautomator2-driver/build/lib/commands/screenshot.js:72:19)
+   🔄 Retrying in 1s...
+   🔌 Attempting to reconnect session...
+🖥️  Appium will control current screen (no app launch)
+🔌 Connecting to Appium server at http://localhost:4723...
+✅ Appium session started: 6f551178-5e6f-4de8-87cc-e149fc2edfbe
+   ✅ Screenshot captured after 2 attempts
+   💾 step_5_frame_5.png (captured in 3.15s)
+   🔄 Required 1 retry(ies)
+✅ Saved screenshot
+⚡ Fast State Check (GroqVLM) [0.54s]: YES
+🎯 Groq detected 'in_game' state! Forcing immediate optimized transition.
+🔄 Starting background ER 1.5 detection task...
+🔍 Vision detection
+🎯 Power-up is READY! Clicking...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+⚡ Executing 1 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/1)
+👆 CLICK (Appium): (2527, 143) duration=0.1s
+
+🔄 Black box iteration 6
+
+================================================================================
+🎮 Step 6 | Frame 6
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_6_frame_6.png (captured in 0.63s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 8
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 8 pending balls.
+
+🔄 Black box iteration 7
+
+================================================================================
+🎮 Step 7 | Frame 7
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_7_frame_7.png (captured in 0.63s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 9
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 9 pending balls.
+
+🔄 Black box iteration 8
+
+================================================================================
+🎮 Step 8 | Frame 8
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_8_frame_8.png (captured in 0.62s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+🎯 Power-up is READY! Clicking...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 9
+⚡ Executing 1 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/1)
+👆 CLICK (Appium): (2527, 143) duration=0.1s
+
+🔄 Black box iteration 9
+
+================================================================================
+🎮 Step 9 | Frame 9
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_9_frame_9.png (captured in 0.62s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 10
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 10 pending balls.
+
+🔄 Black box iteration 10
+
+================================================================================
+🎮 Step 10 | Frame 10
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_10_frame_10.png (captured in 0.61s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 11
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 11 pending balls.
+
+🔄 Black box iteration 11
+
+================================================================================
+🎮 Step 11 | Frame 11
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_11_frame_11.png (captured in 0.62s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+🎯 Power-up is READY! Clicking...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 11
+⚡ Executing 1 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/1)
+👆 CLICK (Appium): (2527, 143) duration=0.1s
+
+🔄 Black box iteration 12
+
+================================================================================
+🎮 Step 12 | Frame 12
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_12_frame_12.png (captured in 0.62s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 12
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 12 pending balls.
+
+🔄 Black box iteration 13
+
+================================================================================
+🎮 Step 13 | Frame 13
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_13_frame_13.png (captured in 0.62s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 13
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 13 pending balls.
+
+🔄 Black box iteration 14
+
+================================================================================
+🎮 Step 14 | Frame 14
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_14_frame_14.png (captured in 0.62s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 13
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 13 pending balls.
+
+🔄 Black box iteration 15
+
+================================================================================
+🎮 Step 15 | Frame 15
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_15_frame_15.png (captured in 0.63s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+⏱️  Vision API response time: 33.57s
+✅ Detected 58 elements via vision
+✅ Background vision task completed successfully. Elements cached.
+🎯 Power-up is READY! Clicking...
+🚀 Running Groq for ball capture...
+📸 Annotated image saved
+🎱 Balls saved: 14
+⚡ Executing 1 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/1)
+👆 CLICK (Appium): (2527, 143) duration=0.1s
+
+🔄 Black box iteration 16
+
+================================================================================
+🎮 Step 16 | Frame 16
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_16_frame_16.png (captured in 0.64s)
+✅ Saved screenshot
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 15
+🔍 Processing retroactively 15 pending balls: ['45', '66', '22', '61', '41', '17', '57', '54', '30', '21', '50', '10', '75', '60', '7']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 45)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 66)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 22)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 61)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 41)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 17)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 50)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 75)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 60)
+⚡ Executing 9 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/9)
+👆 CLICK (Appium): (965, 421) duration=0.1s
+   🎮 Executing click action (2/9)
+👆 CLICK (Appium): (2113, 421) duration=0.1s
+   🎮 Executing click action (3/9)
+👆 CLICK (Appium): (1673, 421) duration=0.1s
+   🎮 Executing click action (4/9)
+👆 CLICK (Appium): (2113, 852) duration=0.1s
+   🎮 Executing click action (5/9)
+👆 CLICK (Appium): (965, 564) duration=0.1s
+   🎮 Executing click action (6/9)
+👆 CLICK (Appium): (1673, 564) duration=0.1s
+   🎮 Executing click action (7/9)
+👆 CLICK (Appium): (1113, 852) duration=0.1s
+   🎮 Executing click action (8/9)
+👆 CLICK (Appium): (1262, 564) duration=0.1s
+   🎮 Executing click action (9/9)
+👆 CLICK (Appium): (1113, 708) duration=0.1s
+
+🔄 Black box iteration 17
+
+================================================================================
+🎮 Step 17 | Frame 17
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_17_frame_17.png (captured in 0.62s)
+✅ Saved screenshot
+🎯 Power-up is READY! Clicking...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['31', '7', '60', '75', '10', '50', '21']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 60)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 75)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 50)
+⚡ Executing 4 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/4)
+👆 CLICK (Appium): (2527, 143) duration=0.1s
+   🎮 Executing click action (2/4)
+👆 CLICK (Appium): (1113, 708) duration=0.1s
+   🎮 Executing click action (3/4)
+👆 CLICK (Appium): (1262, 564) duration=0.1s
+   🎮 Executing click action (4/4)
+👆 CLICK (Appium): (1113, 852) duration=0.1s
+
+🔄 Black box iteration 18
+
+================================================================================
+🎮 Step 18 | Frame 18
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_18_frame_18.png (captured in 0.64s)
+✅ Saved screenshot
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['63', '31', '7', '60', '75', '10', '50']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 63)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 60)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 75)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 50)
+⚡ Executing 4 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/4)
+👆 CLICK (Appium): (1262, 996) duration=0.1s
+   🎮 Executing click action (2/4)
+👆 CLICK (Appium): (1113, 708) duration=0.1s
+   🎮 Executing click action (3/4)
+👆 CLICK (Appium): (1262, 564) duration=0.1s
+   🎮 Executing click action (4/4)
+👆 CLICK (Appium): (1113, 852) duration=0.1s
+
+🔄 Black box iteration 19
+
+================================================================================
+🎮 Step 19 | Frame 19
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_19_frame_19.png (captured in 0.63s)
+✅ Saved screenshot
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['8', '63', '31', '7', '60', '75', '10']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 63)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 60)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 75)
+⚡ Executing 3 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/3)
+👆 CLICK (Appium): (1262, 996) duration=0.1s
+   🎮 Executing click action (2/3)
+👆 CLICK (Appium): (1113, 708) duration=0.1s
+   🎮 Executing click action (3/3)
+👆 CLICK (Appium): (1262, 564) duration=0.1s
+
+🔄 Black box iteration 20
+
+================================================================================
+🎮 Step 20 | Frame 20
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_20_frame_20.png (captured in 0.63s)
+✅ Saved screenshot
+🎯 Power-up is READY! Clicking...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['12', '8', '63', '31', '7', '60', '75']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 12)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 63)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 60)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 75)
+⚡ Executing 5 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/5)
+👆 CLICK (Appium): (2527, 143) duration=0.1s
+   🎮 Executing click action (2/5)
+👆 CLICK (Appium): (679, 708) duration=0.1s
+   🎮 Executing click action (3/5)
+👆 CLICK (Appium): (1262, 996) duration=0.1s
+   🎮 Executing click action (4/5)
+👆 CLICK (Appium): (1113, 708) duration=0.1s
+   🎮 Executing click action (5/5)
+👆 CLICK (Appium): (1262, 564) duration=0.1s
+
+🔄 Black box iteration 21
+
+================================================================================
+🎮 Step 21 | Frame 21
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_21_frame_21.png (captured in 0.63s)
+✅ Saved screenshot
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['23', '12', '8', '63', '31', '7', '60']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 23)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 12)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 63)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 60)
+⚡ Executing 4 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/4)
+👆 CLICK (Appium): (819, 421) duration=0.1s
+   🎮 Executing click action (2/4)
+👆 CLICK (Appium): (679, 708) duration=0.1s
+   🎮 Executing click action (3/4)
+👆 CLICK (Appium): (1262, 996) duration=0.1s
+   🎮 Executing click action (4/4)
+👆 CLICK (Appium): (1113, 708) duration=0.1s
+
+🔄 Black box iteration 22
+
+================================================================================
+🎮 Step 22 | Frame 22
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_22_frame_22.png (captured in 0.62s)
+✅ Saved screenshot
+🎯 Power-up is READY! Clicking...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['6', '23', '12', '8', '63', '31', '7']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 6)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 23)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 12)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 63)
+⚡ Executing 5 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/5)
+👆 CLICK (Appium): (2527, 143) duration=0.1s
+   🎮 Executing click action (2/5)
+👆 CLICK (Appium): (1533, 708) duration=0.1s
+   🎮 Executing click action (3/5)
+👆 CLICK (Appium): (819, 421) duration=0.1s
+   🎮 Executing click action (4/5)
+👆 CLICK (Appium): (679, 708) duration=0.1s
+   🎮 Executing click action (5/5)
+👆 CLICK (Appium): (1262, 996) duration=0.1s
+
+🔄 Black box iteration 23
+
+================================================================================
+🎮 Step 23 | Frame 23
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_23_frame_23.png (captured in 0.60s)
+✅ Saved screenshot
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['64', '6', '23', '12', '8', '63', '31']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 6)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 23)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 12)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 63)
+⚡ Executing 4 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/4)
+👆 CLICK (Appium): (1533, 708) duration=0.1s
+   🎮 Executing click action (2/4)
+👆 CLICK (Appium): (819, 421) duration=0.1s
+   🎮 Executing click action (3/4)
+👆 CLICK (Appium): (679, 708) duration=0.1s
+   🎮 Executing click action (4/4)
+👆 CLICK (Appium): (1262, 996) duration=0.1s
+
+🔄 Black box iteration 24
+
+================================================================================
+🎮 Step 24 | Frame 24
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_24_frame_24.png (captured in 0.62s)
+✅ Saved screenshot
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['34', '64', '6', '23', '12', '8', '63']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 6)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 23)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 12)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 63)
+⚡ Executing 4 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/4)
+👆 CLICK (Appium): (1533, 708) duration=0.1s
+   🎮 Executing click action (2/4)
+👆 CLICK (Appium): (819, 421) duration=0.1s
+   🎮 Executing click action (3/4)
+👆 CLICK (Appium): (679, 708) duration=0.1s
+   🎮 Executing click action (4/4)
+👆 CLICK (Appium): (1262, 996) duration=0.1s
+
+🔄 Black box iteration 25
+
+================================================================================
+🎮 Step 25 | Frame 25
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_25_frame_25.png (captured in 0.69s)
+✅ Saved screenshot
+🎯 Power-up is READY! Clicking...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['59', '34', '64', '6', '23', '12', '8']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 59)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 6)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 23)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 12)
+⚡ Executing 5 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/5)
+👆 CLICK (Appium): (2527, 143) duration=0.1s
+   🎮 Executing click action (2/5)
+👆 CLICK (Appium): (1113, 996) duration=0.1s
+   🎮 Executing click action (3/5)
+👆 CLICK (Appium): (1533, 708) duration=0.1s
+   🎮 Executing click action (4/5)
+👆 CLICK (Appium): (819, 421) duration=0.1s
+   🎮 Executing click action (5/5)
+👆 CLICK (Appium): (679, 708) duration=0.1s
+
+🔄 Black box iteration 26
+
+================================================================================
+🎮 Step 26 | Frame 26
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_26_frame_26.png (captured in 0.62s)
+✅ Saved screenshot
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['73', '59', '34', '64', '6', '23', '12']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 59)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 6)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 23)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 12)
+⚡ Executing 4 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/4)
+👆 CLICK (Appium): (1113, 996) duration=0.1s
+   🎮 Executing click action (2/4)
+👆 CLICK (Appium): (1533, 708) duration=0.1s
+   🎮 Executing click action (3/4)
+👆 CLICK (Appium): (819, 421) duration=0.1s
+   🎮 Executing click action (4/4)
+👆 CLICK (Appium): (679, 708) duration=0.1s
+
+🔄 Black box iteration 27
+
+================================================================================
+🎮 Step 27 | Frame 27
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_27_frame_27.png (captured in 0.61s)
+✅ Saved screenshot
+🎯 Power-up is READY! Clicking...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['52', '73', '59', '34', '64', '6', '23']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 59)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 6)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 23)
+⚡ Executing 4 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/4)
+👆 CLICK (Appium): (2527, 143) duration=0.1s
+   🎮 Executing click action (2/4)
+👆 CLICK (Appium): (1113, 996) duration=0.1s
+   🎮 Executing click action (3/4)
+👆 CLICK (Appium): (1533, 708) duration=0.1s
+   🎮 Executing click action (4/4)
+👆 CLICK (Appium): (819, 421) duration=0.1s
+
+🔄 Black box iteration 28
+
+================================================================================
+🎮 Step 28 | Frame 28
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_28_frame_28.png (captured in 0.62s)
+✅ Saved screenshot
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['42', '52', '73', '59', '34', '64', '6']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 59)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 6)
+⚡ Executing 2 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/2)
+👆 CLICK (Appium): (1113, 996) duration=0.1s
+   🎮 Executing click action (2/2)
+👆 CLICK (Appium): (1533, 708) duration=0.1s
+
+🔄 Black box iteration 29
+
+================================================================================
+🎮 Step 29 | Frame 29
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_29_frame_29.png (captured in 0.62s)
+✅ Saved screenshot
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['42', '52', '73', '59', '34', '64', '6']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 59)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 6)
+⚡ Executing 2 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/2)
+👆 CLICK (Appium): (1113, 996) duration=0.1s
+   🎮 Executing click action (2/2)
+👆 CLICK (Appium): (1533, 708) duration=0.1s
+
+🔄 Black box iteration 30
+
+================================================================================
+🎮 Step 30 | Frame 30
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_30_frame_30.png (captured in 0.63s)
+✅ Saved screenshot
+🎯 Power-up is READY! Clicking...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['71', '42', '52', '73', '59', '34', '64']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 59)
+⚡ Executing 2 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/2)
+👆 CLICK (Appium): (2527, 143) duration=0.1s
+   🎮 Executing click action (2/2)
+👆 CLICK (Appium): (1113, 996) duration=0.1s
+
+🔄 Black box iteration 31
+
+================================================================================
+🎮 Step 31 | Frame 31
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_31_frame_31.png (captured in 0.64s)
+✅ Saved screenshot
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['69', '71', '42', '52', '73', '59', '34']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 59)
+⚡ Executing 1 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/1)
+👆 CLICK (Appium): (1113, 996) duration=0.1s
+
+🔄 Black box iteration 32
+
+================================================================================
+🎮 Step 32 | Frame 32
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_32_frame_32.png (captured in 0.64s)
+✅ Saved screenshot
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['4', '69', '71', '42', '52', '73', '59']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 4)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 59)
+⚡ Executing 2 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/2)
+👆 CLICK (Appium): (679, 564) duration=0.1s
+   🎮 Executing click action (2/2)
+👆 CLICK (Appium): (1113, 996) duration=0.1s
+
+🔄 Black box iteration 33
+
+================================================================================
+🎮 Step 33 | Frame 33
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_33_frame_33.png (captured in 0.63s)
+✅ Saved screenshot
+🎯 Power-up is READY! Clicking...
+🚀 Running Groq for ball capture...
+🎱 Balls saved: 7
+🔍 Processing retroactively 7 pending balls: ['4', '69', '71', '42', '52', '73', '59']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 4)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 59)
+⚡ Executing 3 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/3)
+👆 CLICK (Appium): (2527, 143) duration=0.1s
+   🎮 Executing click action (2/3)
+👆 CLICK (Appium): (679, 564) duration=0.1s
+   🎮 Executing click action (3/3)
+👆 CLICK (Appium): (1113, 996) duration=0.1s
+
+🔄 Black box iteration 34
+
+================================================================================
+🎮 Step 34 | Frame 34
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1.1] [VERIFY] New Player Login
+[COMPLETED] [1.2] [VERIFY] Accept Regulations (depends on: 1.1)
+[COMPLETED] [2.1] [ACTION] Go to Catalina City (depends on: 1.2)
+[PENDING] [2.2] [ACTION] How to Play Tutorial (depends on: 2.1)
+[COMPLETED] [3.1] [ACTION] Select 2 Cards (depends on: 2.2)
+[IN_PROGRESS] [3.2] [ACTION] Daub Matched Numbers (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the Round (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to Main Map (depends on: 3.3)
+============================================================
+
+   💾 step_34_frame_34.png (captured in 0.40s)
+✅ Saved screenshot
+🚀 Running Groq for ball capture...

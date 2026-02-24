@@ -556,5 +556,23 @@
     "comment": "Successfully navigated to Catalina City.",
     "screenshot_id": "step_0_frame_0.png",
     "timestamp": "2026-02-24T11:46:17.913583Z"
+  },
+  {
+    "test_case_id": "1.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "App is launched and player is logged in as evidenced by the main game UI and sale pop-up.",
+    "screenshot_id": "step_0_frame_0.png",
+    "timestamp": "2026-02-24T11:56:54.141935Z"
+  },
+  {
+    "test_case_id": "1.2",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Regulation prompts have been accepted or bypassed automatically to reach the main menu.",
+    "screenshot_id": "step_0_frame_0.png",
+    "timestamp": "2026-02-24T11:56:54.141935Z"
   }
 ]
