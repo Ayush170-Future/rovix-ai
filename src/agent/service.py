@@ -430,20 +430,20 @@ async def agent_handler(event: GamePauseEvent):
             is_bingo_blitz = GAME_NAME == "bingo_blitz"
             latest_bingo_state = context_service.get_latest_bingo_state(SESSION_ID)
             
-            # --- FAST STATE PRE-CHECK VIA GROQ ---
+            # --- FAST STATE PRE-CHECK VIA FAST MODEL ---
             if is_bingo_blitz and optimize_bingo and latest_bingo_state != "in_game":
                 # Check if we transitioned to in_game, lobby, or menu quickly
                 check_state_str = await vision_detector.check_bingo_state_groq(saved_filepaths[0])
                 
                 if check_state_str == "in_game":
-                    print(f"🎯 Groq detected 'in_game' state! Forcing immediate optimized transition.")
+                    print(f"🎯 Fast Model detected 'in_game' state! Forcing immediate optimized transition.")
                     context_service._sessions[SESSION_ID]['latest_bingo_state'] = "in_game"
                     context_service._sessions[SESSION_ID]['cached_vision_elements'] = None
                     context_service._sessions[SESSION_ID]['pending_balls'] = []
                     context_service._sessions[SESSION_ID]['vision_task'] = None
                     latest_bingo_state = "in_game"
                 elif check_state_str == "lobby":
-                    print(f"⌛ Groq detected 'lobby' state. Waiting 2.5s before next check.")
+                    print(f"⌛ Fast Model detected 'lobby' state. Waiting 2.5s before next check.")
                     if not SDK_ENABLED:
                         # Blackbox mode sleep
                         await asyncio.sleep(2.5)
@@ -460,10 +460,10 @@ async def agent_handler(event: GamePauseEvent):
                     vision_task = context_service.get_vision_task(SESSION_ID)
                     p_ready = False
                     
-                    # --- Start Background ER 1.5 Task if needed ---
+                    # --- Start Background Annotation Model Task if needed ---
                     if cached_elements is None:
                         if vision_task is None or vision_task.done():
-                            print(f"🔄 Starting background ER 1.5 detection task...")
+                            print(f"🔄 Starting background Annotation Model detection task...")
                             # Create the background task
                             task = asyncio.create_task(vision_detector.detect_elements(saved_filepaths[0], is_in_game=True))
                             context_service.set_vision_task(SESSION_ID, task)
@@ -532,9 +532,9 @@ async def agent_handler(event: GamePauseEvent):
                         current_time = time.time()
                         last_groq_time = context_service.get_last_groq_time(SESSION_ID)
                         
-                        # Apply ~2.5 second cooldown (24 calls/min) for Groq targeted OCR
+                        # Apply ~2.5 second cooldown (24 calls/min) for Fast Model targeted OCR
                         if current_time - last_groq_time >= 2.5:
-                            print("🚀 Running Groq for ball capture...")
+                            print("🚀 Running Fast Model for ball capture...")
                             b_bbox_norm = ast.literal_eval(ball_bbox_str)
                             prompt = "List all Bingo numbers visible in this Ball History Bar. Return ONLY the numbers separated by commas. Example: 32, 16, 69"
                             res_text = await vision_detector.targeted_ocr(saved_filepaths[0], b_bbox_norm, prompt)
@@ -545,7 +545,7 @@ async def agent_handler(event: GamePauseEvent):
                             
                             # --- LOG OCR RESULTS ---
                             numbers_str = ", ".join(called_numbers) if called_numbers else "Missed"
-                            tally_entry = f"[{datetime.now().strftime('%H:%M:%S')}] Frame: {event.current_frame} | Ball OCR: [{numbers_str}] | Powerup Ready: {p_ready} | Method: GroqVLM\n"
+                            tally_entry = f"[{datetime.now().strftime('%H:%M:%S')}] Frame: {event.current_frame} | Ball OCR: [{numbers_str}] | Powerup Ready: {p_ready} | Method: FastModel\n"
                             try:
                                 with open("ocr_tally.txt", "a") as f:
                                     f.write(tally_entry)
@@ -592,9 +592,9 @@ async def agent_handler(event: GamePauseEvent):
                                     context_service.clear_pending_balls(SESSION_ID)
                     
                     # If we don't have cached elements yet but we are accumulating pendings,
-                    # we still want to skip LLM to maintain fast frame rate. Let's return a special optimized status.
+                    # we still want to skip Reasoning Model to maintain fast frame rate. Let's return a special optimized status.
                     if quick_actions:
-                        print(f"⚡ Executing {len(quick_actions)} optimized actions (bypassing LLM)")
+                        print(f"⚡ Executing {len(quick_actions)} optimized actions (bypassing Reasoning Model)")
                         await execute_agent_actions(quick_actions)
                         if SDK_ENABLED:
                             try: frame_controller.mark_actions_executed()
@@ -604,7 +604,7 @@ async def agent_handler(event: GamePauseEvent):
                         return {"status": "ok", "optimized": True, "method": "local_ocr", "actions_count": len(quick_actions)}
                     elif cached_elements is None and latest_bingo_state == "in_game":
                         # We are waiting for background scan. Skip LLM entirely to keep local OCR loop very fast.
-                        print(f"⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated {len(context_service.get_pending_balls(SESSION_ID))} pending balls.")
+                        print(f"⚡ Skipping Reasoning Model while waiting for background Annotation Model scan. Accumulated {len(context_service.get_pending_balls(SESSION_ID))} pending balls.")
                         if not SDK_ENABLED:
                             await asyncio.sleep(2.0)
                         return {"status": "ok", "optimized": True, "method": "waiting_for_vision"}
@@ -626,11 +626,11 @@ async def agent_handler(event: GamePauseEvent):
             
             messages = context_service.get_messages_for_llm(SESSION_ID)
             
-            print("🤖 Getting agent decision from LLM...")
+            print("🤖 Getting agent decision from Reasoning Model...")
             start_time = time.time()
             response = await asyncio.to_thread(structured_model.invoke, messages)
             elapsed = time.time() - start_time
-            print(f"⏱️  LLM response time: {elapsed:.2f}s")
+            print(f"⏱️  Reasoning Model response time: {elapsed:.2f}s")
 
             agent_output = parse_llm_response(response)
             print(f"✅ Agent decision received")
@@ -687,7 +687,7 @@ async def agent_handler(event: GamePauseEvent):
             return {"status": "ok", "saved": 1, "files": [filename]}
             
         except Exception as e:
-            print(f"❌ Error in LLM call or action execution: {e}")
+            print(f"❌ Error in Reasoning Model call or action execution: {e}")
             import traceback
             traceback.print_exception(type(e), e, e.__traceback__)
             if SDK_ENABLED:

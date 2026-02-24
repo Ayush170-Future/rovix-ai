@@ -342,10 +342,10 @@ Be exhaustive.
             return ""
 
     async def check_bingo_state_groq(self, screenshot_path: str) -> bool:
-        """Fast binary check using Groq Llama to see if we are actively in a bingo game"""
+        """Fast binary check using Fast Model to see if we are actively in a bingo game"""
         try:
             image = Image.open(screenshot_path)
-            # Try to shrink the image slightly to make it even faster/smaller for Groq
+            # Try to shrink the image slightly to make it even faster/smaller for the Fast Model
             image.thumbnail((1024, 1024), Image.Resampling.LANCZOS)
             
             # Convert RGBA to RGB before saving as JPEG
@@ -401,7 +401,7 @@ Be exhaustive.
                     data = api_response.json()
                     if "choices" in data and len(data["choices"]) > 0:
                         ans = data["choices"][0]["message"]["content"].strip().upper()
-                        print(f"⚡ Fast State Check (GroqVLM) [{elapsed:.2f}s]: {ans}")
+                        print(f"⚡ Fast State Check (Fast Model) [{elapsed:.2f}s]: {ans}")
                         
                         if "IN_GAME" in ans:
                             return "in_game"
@@ -410,7 +410,7 @@ Be exhaustive.
                         else:
                             return "menu"
                 else:
-                    print(f"⚠️ Groq state check error: {api_response.status_code} - {api_response.text}")
+                    print(f"⚠️ Fast Model state check error: {api_response.status_code} - {api_response.text}")
             
             return "menu"
             
