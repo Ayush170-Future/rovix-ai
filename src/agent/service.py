@@ -24,6 +24,35 @@ try:
 except ImportError:
     from agent.prompts import SYSTEM_PROMPT, SYSTEM_PROMPT_WITH_TODO, GAME_CONFIGS
 
+# --- GLOBAL LOGGER SETUP ---
+_original_print = print
+_run_id = datetime.now().strftime("%Y%m%d_%H%M%S")
+_log_file = f"run_log_{_run_id}.txt"
+
+def _run_logger_print(*args, **kwargs):
+    # Check if 'file' argument was supplied. If so, let built-in print handle it.
+    if 'file' in kwargs:
+        _original_print(*args, **kwargs)
+        return
+
+    # Convert all args to string
+    msg = " ".join(str(a) for a in args)
+    
+    # 1. Print to console exactly as requested (no timestamp prefix)
+    _original_print(msg, **kwargs)
+    
+    # 2. Append to run-specific log file
+    try:
+        with open(_log_file, "a") as f:
+            f.write(msg + "\n")
+    except Exception:
+        pass
+
+# Override built-in print for this module
+import builtins
+builtins.print = _run_logger_print
+# ---------------------------
+
 from tester import InputController, AltTesterClient, GameFrameController, SceneController, TimeController
 from agent.actions import ActionHandler
 from agent.adb_manager import ADBManager
@@ -137,100 +166,21 @@ context_service = ContextService(
 test_plan = """
 Execute the following test cases in order. Report each result with test_case_id matching the id below (e.g. 1.1, 2.3).
 
-Note: You have already completed testing till 5.8 and currently the match 3 is running. So just complete it and do the testing from 5.9 onwards only till the end.
+1.⁠ ⁠Onboarding & Login
+1.1 New Player Login: Launch the app and complete the new player login or sign-up flow. Verify the welcome/login screen appears and the player successfully enters the game.
+1.2 Accept Regulations: Accept any terms of service, privacy policy, or regulation prompts that appear. Verify all consent screens are dismissed and the game proceeds.
 
-1. Initial Setup
-1.1 Country Selection: Ensure country selection works properly.
-1.2 City Selection: Verify the Back and Submit buttons work correctly.
-1.3 Narrative Slides: Ensure slides appear with functional Skip and Next buttons.
+2.⁠ ⁠Navigation & Tutorial
+2.1 Go to Catalina City: Navigate to the world map, locate Catalina City, and tap on it to enter. Verify the Catalina City room or its entry screen is visible.
+2.2 How to Play Tutorial: Follow all tutorial prompts and complete the how-to-play walkthrough inside Catalina City. Verify the tutorial is marked complete and normal gameplay is accessible.
 
-2. Scouting Flow and Match 1
-2.1 Verify Natasha/Harsha's dialogue appears when scouting a player.
-2.2 Ensure only **one player (Master Blaster)** is available for scouting.
-2.3 Verify **Master Blaster** appears on screen with player info after the scrolling animation.
-2.4 Confirm **Match 1 starts** after scouting Master Blaster.
-2.5 Verify Natasha/Harsha's dialogue: **"Score 18 runs in 2 overs."**
-2.6 Check that a **soft nudge** appears on **Master Blaster** and a **common player**.
-2.7 Verify Natasha/Harsha's dialogue with a **hand pointer** highlighting the play cards (**0, 1, 2, 4, 6**).
-2.8 Ensure the **success rate** is highlighted on the **play cards, striker, and bowler**.
-2.9 Check the **screen shatter animation** triggers when a successful **six (Straight Drive)** is hit.
-2.10 Ensure the opponent team consists of **only common players**, with **no wicket loss** and **no SA active time** for the opponent.
-2.11 Verify Natasha/Harsha's dialogue appears when the **SA meter fills with mana**.
-2.12 Confirm a **hand pointer with blinking animation** appears on the **SA button** (if activated).
-2.13 Verify the **SA info screen** appears after activating the SA (if activated).
-2.14 Check that the **fire animation** triggers on **4s and 6s** (if activated).
-2.15 Verify the **player dance animation** plays on the **victory screen** after completing **Match 1**.
+3.⁠ ⁠Bingo Round
+3.1 Select 2 Cards: At the card selection screen, select exactly 2 bingo cards and confirm to start the round. Verify the round begins with 2 cards visible on screen.
+3.2 Daub Matched Numbers: As numbers are called during the round, tap the matching cells on both cards to daub them. Verify daubed numbers are visually marked on the cards.
+3.3 Complete the Round: Continue daubing called numbers until the round ends (all bingos claimed). Verify the Round Summary screen appears confirming the round is complete.
 
-3. Training Tutorial
-3.1 Natasha/Harsha's dialogue provides information about Training Points (TP).
-3.2 Natasha/Harsha's dialogue instructs to use TP to train a player.
-3.3 Hand pointer appears on the player on the dashboard.
-3.4 Natasha/Harsha's dialogue appears on the Player Detail screen.
-3.5 Hand pointer highlights the Train button until Level 5 is reached.
-3.6 Ensure Back button or other UI buttons are not interactable during dialogue.
-
-4. Match 2 Flow
-4.1 Natasha/Harsha's dialogue instructs to play 3 more matches to unlock the League.
-4.2 Hand pointer appears on the Play button.
-4.3 Edge case: Verify the user can train the player from the VS screen.
-4.4 Ensure Play and Lineup buttons are visible on the VS screen.
-4.5 Natasha/Harsha's dialogue for Commentary appears (in match).
-4.6 FTUE Match 2: Verify SA tutorial appears inside the match (if mana filled).
-4.7 On victory screen, Natasha/Harsha's dialogue about player shards and its use.
-4.8 Edge case: If the user loses the match, ensure the match is replayable and the goal does not update until the user wins.
-
-5. Store and Super Chest Flow
-5.1 Hand pointer appears on the Store icon.
-5.2 Natasha/Harsha's dialogue introduces the Super Chest.
-5.3 Hand pointer appears on the Buy button with 0 HC (shows 50 HC but allows direct access).
-5.4 Ensure no HC is deducted for free Super Chest opening.
-5.5 Verify Chest Opening animation plays properly.
-5.6 Verify user is redirected directly to the VS screen.
-5.7 Ensure the user can train any player from the VS screen.
-5.8 Check if user can tap Back, Play and Lineup buttons.
-5.9 Ensure Match 3 is playable without any issue.
-
-6. ESP Trigger and Dashboard State
-6.1 ESP (Ultimate Finisher Pack) triggers after Match 3.
-6.2 Verify arrow animation on the Play button.
-6.3 Ensure ESP icon appears on the dashboard.
-6.4 PK icon should blink on the dashboard.
-6.5 Ensure Events, PvP, and League remain locked (base case).
-6.6 Verify Store with Golden glow shows Free tag if a free item is available.
-6.7 Ensure Net 2 is locked and requires 400 HC to unlock.
-6.8 Verify Match 4 is playable without any issue.
-
-7. League Unlock Flow
-7.1 Natasha/Harsha's dialogue appears on dashboard for League Unlock.
-7.2 Hand pointer highlights the League button.
-7.3 Natasha/Harsha's dialogue appears on the League page about the league journey.
-7.4 Hand pointer highlights the Play button on the League screen.
-7.5 Verify tapping Play redirects correctly to the VS screen.
-7.6 Verify PK Match is playable.
-7.7 If user loses the PK Match, verify a 5-minute timer starts and the match becomes playable again.
-7.8 Verify PK Match rewards (after winning) and flow (Haryana Hurricane and Athena).
-7.9 Verify selected players are added to the squad.
-
-8. Post-League Unlock Flows
-8.1 Verify Events tab unlocks after League unlock.
-8.2 Verify My Team unlocks after League unlock.
-8.3 Ensure Fast Mode is accessible in LM1 (first innings screen).
-8.4 Verify Leaderboard appears after winning LM1.
-8.5 Verify SP/Quest Challenges are visible on the victory screen - LM1.
-8.6 Hand pointer appears on Trophy Road for reward claim.
-8.7 Verify Season Pass unlocks after LM1.
-8.8 Verify Banner Unlock event (base case) or Thala Epics event.
-8.9 Verify All HUD icons are visible.
-8.10 EQ Unlocks (Player Card): Ensure equipment unlock flow works correctly.
-8.11 Verify Inventory unlocks after League unlock.
-
-9. Fast Mode and LM2 Flow
-9.1 Verify Fast Mode Tutorial triggers during LM2 if the user did not interact in LM1.
-9.2 Ensure the user can play in Fast Mode if active.
-9.3 Verify LM2 is playable without any issues.
-9.4 Check if Leaderboard updates correctly after user wins.
-9.5 Verify Spitfire tutorial appears correctly.
-9.6 Lineup tutorial at LM3 if a powerful player is available.
+4.⁠ ⁠Post-Round
+4.1 Return to Main Map: From the post-round screen or in-game navigation, tap to return to the main world map. Verify the main world map is visible and accessible.
 """
 
 def initialize_game_todos():
@@ -480,16 +430,57 @@ async def agent_handler(event: GamePauseEvent):
             is_bingo_blitz = GAME_NAME == "bingo_blitz"
             latest_bingo_state = context_service.get_latest_bingo_state(SESSION_ID)
             
+            # --- FAST STATE PRE-CHECK VIA GROQ ---
+            if is_bingo_blitz and optimize_bingo and latest_bingo_state != "in_game":
+                # Check if we transitioned to in_game quickly
+                is_in_game_now = await vision_detector.check_bingo_state_groq(saved_filepaths[0])
+                if is_in_game_now:
+                    print(f"🎯 Groq detected 'in_game' state! Forcing immediate optimized transition.")
+                    context_service._sessions[SESSION_ID]['latest_bingo_state'] = "in_game"
+                    context_service._sessions[SESSION_ID]['cached_vision_elements'] = None
+                    context_service._sessions[SESSION_ID]['pending_balls'] = []
+                    context_service._sessions[SESSION_ID]['vision_task'] = None
+                    latest_bingo_state = "in_game"
+            
             # Optimization ONLY runs during active 'in_game' play (not in menus)
             if is_bingo_blitz and optimize_bingo and latest_bingo_state == "in_game":
                 try:
                     import ast
                     with Image.open(saved_filepaths[0]) as img:
                         w, h = img.size
-                    
                     quick_actions = []
                     cached_elements = context_service.get_cached_vision_elements(SESSION_ID)
+                    vision_task = context_service.get_vision_task(SESSION_ID)
                     p_ready = False
+                    
+                    # --- Start Background ER 1.5 Task if needed ---
+                    if cached_elements is None:
+                        if vision_task is None or vision_task.done():
+                            print(f"🔄 Starting background ER 1.5 detection task...")
+                            # Create the background task
+                            task = asyncio.create_task(vision_detector.detect_elements(saved_filepaths[0], is_in_game=True))
+                            context_service.set_vision_task(SESSION_ID, task)
+                            
+                            # Add a callback to save the result to cache when done
+                            def _on_vision_done(f):
+                                try:
+                                    res = f.result()
+                                    if res.success:
+                                        print(f"✅ Background vision task completed successfully. Elements cached.")
+                                        # Note: We need to access standard session dictionary safely here or set a flag.
+                                        # Since we don't have a dedicated setter, we'll let context_service handle it 
+                                        # in _build_available_actions_message on the NEXT frame, but let's pre-populate 
+                                        # it if possible.
+                                        context_service._sessions[SESSION_ID]['cached_vision_elements'] = res.elements
+                                    else:
+                                        print(f"⚠️ Background vision task failed.")
+                                except Exception as e:
+                                    print(f"❌ Background vision task error: {e}")
+                            
+                            task.add_done_callback(_on_vision_done)
+                            vision_task = task
+                        else:
+                            print(f"⏳ Waiting for background ER 1.5 detection...")
                     
                     # --- DYNAMIC ANCHORING ---
                     # Look for ball history and powerup in the cached elements
@@ -546,8 +537,16 @@ async def agent_handler(event: GamePauseEvent):
                         except: pass
 
                         if called_numbers:
+                            # Add to pending balls
+                            context_service.add_pending_balls(SESSION_ID, called_numbers)
+                            
                             if cached_elements:
-                                for num in called_numbers:
+                                # Retrieve ALL pending balls to process them retroactively
+                                all_pending = context_service.get_pending_balls(SESSION_ID)
+                                print(f"🔍 Processing retroactively {len(all_pending)} pending balls: {all_pending}")
+                                
+                                balls_processed = 0
+                                for num in all_pending:
                                     matching_element = None
                                     for element in cached_elements:
                                         name = element.get('name', '').lower()
@@ -567,7 +566,14 @@ async def agent_handler(event: GamePauseEvent):
                                             x=matching_element['screen_position'][0],
                                             y=matching_element['screen_position'][1]
                                         ))
+                                        balls_processed += 1
+                                
+                                # If we successfully mapped balls to clicks using the cache, clear the pending queue
+                                if balls_processed > 0:
+                                    context_service.clear_pending_balls(SESSION_ID)
                     
+                    # If we don't have cached elements yet but we are accumulating pendings,
+                    # we still want to skip LLM to maintain fast frame rate. Let's return a special optimized status.
                     if quick_actions:
                         print(f"⚡ Executing {len(quick_actions)} optimized actions (bypassing LLM)")
                         await execute_agent_actions(quick_actions)
@@ -575,6 +581,10 @@ async def agent_handler(event: GamePauseEvent):
                             try: frame_controller.mark_actions_executed()
                             except Exception: pass
                         return {"status": "ok", "optimized": True, "method": "local_ocr", "actions_count": len(quick_actions)}
+                    elif cached_elements is None and latest_bingo_state == "in_game":
+                        # We are waiting for background scan. Skip LLM entirely to keep local OCR loop very fast.
+                        print(f"⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated {len(context_service.get_pending_balls(SESSION_ID))} pending balls.")
+                        return {"status": "ok", "optimized": True, "method": "waiting_for_vision"}
                         
                 except Exception as e:
                     print(f"⚠️ Local OCR optimization failed: {e}")

@@ -1,0 +1,775 @@
+🤖 Using model: gemini-3-flash-preview
+Black box mode - skipping AltTester initialization
+Initializing Appium Manager...
+🖥️  Appium will control current screen (no app launch)
+🔌 Connecting to Appium server at http://localhost:4723...
+✅ Appium session started: 285c1a42-a18e-42c9-ad2a-a1c674cb430a
+🎮 Target Game: BINGO_BLITZ
+🎯 Initializing game todos for 6 levels...
+🎯 Black box mode - starting polling loop
+🎮 Starting black box polling loop
+
+🔄 Black box iteration 0
+
+================================================================================
+🎮 Step 0 | Frame 0
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_0_frame_0.png (captured in 0.65s)
+✅ Saved screenshot
+⚡ Fast State Check (GroqVLM) [0.44s]: YES
+🎯 Groq detected 'in_game' state! Forcing immediate optimized transition.
+🔄 Starting background ER 1.5 detection task...
+🔍 Vision detection
+🎯 Power-up is READY! Clicking...
+⚡ Executing 1 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/1)
+👆 CLICK (Appium): (2527, 143) duration=0.1s
+
+🔄 Black box iteration 1
+
+================================================================================
+🎮 Step 1 | Frame 1
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_1_frame_1.png (captured in 0.62s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 8 pending balls.
+
+🔄 Black box iteration 2
+
+================================================================================
+🎮 Step 2 | Frame 2
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_2_frame_2.png (captured in 0.65s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 8 pending balls.
+
+🔄 Black box iteration 3
+
+================================================================================
+🎮 Step 3 | Frame 3
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_3_frame_3.png (captured in 0.59s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 8 pending balls.
+
+🔄 Black box iteration 4
+
+================================================================================
+🎮 Step 4 | Frame 4
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_4_frame_4.png (captured in 0.62s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 8 pending balls.
+
+🔄 Black box iteration 5
+
+================================================================================
+🎮 Step 5 | Frame 5
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_5_frame_5.png (captured in 0.60s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 9 pending balls.
+
+🔄 Black box iteration 6
+
+================================================================================
+🎮 Step 6 | Frame 6
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_6_frame_6.png (captured in 0.60s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 9 pending balls.
+
+🔄 Black box iteration 7
+
+================================================================================
+🎮 Step 7 | Frame 7
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_7_frame_7.png (captured in 0.62s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 9 pending balls.
+
+🔄 Black box iteration 8
+
+================================================================================
+🎮 Step 8 | Frame 8
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_8_frame_8.png (captured in 0.61s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 9 pending balls.
+
+🔄 Black box iteration 9
+
+================================================================================
+🎮 Step 9 | Frame 9
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_9_frame_9.png (captured in 0.60s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+🎯 Power-up is READY! Clicking...
+⚡ Executing 1 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/1)
+👆 CLICK (Appium): (2527, 143) duration=0.1s
+
+🔄 Black box iteration 10
+
+================================================================================
+🎮 Step 10 | Frame 10
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_10_frame_10.png (captured in 0.60s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 10 pending balls.
+
+🔄 Black box iteration 11
+
+================================================================================
+🎮 Step 11 | Frame 11
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_11_frame_11.png (captured in 0.61s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 10 pending balls.
+
+🔄 Black box iteration 12
+
+================================================================================
+🎮 Step 12 | Frame 12
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_12_frame_12.png (captured in 0.61s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 10 pending balls.
+
+🔄 Black box iteration 13
+
+================================================================================
+🎮 Step 13 | Frame 13
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_13_frame_13.png (captured in 0.62s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 10 pending balls.
+
+🔄 Black box iteration 14
+
+================================================================================
+🎮 Step 14 | Frame 14
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_14_frame_14.png (captured in 0.61s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 11 pending balls.
+
+🔄 Black box iteration 15
+
+================================================================================
+🎮 Step 15 | Frame 15
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_15_frame_15.png (captured in 0.60s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 11 pending balls.
+
+🔄 Black box iteration 16
+
+================================================================================
+🎮 Step 16 | Frame 16
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_16_frame_16.png (captured in 0.63s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 11 pending balls.
+
+🔄 Black box iteration 17
+
+================================================================================
+🎮 Step 17 | Frame 17
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_17_frame_17.png (captured in 0.62s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 11 pending balls.
+
+🔄 Black box iteration 18
+
+================================================================================
+🎮 Step 18 | Frame 18
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_18_frame_18.png (captured in 0.63s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+🎯 Power-up is READY! Clicking...
+⚡ Executing 1 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/1)
+👆 CLICK (Appium): (2527, 143) duration=0.1s
+
+🔄 Black box iteration 19
+
+================================================================================
+🎮 Step 19 | Frame 19
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_19_frame_19.png (captured in 0.60s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 12 pending balls.
+
+🔄 Black box iteration 20
+
+================================================================================
+🎮 Step 20 | Frame 20
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_20_frame_20.png (captured in 0.60s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 12 pending balls.
+
+🔄 Black box iteration 21
+
+================================================================================
+🎮 Step 21 | Frame 21
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_21_frame_21.png (captured in 0.62s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 12 pending balls.
+
+🔄 Black box iteration 22
+
+================================================================================
+🎮 Step 22 | Frame 22
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_22_frame_22.png (captured in 0.62s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 13 pending balls.
+
+🔄 Black box iteration 23
+
+================================================================================
+🎮 Step 23 | Frame 23
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_23_frame_23.png (captured in 0.61s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 13 pending balls.
+
+🔄 Black box iteration 24
+
+================================================================================
+🎮 Step 24 | Frame 24
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_24_frame_24.png (captured in 0.61s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 13 pending balls.
+
+🔄 Black box iteration 25
+
+================================================================================
+🎮 Step 25 | Frame 25
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_25_frame_25.png (captured in 0.61s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated 13 pending balls.
+
+🔄 Black box iteration 26
+
+================================================================================
+🎮 Step 26 | Frame 26
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_26_frame_26.png (captured in 0.62s)
+✅ Saved screenshot
+⏳ Waiting for background ER 1.5 detection...
+⏱️  Vision API response time: 31.58s
+✅ Detected 63 elements via vision
+✅ Background vision task completed successfully. Elements cached.
+🎯 Power-up is READY! Clicking...
+📸 Annotated image saved
+⚡ Executing 1 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/1)
+👆 CLICK (Appium): (2527, 143) duration=0.1s
+
+🔄 Black box iteration 27
+
+================================================================================
+🎮 Step 27 | Frame 27
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_27_frame_27.png (captured in 0.61s)
+✅ Saved screenshot
+🔍 Processing retroactively 14 pending balls: ['2', '18', '58', '29', '47', '13', '61', '64', '35', '53', '48', '15', '75', '14']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 2)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 18)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 13)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 64)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 53)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 48)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 75)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 14)
+⚡ Executing 8 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/8)
+👆 CLICK (Appium): (662, 854) duration=0.1s
+   🎮 Executing click action (2/8)
+👆 CLICK (Appium): (810, 562) duration=0.1s
+   🎮 Executing click action (3/8)
+👆 CLICK (Appium): (1513, 1000) duration=0.1s
+   🎮 Executing click action (4/8)
+👆 CLICK (Appium): (2107, 562) duration=0.1s
+   🎮 Executing click action (5/8)
+👆 CLICK (Appium): (1108, 562) duration=0.1s
+   🎮 Executing click action (6/8)
+👆 CLICK (Appium): (1810, 708) duration=0.1s
+   🎮 Executing click action (7/8)
+👆 CLICK (Appium): (1256, 708) duration=0.1s
+   🎮 Executing click action (8/8)
+👆 CLICK (Appium): (662, 562) duration=0.1s
+
+🔄 Black box iteration 28
+
+================================================================================
+🎮 Step 28 | Frame 28
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_28_frame_28.png (captured in 0.60s)
+✅ Saved screenshot
+🎯 Power-up is READY! Clicking...
+🔍 Processing retroactively 7 pending balls: ['7', '54', '14', '75', '15', '48', '53']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 7)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 54)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 14)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 75)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 48)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 53)
+⚡ Executing 7 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/7)
+👆 CLICK (Appium): (2527, 143) duration=0.1s
+   🎮 Executing click action (2/7)
+👆 CLICK (Appium): (1513, 419) duration=0.1s
+   🎮 Executing click action (3/7)
+👆 CLICK (Appium): (1108, 708) duration=0.1s
+   🎮 Executing click action (4/7)
+👆 CLICK (Appium): (662, 562) duration=0.1s
+   🎮 Executing click action (5/7)
+👆 CLICK (Appium): (1256, 708) duration=0.1s
+   🎮 Executing click action (6/7)
+👆 CLICK (Appium): (1810, 708) duration=0.1s
+   🎮 Executing click action (7/7)
+👆 CLICK (Appium): (1108, 562) duration=0.1s
+
+🔄 Black box iteration 29
+
+================================================================================
+🎮 Step 29 | Frame 29
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_29_frame_29.png (captured in 0.62s)
+✅ Saved screenshot
+🔍 Processing retroactively 7 pending balls: ['8', '7', '54', '14', '75', '15', '48']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 8)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 7)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 54)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 14)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 75)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 48)
+⚡ Executing 6 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/6)
+👆 CLICK (Appium): (662, 1000) duration=0.1s
+   🎮 Executing click action (2/6)
+👆 CLICK (Appium): (1513, 419) duration=0.1s
+   🎮 Executing click action (3/6)
+👆 CLICK (Appium): (1108, 708) duration=0.1s
+   🎮 Executing click action (4/6)
+👆 CLICK (Appium): (662, 562) duration=0.1s
+   🎮 Executing click action (5/6)
+👆 CLICK (Appium): (1256, 708) duration=0.1s
+   🎮 Executing click action (6/6)
+👆 CLICK (Appium): (1810, 708) duration=0.1s
+
+🔄 Black box iteration 30
+
+================================================================================
+🎮 Step 30 | Frame 30
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_30_frame_30.png (captured in 0.67s)
+✅ Saved screenshot
+🔍 Processing retroactively 7 pending balls: ['17', '8', '7', '54', '14', '75', '15']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 8)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 7)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 54)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 14)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 75)
+⚡ Executing 5 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/5)
+👆 CLICK (Appium): (662, 1000) duration=0.1s
+   🎮 Executing click action (2/5)
+👆 CLICK (Appium): (1513, 419) duration=0.1s
+   🎮 Executing click action (3/5)
+👆 CLICK (Appium): (1108, 708) duration=0.1s
+   🎮 Executing click action (4/5)
+👆 CLICK (Appium): (662, 562) duration=0.1s
+   🎮 Executing click action (5/5)
+👆 CLICK (Appium): (1256, 708) duration=0.1s
+
+🔄 Black box iteration 31
+
+================================================================================
+🎮 Step 31 | Frame 31
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_31_frame_31.png (captured in 0.70s)
+✅ Saved screenshot
+🎯 Power-up is READY! Clicking...
+🔍 Processing retroactively 7 pending balls: ['17', '8', '7', '54', '14', '75', '15']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 8)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 7)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 54)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 14)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 75)
+⚡ Executing 6 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/6)
+👆 CLICK (Appium): (2527, 143) duration=0.1s
+   🎮 Executing click action (2/6)
+👆 CLICK (Appium): (662, 1000) duration=0.1s
+   🎮 Executing click action (3/6)
+👆 CLICK (Appium): (1513, 419) duration=0.1s
+   🎮 Executing click action (4/6)
+👆 CLICK (Appium): (1108, 708) duration=0.1s
+   🎮 Executing click action (5/6)
+👆 CLICK (Appium): (662, 562) duration=0.1s
+   🎮 Executing click action (6/6)
+👆 CLICK (Appium): (1256, 708) duration=0.1s
+
+🔄 Black box iteration 32
+
+================================================================================
+🎮 Step 32 | Frame 32
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_32_frame_32.png (captured in 0.68s)
+✅ Saved screenshot
+🔍 Processing retroactively 7 pending balls: ['73', '17', '8', '7', '54', '14', '75']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 73)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 8)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 7)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 54)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 14)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 75)
+⚡ Executing 6 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/6)
+👆 CLICK (Appium): (1256, 419) duration=0.1s
+   🎮 Executing click action (2/6)
+👆 CLICK (Appium): (662, 1000) duration=0.1s
+   🎮 Executing click action (3/6)
+👆 CLICK (Appium): (1513, 419) duration=0.1s
+   🎮 Executing click action (4/6)
+👆 CLICK (Appium): (1108, 708) duration=0.1s
+   🎮 Executing click action (5/6)
+👆 CLICK (Appium): (662, 562) duration=0.1s
+   🎮 Executing click action (6/6)
+👆 CLICK (Appium): (1256, 708) duration=0.1s
+
+🔄 Black box iteration 33
+
+================================================================================
+🎮 Step 33 | Frame 33
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_33_frame_33.png (captured in 0.75s)
+✅ Saved screenshot
+🔍 Processing retroactively 7 pending balls: ['73', '17', '8', '7', '54', '14', '75']
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 73)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 8)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 7)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 54)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 14)
+🚀 MATCH FOUND! Clicking BINGO_NUMBERS (Number: 75)
+⚡ Executing 6 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/6)
+👆 CLICK (Appium): (1256, 419) duration=0.1s
+   🎮 Executing click action (2/6)
+👆 CLICK (Appium): (662, 1000) duration=0.1s
+   🎮 Executing click action (3/6)
+👆 CLICK (Appium): (1513, 419) duration=0.1s
+   🎮 Executing click action (4/6)
+👆 CLICK (Appium): (1108, 708) duration=0.1s
+   🎮 Executing click action (5/6)
+👆 CLICK (Appium): (662, 562) duration=0.1s
+   🎮 Executing click action (6/6)
+👆 CLICK (Appium): (1256, 708) duration=0.1s
+
+🔄 Black box iteration 34
+
+================================================================================
+🎮 Step 34 | Frame 34
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_34_frame_34.png (captured in 0.58s)
+✅ Saved screenshot
+🎯 Power-up is READY! Clicking...
+⚡ Executing 1 optimized actions (bypassing LLM)
+   🎮 Executing click action (1/1)
+👆 CLICK (Appium): (2527, 143) duration=0.1s
+
+🔄 Black box iteration 35
+
+================================================================================
+🎮 Step 35 | Frame 35
+================================================================================
+
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+
+   💾 step_35_frame_35.png (captured in 0.59s)
+✅ Saved screenshot
+⚠️ Groq API error: 429 - {"error":{"message":"Rate limit reached for model `meta-llama/llama-4-scout-17b-16e-instruct` in organization `org_01kfdp37sjevta9rq47zj0kfv7` service tier `on_demand` on tokens per day (TPD): Limit 500000, Used 499993, Requested 42. Please try again in 6.047999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing","type":"tokens","code":"rate_limit_exceeded"}}
+

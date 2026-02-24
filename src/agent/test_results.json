@@ -205,5 +205,230 @@
     "comment": "Match 3 was completed successfully without any issues.",
     "screenshot_id": "step_36_frame_36.png",
     "timestamp": "2026-02-22T11:26:15.268198Z"
+  },
+  {
+    "test_case_id": "1.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Game is already at the world map, implying login was successful.",
+    "screenshot_id": "step_0_frame_0.png",
+    "timestamp": "2026-02-23T14:34:48.152413Z"
+  },
+  {
+    "test_case_id": "1.2",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "No regulation prompts are visible; proceeding to navigation.",
+    "screenshot_id": "step_0_frame_0.png",
+    "timestamp": "2026-02-23T14:34:48.152413Z"
+  },
+  {
+    "test_case_id": "3.2",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Successfully daubed numbers and progressed the round.",
+    "screenshot_id": "step_43_frame_43.png",
+    "timestamp": "2026-02-23T17:54:47.201794Z"
+  },
+  {
+    "test_case_id": "3.3",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Round completed and post-round summary/level-up screen appeared.",
+    "screenshot_id": "step_43_frame_43.png",
+    "timestamp": "2026-02-23T17:54:47.201794Z"
+  },
+  {
+    "test_case_id": "3.2",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Numbers were daubed and the round proceeded to rewards.",
+    "screenshot_id": "step_43_frame_43.png",
+    "timestamp": "2026-02-23T18:06:13.611512Z"
+  },
+  {
+    "test_case_id": "3.3",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Round summary and rewards (Classic Chest) were displayed.",
+    "screenshot_id": "step_43_frame_43.png",
+    "timestamp": "2026-02-23T18:06:13.611512Z"
+  },
+  {
+    "test_case_id": "4.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Successfully returned to the main world map after dismissing post-round popups.",
+    "screenshot_id": "step_44_frame_44.png",
+    "timestamp": "2026-02-23T18:06:37.299961Z"
+  },
+  {
+    "test_case_id": "1.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Login completed successfully.",
+    "screenshot_id": "step_45_frame_45.png",
+    "timestamp": "2026-02-23T18:06:50.968828Z"
+  },
+  {
+    "test_case_id": "1.2",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Regulations accepted.",
+    "screenshot_id": "step_45_frame_45.png",
+    "timestamp": "2026-02-23T18:06:50.968828Z"
+  },
+  {
+    "test_case_id": "2.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Entered Catalina City.",
+    "screenshot_id": "step_45_frame_45.png",
+    "timestamp": "2026-02-23T18:06:50.968828Z"
+  },
+  {
+    "test_case_id": "2.2",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Tutorial completed/bypassed.",
+    "screenshot_id": "step_45_frame_45.png",
+    "timestamp": "2026-02-23T18:06:50.968828Z"
+  },
+  {
+    "test_case_id": "3.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Round started.",
+    "screenshot_id": "step_45_frame_45.png",
+    "timestamp": "2026-02-23T18:06:50.968828Z"
+  },
+  {
+    "test_case_id": "3.2",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Daubing performed.",
+    "screenshot_id": "step_45_frame_45.png",
+    "timestamp": "2026-02-23T18:06:50.968828Z"
+  },
+  {
+    "test_case_id": "3.3",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Round summary confirmed.",
+    "screenshot_id": "step_45_frame_45.png",
+    "timestamp": "2026-02-23T18:06:50.968828Z"
+  },
+  {
+    "test_case_id": "4.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Returned to world map.",
+    "screenshot_id": "step_45_frame_45.png",
+    "timestamp": "2026-02-23T18:06:50.968828Z"
+  },
+  {
+    "test_case_id": "1.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Player successfully logged in and reached the main interface.",
+    "screenshot_id": "step_0_frame_0.png",
+    "timestamp": "2026-02-23T18:14:05.325214Z"
+  },
+  {
+    "test_case_id": "1.2",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "All regulations and start-up prompts have been cleared.",
+    "screenshot_id": "step_0_frame_0.png",
+    "timestamp": "2026-02-23T18:14:05.325214Z"
+  },
+  {
+    "test_case_id": "2.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Navigated to Catalina City room.",
+    "screenshot_id": "step_0_frame_0.png",
+    "timestamp": "2026-02-23T18:14:05.325214Z"
+  },
+  {
+    "test_case_id": "1.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Game is already logged in and at level 2.",
+    "screenshot_id": "step_0_frame_0.png",
+    "timestamp": "2026-02-23T18:35:48.704007Z"
+  },
+  {
+    "test_case_id": "1.2",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Initial screens bypassed.",
+    "screenshot_id": "step_0_frame_0.png",
+    "timestamp": "2026-02-23T18:35:48.704007Z"
+  },
+  {
+    "test_case_id": "2.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Successfully entered Catalina City.",
+    "screenshot_id": "step_0_frame_0.png",
+    "timestamp": "2026-02-23T18:35:48.704007Z"
+  },
+  {
+    "test_case_id": "1.2",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Consent screen was successfully dismissed and the game proceeded to a loading state.",
+    "screenshot_id": "step_1_frame_1.png",
+    "timestamp": "2026-02-23T19:32:12.459784Z"
+  },
+  {
+    "test_case_id": "2.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Successfully navigated to the World Map and located Catalina City.",
+    "screenshot_id": "step_31_frame_31.png",
+    "timestamp": "2026-02-23T19:34:25.939748Z"
+  },
+  {
+    "test_case_id": "1.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Player is already logged in at level 34, bypassing initial login flow.",
+    "screenshot_id": "step_0_frame_0.png",
+    "timestamp": "2026-02-24T07:26:25.816436Z"
+  },
+  {
+    "test_case_id": "1.2",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Account is active, regulations were previously accepted.",
+    "screenshot_id": "step_0_frame_0.png",
+    "timestamp": "2026-02-24T07:26:25.816436Z"
   }
 ]

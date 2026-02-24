@@ -132,3 +132,280 @@
 [02:04:47] Frame: 52 | Ball OCR: [19, 75, 27, 47, 3, 45, 23] | Powerup Ready: True | Method: GroqVLM
 [02:04:49] Frame: 53 | Ball OCR: [19, 75, 27, 47, 3, 45, 23] | Powerup Ready: True | Method: GroqVLM
 [02:04:51] Frame: 54 | Ball OCR: [Missed] | Powerup Ready: True | Method: GroqVLM
+[20:06:45] Frame: 5 | Ball OCR: [30, 54, 1, 22, 6, 5, 35] | Powerup Ready: True | Method: GroqVLM
+[20:06:48] Frame: 6 | Ball OCR: [75, 30, 54, 1, 22, 6, 5] | Powerup Ready: True | Method: GroqVLM
+[20:06:50] Frame: 7 | Ball OCR: [75, 30, 54, 1, 22, 6, 5] | Powerup Ready: True | Method: GroqVLM
+[20:06:53] Frame: 8 | Ball OCR: [21, 75, 30, 54, 1, 22, 6] | Powerup Ready: True | Method: GroqVLM
+[20:06:55] Frame: 9 | Ball OCR: [21, 75, 30, 54, 1, 22, 6] | Powerup Ready: True | Method: GroqVLM
+[20:06:57] Frame: 10 | Ball OCR: [62, 21, 75, 30, 54, 1, 22] | Powerup Ready: True | Method: GroqVLM
+[20:07:00] Frame: 11 | Ball OCR: [62, 21, 75, 30, 54, 1, 22] | Powerup Ready: True | Method: GroqVLM
+[20:07:02] Frame: 12 | Ball OCR: [50, 62, 21, 75, 30, 54, 1] | Powerup Ready: True | Method: GroqVLM
+[20:07:04] Frame: 13 | Ball OCR: [50, 62, 21, 75, 30, 54, 1] | Powerup Ready: True | Method: GroqVLM
+[20:07:06] Frame: 14 | Ball OCR: [50, 62, 21, 75, 30, 54, 1] | Powerup Ready: True | Method: GroqVLM
+[20:07:08] Frame: 15 | Ball OCR: [72, 50, 62, 21, 75, 30, 54] | Powerup Ready: True | Method: GroqVLM
+[20:07:11] Frame: 16 | Ball OCR: [72, 50, 62, 21, 75, 30, 54] | Powerup Ready: True | Method: GroqVLM
+[20:07:14] Frame: 17 | Ball OCR: [41, 72, 50, 62, 21, 75, 30] | Powerup Ready: True | Method: GroqVLM
+[20:07:17] Frame: 18 | Ball OCR: [41, 72, 50, 62, 21, 75, 30] | Powerup Ready: True | Method: GroqVLM
+[20:07:19] Frame: 19 | Ball OCR: [23, 41, 72, 50, 62, 21, 75] | Powerup Ready: True | Method: GroqVLM
+[20:07:22] Frame: 20 | Ball OCR: [25, 23, 41, 72, 50, 62, 21] | Powerup Ready: True | Method: GroqVLM
+[20:07:25] Frame: 21 | Ball OCR: [25, 23, 41, 72, 50, 62, 21] | Powerup Ready: True | Method: GroqVLM
+[20:07:27] Frame: 22 | Ball OCR: [20, 25, 23, 41, 72, 50, 62] | Powerup Ready: True | Method: GroqVLM
+[20:07:30] Frame: 23 | Ball OCR: [20, 25, 23, 41, 72, 50, 62] | Powerup Ready: True | Method: GroqVLM
+[20:07:33] Frame: 24 | Ball OCR: [8, 20, 25, 23, 41, 72, 50] | Powerup Ready: True | Method: GroqVLM
+[20:07:36] Frame: 25 | Ball OCR: [8, 20, 25, 23, 41, 72, 50] | Powerup Ready: True | Method: GroqVLM
+[20:07:38] Frame: 26 | Ball OCR: [2, 8, 20, 25, 23, 41, 72] | Powerup Ready: True | Method: GroqVLM
+[20:07:40] Frame: 27 | Ball OCR: [2, 8, 20, 25, 23, 41, 72] | Powerup Ready: True | Method: GroqVLM
+[20:07:43] Frame: 28 | Ball OCR: [45, 2, 8, 20, 25, 23, 41] | Powerup Ready: True | Method: GroqVLM
+[20:07:45] Frame: 29 | Ball OCR: [45, 2, 8, 20, 25, 23, 41] | Powerup Ready: True | Method: GroqVLM
+[20:07:48] Frame: 30 | Ball OCR: [59, 45, 2, 8, 20, 25, 23] | Powerup Ready: True | Method: GroqVLM
+[20:07:50] Frame: 31 | Ball OCR: [59, 45, 2, 8, 20, 25, 23] | Powerup Ready: True | Method: GroqVLM
+[20:07:53] Frame: 32 | Ball OCR: [60, 59, 45, 2, 8, 20, 25] | Powerup Ready: True | Method: GroqVLM
+[20:07:56] Frame: 33 | Ball OCR: [60, 59, 45, 2, 8, 20, 25] | Powerup Ready: True | Method: GroqVLM
+[20:07:58] Frame: 34 | Ball OCR: [34, 60, 59, 45, 2, 8, 20] | Powerup Ready: True | Method: GroqVLM
+[20:08:00] Frame: 35 | Ball OCR: [34, 60, 59, 45, 2, 8, 20] | Powerup Ready: True | Method: GroqVLM
+[20:08:03] Frame: 36 | Ball OCR: [39, 34, 60, 59, 45, 2, 8] | Powerup Ready: True | Method: GroqVLM
+[20:08:06] Frame: 37 | Ball OCR: [39, 34, 60, 59, 45, 2, 8] | Powerup Ready: True | Method: GroqVLM
+[20:08:10] Frame: 38 | Ball OCR: [73, 39, 34, 60, 59, 45, 2] | Powerup Ready: True | Method: GroqVLM
+[20:08:13] Frame: 39 | Ball OCR: [73, 39, 34, 60, 59, 45, 2] | Powerup Ready: True | Method: GroqVLM
+[20:08:15] Frame: 40 | Ball OCR: [38, 38] | Powerup Ready: True | Method: GroqVLM
+[20:08:27] Frame: 41 | Ball OCR: [Missed] | Powerup Ready: False | Method: GroqVLM
+[20:08:38] Frame: 42 | Ball OCR: [Missed] | Powerup Ready: True | Method: GroqVLM
+[20:08:39] Frame: 43 | Ball OCR: [30, 1, 30, 30, 1] | Powerup Ready: True | Method: GroqVLM
+[20:08:41] Frame: 44 | Ball OCR: [38] | Powerup Ready: True | Method: GroqVLM
+[20:11:05] Frame: 49 | Ball OCR: [5, 69, 7, 28, 25, 54, 35] | Powerup Ready: True | Method: GroqVLM
+[20:11:09] Frame: 50 | Ball OCR: [5, 69, 7, 28, 25, 54, 35] | Powerup Ready: True | Method: GroqVLM
+[20:11:11] Frame: 51 | Ball OCR: [21, 5, 69, 7, 28, 25, 54] | Powerup Ready: True | Method: GroqVLM
+[20:11:14] Frame: 52 | Ball OCR: [46, 21, 5, 69, 7, 28, 25] | Powerup Ready: True | Method: GroqVLM
+[20:11:16] Frame: 53 | Ball OCR: [46, 21, 5, 69, 7, 28, 25] | Powerup Ready: True | Method: GroqVLM
+[20:11:19] Frame: 54 | Ball OCR: [46, 21, 5, 69, 7, 28, 25] | Powerup Ready: True | Method: GroqVLM
+[20:11:21] Frame: 55 | Ball OCR: [37, 46, 21, 5, 69, 7, 28] | Powerup Ready: True | Method: GroqVLM
+[20:11:23] Frame: 56 | Ball OCR: [37, 46, 21, 5, 69, 7, 28, 37, 46, 21, 5, 69, 7, 28] | Powerup Ready: True | Method: GroqVLM
+[20:11:26] Frame: 57 | Ball OCR: [27, 37, 46, 21, 5, 69, 7] | Powerup Ready: True | Method: GroqVLM
+[20:11:30] Frame: 58 | Ball OCR: [62, 27, 37, 46, 21, 5, 69] | Powerup Ready: True | Method: GroqVLM
+[20:11:33] Frame: 59 | Ball OCR: [62, 27, 37, 46, 21, 5, 69] | Powerup Ready: True | Method: GroqVLM
+[20:11:35] Frame: 60 | Ball OCR: [34, 62, 27, 37, 46, 21, 5] | Powerup Ready: True | Method: GroqVLM
+[20:11:38] Frame: 61 | Ball OCR: [34, 62, 27, 37, 46, 21, 5] | Powerup Ready: True | Method: GroqVLM
+[20:11:41] Frame: 62 | Ball OCR: [20, 34, 62, 27, 37, 46, 21] | Powerup Ready: True | Method: GroqVLM
+[20:11:43] Frame: 63 | Ball OCR: [20, 34, 62, 27, 37, 46, 21] | Powerup Ready: True | Method: GroqVLM
+[20:11:46] Frame: 64 | Ball OCR: [63, 20, 34, 62, 27, 37, 46] | Powerup Ready: True | Method: GroqVLM
+[20:11:49] Frame: 65 | Ball OCR: [1, 63, 20, 34, 62, 27, 37] | Powerup Ready: True | Method: GroqVLM
+[20:11:53] Frame: 66 | Ball OCR: [1, 63, 20, 34, 62, 27, 37] | Powerup Ready: True | Method: GroqVLM
+[20:11:57] Frame: 67 | Ball OCR: [43, 1, 63, 20, 34, 62, 27] | Powerup Ready: True | Method: GroqVLM
+[20:11:59] Frame: 68 | Ball OCR: [30, 43, 1, 63, 20, 34, 62] | Powerup Ready: True | Method: GroqVLM
+[20:12:03] Frame: 69 | Ball OCR: [30, 43, 1, 63, 20, 34, 62] | Powerup Ready: True | Method: GroqVLM
+[20:12:06] Frame: 70 | Ball OCR: [14, 30, 43, 1, 63, 20, 34] | Powerup Ready: True | Method: GroqVLM
+[20:12:09] Frame: 71 | Ball OCR: [36, 14, 30, 43, 1, 63, 20] | Powerup Ready: True | Method: GroqVLM
+[20:12:12] Frame: 72 | Ball OCR: [36, 14, 30, 43, 1, 63, 20] | Powerup Ready: True | Method: GroqVLM
+[20:12:16] Frame: 73 | Ball OCR: [65, 36, 14, 30, 43, 1, 63] | Powerup Ready: True | Method: GroqVLM
+[20:12:20] Frame: 74 | Ball OCR: [71, 65, 36, 14, 30, 43, 1] | Powerup Ready: True | Method: GroqVLM
+[20:12:24] Frame: 75 | Ball OCR: [71, 65, 36, 14, 30, 43, 1] | Powerup Ready: True | Method: GroqVLM
+[20:12:27] Frame: 76 | Ball OCR: [40, 71, 65, 36, 14, 30, 43] | Powerup Ready: True | Method: GroqVLM
+[20:12:31] Frame: 77 | Ball OCR: [52, 40, 71, 65, 36, 14, 30] | Powerup Ready: True | Method: GroqVLM
+[20:12:34] Frame: 78 | Ball OCR: [59, 52, 40, 71, 65, 36, 14] | Powerup Ready: True | Method: GroqVLM
+[20:12:37] Frame: 79 | Ball OCR: [Missed] | Powerup Ready: False | Method: GroqVLM
+[20:12:48] Frame: 80 | Ball OCR: [Missed] | Powerup Ready: False | Method: GroqVLM
+[20:12:59] Frame: 81 | Ball OCR: [Missed] | Powerup Ready: False | Method: GroqVLM
+[23:22:31] Frame: 4 | Ball OCR: [6, 33, 55, 47, 2, 21, 34] | Powerup Ready: True | Method: GroqVLM
+[23:22:33] Frame: 5 | Ball OCR: [6, 33, 55, 47, 2, 21, 34] | Powerup Ready: True | Method: GroqVLM
+[23:22:35] Frame: 6 | Ball OCR: [25, 6, 33, 55, 47, 2, 21] | Powerup Ready: True | Method: GroqVLM
+[23:22:37] Frame: 7 | Ball OCR: [25, 6, 33, 55, 47, 2, 21] | Powerup Ready: True | Method: GroqVLM
+[23:22:39] Frame: 8 | Ball OCR: [25, 6, 33, 55, 47, 2, 21] | Powerup Ready: True | Method: GroqVLM
+[23:22:41] Frame: 9 | Ball OCR: [3, 25, 6, 33, 55, 47, 2] | Powerup Ready: True | Method: GroqVLM
+[23:22:44] Frame: 10 | Ball OCR: [15, 3, 25, 6, 33, 55, 47] | Powerup Ready: True | Method: GroqVLM
+[23:22:46] Frame: 11 | Ball OCR: [15, 3, 25, 6, 33, 55, 47] | Powerup Ready: True | Method: GroqVLM
+[23:22:48] Frame: 12 | Ball OCR: [15, 3, 25, 6, 33, 55, 47] | Powerup Ready: True | Method: GroqVLM
+[23:22:51] Frame: 13 | Ball OCR: [72, 15, 3, 25, 6, 33, 55] | Powerup Ready: True | Method: GroqVLM
+[23:22:53] Frame: 14 | Ball OCR: [72, 15, 3, 25, 6, 33, 55] | Powerup Ready: True | Method: GroqVLM
+[23:22:55] Frame: 15 | Ball OCR: [44, 72, 15, 3, 25, 6, 33] | Powerup Ready: True | Method: GroqVLM
+[23:22:58] Frame: 16 | Ball OCR: [44, 72, 15, 3, 25, 6, 33] | Powerup Ready: True | Method: GroqVLM
+[23:23:01] Frame: 17 | Ball OCR: [43, 44, 72, 15, 3, 25, 6] | Powerup Ready: True | Method: GroqVLM
+[23:23:04] Frame: 18 | Ball OCR: [5, 43, 44, 72, 15, 3, 25] | Powerup Ready: True | Method: GroqVLM
+[23:23:07] Frame: 19 | Ball OCR: [5, 43, 44, 72, 15, 3, 25] | Powerup Ready: True | Method: GroqVLM
+[23:23:10] Frame: 20 | Ball OCR: [1, 5, 43, 44, 72, 15, 3] | Powerup Ready: True | Method: GroqVLM
+[23:23:13] Frame: 21 | Ball OCR: [1, 5, 43, 44, 72, 15, 3] | Powerup Ready: True | Method: GroqVLM
+[23:23:16] Frame: 22 | Ball OCR: [75, 1, 5, 43, 44, 72, 15] | Powerup Ready: True | Method: GroqVLM
+[23:23:19] Frame: 23 | Ball OCR: [65, 75, 1, 5, 43, 44, 72] | Powerup Ready: True | Method: GroqVLM
+[23:23:22] Frame: 24 | Ball OCR: [65, 75, 1, 5, 43, 44, 72] | Powerup Ready: True | Method: GroqVLM
+[23:23:26] Frame: 25 | Ball OCR: [4, 65, 75, 1, 5, 43, 44] | Powerup Ready: True | Method: GroqVLM
+[23:23:30] Frame: 26 | Ball OCR: [41, 4, 65, 75, 1, 5, 43] | Powerup Ready: True | Method: GroqVLM
+[23:23:33] Frame: 27 | Ball OCR: [41, 4, 65, 75, 1, 5, 43] | Powerup Ready: True | Method: GroqVLM
+[23:23:36] Frame: 28 | Ball OCR: [36, 41, 4, 65, 75, 1, 5] | Powerup Ready: True | Method: GroqVLM
+[23:23:39] Frame: 29 | Ball OCR: [36, 41, 4, 65, 75, 1, 5] | Powerup Ready: True | Method: GroqVLM
+[23:23:41] Frame: 30 | Ball OCR: [73, 36, 41, 4, 65, 75, 1] | Powerup Ready: True | Method: GroqVLM
+[23:23:44] Frame: 31 | Ball OCR: [35, 73, 36, 41, 4, 65, 75] | Powerup Ready: True | Method: GroqVLM
+[23:23:46] Frame: 32 | Ball OCR: [35, 73, 36, 41, 4, 65, 75] | Powerup Ready: True | Method: GroqVLM
+[23:23:49] Frame: 33 | Ball OCR: [39, 35, 73, 36, 41, 4, 65] | Powerup Ready: True | Method: GroqVLM
+[23:23:52] Frame: 34 | Ball OCR: [39, 35, 73, 36, 41, 4, 65] | Powerup Ready: True | Method: GroqVLM
+[23:23:55] Frame: 35 | Ball OCR: [8, 39, 35, 73, 36, 41, 4] | Powerup Ready: True | Method: GroqVLM
+[23:23:57] Frame: 36 | Ball OCR: [8, 39, 35, 73, 36, 41, 4] | Powerup Ready: True | Method: GroqVLM
+[23:24:00] Frame: 37 | Ball OCR: [49, 8, 39, 35, 73, 36, 41] | Powerup Ready: True | Method: GroqVLM
+[23:24:03] Frame: 38 | Ball OCR: [49, 8, 39, 35, 73, 36, 41] | Powerup Ready: True | Method: GroqVLM
+[23:24:05] Frame: 39 | Ball OCR: [49, 8, 39, 35, 73, 36, 41] | Powerup Ready: True | Method: GroqVLM
+[23:24:07] Frame: 40 | Ball OCR: [49, 8, 39, 35, 73, 36, 41] | Powerup Ready: True | Method: GroqVLM
+[23:24:10] Frame: 41 | Ball OCR: [Missed] | Powerup Ready: True | Method: GroqVLM
+[23:33:56] Frame: 2 | Ball OCR: [12, 65, 15, 64, 18, 26, 25] | Powerup Ready: True | Method: GroqVLM
+[23:33:58] Frame: 3 | Ball OCR: [12, 65, 15, 64, 18, 26, 25] | Powerup Ready: True | Method: GroqVLM
+[23:34:00] Frame: 4 | Ball OCR: [42, 12, 65, 15, 64, 18, 26] | Powerup Ready: True | Method: GroqVLM
+[23:34:03] Frame: 5 | Ball OCR: [42, 12, 65, 15, 64, 18, 26] | Powerup Ready: True | Method: GroqVLM
+[23:34:05] Frame: 6 | Ball OCR: [24, 42, 12, 65, 15, 64, 18] | Powerup Ready: True | Method: GroqVLM
+[23:34:07] Frame: 7 | Ball OCR: [24, 42, 12, 65, 15, 64, 18] | Powerup Ready: True | Method: GroqVLM
+[23:34:10] Frame: 8 | Ball OCR: [2, 24, 42, 12, 65, 15, 64] | Powerup Ready: True | Method: GroqVLM
+[23:34:12] Frame: 9 | Ball OCR: [2, 24, 42, 12, 65, 15, 64] | Powerup Ready: True | Method: GroqVLM
+[23:34:14] Frame: 10 | Ball OCR: [63, 2, 24, 42, 12, 65, 15] | Powerup Ready: True | Method: GroqVLM
+[23:34:16] Frame: 11 | Ball OCR: [63, 2, 24, 42, 12, 65, 15] | Powerup Ready: True | Method: GroqVLM
+[23:34:19] Frame: 12 | Ball OCR: [8, 63, 2, 24, 42, 12, 65] | Powerup Ready: True | Method: GroqVLM
+[23:34:21] Frame: 13 | Ball OCR: [8, 63, 2, 24, 42, 12, 65] | Powerup Ready: True | Method: GroqVLM
+[23:34:23] Frame: 14 | Ball OCR: [8, 63, 2, 24, 42, 12, 65] | Powerup Ready: True | Method: GroqVLM
+[23:34:25] Frame: 15 | Ball OCR: [19, 8, 63, 2, 24, 42, 12] | Powerup Ready: True | Method: GroqVLM
+[23:34:27] Frame: 16 | Ball OCR: [19, 8, 63, 2, 24, 42, 12] | Powerup Ready: True | Method: GroqVLM
+[23:34:30] Frame: 17 | Ball OCR: [1, 19, 8, 63, 2, 24, 42] | Powerup Ready: True | Method: GroqVLM
+[23:34:32] Frame: 18 | Ball OCR: [1, 19, 8, 63, 2, 24, 42] | Powerup Ready: True | Method: GroqVLM
+[23:34:34] Frame: 19 | Ball OCR: [4, 1, 19, 8, 63, 2, 24] | Powerup Ready: True | Method: GroqVLM
+[23:34:36] Frame: 20 | Ball OCR: [14, 1, 19, 8, 63, 2, 24] | Powerup Ready: True | Method: GroqVLM
+[23:34:37] Frame: 21 | Ball OCR: [14, 1, 19, 8, 63, 2, 24] | Powerup Ready: True | Method: GroqVLM
+[23:34:39] Frame: 22 | Ball OCR: [14, 1, 19, 8, 63, 2, 24] | Powerup Ready: True | Method: GroqVLM
+[23:34:40] Frame: 23 | Ball OCR: [30, 14, 1, 19, 8, 63, 2] | Powerup Ready: True | Method: GroqVLM
+[23:34:42] Frame: 24 | Ball OCR: [30, 14, 1, 19, 8, 63, 2] | Powerup Ready: True | Method: GroqVLM
+[23:34:43] Frame: 25 | Ball OCR: [30, 14, 1, 19, 8, 63, 2] | Powerup Ready: True | Method: GroqVLM
+[23:34:45] Frame: 26 | Ball OCR: [53, 30, 14, 1, 19, 8, 63] | Powerup Ready: True | Method: GroqVLM
+[23:34:46] Frame: 27 | Ball OCR: [53, 30, 14, 1, 19, 8, 63] | Powerup Ready: True | Method: GroqVLM
+[23:34:48] Frame: 28 | Ball OCR: [53, 30, 14, 1, 19, 8, 63] | Powerup Ready: True | Method: GroqVLM
+[23:34:49] Frame: 29 | Ball OCR: [37, 53, 30, 14, 1, 19, 8] | Powerup Ready: True | Method: GroqVLM
+[23:34:51] Frame: 30 | Ball OCR: [37, 53, 30, 14, 1, 19, 8] | Powerup Ready: True | Method: GroqVLM
+[23:34:53] Frame: 31 | Ball OCR: [37, 53, 30, 14, 1, 19, 8] | Powerup Ready: True | Method: GroqVLM
+[23:34:55] Frame: 32 | Ball OCR: [22, 37, 53, 30, 14, 1, 19] | Powerup Ready: True | Method: GroqVLM
+[23:34:57] Frame: 33 | Ball OCR: [22, 37, 53, 30, 14, 1, 19] | Powerup Ready: True | Method: GroqVLM
+[23:34:59] Frame: 34 | Ball OCR: [22, 37, 53, 30, 14, 1, 19] | Powerup Ready: True | Method: GroqVLM
+[23:35:00] Frame: 35 | Ball OCR: [35, 22, 37, 53, 30, 14, 1] | Powerup Ready: True | Method: GroqVLM
+[23:35:02] Frame: 36 | Ball OCR: [35, 22, 37, 53, 30, 14, 1] | Powerup Ready: True | Method: GroqVLM
+[23:35:04] Frame: 37 | Ball OCR: [33, 35, 22, 37, 53, 30, 14] | Powerup Ready: True | Method: GroqVLM
+[23:35:06] Frame: 38 | Ball OCR: [33, 35, 22, 37, 53, 30, 14] | Powerup Ready: True | Method: GroqVLM
+[23:35:08] Frame: 39 | Ball OCR: [33, 35, 22, 37, 53, 30, 14] | Powerup Ready: True | Method: GroqVLM
+[23:35:10] Frame: 40 | Ball OCR: [Missed] | Powerup Ready: True | Method: GroqVLM
+[23:35:22] Frame: 41 | Ball OCR: [Missed] | Powerup Ready: False | Method: GroqVLM
+[23:48:36] Frame: 5 | Ball OCR: [29, 55, 66, 72, 63, 32, 71] | Powerup Ready: True | Method: GroqVLM
+[23:48:40] Frame: 6 | Ball OCR: [19, 29, 55, 66, 72, 63, 32] | Powerup Ready: True | Method: GroqVLM
+[23:48:42] Frame: 7 | Ball OCR: [65, 19, 29, 55, 66, 72, 63] | Powerup Ready: True | Method: GroqVLM
+[23:48:44] Frame: 8 | Ball OCR: [65, 19, 29, 55, 66, 72, 63] | Powerup Ready: True | Method: GroqVLM
+[23:48:47] Frame: 9 | Ball OCR: [5, 65, 19, 29, 55, 66, 72, 63] | Powerup Ready: True | Method: GroqVLM
+[23:48:50] Frame: 10 | Ball OCR: [35, 65, 19, 29, 55, 66, 72] | Powerup Ready: True | Method: GroqVLM
+[23:48:53] Frame: 11 | Ball OCR: [27, 35, 65, 19, 29, 55, 66] | Powerup Ready: True | Method: GroqVLM
+[23:48:54] Frame: 12 | Ball OCR: [27, 35, 65, 19, 29, 55, 66] | Powerup Ready: True | Method: GroqVLM
+[23:48:57] Frame: 13 | Ball OCR: [27, 35, 65, 19, 29, 55, 66] | Powerup Ready: True | Method: GroqVLM
+[23:48:59] Frame: 14 | Ball OCR: [25, 27, 35, 65, 19, 29, 55] | Powerup Ready: True | Method: GroqVLM
+[23:49:00] Frame: 15 | Ball OCR: [25, 27, 35, 65, 19, 29, 55] | Powerup Ready: True | Method: GroqVLM
+[23:49:02] Frame: 16 | Ball OCR: [70, 25, 27, 35, 65, 19, 29] | Powerup Ready: True | Method: GroqVLM
+[23:49:03] Frame: 17 | Ball OCR: [70, 25, 27, 35, 65, 19, 29] | Powerup Ready: True | Method: GroqVLM
+[23:49:04] Frame: 18 | Ball OCR: [70, 25, 27, 35, 65, 19, 29] | Powerup Ready: True | Method: GroqVLM
+[23:49:06] Frame: 19 | Ball OCR: [70, 25, 27, 35, 65, 19, 29] | Powerup Ready: True | Method: GroqVLM
+[23:49:07] Frame: 20 | Ball OCR: [4, 70, 25, 27, 35, 65, 19] | Powerup Ready: True | Method: GroqVLM
+[23:49:09] Frame: 21 | Ball OCR: [4, 70, 25, 27, 35, 65, 19] | Powerup Ready: True | Method: GroqVLM
+[23:49:11] Frame: 22 | Ball OCR: [4, 70, 25, 27, 35, 65, 19] | Powerup Ready: True | Method: GroqVLM
+[23:49:13] Frame: 23 | Ball OCR: [50, 4, 70, 25, 27, 35, 65] | Powerup Ready: True | Method: GroqVLM
+[23:49:15] Frame: 24 | Ball OCR: [50, 4, 70, 25, 27, 35, 65] | Powerup Ready: True | Method: GroqVLM
+[23:49:17] Frame: 25 | Ball OCR: [50, 4, 70, 25, 27, 35, 65] | Powerup Ready: True | Method: GroqVLM
+[23:49:18] Frame: 26 | Ball OCR: [40, 50, 4, 70, 25, 27, 35] | Powerup Ready: True | Method: GroqVLM
+[23:49:21] Frame: 27 | Ball OCR: [40, 50, 4, 70, 25, 27, 35] | Powerup Ready: True | Method: GroqVLM
+[23:49:23] Frame: 28 | Ball OCR: [74, 40, 50, 4, 70, 25, 27] | Powerup Ready: True | Method: GroqVLM
+[23:49:25] Frame: 29 | Ball OCR: [74, 40, 50, 4, 70, 25, 27] | Powerup Ready: True | Method: GroqVLM
+[23:49:27] Frame: 30 | Ball OCR: [9, 74, 40, 50, 4, 70, 25] | Powerup Ready: True | Method: GroqVLM
+[23:49:29] Frame: 31 | Ball OCR: [9, 74, 40, 50, 4, 70, 25] | Powerup Ready: True | Method: GroqVLM
+[23:49:31] Frame: 32 | Ball OCR: [9, 74, 40, 50, 4, 70, 25] | Powerup Ready: True | Method: GroqVLM
+[23:49:34] Frame: 33 | Ball OCR: [20, 9, 74, 40, 50, 4, 70] | Powerup Ready: True | Method: GroqVLM
+[23:49:36] Frame: 34 | Ball OCR: [20, 9, 74, 40, 50, 4, 70] | Powerup Ready: True | Method: GroqVLM
+[23:49:38] Frame: 35 | Ball OCR: [44, 20, 9, 74, 40, 50, 4] | Powerup Ready: True | Method: GroqVLM
+[23:49:41] Frame: 36 | Ball OCR: [44, 20, 9, 74, 40, 50, 4] | Powerup Ready: True | Method: GroqVLM
+[23:49:43] Frame: 37 | Ball OCR: [18, 44, 20, 9, 74, 40, 50] | Powerup Ready: True | Method: GroqVLM
+[23:49:45] Frame: 38 | Ball OCR: [18, 44, 20, 9, 74, 40, 50] | Powerup Ready: True | Method: GroqVLM
+[23:49:47] Frame: 39 | Ball OCR: [18, 44, 20, 9, 74, 40, 50] | Powerup Ready: True | Method: GroqVLM
+[23:49:48] Frame: 40 | Ball OCR: [34, 18, 44, 20, 9, 74, 40] | Powerup Ready: True | Method: GroqVLM
+[23:49:50] Frame: 41 | Ball OCR: [34, 18, 44, 20, 9, 74, 40] | Powerup Ready: True | Method: GroqVLM
+[23:49:52] Frame: 42 | Ball OCR: [48, 34, 18, 44, 20, 9, 74] | Powerup Ready: True | Method: GroqVLM
+[23:49:54] Frame: 43 | Ball OCR: [48, 34, 18, 44, 20, 9, 74] | Powerup Ready: True | Method: GroqVLM
+[23:49:56] Frame: 44 | Ball OCR: [48, 34, 18, 44, 20, 9, 74] | Powerup Ready: True | Method: GroqVLM
+[23:49:58] Frame: 45 | Ball OCR: [62, 48, 34, 18, 44, 20, 9] | Powerup Ready: True | Method: GroqVLM
+[23:50:00] Frame: 46 | Ball OCR: [62, 48, 34, 18, 44, 20, 9] | Powerup Ready: True | Method: GroqVLM
+[23:50:02] Frame: 47 | Ball OCR: [53, 62, 48, 34, 18, 44, 20] | Powerup Ready: True | Method: GroqVLM
+[23:50:04] Frame: 48 | Ball OCR: [53, 62, 48, 34, 18, 44, 20] | Powerup Ready: True | Method: GroqVLM
+[23:50:05] Frame: 49 | Ball OCR: [53, 62, 48, 34, 18, 44, 20] | Powerup Ready: True | Method: GroqVLM
+[23:50:08] Frame: 50 | Ball OCR: [24, 53, 62, 48, 34, 18, 44] | Powerup Ready: True | Method: GroqVLM
+[23:50:10] Frame: 51 | Ball OCR: [24, 53, 62, 48, 34, 18, 44] | Powerup Ready: True | Method: GroqVLM
+[23:50:12] Frame: 52 | Ball OCR: [49, 24, 53, 62, 48, 34, 18] | Powerup Ready: True | Method: GroqVLM
+[23:50:15] Frame: 53 | Ball OCR: [49, 24, 53, 62, 48, 34, 18] | Powerup Ready: True | Method: GroqVLM
+[23:50:17] Frame: 54 | Ball OCR: [47, 49, 24, 53, 62, 48, 34] | Powerup Ready: True | Method: GroqVLM
+[23:50:20] Frame: 55 | Ball OCR: [47, 49, 24, 53, 62, 48, 34] | Powerup Ready: True | Method: GroqVLM
+[23:50:23] Frame: 56 | Ball OCR: [37, 47, 49, 24, 53, 62, 48] | Powerup Ready: True | Method: GroqVLM
+[23:50:25] Frame: 57 | Ball OCR: [37, 47, 49, 24, 53, 62, 48] | Powerup Ready: True | Method: GroqVLM
+[23:50:28] Frame: 58 | Ball OCR: [Missed] | Powerup Ready: True | Method: GroqVLM
+[00:10:56] Frame: 0 | Ball OCR: [2, 18, 58, 29, 47, 13, 61] | Powerup Ready: True | Method: GroqVLM
+[00:10:57] Frame: 1 | Ball OCR: [64, 2, 18, 58, 29, 47, 13] | Powerup Ready: True | Method: GroqVLM
+[00:10:58] Frame: 2 | Ball OCR: [64, 2, 18, 58, 29, 47, 13] | Powerup Ready: True | Method: GroqVLM
+[00:10:59] Frame: 3 | Ball OCR: [64, 2, 18, 58, 29, 47, 13] | Powerup Ready: True | Method: GroqVLM
+[00:11:01] Frame: 4 | Ball OCR: [64, 2, 18, 58, 29, 47, 13] | Powerup Ready: True | Method: GroqVLM
+[00:11:02] Frame: 5 | Ball OCR: [35, 64, 2, 18, 58, 29, 47] | Powerup Ready: True | Method: GroqVLM
+[00:11:03] Frame: 6 | Ball OCR: [35, 64, 2, 18, 58, 29, 47] | Powerup Ready: True | Method: GroqVLM
+[00:11:04] Frame: 7 | Ball OCR: [35, 64, 2, 18, 58, 29, 47] | Powerup Ready: True | Method: GroqVLM
+[00:11:05] Frame: 8 | Ball OCR: [35, 64, 2, 18, 58, 29, 47] | Powerup Ready: True | Method: GroqVLM
+[00:11:06] Frame: 9 | Ball OCR: [35, 64, 2, 18, 58, 29, 47] | Powerup Ready: True | Method: GroqVLM
+[00:11:07] Frame: 10 | Ball OCR: [53, 35, 64, 2, 18, 58, 29] | Powerup Ready: True | Method: GroqVLM
+[00:11:08] Frame: 11 | Ball OCR: [53, 35, 64, 2, 18, 58, 29] | Powerup Ready: True | Method: GroqVLM
+[00:11:09] Frame: 12 | Ball OCR: [53, 35, 64, 2, 18, 58, 29] | Powerup Ready: True | Method: GroqVLM
+[00:11:10] Frame: 13 | Ball OCR: [53, 35, 64, 2, 18, 58, 29] | Powerup Ready: True | Method: GroqVLM
+[00:11:11] Frame: 14 | Ball OCR: [48, 53, 35, 64, 2, 18, 58] | Powerup Ready: True | Method: GroqVLM
+[00:11:12] Frame: 15 | Ball OCR: [48, 53, 35, 64, 2, 18, 58] | Powerup Ready: True | Method: GroqVLM
+[00:11:14] Frame: 16 | Ball OCR: [48, 53, 35, 64, 2, 18, 58] | Powerup Ready: True | Method: GroqVLM
+[00:11:15] Frame: 17 | Ball OCR: [48, 53, 35, 64, 2, 18, 58] | Powerup Ready: True | Method: GroqVLM
+[00:11:16] Frame: 18 | Ball OCR: [15, 48, 53, 35, 64, 2, 18] | Powerup Ready: True | Method: GroqVLM
+[00:11:18] Frame: 19 | Ball OCR: [15, 48, 53, 35, 64, 2, 18] | Powerup Ready: True | Method: GroqVLM
+[00:11:19] Frame: 20 | Ball OCR: [15, 48, 53, 35, 64, 2, 18] | Powerup Ready: True | Method: GroqVLM
+[00:11:21] Frame: 21 | Ball OCR: [15, 48, 53, 35, 64, 2, 18] | Powerup Ready: True | Method: GroqVLM
+[00:11:22] Frame: 22 | Ball OCR: [75, 15, 48, 53, 35, 64, 2] | Powerup Ready: True | Method: GroqVLM
+[00:11:23] Frame: 23 | Ball OCR: [75, 15, 48, 53, 35, 64, 2] | Powerup Ready: True | Method: GroqVLM
+[00:11:25] Frame: 24 | Ball OCR: [75, 15, 48, 53, 35, 64, 2] | Powerup Ready: True | Method: GroqVLM
+[00:11:26] Frame: 25 | Ball OCR: [75, 15, 48, 53, 35, 64, 2] | Powerup Ready: True | Method: GroqVLM
+[00:11:28] Frame: 26 | Ball OCR: [14, 75, 15, 48, 53, 35, 64] | Powerup Ready: True | Method: GroqVLM
+[00:11:35] Frame: 27 | Ball OCR: [14, 75, 15, 48, 53, 35, 64] | Powerup Ready: True | Method: GroqVLM
+[00:11:39] Frame: 28 | Ball OCR: [7, 54, 14, 75, 15, 48, 53] | Powerup Ready: True | Method: GroqVLM
+[00:11:43] Frame: 29 | Ball OCR: [8, 7, 54, 14, 75, 15, 48] | Powerup Ready: True | Method: GroqVLM
+[00:11:46] Frame: 30 | Ball OCR: [17, 8, 7, 54, 14, 75, 15] | Powerup Ready: True | Method: GroqVLM
+[00:11:49] Frame: 31 | Ball OCR: [17, 8, 7, 54, 14, 75, 15] | Powerup Ready: True | Method: GroqVLM
+[00:11:53] Frame: 32 | Ball OCR: [73, 17, 8, 7, 54, 14, 75] | Powerup Ready: True | Method: GroqVLM
+[00:11:56] Frame: 33 | Ball OCR: [73, 17, 8, 7, 54, 14, 75] | Powerup Ready: True | Method: GroqVLM
+[00:11:59] Frame: 34 | Ball OCR: [Missed] | Powerup Ready: True | Method: GroqVLM
+[01:03:03] Frame: 4 | Ball OCR: [Missed] | Powerup Ready: True | Method: GroqVLM
+[01:03:04] Frame: 5 | Ball OCR: [Missed] | Powerup Ready: True | Method: GroqVLM
+[01:03:25] Frame: 6 | Ball OCR: [64] | Powerup Ready: True | Method: GroqVLM
+[01:03:27] Frame: 7 | Ball OCR: [64] | Powerup Ready: True | Method: GroqVLM
+[01:03:27] Frame: 8 | Ball OCR: [64] | Powerup Ready: True | Method: GroqVLM
+[01:03:28] Frame: 9 | Ball OCR: [64] | Powerup Ready: True | Method: GroqVLM
+[01:03:29] Frame: 10 | Ball OCR: [64] | Powerup Ready: True | Method: GroqVLM
+[01:03:30] Frame: 11 | Ball OCR: [64] | Powerup Ready: True | Method: GroqVLM
+[01:03:31] Frame: 12 | Ball OCR: [64] | Powerup Ready: True | Method: GroqVLM
+[01:03:33] Frame: 13 | Ball OCR: [64] | Powerup Ready: True | Method: GroqVLM
+[01:03:33] Frame: 14 | Ball OCR: [64] | Powerup Ready: True | Method: GroqVLM
+[01:03:34] Frame: 15 | Ball OCR: [64] | Powerup Ready: True | Method: GroqVLM
+[01:03:35] Frame: 16 | Ball OCR: [64] | Powerup Ready: True | Method: GroqVLM
+[01:03:37] Frame: 17 | Ball OCR: [64] | Powerup Ready: True | Method: GroqVLM
+[01:03:38] Frame: 18 | Ball OCR: [64] | Powerup Ready: True | Method: GroqVLM
+[01:03:39] Frame: 19 | Ball OCR: [64] | Powerup Ready: True | Method: GroqVLM
+[01:03:39] Frame: 20 | Ball OCR: [64] | Powerup Ready: True | Method: GroqVLM
+[01:03:41] Frame: 21 | Ball OCR: [64] | Powerup Ready: True | Method: GroqVLM
+[01:03:42] Frame: 22 | Ball OCR: [64] | Powerup Ready: True | Method: GroqVLM
+[01:03:43] Frame: 23 | Ball OCR: [64] | Powerup Ready: True | Method: GroqVLM
+[01:03:44] Frame: 24 | Ball OCR: [64] | Powerup Ready: True | Method: GroqVLM
+[01:03:45] Frame: 25 | Ball OCR: [64] | Powerup Ready: True | Method: GroqVLM
+[01:03:46] Frame: 26 | Ball OCR: [64] | Powerup Ready: True | Method: GroqVLM
+[01:03:47] Frame: 27 | Ball OCR: [64] | Powerup Ready: True | Method: GroqVLM
+[01:03:49] Frame: 28 | Ball OCR: [64] | Powerup Ready: True | Method: GroqVLM
+[01:03:50] Frame: 29 | Ball OCR: [64] | Powerup Ready: True | Method: GroqVLM
+[01:03:51] Frame: 30 | Ball OCR: [64] | Powerup Ready: True | Method: GroqVLM
+[01:07:14] Frame: 38 | Ball OCR: [4] | Powerup Ready: True | Method: GroqVLM
+[01:07:15] Frame: 39 | Ball OCR: [49, 4] | Powerup Ready: True | Method: GroqVLM
+[01:07:35] Frame: 40 | Ball OCR: [47, 5, 18, 58, 49, 4] | Powerup Ready: True | Method: GroqVLM
+[01:07:38] Frame: 41 | Ball OCR: [47, 5, 18, 58, 49, 4] | Powerup Ready: True | Method: GroqVLM
+[01:07:53] Frame: 42 | Ball OCR: [20, 72, 6, 47, 5, 18, 58] | Powerup Ready: True | Method: GroqVLM
+[01:07:55] Frame: 43 | Ball OCR: [20, 72, 6, 47, 5, 18, 58] | Powerup Ready: True | Method: GroqVLM
+[01:08:18] Frame: 44 | Ball OCR: [40, 43, 56, 2, 67, 20, 72] | Powerup Ready: True | Method: GroqVLM
+[01:08:19] Frame: 45 | Ball OCR: [40, 43, 56, 2, 67, 20, 72] | Powerup Ready: True | Method: GroqVLM
+[01:08:59] Frame: 46 | Ball OCR: [45, 22, 69, 46, 15, 55, 57] | Powerup Ready: True | Method: GroqVLM
+[01:09:01] Frame: 47 | Ball OCR: [37, 45, 22, 69, 46, 15, 55] | Powerup Ready: True | Method: GroqVLM

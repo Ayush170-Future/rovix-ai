@@ -33,7 +33,16 @@ class VisionElementDetector:
         self.max_retries = max_retries
         self.client = genai.Client(api_key=api_key)
         
-        self.prompt = """
+        self.prompt_generic = """
+Identify all interactable elements in this screenshot (e.g., buttons, tabs, input fields, icons, banners).
+Provide a concise label and description for each.
+
+Format: JSON list of objects with [bounding_box, label, description].
+Bounding boxes: [y_min, x_min, y_max, x_max] normalized (0-1000).
+Be exhaustive.
+"""
+
+        self.prompt_ingame = """
 Identify all interactable elements in this Bingo Blitz screenshot.
 CRITICAL:
 1. BALL_HISTORY_BAR: Identify the ENTIRE horizontal area at the top where called balls appear (capture the full width).
@@ -44,8 +53,11 @@ Format: JSON list of objects with [bounding_box, label, description].
 Bounding boxes: [y_min, x_min, y_max, x_max] normalized (0-1000).
 Be exhaustive.
 """
-
     def _parse_gemini_response(self, response_text: str) -> List[Dict]:
+        if not response_text or not response_text.strip():
+            print("⚠️ Vision model returned an empty string.")
+            return []
+            
         cleaned = response_text.replace("```json", "").replace("```", "").strip()
         
         try:
@@ -59,6 +71,10 @@ Be exhaustive.
                 cleaned.rfind('}') if cleaned.rfind('}') != -1 else 0
             )
             
+            if start_idx >= len(cleaned) or end_idx == 0 or start_idx > end_idx:
+                print(f"⚠️ Could not find valid JSON boundaries in response.\nRaw Response Snippet: {response_text[:200]}...")
+                return []
+                
             json_str = cleaned[start_idx:end_idx+1]
             parsed = json.loads(json_str)
             
@@ -66,7 +82,7 @@ Be exhaustive.
                 return [parsed]
             return parsed
         except json.JSONDecodeError as e:
-            print(f"Error parsing JSON: {e}")
+            print(f"⚠️ Error parsing JSON: {e}\nRaw Response Snippet: {response_text[:200]}...")
             return []
 
     def _convert_normalized_bbox_to_pixels(self, bbox_norm: List[int], image_width: int, image_height: int) -> dict:
@@ -125,7 +141,7 @@ Be exhaustive.
         except Exception as e:
             print(f"⚠️  Failed to save annotated image: {e}")
 
-    async def detect_elements(self, screenshot_path: str) -> VisionDetectionResult:
+    async def detect_elements(self, screenshot_path: str, is_in_game: bool = False) -> VisionDetectionResult:
         """
         Detect interactive elements in a screenshot with retry logic and timeout.
         
@@ -137,7 +153,7 @@ Be exhaustive.
         try:
             # Wrap entire detection with timeout
             result = await asyncio.wait_for(
-                self._detect_elements_with_retry(screenshot_path),
+                self._detect_elements_with_retry(screenshot_path, is_in_game),
                 timeout=self.timeout
             )
             return result
@@ -160,7 +176,7 @@ Be exhaustive.
                 retry_count=0
             )
     
-    async def _detect_elements_with_retry(self, screenshot_path: str) -> VisionDetectionResult:
+    async def _detect_elements_with_retry(self, screenshot_path: str, is_in_game: bool = False) -> VisionDetectionResult:
         """Internal method with retry logic"""
         image = Image.open(screenshot_path)
         image_width, image_height = image.size
@@ -175,6 +191,8 @@ Be exhaustive.
             try:
                 start_time = time.time()
                 
+                active_prompt = self.prompt_ingame if is_in_game else self.prompt_generic
+                
                 response = await asyncio.to_thread(
                     self.client.models.generate_content,
                     model=self.model_name,
@@ -183,7 +201,7 @@ Be exhaustive.
                             data=image_bytes,
                             mime_type='image/png',
                         ),
-                        self.prompt
+                        active_prompt
                     ],
                     config=types.GenerateContentConfig(
                         temperature=0.5,
@@ -322,6 +340,72 @@ Be exhaustive.
         except Exception as e:
             print(f"⚠️ Targeted VLM OCR failed: {e}")
             return ""
+
+    async def check_bingo_state_groq(self, screenshot_path: str) -> bool:
+        """Fast binary check using Groq Llama to see if we are actively in a bingo game"""
+        try:
+            image = Image.open(screenshot_path)
+            # Try to shrink the image slightly to make it even faster/smaller for Groq
+            image.thumbnail((1024, 1024), Image.Resampling.LANCZOS)
+            
+            # Convert RGBA to RGB before saving as JPEG
+            if image.mode in ('RGBA', 'P'):
+                image = image.convert('RGB')
+                
+            import io
+            img_byte_arr = io.BytesIO()
+            image.save(img_byte_arr, format='JPEG', quality=75)
+            image_bytes = img_byte_arr.getvalue()
+            
+            groq_key = os.getenv("GROQ_API_KEY")
+            if groq_key:
+                import base64
+                import requests
+                base64_image = base64.b64encode(image_bytes).decode('utf-8')
+                headers = {
+                    "Authorization": f"Bearer {groq_key}",
+                    "Content-Type": "application/json"
+                }
+                
+                prompt = "Look carefully at this image. Are there 1 or 2 bingo cards visible on the screen with numbers on them? This indicates we are in an active game of Bingo. Ignore any popups or menus blocking part of the screen. Reply ONLY 'YES' if 1 or 2 Bingo cards are clearly visible, otherwise reply 'NO'."
+                
+                payload = {
+                    "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+                    "messages": [
+                        {
+                            "role": "user",
+                            "content": [
+                                {"type": "text", "text": prompt},
+                                {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}}
+                            ]
+                        }
+                    ],
+                    "temperature": 0.0,
+                    "max_tokens": 10
+                }
+                
+                loop = asyncio.get_event_loop()
+                start_time = time.time()
+                api_response = await loop.run_in_executor(
+                    None, 
+                    lambda: requests.post("https://api.groq.com/openai/v1/chat/completions", headers=headers, json=payload, timeout=5)
+                )
+                elapsed = time.time() - start_time
+                
+                if api_response.status_code == 200:
+                    data = api_response.json()
+                    if "choices" in data and len(data["choices"]) > 0:
+                        ans = data["choices"][0]["message"]["content"].strip().upper()
+                        print(f"⚡ Fast State Check (GroqVLM) [{elapsed:.2f}s]: {ans}")
+                        return "YES" in ans
+                else:
+                    print(f"⚠️ Groq state check error: {api_response.status_code} - {api_response.text}")
+            
+            return False
+            
+        except Exception as e:
+            print(f"⚠️ Fast state check failed: {e}")
+            return False
 
     def _build_results(self, detections: List[Dict], image_width: int, image_height: int) -> List[Dict]:
         """Build results list from detections"""

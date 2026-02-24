@@ -33,7 +33,9 @@ class ContextService:
                 'step_counter': 0,
                 'cached_vision_elements': None,
                 'latest_bingo_state': 'unspecified',
-                'last_powerup_time': 0
+                'last_powerup_time': 0,
+                'vision_task': None,
+                'pending_balls': []
             }
         return True
     
@@ -92,10 +94,27 @@ class ContextService:
         
         self._sessions[session_id]['step_counter'] += 1
         
+        new_state = None
         if hasattr(agent_output, 'bingo_state'):
-            self._sessions[session_id]['latest_bingo_state'] = agent_output.bingo_state
+            new_state = agent_output.bingo_state
         elif isinstance(agent_output, dict) and 'bingo_state' in agent_output:
-            self._sessions[session_id]['latest_bingo_state'] = agent_output['bingo_state']
+            new_state = agent_output.get('bingo_state')
+            
+        if new_state:
+            old_state = self._sessions[session_id].get('latest_bingo_state')
+            self._sessions[session_id]['latest_bingo_state'] = new_state
+            
+            if old_state == 'in_game' and new_state != 'in_game':
+                print(f"🔄 State transitioned out of in_game. Clearing vision cache and pending balls.")
+                self._sessions[session_id]['cached_vision_elements'] = None
+                self._sessions[session_id]['pending_balls'] = []
+                # Don't strictly need to kill vision_task, but we can set it to None
+                self._sessions[session_id]['vision_task'] = None
+            elif old_state != 'in_game' and new_state == 'in_game':
+                print(f"🔄 State transitioned to in_game. Clearing vision cache and pending balls.")
+                self._sessions[session_id]['cached_vision_elements'] = None
+                self._sessions[session_id]['pending_balls'] = []
+                self._sessions[session_id]['vision_task'] = None
     
     def add_todo_result(self, session_id: str, result: str):
         self._ensure_session(session_id)
@@ -168,6 +187,31 @@ class ContextService:
     def set_last_powerup_time(self, session_id: str, t: float):
         if session_id in self._sessions:
             self._sessions[session_id]['last_powerup_time'] = t
+
+    def get_vision_task(self, session_id: str):
+        session = self._sessions.get(session_id, {})
+        return session.get('vision_task')
+
+    def set_vision_task(self, session_id: str, task):
+        if session_id in self._sessions:
+            self._sessions[session_id]['vision_task'] = task
+
+    def get_pending_balls(self, session_id: str) -> List[str]:
+        session = self._sessions.get(session_id, {})
+        return session.get('pending_balls', [])
+        
+    def add_pending_balls(self, session_id: str, balls: List[str]):
+        if session_id in self._sessions:
+            current_balls = self._sessions[session_id].get('pending_balls', [])
+            # Add only new balls that aren't already in the list to avoid duplicates
+            for ball in balls:
+                if ball not in current_balls:
+                    current_balls.append(ball)
+            self._sessions[session_id]['pending_balls'] = current_balls
+
+    def clear_pending_balls(self, session_id: str):
+        if session_id in self._sessions:
+            self._sessions[session_id]['pending_balls'] = []
     
     def _build_marker_message(self, is_current: bool, step: Optional[int] = None) -> HumanMessage:
         if is_current:
@@ -216,6 +260,12 @@ class ContextService:
         use_cached_vision = is_bingo_blitz and optimize_bingo and latest_bingo_state == "in_game" and cached_elements is not None
 
         if not sdk_enabled and vision_detector:
+            # If a background task is running, don't block. Just return empty elements and let local OCR handle it.
+            vision_task = session.get('vision_task')
+            if latest_bingo_state == "in_game" and vision_task is not None and not vision_task.done():
+                print(f"⏳ Context service: Vision detection is running in background. Returning empty elements for now.")
+                return HumanMessage(content=[{"type": "text", "text": "Detected interactive elements on screen:\n- Vision detection is currently running in the background. Rely on local OCR for now."}])
+
             if use_cached_vision:
                 print(f"🚀 Using cached vision elements for Bingo Blitz (skipping detection)")
                 detection_result_elements = cached_elements
@@ -233,11 +283,15 @@ class ContextService:
                 
                 return HumanMessage(content=[{"type": "text", "text": action_message_content}])
 
-            detection_result = await vision_detector.detect_elements(screenshot_path)
+            is_active_game = (is_bingo_blitz and latest_bingo_state == "in_game")
+            detection_result = await vision_detector.detect_elements(
+                screenshot_path, 
+                is_in_game=is_active_game
+            )
             
             if detection_result.success:
                 # Save to cache
-                if is_bingo_blitz and optimize_bingo:
+                if is_bingo_blitz and optimize_bingo and is_active_game:
                     session['cached_vision_elements'] = detection_result.elements
 
                 action_message_content = "Detected interactive elements on screen:"
