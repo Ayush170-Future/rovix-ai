@@ -1,39 +1,48 @@
 [
   {
+    "test_case_id": "3.3",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Completed the first round, although the summary was represented by the chest reward sequence.",
+    "screenshot_id": "step_28_frame_28.png",
+    "timestamp": "2026-02-23T23:50:32.329601Z"
+  },
+  {
     "test_case_id": "1.1",
     "completion": true,
     "failure_reason": "NA",
     "virdict": "pass",
-    "comment": "New player login flow completed successfully.",
-    "screenshot_id": "step_20_frame_20.png",
-    "timestamp": "2026-02-23T01:14:08.322518Z"
+    "comment": "Successfully logged in as a new player.",
+    "screenshot_id": "step_30_frame_30.png",
+    "timestamp": "2026-02-23T23:51:14.948883Z"
   },
   {
     "test_case_id": "1.2",
     "completion": true,
     "failure_reason": "NA",
     "virdict": "pass",
-    "comment": "No regulation prompts appeared, or they were automatically handled.",
-    "screenshot_id": "step_20_frame_20.png",
-    "timestamp": "2026-02-23T01:14:08.322518Z"
+    "comment": "Regulations and terms were accepted or bypassed through the onboarding flow.",
+    "screenshot_id": "step_30_frame_30.png",
+    "timestamp": "2026-02-23T23:51:14.948883Z"
   },
   {
     "test_case_id": "2.1",
     "completion": true,
     "failure_reason": "NA",
     "virdict": "pass",
-    "comment": "Successfully navigated to Catalina City entry screen.",
-    "screenshot_id": "step_20_frame_20.png",
-    "timestamp": "2026-02-23T01:14:08.322518Z"
+    "comment": "Navigated to Catalina City from the world map.",
+    "screenshot_id": "step_30_frame_30.png",
+    "timestamp": "2026-02-23T23:51:14.948883Z"
   },
   {
     "test_case_id": "2.2",
     "completion": true,
     "failure_reason": "NA",
     "virdict": "pass",
-    "comment": "Completed the tutorial prompts inside the bingo round.",
-    "screenshot_id": "step_20_frame_20.png",
-    "timestamp": "2026-02-23T01:14:08.322518Z"
+    "comment": "Followed the in-game tutorial during the first round.",
+    "screenshot_id": "step_30_frame_30.png",
+    "timestamp": "2026-02-23T23:51:14.948883Z"
   },
   {
     "test_case_id": "3.1",
@@ -41,79 +50,52 @@
     "failure_reason": "NA",
     "virdict": "pass",
     "comment": "Selected 2 cards and started the bingo round.",
-    "screenshot_id": "step_20_frame_20.png",
-    "timestamp": "2026-02-23T01:14:08.322518Z"
+    "screenshot_id": "step_30_frame_30.png",
+    "timestamp": "2026-02-23T23:51:14.948883Z"
   },
   {
     "test_case_id": "3.2",
     "completion": true,
     "failure_reason": "NA",
     "virdict": "pass",
-    "comment": "Successfully daubed matched numbers on both cards during the round.",
-    "screenshot_id": "step_20_frame_20.png",
-    "timestamp": "2026-02-23T01:14:08.322518Z"
+    "comment": "Successfully daubed numbers on both cards during gameplay.",
+    "screenshot_id": "step_30_frame_30.png",
+    "timestamp": "2026-02-23T23:51:14.948883Z"
   },
   {
     "test_case_id": "3.3",
     "completion": true,
     "failure_reason": "NA",
     "virdict": "pass",
-    "comment": "Completed the bingo round and returned to city lobby.",
-    "screenshot_id": "step_20_frame_20.png",
-    "timestamp": "2026-02-23T01:14:08.322518Z"
+    "comment": "Completed the round and received rewards.",
+    "screenshot_id": "step_30_frame_30.png",
+    "timestamp": "2026-02-23T23:51:14.948883Z"
   },
   {
     "test_case_id": "4.1",
     "completion": true,
     "failure_reason": "NA",
     "virdict": "pass",
-    "comment": "Returned to the main world map from the city lobby.",
-    "screenshot_id": "step_20_frame_20.png",
-    "timestamp": "2026-02-23T01:14:08.322518Z"
-  },
-  {
-    "test_case_id": "1.1",
-    "completion": true,
-    "failure_reason": "NA",
-    "virdict": "pass",
-    "comment": "Successfully entered the game as a new player.",
-    "screenshot_id": "step_2_frame_2.png",
-    "timestamp": "2026-02-23T01:21:01.664471Z"
-  },
-  {
-    "test_case_id": "1.2",
-    "completion": true,
-    "failure_reason": "NA",
-    "virdict": "pass",
-    "comment": "Successfully proceeded past any initial regulations to the main map.",
-    "screenshot_id": "step_2_frame_2.png",
-    "timestamp": "2026-02-23T01:21:01.664471Z"
-  },
-  {
-    "test_case_id": "3.1",
-    "completion": true,
-    "failure_reason": "NA",
-    "virdict": "pass",
-    "comment": "Selected 2 cards and successfully started the bingo round.",
-    "screenshot_id": "step_22_frame_22.png",
-    "timestamp": "2026-02-23T01:27:03.675597Z"
-  },
-  {
-    "test_case_id": "3.2",
-    "completion": true,
-    "failure_reason": "NA",
-    "virdict": "pass",
-    "comment": "Daubed numbers throughout the round until completion.",
-    "screenshot_id": "step_22_frame_22.png",
-    "timestamp": "2026-02-23T01:27:03.675597Z"
+    "comment": "Successfully returned to the main world map.",
+    "screenshot_id": "step_30_frame_30.png",
+    "timestamp": "2026-02-23T23:51:14.948883Z"
   },
   {
     "test_case_id": "3.3",
     "completion": true,
     "failure_reason": "NA",
     "virdict": "pass",
-    "comment": "Round ended and transitioned away from the game cards.",
-    "screenshot_id": "step_22_frame_22.png",
-    "timestamp": "2026-02-23T01:27:03.675597Z"
+    "comment": "The round was successfully played and completed, returning the player to the room screen.",
+    "screenshot_id": "step_11_frame_11.png",
+    "timestamp": "2026-02-24T00:01:22.911030Z"
+  },
+  {
+    "test_case_id": "4.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Successfully navigated back to the world map from the city room.",
+    "screenshot_id": "step_12_frame_12.png",
+    "timestamp": "2026-02-24T00:01:46.004020Z"
   }
 ]

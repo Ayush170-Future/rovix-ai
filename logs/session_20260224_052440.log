@@ -1,0 +1,129 @@
+2026-02-24 05:24:40 | INFO     | agent.service                       | 🤖 Using model: gemini-3-flash-preview
+2026-02-24 05:24:40 | INFO     | agent.service                       | Black box mode - skipping AltTester initialization
+2026-02-24 05:24:40 | INFO     | agent.service                       | Initializing Appium Manager...
+2026-02-24 05:24:40 | INFO     | agent.appium_manager                | 📱 Using device with UDID: RZCW31HH47R
+2026-02-24 05:24:40 | INFO     | agent.appium_manager                | 🖥️  Appium will control current screen (no app launch)
+2026-02-24 05:24:40 | INFO     | agent.appium_manager                | 🔌 Connecting to Appium server at http://localhost:4723...
+2026-02-24 05:24:45 | INFO     | agent.appium_manager                | ✅ Appium session started: 2d04a1b7-5577-4332-a0a0-a2819a4d1e95
+2026-02-24 05:24:45 | INFO     | agent.service                       | Initializing Vision Detector...
+2026-02-24 05:24:45 | INFO     | agent.service                       | 🎯 Initializing game todos for 6 levels...
+2026-02-24 05:24:45 | INFO     | agent.service                       | 🎯 Black box mode - starting polling loop
+2026-02-24 05:24:45 | INFO     | agent.service                       | 🎮 Starting black box polling loop
+2026-02-24 05:24:45 | INFO     | agent.service                       | 🔄 Black box iteration 0
+2026-02-24 05:24:45 | INFO     | agent.service                       | 
+================================================================================
+🎮 Step 0 | Frame 0
+================================================================================
+2026-02-24 05:24:45 | INFO     | agent.service                       | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+No active todo list.
+============================================================
+2026-02-24 05:24:47 | INFO     | agent.service                       | 💾 step_0_frame_0.png (captured in 2.14s)
+2026-02-24 05:24:47 | INFO     | agent.service                       | ✅ Saved screenshot
+2026-02-24 05:24:47 | INFO     | agent.context.context_service       | 🆕 No cached annotation yet, running first annotation
+2026-02-24 05:24:47 | INFO     | agent.vision_element_detector       | 🔍 Vision detection
+2026-02-24 05:24:55 | INFO     | agent.vision_element_detector       | ⏱️  Vision API response time: 7.79s
+2026-02-24 05:24:55 | INFO     | agent.vision_element_detector       | ✅ Detected 3 elements via vision
+2026-02-24 05:24:55 | DEBUG    | agent.context.context_service       | 💾 Annotation cache updated for step 0
+2026-02-24 05:24:55 | INFO     | agent.service                       | 🤖 Getting agent decision from LLM...
+2026-02-24 05:24:55 | INFO     | agent.vision_element_detector       | 📸 Annotated image saved
+2026-02-24 05:25:02 | INFO     | agent.service                       | ⏱️  LLM response time: 7.16s
+2026-02-24 05:25:02 | DEBUG    | agent.service                       | 📊 Token counts: {'input_tokens': 3872, 'output_tokens': 948, 'total_tokens': 4820, 'input_token_details': {'cache_read': 2612}, 'output_token_details': {'reasoning': 534}}
+2026-02-24 05:25:02 | INFO     | agent.service                       | 📊 Token usage - Input: 3872, Output: 948, Total: 4820
+2026-02-24 05:25:02 | DEBUG    | agent.service                       | 📊 Cached tokens: 1
+2026-02-24 05:25:02 | INFO     | agent.service                       | ✅ Agent decision received
+2026-02-24 05:25:02 | INFO     | agent.service                       |    📝 Game state: The game is on the initial landing screen with 'New player' and 'Played before?' options. I need to start the onboarding process.
+2026-02-24 05:25:02 | INFO     | agent.service                       |    🤔 Reasoning: I am initializing the todo list based on the provided test plan and starting with the first task: 'New Player Login'. Clicking the 'New player' button will initiate the flow for a new user.
+2026-02-24 05:25:02 | INFO     | agent.service                       |    🔍 Force annotate: False
+2026-02-24 05:25:02 | INFO     | agent.service                       |    🎯 Actions count: 2
+2026-02-24 05:25:02 | INFO     | agent.service                       |    🏁 End game: False
+2026-02-24 05:25:02 | INFO     | agent.service                       |    📋 Test results: []
+2026-02-24 05:25:02 | INFO     | agent.service                       | todo_write (1/2): updated 8 tasks {'pending': 7, 'in_progress': 1, 'completed': 0, 'cancelled': 0, 'actions': 7, 'verifications': 1}
+2026-02-24 05:25:02 | INFO     | agent.service                       | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[IN_PROGRESS] [1.1] [ACTION] Complete new player login flow
+[PENDING] [1.2] [ACTION] Accept terms and regulations (depends on: 1.1)
+[PENDING] [2.1] [ACTION] Navigate to Catalina City on map (depends on: 1.2)
+[PENDING] [2.2] [ACTION] Complete How to Play tutorial (depends on: 2.1)
+[PENDING] [3.1] [ACTION] Select 2 bingo cards and start round (depends on: 2.2)
+[PENDING] [3.2] [ACTION] Daub matched numbers on cards (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the round and verify summary (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to main world map (depends on: 3.3)
+============================================================
+2026-02-24 05:25:02 | INFO     | agent.service                       | action (2/2): click x=1204 y=718 duration=0.1
+2026-02-24 05:25:02 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (1204, 718) duration=0.1s
+2026-02-24 05:25:02 | DEBUG    | agent.service                       | ⏳ Waiting 2.0s for game to process actions...
+2026-02-24 05:25:04 | INFO     | agent.service                       | 🔄 Black box iteration 1
+2026-02-24 05:25:04 | INFO     | agent.service                       | 
+================================================================================
+🎮 Step 1 | Frame 1
+================================================================================
+2026-02-24 05:25:04 | INFO     | agent.service                       | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[IN_PROGRESS] [1.1] [ACTION] Complete new player login flow
+[PENDING] [1.2] [ACTION] Accept terms and regulations (depends on: 1.1)
+[PENDING] [2.1] [ACTION] Navigate to Catalina City on map (depends on: 1.2)
+[PENDING] [2.2] [ACTION] Complete How to Play tutorial (depends on: 2.1)
+[PENDING] [3.1] [ACTION] Select 2 bingo cards and start round (depends on: 2.2)
+[PENDING] [3.2] [ACTION] Daub matched numbers on cards (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the round and verify summary (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to main world map (depends on: 3.3)
+============================================================
+2026-02-24 05:25:07 | INFO     | agent.service                       | 💾 step_1_frame_1.png (captured in 3.16s)
+2026-02-24 05:25:07 | INFO     | agent.service                       | ✅ Saved screenshot
+2026-02-24 05:25:08 | DEBUG    | agent.context.context_service       | 🔍 Annotation cache: dhash distance=5 (threshold=15)
+2026-02-24 05:25:08 | INFO     | agent.context.context_service       | ♻️  Reusing cached annotations from step 0 (distance=5 < 15)
+2026-02-24 05:25:08 | DEBUG    | agent.context.context_service       |    Cached text: Detected interactive elements on screen:
+- New player button at (1204, 718) bbox: [994, 668, 1415, 768] - Starts a new game for a new player.
+- Played before button at (1204, 894) bbox: [994, 844, 1415, 945] - Allows returning players to log in or restore progress.
+- Support button at (2176, 1038) bbox: [2061, 1015, 2292, 1062] - Opens the support or help section.
+2026-02-24 05:25:08 | INFO     | agent.service                       | 🤖 Getting agent decision from LLM...
+2026-02-24 05:25:11 | INFO     | agent.service                       | ⏱️  LLM response time: 3.85s
+2026-02-24 05:25:11 | DEBUG    | agent.service                       | 📊 Token counts: {'input_tokens': 5948, 'output_tokens': 312, 'total_tokens': 6260, 'input_token_details': {'cache_read': 1493}, 'output_token_details': {'reasoning': 152}}
+2026-02-24 05:25:11 | INFO     | agent.service                       | 📊 Token usage - Input: 5948, Output: 312, Total: 6260
+2026-02-24 05:25:11 | DEBUG    | agent.service                       | 📊 Cached tokens: 1
+2026-02-24 05:25:11 | INFO     | agent.service                       | ✅ Agent decision received
+2026-02-24 05:25:11 | INFO     | agent.service                       |    📝 Game state: The game is still on the landing screen with a loading progress bar visible at the bottom after clicking 'New player'. No new elements have appeared yet.
+2026-02-24 05:25:11 | INFO     | agent.service                       |    🤔 Reasoning: The previous action was to click 'New player', and a loading bar is now visible. I need to wait for the next screen to load to continue with the login flow.
+2026-02-24 05:25:11 | INFO     | agent.service                       |    🔍 Force annotate: False
+2026-02-24 05:25:11 | INFO     | agent.service                       |    🎯 Actions count: 1
+2026-02-24 05:25:11 | INFO     | agent.service                       |    🏁 End game: False
+2026-02-24 05:25:11 | INFO     | agent.service                       |    📋 Test results: []
+2026-02-24 05:25:11 | INFO     | agent.service                       | action (1/1): wait x=None y=None duration=2.0
+2026-02-24 05:25:11 | INFO     | agent.appium_manager                | ⏳ WAIT: 2.0s
+2026-02-24 05:25:13 | DEBUG    | agent.service                       | ⏳ Waiting 2.0s for game to process actions...
+2026-02-24 05:25:15 | INFO     | agent.service                       | 🔄 Black box iteration 2
+2026-02-24 05:25:15 | INFO     | agent.service                       | 
+================================================================================
+🎮 Step 2 | Frame 2
+================================================================================
+2026-02-24 05:25:15 | INFO     | agent.service                       | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[IN_PROGRESS] [1.1] [ACTION] Complete new player login flow
+[PENDING] [1.2] [ACTION] Accept terms and regulations (depends on: 1.1)
+[PENDING] [2.1] [ACTION] Navigate to Catalina City on map (depends on: 1.2)
+[PENDING] [2.2] [ACTION] Complete How to Play tutorial (depends on: 2.1)
+[PENDING] [3.1] [ACTION] Select 2 bingo cards and start round (depends on: 2.2)
+[PENDING] [3.2] [ACTION] Daub matched numbers on cards (depends on: 3.1)
+[PENDING] [3.3] [VERIFY] Complete the round and verify summary (depends on: 3.2)
+[PENDING] [4.1] [ACTION] Return to main world map (depends on: 3.3)
+============================================================
+2026-02-24 05:25:18 | INFO     | agent.service                       | 💾 step_2_frame_2.png (captured in 2.31s)
+2026-02-24 05:25:18 | INFO     | agent.service                       | ✅ Saved screenshot
+2026-02-24 05:25:18 | DEBUG    | agent.context.context_service       | 🔍 Annotation cache: dhash distance=25 (threshold=15)
+2026-02-24 05:25:18 | INFO     | agent.context.context_service       | 🆕 Screen changed (distance=25 >= 15), running fresh annotation
+2026-02-24 05:25:18 | INFO     | agent.vision_element_detector       | 🔍 Vision detection
