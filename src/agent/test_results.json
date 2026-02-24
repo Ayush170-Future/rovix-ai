@@ -457,5 +457,50 @@
     "comment": "Successfully returned to the main world map after completing a round in Catalina City.",
     "screenshot_id": "step_79_frame_79.png",
     "timestamp": "2026-02-24T09:42:49.211530Z"
+  },
+  {
+    "test_case_id": "1.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "App is already launched and logged in on the world map.",
+    "screenshot_id": "step_0_frame_0.png",
+    "timestamp": "2026-02-24T11:03:41.913325Z"
+  },
+  {
+    "test_case_id": "1.2",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "No regulation prompts visible; assumed accepted during startup.",
+    "screenshot_id": "step_0_frame_0.png",
+    "timestamp": "2026-02-24T11:03:41.913325Z"
+  },
+  {
+    "test_case_id": "1.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Player is already logged in and at the Catalina screen.",
+    "screenshot_id": "step_0_frame_0.png",
+    "timestamp": "2026-02-24T11:26:55.451288Z"
+  },
+  {
+    "test_case_id": "1.2",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Regulations assumed accepted as game is at playable state.",
+    "screenshot_id": "step_0_frame_0.png",
+    "timestamp": "2026-02-24T11:26:55.451288Z"
+  },
+  {
+    "test_case_id": "2.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Successfully navigated to Catalina City.",
+    "screenshot_id": "step_0_frame_0.png",
+    "timestamp": "2026-02-24T11:26:55.451288Z"
   }
 ]

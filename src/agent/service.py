@@ -154,7 +154,7 @@ print(f"🎮 Target Game: {GAME_NAME.upper()}")
 vision_detector = VisionElementDetector(
     api_key=os.getenv("GOOGLE_API_KEY"),
     model_name=os.getenv("VISION_MODEL", "gemini-robotics-er-1.5-preview"),
-    timeout=float(os.getenv("VISION_TIMEOUT", "90.0")),
+    timeout=float(os.getenv("VISION_TIMEOUT", "45.0")),
     max_retries=int(os.getenv("VISION_MAX_RETRIES", "3"))
 )
 
@@ -527,6 +527,7 @@ async def agent_handler(event: GamePauseEvent):
                         
                         # Apply ~2.5 second cooldown (24 calls/min) for Groq targeted OCR
                         if current_time - last_groq_time >= 2.5:
+                            print("🚀 Running Groq for ball capture...")
                             b_bbox_norm = ast.literal_eval(ball_bbox_str)
                             prompt = "List all Bingo numbers visible in this Ball History Bar. Return ONLY the numbers separated by commas. Example: 32, 16, 69"
                             res_text = await vision_detector.targeted_ocr(saved_filepaths[0], b_bbox_norm, prompt)
@@ -546,6 +547,8 @@ async def agent_handler(event: GamePauseEvent):
                             if called_numbers:
                                 # Add to pending balls
                                 context_service.add_pending_balls(SESSION_ID, called_numbers)
+                                all_pending_now = context_service.get_pending_balls(SESSION_ID)
+                                print(f"🎱 Balls saved: {len(all_pending_now)}")
                         
                         if cached_elements:
                             # Retrieve ALL pending balls to process them retroactively
@@ -588,10 +591,14 @@ async def agent_handler(event: GamePauseEvent):
                         if SDK_ENABLED:
                             try: frame_controller.mark_actions_executed()
                             except Exception: pass
+                        else:
+                            await asyncio.sleep(2.0)
                         return {"status": "ok", "optimized": True, "method": "local_ocr", "actions_count": len(quick_actions)}
                     elif cached_elements is None and latest_bingo_state == "in_game":
                         # We are waiting for background scan. Skip LLM entirely to keep local OCR loop very fast.
                         print(f"⚡ Skipping LLM while waiting for background ER 1.5 scan. Accumulated {len(context_service.get_pending_balls(SESSION_ID))} pending balls.")
+                        if not SDK_ENABLED:
+                            await asyncio.sleep(2.0)
                         return {"status": "ok", "optimized": True, "method": "waiting_for_vision"}
                         
                 except Exception as e:
