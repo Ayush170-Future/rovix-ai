@@ -1,0 +1,9 @@
+2026-02-27 19:30:33 | INFO     | agent.service                       | 🤖 Using model: gemini-3-flash-preview
+2026-02-27 19:30:33 | INFO     | agent.service                       | Black box mode - skipping AltTester initialization
+2026-02-27 19:30:33 | INFO     | agent.service                       | Initializing Appium Manager...
+2026-02-27 19:30:33 | INFO     | agent.appium_manager                | 📱 Using device with UDID: RZCW31HH47R
+2026-02-27 19:30:33 | INFO     | agent.appium_manager                | 🖥️  Appium will control current screen (no app launch)
+2026-02-27 19:30:33 | INFO     | agent.appium_manager                | 🔌 Connecting to Appium server at http://localhost:4723...
+2026-02-27 19:30:33 | ERROR    | agent.appium_manager                | ❌ Failed to start Appium session: HTTPConnectionPool(host='localhost', port=4723): Max retries exceeded with url: /session (Caused by NewConnectionError("HTTPConnection(host='localhost', port=4723): Failed to establish a new connection: [Errno 61] Connection refused"))
+2026-02-27 19:30:33 | ERROR    | agent.appium_manager                |    Make sure Appium server is running: appium
+2026-02-27 19:30:33 | INFO     | agent.service                       | Initializing Vision Detector...

@@ -1,11 +1,15 @@
 import os
 from motor.motor_asyncio import AsyncIOMotorClient
 from beanie import init_beanie
-from models.test_case import TestCase
-from models.test_run import TestRun
+
+from models.organization import Organization
+from models.game import Game
+from models.test_scenario import TestScenario
+from models.execution_run import ExecutionRun
+from models.execution_step import ExecutionStep
 from agent.logger import get_logger
 
-logger = get_logger("agent.database")
+logger = get_logger("database")
 
 MONGODB_URL = os.getenv("MONGODB_URL")
 DATABASE_NAME = os.getenv("DATABASE_NAME")
@@ -15,14 +19,16 @@ async def init_db():
     await init_beanie(
         database=client[DATABASE_NAME],
         document_models=[
-            TestCase,
-            TestRun,
-            # Add other Document models here as you create them
-        ]
+            Organization,
+            Game,
+            TestScenario,
+            ExecutionRun,
+            ExecutionStep,
+        ],
     )
-    
-    logger.info(f"Connected to MongoDB database: {DATABASE_NAME}")
+    logger.info(f"Connected to MongoDB: {DATABASE_NAME}")
 
 
 async def close_db():
     pass
+    
