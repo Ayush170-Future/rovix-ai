@@ -1,3 +1,4 @@
+import io
 import json
 import time
 import asyncio
@@ -5,7 +6,7 @@ import os
 from PIL import Image, ImageDraw, ImageFont
 from google import genai
 from google.genai import types
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Tuple
 from dataclasses import dataclass
 
 try:
@@ -32,56 +33,35 @@ class VisionElementDetector:
         api_key: str, 
         model_name: str = "gemini-robotics-er-1.5-preview",
         timeout: float = 45.0,
-        max_retries: int = 3
+        max_retries: int = 3,
+        max_image_size: Optional[Tuple[int, int]] = (2024, 2024),
+        image_quality: int = 85
     ):
         self.api_key = api_key
         self.model_name = model_name
         self.timeout = timeout
         self.max_retries = max_retries
+        self.max_image_size = max_image_size
+        self.image_quality = image_quality
         self.client = genai.Client(api_key=api_key)
         
         self.prompt = """
-You are a helpful assistant and your job is identify ALL INTERACTABLE UI elements in this screenshot. An interactable element is something a user can tap, click, swipe, or interact with.
-The dectected objects have be exhaustive and the bounding boxes has to be accurate. This information will be used to interact with the game. And any wrong detection, missed object or incorrect bounding boxes
-will lead to the failure of the game play, which is not acceptable.
+You are an expert UI detection system. Your task is to extract ALL INTERACTABLE elements (buttons, icons, text fields, tabs, sliders, game objects) from the provided screenshot.
+Accuracy and exhaustive detection are critical for the downstream agent. Do not include static non-interactable decorations or background text.
 
-Examples of interactable elements to detect:
-- Buttons (submit, cancel, back, menu, navigation, etc.)
-- Icons (settings, share, home, search, profile, etc.)
-- Text input fields and text boxes
-- Checkboxes, radio buttons, toggles, switches
-- Dropdown menus and selectors
-- Tabs and navigation items
-- Clickable cards or tiles
-- Links and clickable text
-- Sliders and scroll bars
-- Game pieces or interactive objects (if it's a game)
-- Any other elements users can interact with
+Provide the exact bounding box and a concise classification for each element. The label should be 2-5 words describing WHAT it is and WHAT it does (e.g., "Settings menu icon", "Submit login button", "Red health potion").
+To minimize latency, output ONLY a valid JSON list of objects with no markdown formatting. Do not provide detailed descriptions.
 
-DO NOT include:
-- Static text labels (unless they're clickable)
-- Background images
-- Decorative elements
-- Non-interactive text
-
-For each interactable element, provide:
-1. Its bounding box location
-2. A brief label identifying what it is
-3. A short description of what it does when interacted with
-
-The answer should follow this JSON format:
+Output format:
 [
   {
     "bounding_box": [y_min, x_min, y_max, x_max],
-    "label": "Brief identifying name (e.g., 'settings button', 'username input field', 'login button')",
-    "description": "Short description of what this element does (e.g., 'Opens settings menu', 'Enter username here', 'Submit login form')"
-  },
-  ...
+    "label": "2-5 word description of element and function"
+  }
 ]
 
-The bounding boxes are in [y_min, x_min, y_max, x_max] format normalized to 0-1000.
-
-Detect as many interactable elements as you can find. Be thorough!"""
+Bounding boxes must be in [y_min, x_min, y_max, x_max] format normalized between 0-1000.
+"""
 
     def _parse_gemini_response(self, response_text: str) -> List[Dict]:
         cleaned = response_text.replace("```json", "").replace("```", "").strip()
@@ -198,13 +178,22 @@ Detect as many interactable elements as you can find. Be thorough!"""
                 retry_count=0
             )
     
+    def _prepare_image_for_api(self, screenshot_path: str) -> Tuple[bytes, str, int, int]:
+        """Load image, optionally downscale for API, return (bytes, mime_type, original_width, original_height).
+        Bbox conversion must use original dimensions so tap coordinates match the device screen."""
+        image = Image.open(screenshot_path).convert("RGB")
+        original_width, original_height = image.size
+        
+        if self.max_image_size:
+            image = image.copy()
+            image.thumbnail(self.max_image_size, Image.Resampling.LANCZOS)
+        buf = io.BytesIO()
+        image.save(buf, format="JPEG", quality=self.image_quality, optimize=True)
+        return buf.getvalue(), "image/jpeg", original_width, original_height
+
     async def _detect_elements_with_retry(self, screenshot_path: str) -> VisionDetectionResult:
         """Internal method with retry logic"""
-        image = Image.open(screenshot_path)
-        image_width, image_height = image.size
-        
-        with open(screenshot_path, 'rb') as f:
-            image_bytes = f.read()
+        image_bytes, mime_type, image_width, image_height = self._prepare_image_for_api(screenshot_path)
         
         last_error = None
         overall_start = time.time()
@@ -218,7 +207,7 @@ Detect as many interactable elements as you can find. Be thorough!"""
                     contents=[
                         types.Part.from_bytes(
                             data=image_bytes,
-                            mime_type='image/png',
+                            mime_type=mime_type,
                         ),
                         self.prompt
                     ],
@@ -282,20 +271,20 @@ Detect as many interactable elements as you can find. Be thorough!"""
         )
     
     def _build_results(self, detections: List[Dict], image_width: int, image_height: int) -> List[Dict]:
-        """Build results list from detections"""
+        """Build results list from detections. Prompt returns bounding_box + label only."""
         results = []
         for detection in detections:
             bbox_norm = detection.get('bounding_box', [0, 0, 0, 0])
             label = detection.get('label', 'Unknown')
-            description = detection.get('description', 'No description')
-            
+            # New prompt omits description; use label for both for downstream compatibility
+            description = detection.get('description') or label
+
             bbox_data = self._convert_normalized_bbox_to_pixels(bbox_norm, image_width, image_height)
-            
+
             results.append({
                 'name': label,
                 'description': description,
                 'screen_position': bbox_data['center'],
                 'bounding_box': bbox_data['bbox']
             })
-        
         return results

@@ -119,6 +119,9 @@ class ContextService:
             self._ensure_session(session_id)
             return self._sessions[session_id]['messages'].copy()
     
+    # TODO: Remove TODO write from comment.
+    # Can improve Structured output for better context management.
+    # Better removal logic because its hardcoded, can be done better in a modular, class structure.
     def cleanup_old_messages(self, session_id: str):
         with self._lock:
             self._ensure_session(session_id)
@@ -352,6 +355,8 @@ class ContextService:
             }])
     
     def _image_file_to_base64(self, filepath: str, max_size=(1024, 1024), quality=75) -> str:
+        """Resize to fit within max_size (keeps aspect ratio), then encode as JPEG base64.
+        e.g. 1080x1920 → 576x1024. 1024 cap keeps vision API payload small and within typical limits."""
         img = Image.open(filepath).convert("RGB")
         img.thumbnail(max_size)
         buf = io.BytesIO()
