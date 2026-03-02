@@ -574,5 +574,23 @@
     "comment": "Regulation prompts have been accepted or bypassed automatically to reach the main menu.",
     "screenshot_id": "step_0_frame_0.png",
     "timestamp": "2026-02-24T11:56:54.141935Z"
+  },
+  {
+    "test_case_id": "1.1",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Successfully launched the app and initiated the new player flow, reaching the terms and conditions screen.",
+    "screenshot_id": "step_1_frame_1.png",
+    "timestamp": "2026-02-24T12:55:46.387023Z"
+  },
+  {
+    "test_case_id": "1.2",
+    "completion": true,
+    "failure_reason": "NA",
+    "virdict": "pass",
+    "comment": "Accepted terms of service and the game is now loading the next scene.",
+    "screenshot_id": "step_2_frame_2.png",
+    "timestamp": "2026-02-24T12:56:02.379723Z"
   }
 ]

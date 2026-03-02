@@ -734,3 +734,56 @@
 [17:53:24] Frame: 38 | Ball OCR: [41, 14, 6, 29, 23, 30, 67] | Powerup Ready: True | Method: GroqVLM
 [17:53:30] Frame: 39 | Ball OCR: [Missed] | Powerup Ready: True | Method: GroqVLM
 [17:53:33] Frame: 40 | Ball OCR: [Missed] | Powerup Ready: True | Method: GroqVLM
+[18:26:47] Frame: 5 | Ball OCR: [Missed] | Powerup Ready: True | Method: FastModel
+[18:26:51] Frame: 6 | Ball OCR: [Missed] | Powerup Ready: True | Method: FastModel
+[18:26:53] Frame: 7 | Ball OCR: [Missed] | Powerup Ready: True | Method: FastModel
+[18:26:56] Frame: 8 | Ball OCR: [0, 64] | Powerup Ready: True | Method: FastModel
+[18:26:59] Frame: 9 | Ball OCR: [64] | Powerup Ready: True | Method: FastModel
+[18:27:03] Frame: 10 | Ball OCR: [64] | Powerup Ready: True | Method: FastModel
+[18:27:06] Frame: 11 | Ball OCR: [64] | Powerup Ready: True | Method: FastModel
+[18:27:09] Frame: 12 | Ball OCR: [64] | Powerup Ready: True | Method: FastModel
+[18:27:12] Frame: 13 | Ball OCR: [64] | Powerup Ready: True | Method: FastModel
+[18:27:16] Frame: 14 | Ball OCR: [64] | Powerup Ready: True | Method: FastModel
+[18:27:19] Frame: 15 | Ball OCR: [64] | Powerup Ready: True | Method: FastModel
+[18:27:23] Frame: 16 | Ball OCR: [64] | Powerup Ready: True | Method: FastModel
+[18:27:26] Frame: 17 | Ball OCR: [64] | Powerup Ready: True | Method: FastModel
+[18:27:30] Frame: 18 | Ball OCR: [60, 64] | Powerup Ready: True | Method: FastModel
+[18:27:33] Frame: 19 | Ball OCR: [60, 64] | Powerup Ready: True | Method: FastModel
+[18:27:38] Frame: 20 | Ball OCR: [60, 64] | Powerup Ready: True | Method: FastModel
+[18:35:39] Frame: 2 | Ball OCR: [Missed] | Powerup Ready: True | Method: FastModel
+[18:35:43] Frame: 3 | Ball OCR: [Missed] | Powerup Ready: True | Method: FastModel
+[18:35:45] Frame: 4 | Ball OCR: [Missed] | Powerup Ready: True | Method: FastModel
+[18:35:48] Frame: 5 | Ball OCR: [Missed] | Powerup Ready: True | Method: FastModel
+[18:35:51] Frame: 6 | Ball OCR: [64] | Powerup Ready: True | Method: FastModel
+[18:35:55] Frame: 7 | Ball OCR: [64] | Powerup Ready: True | Method: FastModel
+[18:35:57] Frame: 8 | Ball OCR: [64] | Powerup Ready: True | Method: FastModel
+[18:36:00] Frame: 9 | Ball OCR: [64] | Powerup Ready: True | Method: FastModel
+[18:36:03] Frame: 10 | Ball OCR: [60, 64] | Powerup Ready: True | Method: FastModel
+[18:36:08] Frame: 11 | Ball OCR: [1, 60, 64] | Powerup Ready: True | Method: FastModel
+[18:36:11] Frame: 12 | Ball OCR: [1, 60, 64] | Powerup Ready: True | Method: FastModel
+[18:36:15] Frame: 13 | Ball OCR: [1, 60, 64] | Powerup Ready: True | Method: FastModel
+[18:36:19] Frame: 14 | Ball OCR: [1, 60, 64, 1, 60, 64] | Powerup Ready: True | Method: FastModel
+[18:36:23] Frame: 15 | Ball OCR: [1, 60, 64] | Powerup Ready: True | Method: FastModel
+[18:36:27] Frame: 16 | Ball OCR: [1, 60, 64] | Powerup Ready: True | Method: FastModel
+[18:36:31] Frame: 17 | Ball OCR: [1, 60, 64] | Powerup Ready: True | Method: FastModel
+[18:36:34] Frame: 18 | Ball OCR: [1, 60, 64] | Powerup Ready: True | Method: FastModel
+[18:36:38] Frame: 19 | Ball OCR: [1, 60, 64] | Powerup Ready: True | Method: FastModel
+[18:36:42] Frame: 20 | Ball OCR: [1, 60, 64] | Powerup Ready: True | Method: FastModel
+[18:36:46] Frame: 21 | Ball OCR: [1, 60, 64] | Powerup Ready: True | Method: FastModel
+[18:36:50] Frame: 22 | Ball OCR: [60, 64] | Powerup Ready: True | Method: FastModel
+[18:36:54] Frame: 23 | Ball OCR: [1, 60, 64] | Powerup Ready: True | Method: FastModel
+[18:36:58] Frame: 24 | Ball OCR: [1, 60, 64, 1, 60, 64] | Powerup Ready: True | Method: FastModel
+[18:37:01] Frame: 25 | Ball OCR: [60, 64] | Powerup Ready: True | Method: FastModel
+[18:37:06] Frame: 26 | Ball OCR: [1, 60, 64, 1, 60, 64] | Powerup Ready: True | Method: FastModel
+[18:37:09] Frame: 27 | Ball OCR: [32, 4, 60, 64] | Powerup Ready: True | Method: FastModel
+[18:37:14] Frame: 28 | Ball OCR: [32, 4, 60, 64] | Powerup Ready: True | Method: FastModel
+[18:37:19] Frame: 29 | Ball OCR: [32, 4, 60, 64] | Powerup Ready: True | Method: FastModel
+[18:37:23] Frame: 30 | Ball OCR: [32, 4, 60, 64] | Powerup Ready: True | Method: FastModel
+[18:37:28] Frame: 31 | Ball OCR: [32, 4, 60, 64] | Powerup Ready: True | Method: FastModel
+[18:37:33] Frame: 32 | Ball OCR: [32, 4, 60, 64] | Powerup Ready: True | Method: FastModel
+[18:37:37] Frame: 33 | Ball OCR: [12, 4, 60, 64] | Powerup Ready: True | Method: FastModel
+[18:37:41] Frame: 34 | Ball OCR: [32, 4, 60, 64] | Powerup Ready: True | Method: FastModel
+[18:37:46] Frame: 35 | Ball OCR: [18, 42, 4, 60, 64] | Powerup Ready: True | Method: FastModel
+[18:37:51] Frame: 36 | Ball OCR: [7, 18, 42, 4, 60, 64] | Powerup Ready: True | Method: FastModel
+[18:37:56] Frame: 37 | Ball OCR: [Missed] | Powerup Ready: True | Method: FastModel
+[18:38:00] Frame: 38 | Ball OCR: [Missed] | Powerup Ready: True | Method: FastModel
