@@ -65,13 +65,11 @@ Bounding boxes must be in [y_min, x_min, y_max, x_max] format normalized between
 
     def _parse_gemini_response(self, response_text: str) -> List[Dict]:
         cleaned = response_text.replace("```json", "").replace("```", "").strip()
-        
         try:
             start_idx = min(
                 cleaned.find('[') if cleaned.find('[') != -1 else len(cleaned),
                 cleaned.find('{') if cleaned.find('{') != -1 else len(cleaned)
             )
-            
             end_idx = max(
                 cleaned.rfind(']') if cleaned.rfind(']') != -1 else 0,
                 cleaned.rfind('}') if cleaned.rfind('}') != -1 else 0
@@ -79,13 +77,12 @@ Bounding boxes must be in [y_min, x_min, y_max, x_max] format normalized between
             
             json_str = cleaned[start_idx:end_idx+1]
             parsed = json.loads(json_str)
-            
             if isinstance(parsed, dict):
                 return [parsed]
             return parsed
         except json.JSONDecodeError as e:
             logger.error(f"Error parsing JSON: {e}")
-            return []
+            return None
 
     def _convert_normalized_bbox_to_pixels(self, bbox_norm: List[int], image_width: int, image_height: int) -> dict:
         y_min_norm, x_min_norm, y_max_norm, x_max_norm = bbox_norm
@@ -144,12 +141,6 @@ Bounding boxes must be in [y_min, x_min, y_max, x_max] format normalized between
             logger.warning(f"⚠️  Failed to save annotated image: {e}")
 
     async def detect_elements(self, screenshot_path: str) -> VisionDetectionResult:
-        """
-        Detect interactive elements in a screenshot with retry logic and timeout.
-        
-        Returns:
-            VisionDetectionResult with success status, elements list, and error info
-        """
         logger.info(f"🔍 Vision detection")
         
         try:
@@ -201,8 +192,9 @@ Bounding boxes must be in [y_min, x_min, y_max, x_max] format normalized between
         for attempt in range(self.max_retries):
             try:
                 start_time = time.time()
-                
-                response = self.client.models.generate_content(
+
+                # Use native async client so asyncio.wait_for timeout works and we avoid thread pool
+                response = await self.client.aio.models.generate_content(
                     model=self.model_name,
                     contents=[
                         types.Part.from_bytes(
@@ -216,29 +208,35 @@ Bounding boxes must be in [y_min, x_min, y_max, x_max] format normalized between
                         thinking_config=types.ThinkingConfig(thinking_budget=0)
                     )
                 )
-                
+
                 output = response.text
                 elapsed = time.time() - start_time
                 logger.info(f"⏱️  Vision API response time: {elapsed:.2f}s")
-                
-                # Successfully got response, parse it
+
                 detections = self._parse_gemini_response(output)
+                if detections is None:
+                    # Parse failure is deterministic; no point retrying
+                    total_elapsed = time.time() - overall_start
+                    return VisionDetectionResult(
+                        success=False,
+                        elements=[],
+                        error_message="Vision API returned invalid JSON",
+                        retry_count=0,
+                        elapsed_time=total_elapsed
+                    )
                 results = self._build_results(detections, image_width, image_height)
-                
                 total_elapsed = time.time() - overall_start
                 logger.info(f"✅ Detected {len(results)} elements via vision")
-                
-                # Draw bounding boxes asynchronously
+
                 if results:
                     asyncio.create_task(self._draw_bounding_boxes_async(screenshot_path, results))
-                
                 return VisionDetectionResult(
                     success=True,
                     elements=results,
                     retry_count=attempt,
                     elapsed_time=total_elapsed
                 )
-                
+
             except Exception as e:
                 last_error = e
                 attempt_num = attempt + 1

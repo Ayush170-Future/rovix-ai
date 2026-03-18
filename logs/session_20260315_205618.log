@@ -1,0 +1,108 @@
+2026-03-15 20:56:20 | INFO     | agent.appium_manager                | 📱 Using device with UDID: RZCW31HH47R
+2026-03-15 20:56:20 | INFO     | agent.appium_manager                | 🖥️  Appium will control current screen (no app launch)
+2026-03-15 20:56:20 | INFO     | agent.appium_manager                | 🔌 Connecting to Appium server at http://localhost:4723...
+2026-03-15 20:56:26 | INFO     | agent.appium_manager                | ✅ Appium session started: fe97312a-f6c1-4809-a7f1-0f09a6d65a2b
+2026-03-15 21:06:55 | INFO     | agent.context.context_service       | 🆕 No cached annotation yet, running first annotation
+2026-03-15 21:06:55 | INFO     | agent.vision_element_detector       | 🔍 Vision detection
+2026-03-15 21:07:03 | INFO     | agent.vision_element_detector       | ⏱️  Vision API response time: 8.25s
+2026-03-15 21:07:03 | INFO     | agent.vision_element_detector       | ✅ Detected 11 elements via vision
+2026-03-15 21:07:03 | DEBUG    | agent.context.context_service       | 💾 Annotation cache updated for step 0
+2026-03-15 21:07:03 | INFO     | agent.vision_element_detector       | 📸 Annotated image saved
+2026-03-15 21:07:10 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (563, 600) duration=0.1s
+2026-03-15 21:07:14 | DEBUG    | agent.context.context_service       | 🔍 Annotation cache: dhash distance=0 (threshold=15)
+2026-03-15 21:07:14 | INFO     | agent.context.context_service       | ♻️  Reusing cached annotations from step 0 (distance=0 < 15)
+2026-03-15 21:07:14 | DEBUG    | agent.context.context_service       |    Cached text: Detected interactive elements on screen:
+- Information icon at (210, 58) bbox: [163, 18, 257, 98] - Information icon
+- Close button at (2195, 58) bbox: [2150, 18, 2241, 98] - Close button
+- Today reward tab at (553, 449) bbox: [457, 309, 650, 590] - Today reward tab
+- Tomorrow reward tab at (740, 449) bbox: [650, 309, 830, 590] - Tomorrow reward tab
+- Day 3 reward tab at (919, 449) bbox: [830, 309, 1008, 590] - Day 3 reward tab
+- Day 4 reward tab at (1096, 449) bbox: [1008, 309, 1184, 590] - Day 4 reward tab
+- Day 5 reward tab at (1273, 449) bbox: [1184, 309, 1362, 590] - Day 5 reward tab
+- Day 6 reward tab at (1451, 449) bbox: [1362, 309, 1541, 590] - Day 6 reward tab
+- Day 7 reward tab at (1630, 449) bbox: [1541, 309, 1719, 590] - Day 7 reward tab
+- Claim reward button at (563, 600) bbox: [476, 571, 650, 630] - Claim reward button
+- Grand Reward progress at (1822, 449) bbox: [1719, 309, 1926, 590] - Grand Reward progress
+2026-03-15 21:07:22 | INFO     | agent.appium_manager                | ⏳ WAIT: 2.0s
+2026-03-15 21:07:28 | DEBUG    | agent.context.context_service       | 🔍 Annotation cache: dhash distance=6 (threshold=15)
+2026-03-15 21:07:28 | INFO     | agent.context.context_service       | ♻️  Reusing cached annotations from step 0 (distance=6 < 15)
+2026-03-15 21:07:28 | DEBUG    | agent.context.context_service       |    Cached text: Detected interactive elements on screen:
+- Information icon at (210, 58) bbox: [163, 18, 257, 98] - Information icon
+- Close button at (2195, 58) bbox: [2150, 18, 2241, 98] - Close button
+- Today reward tab at (553, 449) bbox: [457, 309, 650, 590] - Today reward tab
+- Tomorrow reward tab at (740, 449) bbox: [650, 309, 830, 590] - Tomorrow reward tab
+- Day 3 reward tab at (919, 449) bbox: [830, 309, 1008, 590] - Day 3 reward tab
+- Day 4 reward tab at (1096, 449) bbox: [1008, 309, 1184, 590] - Day 4 reward tab
+- Day 5 reward tab at (1273, 449) bbox: [1184, 309, 1362, 590] - Day 5 reward tab
+- Day 6 reward tab at (1451, 449) bbox: [1362, 309, 1541, 590] - Day 6 reward tab
+- Day 7 reward tab at (1630, 449) bbox: [1541, 309, 1719, 590] - Day 7 reward tab
+- Claim reward button at (563, 600) bbox: [476, 571, 650, 630] - Claim reward button
+- Grand Reward progress at (1822, 449) bbox: [1719, 309, 1926, 590] - Grand Reward progress
+2026-03-15 21:07:34 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (1200, 950) duration=0.1s
+2026-03-15 21:07:38 | DEBUG    | agent.context.context_service       | 🔍 Annotation cache: dhash distance=5 (threshold=15)
+2026-03-15 21:07:38 | INFO     | agent.context.context_service       | ♻️  Reusing cached annotations from step 0 (distance=5 < 15)
+2026-03-15 21:07:38 | DEBUG    | agent.context.context_service       |    Cached text: Detected interactive elements on screen:
+- Information icon at (210, 58) bbox: [163, 18, 257, 98] - Information icon
+- Close button at (2195, 58) bbox: [2150, 18, 2241, 98] - Close button
+- Today reward tab at (553, 449) bbox: [457, 309, 650, 590] - Today reward tab
+- Tomorrow reward tab at (740, 449) bbox: [650, 309, 830, 590] - Tomorrow reward tab
+- Day 3 reward tab at (919, 449) bbox: [830, 309, 1008, 590] - Day 3 reward tab
+- Day 4 reward tab at (1096, 449) bbox: [1008, 309, 1184, 590] - Day 4 reward tab
+- Day 5 reward tab at (1273, 449) bbox: [1184, 309, 1362, 590] - Day 5 reward tab
+- Day 6 reward tab at (1451, 449) bbox: [1362, 309, 1541, 590] - Day 6 reward tab
+- Day 7 reward tab at (1630, 449) bbox: [1541, 309, 1719, 590] - Day 7 reward tab
+- Claim reward button at (563, 600) bbox: [476, 571, 650, 630] - Claim reward button
+- Grand Reward progress at (1822, 449) bbox: [1719, 309, 1926, 590] - Grand Reward progress
+2026-03-15 21:07:45 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (2195, 58) duration=0.1s
+2026-03-15 21:07:45 | INFO     | agent.appium_manager                | ⏳ WAIT: 2.0s
+2026-03-15 21:07:50 | DEBUG    | agent.context.context_service       | 🔍 Annotation cache: dhash distance=34 (threshold=15)
+2026-03-15 21:07:50 | INFO     | agent.context.context_service       | 🆕 Screen changed (distance=34 >= 15), running fresh annotation
+2026-03-15 21:07:50 | INFO     | agent.vision_element_detector       | 🔍 Vision detection
+2026-03-15 21:15:10 | INFO     | agent.vision_element_detector       | ⏱️  Vision API response time: 439.21s
+2026-03-15 21:15:10 | ERROR    | agent.vision_element_detector       | Error parsing JSON: Expecting ',' delimiter: line 6489 column 4 (char 121650)
+2026-03-15 21:15:10 | INFO     | agent.vision_element_detector       | ✅ Detected 0 elements via vision
+2026-03-15 21:15:10 | DEBUG    | agent.context.context_service       | 💾 Annotation cache updated for step 4
+2026-03-15 21:15:18 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (1100, 860) duration=0.1s
+2026-03-15 21:15:24 | DEBUG    | agent.context.context_service       | 🔍 Annotation cache: dhash distance=1 (threshold=15)
+2026-03-15 21:15:24 | INFO     | agent.context.context_service       | ♻️  Reusing cached annotations from step 4 (distance=1 < 15)
+2026-03-15 21:15:24 | DEBUG    | agent.context.context_service       |    Cached text: Detected interactive elements on screen:
+- No elements detected. Analyze the screenshot to identify clickable areas.
+2026-03-15 21:15:32 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (1100, 865) duration=0.1s
+2026-03-15 21:15:32 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (1684, 226) duration=0.1s
+2026-03-15 21:15:33 | INFO     | agent.appium_manager                | ⏳ WAIT: 2.0s
+2026-03-15 21:15:39 | DEBUG    | agent.context.context_service       | 🔍 Annotation cache: dhash distance=4 (threshold=15)
+2026-03-15 21:15:39 | INFO     | agent.context.context_service       | ♻️  Reusing cached annotations from step 4 (distance=4 < 15)
+2026-03-15 21:15:39 | DEBUG    | agent.context.context_service       |    Cached text: Detected interactive elements on screen:
+- No elements detected. Analyze the screenshot to identify clickable areas.
+2026-03-15 21:15:50 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (1684, 226) duration=0.1s
+2026-03-15 21:15:51 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (1100, 875) duration=0.1s
+2026-03-15 21:15:51 | INFO     | agent.appium_manager                | ⏳ WAIT: 3.0s
+2026-03-15 21:15:58 | DEBUG    | agent.context.context_service       | 🔍 Annotation cache: dhash distance=1 (threshold=15)
+2026-03-15 21:15:58 | INFO     | agent.context.context_service       | ♻️  Reusing cached annotations from step 4 (distance=1 < 15)
+2026-03-15 21:15:58 | DEBUG    | agent.context.context_service       |    Cached text: Detected interactive elements on screen:
+- No elements detected. Analyze the screenshot to identify clickable areas.
+2026-03-15 21:16:08 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (1100, 730) duration=0.1s
+2026-03-15 21:16:09 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (1100, 860) duration=0.1s
+2026-03-15 21:16:09 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (1684, 226) duration=0.1s
+2026-03-15 21:16:09 | INFO     | agent.appium_manager                | ⏳ WAIT: 3.0s
+2026-03-15 21:16:17 | DEBUG    | agent.context.context_service       | 🔍 Annotation cache: dhash distance=1 (threshold=15)
+2026-03-15 21:16:17 | INFO     | agent.context.context_service       | ♻️  Reusing cached annotations from step 4 (distance=1 < 15)
+2026-03-15 21:16:17 | DEBUG    | agent.context.context_service       |    Cached text: Detected interactive elements on screen:
+- No elements detected. Analyze the screenshot to identify clickable areas.
+2026-03-15 21:16:25 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (1100, 865) duration=0.1s
+2026-03-15 21:16:26 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (1684, 226) duration=0.1s
+2026-03-15 21:16:26 | INFO     | agent.appium_manager                | ⏳ WAIT: 5.0s
+2026-03-15 21:16:35 | DEBUG    | agent.context.context_service       | 🔍 Annotation cache: dhash distance=1 (threshold=15)
+2026-03-15 21:16:35 | INFO     | agent.context.context_service       | ♻️  Reusing cached annotations from step 4 (distance=1 < 15)
+2026-03-15 21:16:35 | DEBUG    | agent.context.context_service       |    Cached text: Detected interactive elements on screen:
+- No elements detected. Analyze the screenshot to identify clickable areas.
+2026-03-15 21:16:43 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (1684, 226) duration=0.1s
+2026-03-15 21:16:43 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (1100, 860) duration=0.1s
+2026-03-15 21:16:44 | INFO     | agent.appium_manager                | ⏳ WAIT: 5.0s
+2026-03-15 21:16:52 | DEBUG    | agent.context.context_service       | 🔍 Annotation cache: dhash distance=2 (threshold=15)
+2026-03-15 21:16:52 | INFO     | agent.context.context_service       | ♻️  Reusing cached annotations from step 4 (distance=2 < 15)
+2026-03-15 21:16:52 | DEBUG    | agent.context.context_service       |    Cached text: Detected interactive elements on screen:
+- No elements detected. Analyze the screenshot to identify clickable areas.
+2026-03-15 21:17:01 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (1684, 226) duration=0.1s
+2026-03-15 21:17:02 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (1100, 865) duration=0.1s
+2026-03-15 21:17:02 | INFO     | agent.appium_manager                | ⏳ WAIT: 5.0s

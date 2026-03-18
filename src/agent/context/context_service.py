@@ -47,6 +47,7 @@ class ContextService:
                 'last_annotation_hash': None,
                 'last_annotation_step': None,
                 'last_annotation_message': None,
+                'last_annotation_success': True,  # No prior run; allow first run to update cache
             }
         return True
     
@@ -213,9 +214,12 @@ class ContextService:
         if not sdk_enabled and vision_detector:
             session = self._sessions[session_id]
             current_hash = imagehash.dhash(Image.open(screenshot_path))
+            last_success = session.get('last_annotation_success', True)
 
             if force_annotate:
                 logger.info(f"🔄 Force annotation requested, bypassing cache")
+            elif not last_success:
+                logger.info("🆕 Previous vision run failed, running fresh annotation (cache invalid)")
             elif session['last_annotation_hash'] is None:
                 logger.info("🆕 No cached annotation yet, running first annotation")
             else:
@@ -259,7 +263,10 @@ class ContextService:
                 session['last_annotation_hash'] = current_hash
                 session['last_annotation_step'] = step
                 session['last_annotation_message'] = built_message
+                session['last_annotation_success'] = True
                 logger.debug(f"💾 Annotation cache updated for step {step}")
+            else:
+                session['last_annotation_success'] = False
 
             return built_message
         
