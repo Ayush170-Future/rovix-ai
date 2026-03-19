@@ -8,6 +8,7 @@ class Game(Document):
     org_id: str
     name: str
     description: str = ""
+    gameplay: str = ""
     platform: Literal["android", "ios", "unity"] = "android"
     created_at: datetime = Field(default_factory=datetime.utcnow)
 

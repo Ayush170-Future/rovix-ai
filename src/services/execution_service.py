@@ -113,7 +113,7 @@ class ExecutionService:
         context_svc._ensure_session(
             session_id,
             game_description=game.description or "A mobile game application.",
-            gameplay_details="",
+            gameplay_details=scenario.gameplay or game.gameplay or "",
             test_plan=self._build_test_plan(scenario),
         )
 
