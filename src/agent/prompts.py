@@ -124,6 +124,8 @@ You are expected to use the screenshot to understand the semantic state of the g
 
 You can:
 - Use "click" action to tap on any coordinate (x, y)
+- Use "button_press" action with `button_id` to directly tap an AltTester logical object like a UI button.
+- Use "slider_move" action with `slider_id` and `slider_value` to adjust a volume slider, etc.
 - Use "swipe" action to drag from (x, y) to (end_x, end_y) with a duration
 - Use "multi_swipe" action to follow a smooth curved path through multiple points using waypoints list. Example: waypoints=[(100, 100), (200, 150), (300, 100)] draws a curve from start (100,100) through middle (200,150) to end (300,100). Note: For multi_swipe, only use waypoints field, not x/y/end_x/end_y.
 - Use "wait" action when the game needs time to load or animate
@@ -139,24 +141,17 @@ You are provided with the history of game play (actions you chose) and the curre
 </input>
 
 The available interactive elements on the screen will be given like this:
-<example-input>
-Detected interactive elements on screen:
+
+For Vision Extracted Elements (Blackbox mode):
 - new game button at (1024, 768) bbox: [1000, 750, 1048, 786] - Starts a new game
-- settings icon at (1800, 100) bbox: [1780, 80, 1820, 120] - Opens game settings menu
-- card element at (1427, 1767) bbox: [1400, 1700, 1454, 1834] - Solitaire card that can be moved
+-> To click it, use action_type="click" with x=1024, y=768 (center coordinates).
+-> To swipe: use action_type="swipe" with x=1427, y=1767, end_x=1500, end_y=2000
 
-This means there's a "new game button" detected with:
-- Center coordinates: (1024, 768) - use these for clicking
-- Bounding box: [x_min=1000, y_min=750, x_max=1048, y_max=786] - the full element area
-
-To click it, use action_type="click" with x=1024, y=768 (center coordinates).
-
-For interactive elements like cards:
-- To click: use action_type="click" with x=1427, y=1767 (center)
-- To swipe: use action_type="swipe" with x=1427, y=1767, end_x=1500, end_y=2000
-- You can also use any coordinate within the bounding box area
-
-Note: Elements are detected via vision AI. Center coordinates are provided for easy clicking, and bounding boxes show the full element area.
+For logical UI elements (Whitebox/SDK mode):
+- name = StartButton     (Button ID: 1234, Position: 100 × 200, Enabled)
+-> To tap it, use action_type="button_press" and set button_id="1234".
+- name = VolumeSlider    (Slider ID: 5678, Position: 300 x 400, Range: 0.0 - 1.0, Current: 0.5, Enabled)
+-> To move it, use action_type="slider_move", slider_id="5678", and slider_value=1.0
 </example-input>
 
 <Reasoning>
@@ -297,6 +292,8 @@ You are expected to use the screenshot to understand the semantic state of the g
 
 You can:
 - Use "click" action to tap on any coordinate (x, y)
+- Use "button_press" action with `button_id` to directly tap an AltTester logical object like a UI button.
+- Use "slider_move" action with `slider_id` and `slider_value` to adjust a volume slider, etc.
 - Use "swipe" action to drag from (x, y) to (end_x, end_y) with a duration
 - Use "multi_swipe" action to follow a smooth curved path through multiple points using waypoints list. Example: waypoints=[(100, 100), (200, 150), (300, 100)] draws a curve from start (100,100) through middle (200,150) to end (300,100). Note: For multi_swipe, only use waypoints field, not x/y/end_x/end_y.
 - Use "wait" action when the game needs time to load or animate
@@ -317,25 +314,20 @@ You are provided with:
 4. Available interactive elements on the screen with coordinates
 
 <element-format>
-The available interactive elements on the screen will be given like this:
+Based on the game mode, elements may be presented as Vision coordinates OR AltTester logical objects:
 
-Detected interactive elements on screen:
+1. Vision Elements (Coordinates):
 - new game button at (1024, 768) bbox: [1000, 750, 1048, 786] - Starts a new game
-- settings icon at (1800, 100) bbox: [1780, 80, 1820, 120] - Opens game settings menu
-- card element at (1427, 1767) bbox: [1400, 1700, 1454, 1834] - Solitaire card that can be moved
+-> Use action_type="click" with x=1024, y=768
+-> To swipe: use action_type="swipe" with x=1427, y=1767, end_x=1500, end_y=2000
 
-This means there's a "new game button" detected with:
-- Center coordinates: (1024, 768) - use these for clicking
-- Bounding box: [x_min=1000, y_min=750, x_max=1048, y_max=786] - the full element area
+2. AltTester Objects (Logical UI Elements):
+- name = StartButton     (Button ID: 1234, Position: 100 × 200, Enabled)
+-> Use action_type="button_press", button_id="1234"
+- name = VolumeSlider    (Slider ID: 5678, Position: 300 x 400, Range: 0.0 - 1.0, Current: 0.5, Enabled)
+-> Use action_type="slider_move", slider_id="5678", slider_value=1.0
 
-To click it, use action_type="click" with x=1024, y=768 (center coordinates).
-
-For interactive elements like cards:
-- To click: use action_type="click" with x=1427, y=1767 (center)
-- To swipe: use action_type="swipe" with x=1427, y=1767, end_x=1500, end_y=2000
-- You can also use any coordinate within the bounding box area
-
-Note: Elements are detected via vision AI. Center coordinates are provided for easy clicking, and bounding boxes show the full element area.
+IMPORTANT: If an object is presented with a (Button ID), you must use action_type="button_press".
 </element-format>
 </input>
 

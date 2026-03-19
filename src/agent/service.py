@@ -252,8 +252,8 @@ def print_current_todos(session_id: str):
     print("="*60 + "\n")
 
 class Action(BaseModel):
-    action_type: Literal["key_press", "click", "swipe", "multi_swipe", "wait", "todo_write"] = Field(
-        description="Represents the type of action to be performed. This can be a key press, click on a coordinate, swipe, multi-point swipe, wait, or todo_write for managing task lists."
+    action_type: Literal["key_press", "click", "swipe", "multi_swipe", "wait", "todo_write", "button_press", "slider_move"] = Field(
+        description="Represents the type of action to be performed. This can be a key press, click on a coordinate, swipe, multi-point swipe, wait, todo_write for managing task lists, or button_press/slider_move for AltTester objects."
     )
     x: int | None = Field(
         default=None,
@@ -282,6 +282,18 @@ class Action(BaseModel):
     duration: float = Field(
         default=0.1,
         description="Duration of the action in seconds. For 'click': hold duration (0.1 = quick tap). For 'swipe': time to complete the swipe. For 'multi_swipe': total time for entire path. For 'wait': how long to wait. Not used for 'todo_write'. Default: 0.1s."
+    )
+    button_id: str | None = Field(
+        default=None,
+        description="The ID of the button to press. Required for 'button_press' action."
+    )
+    slider_id: str | None = Field(
+        default=None,
+        description="The ID of the slider to move. Required for 'slider_move' action."
+    )
+    slider_value: float | None = Field(
+        default=None,
+        description="The target value for the slider. Required for 'slider_move' action."
     )
     todo_input: str | None = Field(
         default=None,
@@ -719,7 +731,10 @@ async def execute_agent_actions(actions: List[Action]):
             context_service.add_todo_result(SESSION_ID, result)
         else:
             print(f"   🎮 Executing {action.action_type} action ({idx}/{len(actions)})")
-            await action_executor.execute_actions_sequential([action])
+            if SDK_ENABLED and action.action_type in ["button_press", "slider_move", "key_press"]:
+                await action_handler.execute_actions_sequential([action])
+            else:
+                await action_executor.execute_actions_sequential([action])
 
 async def run_blackbox_loop():
     print("🎮 Starting black box polling loop")
