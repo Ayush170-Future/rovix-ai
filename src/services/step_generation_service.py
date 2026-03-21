@@ -37,7 +37,7 @@ def _build_prompt(
 
 Produce a JSON object with:
 - steps: ordered executable steps, each with id (string), content (string), step_type ("action" or "verify"), order (int), dependencies (list of step ids that must complete first)
-- assertions: named checkable conditions, each with id (like "1.1"), title (≤5 words), description (exact condition to validate)
+- assertions: named checkable conditions, each with id (like "1", "2", so and so), title (≤5 words), description (exact condition to validate). The number of assertions should be equal to the number of VERIFY steps and chronologically they should represent the same verification.
 - summary: one sentence describing what is tested
 
 ACTION steps perform operations: navigate, tap, swipe, scroll, wait.

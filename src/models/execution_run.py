@@ -27,6 +27,7 @@ class ExecutionRun(Document):
     started_at: Optional[datetime] = None
     completed_at: Optional[datetime] = None
     duration_seconds: Optional[int] = None
+    failure_reason: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:

@@ -62,6 +62,35 @@ async def list_scenarios(game_id: str, org: Organization = Depends(get_org)):
     scenarios = await _scenario_repo.find_by_game(game_id)
     return [_scenario_response(s) for s in scenarios]
 
+# TODO: Add pagination and error handling.
+@router.get("/api/games/{game_id}/executions")
+async def list_game_executions(game_id: str, org: Organization = Depends(get_org)):
+    game = await _game_repo.find_by_id(game_id)
+    if not game or game.org_id != str(org.id):
+        raise HTTPException(status_code=404, detail="Game not found")
+    runs = await _execution_repo.find_by_game(game_id)
+    distinct_scenario_ids = list({r.scenario_id for r in runs})
+    scenarios = await _scenario_repo.find_by_ids(distinct_scenario_ids)
+    title_by_scenario_id = {str(s.id): s.title for s in scenarios}
+
+    return [
+        {
+            "id": str(r.id),
+            "scenario_id": r.scenario_id,
+            "scenario_title": title_by_scenario_id.get(r.scenario_id, ""),
+            "device_udid": r.device_udid,
+            "status": r.status,
+            "total_assertions": r.total_assertions,
+            "passed": r.passed,
+            "failed": r.failed,
+            "started_at": r.started_at,
+            "completed_at": r.completed_at,
+            "duration_seconds": r.duration_seconds,
+            "failure_reason": r.failure_reason,
+        }
+        for r in runs
+    ]
+
 
 @router.get("/api/scenarios/{scenario_id}")
 async def get_scenario(scenario_id: str, org: Organization = Depends(get_org)):

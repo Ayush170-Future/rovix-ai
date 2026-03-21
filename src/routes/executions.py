@@ -31,6 +31,7 @@ async def get_execution(execution_run_id: str, org: Organization = Depends(get_o
         "started_at": run.started_at,
         "completed_at": run.completed_at,
         "duration_seconds": run.duration_seconds,
+        "failure_reason": run.failure_reason,
         "assertion_results": [r.model_dump() for r in run.assertion_results],
     }
 

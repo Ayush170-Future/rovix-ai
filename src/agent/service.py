@@ -369,7 +369,12 @@ async def execute_agent_actions(actions: List[Action]):
             context_service.add_todo_result(SESSION_ID, result)
         else:
             logger.info(f"action ({idx}/{len(actions)}): {action.action_type} x={action.x} y={action.y} duration={action.duration}")
-            await action_executor.execute_actions_sequential([action])
+            batch = await action_executor.execute_actions_sequential([action])
+            if not batch.ok:
+                err = batch.failed_results[0] if batch.failed_results else None
+                msg = err.error_message if err else "Unknown action error"
+                logger.error(f"❌ Action batch failed: {msg}")
+                raise RuntimeError(msg)
 
 async def run_blackbox_loop():
     logger.info("🎮 Starting black box polling loop")

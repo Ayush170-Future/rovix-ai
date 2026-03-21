@@ -30,6 +30,11 @@ class ExecutionRepository:
             ExecutionRun.scenario_id == scenario_id
         ).sort("-created_at").to_list()
 
+    async def find_by_game(self, game_id: str) -> List[ExecutionRun]:
+        return await ExecutionRun.find(
+            ExecutionRun.game_id == game_id
+        ).sort("-created_at").to_list()
+
     async def start(self, run_id: str) -> Optional[ExecutionRun]:
         run = await ExecutionRun.get(run_id)
         if not run:
@@ -55,12 +60,14 @@ class ExecutionRepository:
         await run.save()
         return run
 
-    async def fail(self, run_id: str) -> Optional[ExecutionRun]:
+    async def fail(self, run_id: str, failure_reason: Optional[str] = None) -> Optional[ExecutionRun]:
         run = await ExecutionRun.get(run_id)
         if not run:
             return None
         run.status = "failed"
         run.completed_at = datetime.utcnow()
+        if failure_reason is not None:
+            run.failure_reason = failure_reason
         if run.started_at:
             run.duration_seconds = int((run.completed_at - run.started_at).total_seconds())
         await run.save()

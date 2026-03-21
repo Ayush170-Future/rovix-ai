@@ -31,8 +31,6 @@ isProject: false
 
 # QA Frontend — React + MUI
 
-
-
 Todo: I want to add a voice that tells that the run is over. (for notification)
 
 ## Stack

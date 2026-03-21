@@ -9,9 +9,10 @@ from typing import Dict, List, Optional
 from langchain_google_genai import ChatGoogleGenerativeAI
 
 from agent.context import ContextService
+from agent.device_results import ActionResult, DeviceErrorType, ScreenshotResult
 from agent.prompts import SYSTEM_PROMPT_WITH_TODO
 from agent.logger import get_logger
-from services.views import Action, AgentOutput, TestResult
+from services.views import Action, AgentOutput
 from models.test_scenario import TestScenario, Step
 from models.game import Game
 from models.execution_run import AssertionResult
@@ -26,6 +27,13 @@ logger = get_logger("execution_service")
 USE_APPIUM = os.getenv("USE_APPIUM", "false").lower() == "true"
 POLLING_INTERVAL = float(os.getenv("POLLING_INTERVAL", "2.5"))
 MAX_STEPS = int(os.getenv("MAX_STEPS", "1000"))
+MAX_CONSECUTIVE_DEVICE_FAILURES = int(os.getenv("MAX_CONSECUTIVE_DEVICE_FAILURES", "3"))
+
+
+class FatalExecutionError(Exception):
+    """Stops the run with a persisted failure_reason (device / invalid action)."""
+
+    pass
 
 
 # ── Session state ────────────────────────────────────────────────────────────
@@ -39,6 +47,7 @@ class AgentSession:
     force_annotate: bool = False
     step_count: int = 0
     collected_results: List[AssertionResult] = field(default_factory=list)
+    consecutive_device_failures: int = 0
 
 
 # ── Service ──────────────────────────────────────────────────────────────────
@@ -163,9 +172,13 @@ class ExecutionService:
                 f"Execution {session.execution_run_id} completed — "
                 f"{len(session.collected_results)} assertion result(s)"
             )
+        except FatalExecutionError as e:
+            msg = str(e)
+            logger.error(f"Execution {session.execution_run_id} aborted: {msg}")
+            await self._execution_repo.fail(session.execution_run_id, failure_reason=msg)
         except Exception as e:
             logger.error(f"Execution {session.execution_run_id} failed: {e}", exc_info=True)
-            await self._execution_repo.fail(session.execution_run_id)
+            await self._execution_repo.fail(session.execution_run_id, failure_reason=str(e))
         finally:
             self._cleanup_session(session.device_udid)
 
@@ -175,6 +188,7 @@ class ExecutionService:
         todo_list = get_todo_list_for_context(session.session_id)
         logger.info(f"\n{'='*60}\n📋 CURRENT TODO LIST:\n{'='*60}\n{todo_list}\n{'='*60}")
 
+        # TODO: replace with S3 URL after upload for the screenshot
         screenshots_dir = os.path.join("screenshots", session.execution_run_id)
         os.makedirs(screenshots_dir, exist_ok=True)
         screenshot_path = os.path.join(screenshots_dir, f"step_{step_num}.png")
@@ -185,7 +199,10 @@ class ExecutionService:
                 f"❌ Screenshot capture failed: {result.error_message} "
                 f"(type: {result.error_type}, retries: {result.retry_count})"
             )
+            self._on_screenshot_failure(session, result)
             return False
+
+        session.consecutive_device_failures = 0
 
         logger.info(f"💾 step_{step_num}.png (captured in {result.elapsed_time:.2f}s)")
         if result.retry_count > 0:
@@ -262,6 +279,40 @@ class ExecutionService:
         session.context_service.cleanup_old_messages(session.session_id)
         return False
 
+    def _on_screenshot_failure(self, session: AgentSession, result: ScreenshotResult) -> None:
+        """Raises FatalExecutionError when the run must stop."""
+        if result.error_type == DeviceErrorType.DEVICE_DISCONNECTED:
+            raise FatalExecutionError(result.error_message or "Device disconnected (screenshot)")
+        session.consecutive_device_failures += 1
+        if session.consecutive_device_failures >= MAX_CONSECUTIVE_DEVICE_FAILURES:
+            raise FatalExecutionError(
+                f"Screenshot failed {session.consecutive_device_failures} time(s) in a row "
+                f"(last: {result.error_message})"
+            )
+
+    def _on_action_batch_results(self, session: AgentSession, results: List[ActionResult]) -> None:
+        """Raises FatalExecutionError on device loss, invalid actions, or too many failures."""
+        for r in results:
+            if r.skipped:
+                continue
+            if r.success:
+                session.consecutive_device_failures = 0
+                continue
+            logger.error(
+                f"❌ Action failed: type={r.action_type} error={r.error_message} "
+                f"(type={r.error_type})"
+            )
+            if r.error_type == DeviceErrorType.DEVICE_DISCONNECTED:
+                raise FatalExecutionError(r.error_message or "Device disconnected (action)")
+            if r.error_type == DeviceErrorType.INVALID_INPUT:
+                raise FatalExecutionError(f"Invalid action: {r.error_message}")
+            session.consecutive_device_failures += 1
+            if session.consecutive_device_failures >= MAX_CONSECUTIVE_DEVICE_FAILURES:
+                raise FatalExecutionError(
+                    f"Exceeded {MAX_CONSECUTIVE_DEVICE_FAILURES} consecutive device failures "
+                    f"(last action: {r.error_message})"
+                )
+
     async def _execute_actions(self, session: AgentSession, actions: List[Action]) -> None:
         total = len(actions)
         for idx, action in enumerate(actions, 1):
@@ -282,7 +333,8 @@ class ExecutionService:
                     f"   action ({idx}/{total}): {action.action_type} "
                     f"x={action.x} y={action.y} duration={action.duration}"
                 )
-                await self._action_executor.execute_actions_sequential([action])
+                batch = await self._action_executor.execute_actions_sequential([action])
+                self._on_action_batch_results(session, batch.results)
 
     def _parse_response(self, response) -> AgentOutput:
         if isinstance(response, dict) and "parsed" in response:

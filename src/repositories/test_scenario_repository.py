@@ -1,6 +1,21 @@
 from typing import List, Literal, Optional
 from datetime import datetime
+
+from beanie.operators import In
+from bson import ObjectId
+from bson.errors import InvalidId
+
 from models.test_scenario import TestScenario, Step, Assertion
+
+
+def _object_ids_from_strings(ids: List[str]) -> List[ObjectId]:
+    out: List[ObjectId] = []
+    for raw in ids:
+        try:
+            out.append(ObjectId(raw))
+        except InvalidId:
+            continue
+    return out
 
 # TODO: Error handling and logging is missing.
 
@@ -30,6 +45,15 @@ class TestScenarioRepository:
 
     async def find_by_game(self, game_id: str) -> List[TestScenario]:
         return await TestScenario.find(TestScenario.game_id == game_id).to_list()
+
+    async def find_by_ids(self, scenario_ids: List[str]) -> List[TestScenario]:
+        if not scenario_ids:
+            return []
+        unique = list(dict.fromkeys(scenario_ids))
+        oids = _object_ids_from_strings(unique)
+        if not oids:
+            return []
+        return await TestScenario.find(In(TestScenario.id, oids)).to_list()
 
     async def update_steps_and_assertions(
         self,

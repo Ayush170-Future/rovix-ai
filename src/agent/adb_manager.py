@@ -5,36 +5,21 @@ import time
 import os
 from typing import Optional, Dict, List, Any
 from ppadb.client import Client as AdbClient
-from dataclasses import dataclass
-from enum import Enum
 
 try:
     from .logger import get_logger
 except ImportError:
     from agent.logger import get_logger
 
+from agent.device_results import (
+    ActionBatchResult,
+    ActionResult,
+    DeviceErrorType,
+    ScreenshotResult,
+    classify_exception,
+)
+
 logger = get_logger("agent.adb_manager")
-
-
-class ErrorType(str, Enum):
-    """Types of errors that can occur"""
-    DEVICE_DISCONNECTED = "device_disconnected"
-    TIMEOUT = "timeout"
-    PERMISSION_DENIED = "permission_denied"
-    FILE_IO_ERROR = "file_io_error"
-    NETWORK_ERROR = "network_error"
-    UNKNOWN = "unknown"
-
-
-@dataclass
-class ScreenshotResult:
-    """Result of screenshot capture operation"""
-    success: bool
-    filepath: Optional[str] = None
-    error_message: Optional[str] = None
-    error_type: Optional[ErrorType] = None
-    retry_count: int = 0
-    elapsed_time: float = 0.0
 
 
 class ADBManager:
@@ -167,13 +152,13 @@ class ADBManager:
                 success=False,
                 filepath=None,
                 error_message="No ADB device connected",
-                error_type=ErrorType.DEVICE_DISCONNECTED,
-                retry_count=0
+                error_type=DeviceErrorType.DEVICE_DISCONNECTED,
+                retry_count=0,
             )
         
         overall_start = time.time()
         last_error = None
-        last_error_type = ErrorType.UNKNOWN
+        last_error_type = DeviceErrorType.UNKNOWN
         
         for attempt in range(self.screenshot_max_retries):
             try:
@@ -208,22 +193,22 @@ class ADBManager:
                 
             except (ConnectionError, BrokenPipeError, OSError) as e:
                 last_error = e
-                last_error_type = ErrorType.DEVICE_DISCONNECTED
+                last_error_type = DeviceErrorType.DEVICE_DISCONNECTED
                 error_msg = f"Device connection error: {e}"
-                
+
             except PermissionError as e:
                 last_error = e
-                last_error_type = ErrorType.PERMISSION_DENIED
+                last_error_type = DeviceErrorType.PERMISSION_DENIED
                 error_msg = f"Permission denied: {e}"
-                
+
             except IOError as e:
                 last_error = e
-                last_error_type = ErrorType.FILE_IO_ERROR
+                last_error_type = DeviceErrorType.FILE_IO_ERROR
                 error_msg = f"File I/O error: {e}"
-                
+
             except Exception as e:
                 last_error = e
-                last_error_type = ErrorType.UNKNOWN
+                last_error_type = DeviceErrorType.UNKNOWN
                 error_msg = f"Screenshot error: {e}"
             
             attempt_num = attempt + 1
@@ -236,7 +221,7 @@ class ADBManager:
                 time.sleep(wait_time)
                 
                 # Try to reconnect if device issue
-                if last_error_type == ErrorType.DEVICE_DISCONNECTED:
+                if last_error_type == DeviceErrorType.DEVICE_DISCONNECTED:
                     logger.info(f"   🔌 Attempting to reconnect to device...")
                     self._initialize_connection()
                     if not self.device:
@@ -252,52 +237,85 @@ class ADBManager:
                     error_message=final_error_msg,
                     error_type=last_error_type,
                     retry_count=attempt_num,
-                    elapsed_time=total_elapsed
+                    elapsed_time=total_elapsed,
                 )
-        
+
         # Should never reach here
         return ScreenshotResult(
             success=False,
             filepath=None,
             error_message="Unknown error in retry loop",
-            error_type=ErrorType.UNKNOWN,
-            retry_count=self.screenshot_max_retries
+            error_type=DeviceErrorType.UNKNOWN,
+            retry_count=self.screenshot_max_retries,
         )
-    
-    async def execute_actions_sequential(self, actions: List[Any]) -> None:
+
+    async def execute_actions_sequential(self, actions: List[Any]) -> ActionBatchResult:
         if not actions:
-            return
-        
+            return ActionBatchResult(results=[])
+
+        results: List[ActionResult] = []
+
         for action in actions:
             action_type = action.action_type
             x = action.x
             y = action.y
-            end_x = getattr(action, 'end_x', None)
-            end_y = getattr(action, 'end_y', None)
-            duration = getattr(action, 'duration', 0.1)
-            
+            end_x = getattr(action, "end_x", None)
+            end_y = getattr(action, "end_y", None)
+            duration = getattr(action, "duration", 0.1)
+
             try:
                 if action_type == "click":
                     if x is None or y is None:
                         raise ValueError("x and y are required for click action")
                     logger.info(f"👆 CLICK (ADB): ({x}, {y}) duration={duration}s")
                     self.press(x, y, duration)
-                
+                    results.append(ActionResult(success=True, action_type=action_type))
+
                 elif action_type == "swipe":
                     if x is None or y is None or end_x is None or end_y is None:
                         raise ValueError("x, y, end_x, end_y are required for swipe action")
                     logger.info(f"🔄 SWIPE (ADB): ({x}, {y}) → ({end_x}, {end_y}) duration={duration}s")
                     self.swipe(x, y, end_x, end_y, duration)
-                
+                    results.append(ActionResult(success=True, action_type=action_type))
+
+                elif action_type == "multi_swipe":
+                    logger.warning(f"⚠️  multi_swipe not supported on ADB path; skipping")
+                    results.append(
+                        ActionResult(
+                            success=True,
+                            action_type=action_type,
+                            skipped=True,
+                            skipped_reason="unsupported_on_adb",
+                        )
+                    )
+
                 elif action_type == "wait":
                     logger.info(f"⏳ WAIT: {duration}s")
                     await asyncio.sleep(duration)
-                
+                    results.append(ActionResult(success=True, action_type=action_type))
+
                 else:
                     logger.warning(f"⚠️  Unsupported action type for ADB: {action_type}")
-                    continue
-                    
+                    results.append(
+                        ActionResult(
+                            success=True,
+                            action_type=str(action_type),
+                            skipped=True,
+                            skipped_reason="unsupported_action",
+                        )
+                    )
+
             except Exception as e:
+                et = classify_exception(e)
                 logger.error(f"❌ Action failed: {e}")
-                raise
+                results.append(
+                    ActionResult(
+                        success=False,
+                        action_type=str(action_type),
+                        error_message=str(e),
+                        error_type=et,
+                    )
+                )
+
+        return ActionBatchResult(results=results)
 
