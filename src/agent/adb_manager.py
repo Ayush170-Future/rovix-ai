@@ -24,29 +24,41 @@ logger = get_logger("agent.adb_manager")
 
 class ADBManager:
     def __init__(
-        self, 
-        host: str = "127.0.0.1", 
+        self,
+        host: str = "127.0.0.1",
         port: int = 5037,
+        serial: Optional[str] = None,
         screenshot_timeout: float = 10.0,
-        screenshot_max_retries: int = 3
+        screenshot_max_retries: int = 3,
     ):
         self.host = host
         self.port = port
+        self.serial = serial
         self.client = None
         self.device = None
         self.screenshot_timeout = screenshot_timeout
         self.screenshot_max_retries = screenshot_max_retries
         self._initialize_connection()
-    
+
     def _initialize_connection(self):
         try:
             self.client = AdbClient(host=self.host, port=self.port)
             devices = self.client.devices()
-            
+
             if not devices:
                 logger.warning("⚠️  No ADB devices connected")
                 return
-            
+
+            if self.serial:
+                for d in devices:
+                    if d.serial == self.serial:
+                        self.device = d
+                        logger.info(f"✅ Connected to ADB device: {self.device.serial}")
+                        return
+                logger.error(f"❌ No ADB device with serial {self.serial!r} (available: {[d.serial for d in devices]})")
+                self.device = None
+                return
+
             self.device = devices[0]
             logger.info(f"✅ Connected to ADB device: {self.device.serial}")
             

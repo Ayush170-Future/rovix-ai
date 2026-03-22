@@ -6,6 +6,7 @@ from dependencies import get_org
 from models.organization import Organization
 from models.test_scenario import Step, Assertion
 from repositories.game_repository import GameRepository
+from repositories.build_repository import BuildRepository
 from repositories.test_scenario_repository import TestScenarioRepository
 from repositories.execution_repository import ExecutionRepository
 from services.step_generation_service import generate_steps
@@ -14,6 +15,7 @@ from services.execution_service import ExecutionService
 router = APIRouter(tags=["Test Scenarios"])
 _scenario_repo = TestScenarioRepository()
 _game_repo = GameRepository()
+_build_repo = BuildRepository()
 _execution_repo = ExecutionRepository()
 
 
@@ -31,6 +33,7 @@ class SaveStepsRequest(BaseModel):
 
 class ExecuteRequest(BaseModel):
     device_udid: str
+    build_id: str
 
 
 @router.post("/api/games/{game_id}/scenarios")
@@ -77,6 +80,7 @@ async def list_game_executions(game_id: str, org: Organization = Depends(get_org
         {
             "id": str(r.id),
             "scenario_id": r.scenario_id,
+            "build_id": r.build_id,
             "scenario_title": title_by_scenario_id.get(r.scenario_id, ""),
             "device_udid": r.device_udid,
             "status": r.status,
@@ -168,6 +172,23 @@ async def execute_scenario(
     if not game:
         raise HTTPException(status_code=404, detail="Game not found")
 
+    build = await _build_repo.find_by_id(request.build_id)
+    if not build or build.org_id != str(org.id):
+        raise HTTPException(status_code=404, detail="Build not found")
+    if build.game_id != scenario.game_id:
+        raise HTTPException(status_code=400, detail="Build does not belong to this game")
+    if build.status != "ready":
+        raise HTTPException(status_code=400, detail=f"Build must be ready (current status: {build.status})")
+
+    # Game vs build platform (Unity games ship Android/iOS builds)
+    if build.platform != game.platform and not (
+        game.platform == "unity" and build.platform in ("android", "ios")
+    ):
+        raise HTTPException(
+            status_code=400,
+            detail=f"Build platform {build.platform} does not match game platform {game.platform}",
+        )
+
     execution_service: ExecutionService = http_request.app.state.execution_service
     if execution_service.is_device_busy(request.device_udid):
         raise HTTPException(status_code=409, detail="Device is already running an execution")
@@ -175,6 +196,7 @@ async def execute_scenario(
     run = await _execution_repo.create(
         scenario_id=scenario_id,
         game_id=scenario.game_id,
+        build_id=str(build.id),
         org_id=str(org.id),
         device_udid=request.device_udid,
         total_assertions=len(scenario.assertions),
@@ -185,10 +207,12 @@ async def execute_scenario(
         scenario=scenario,
         game=game,
         device_udid=request.device_udid,
+        build=build,
     )
 
     return {
         "execution_run_id": str(run.id),
+        "build_id": run.build_id,
         "status": run.status,
         "created_at": run.created_at,
     }

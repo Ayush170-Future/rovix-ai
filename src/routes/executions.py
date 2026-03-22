@@ -23,6 +23,7 @@ async def get_execution(execution_run_id: str, org: Organization = Depends(get_o
     return {
         "id": str(run.id),
         "scenario_id": run.scenario_id,
+        "build_id": run.build_id,
         "device_udid": run.device_udid,
         "status": run.status,
         "total_assertions": run.total_assertions,

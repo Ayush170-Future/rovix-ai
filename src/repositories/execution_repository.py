@@ -8,6 +8,7 @@ class ExecutionRepository:
         self,
         scenario_id: str,
         game_id: str,
+        build_id: Optional[str],
         org_id: str,
         device_udid: str,
         total_assertions: int,
@@ -15,6 +16,7 @@ class ExecutionRepository:
         run = ExecutionRun(
             scenario_id=scenario_id,
             game_id=game_id,
+            build_id=build_id,
             org_id=org_id,
             device_udid=device_udid,
             total_assertions=total_assertions,

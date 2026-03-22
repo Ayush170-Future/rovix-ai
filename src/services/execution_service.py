@@ -4,7 +4,7 @@ import json
 import time
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from langchain_google_genai import ChatGoogleGenerativeAI
 
@@ -15,14 +15,16 @@ from agent.logger import get_logger
 from services.views import Action, AgentOutput
 from models.test_scenario import TestScenario, Step
 from models.game import Game
+from models.build import Build
 from models.execution_run import AssertionResult
 from models.execution_step import TokenUsage
 from repositories.execution_repository import ExecutionRepository
 from repositories.execution_step_repository import ExecutionStepRepository
+from services.android_build_runner import create_action_executor_for_build
 from tools.todo_management import todo_write_handler, get_todo_list_for_context
 from tools.todo_management.todo_service import TodoPersistenceService
 
-logger = get_logger("execution_service")
+logger = get_logger("agent.services.execution_service")
 
 USE_APPIUM = os.getenv("USE_APPIUM", "false").lower() == "true"
 POLLING_INTERVAL = float(os.getenv("POLLING_INTERVAL", "2.5"))
@@ -44,6 +46,7 @@ class AgentSession:
     session_id: str
     device_udid: str
     context_service: ContextService
+    action_executor: Any = None  # ADBManager | AppiumManager — set after APK install
     force_annotate: bool = False
     step_count: int = 0
     collected_results: List[AssertionResult] = field(default_factory=list)
@@ -58,7 +61,6 @@ class ExecutionService:
         self._execution_repo = ExecutionRepository()
         self._step_repo = ExecutionStepRepository()
         self._structured_model = self._init_model()
-        self._action_executor = self._init_action_executor()
         self._vision_detector = self._init_vision_detector()
 
     def _init_model(self):
@@ -71,26 +73,6 @@ class ExecutionService:
             schema=AgentOutput.model_json_schema(),
             method="json_schema",
             include_raw=True,
-        )
-
-    def _init_action_executor(self):
-        if USE_APPIUM:
-            from agent.appium_manager import AppiumManager
-            return AppiumManager(
-                appium_url=os.getenv("APPIUM_URL", "http://localhost:4723"),
-                device_name=os.getenv("DEVICE_NAME"),
-                udid=os.getenv("DEVICE_UDID"),
-                app_package=os.getenv("APP_PACKAGE"),
-                app_activity=os.getenv("APP_ACTIVITY"),
-                screenshot_timeout=float(os.getenv("SCREENSHOT_TIMEOUT", "10.0")),
-                screenshot_max_retries=int(os.getenv("SCREENSHOT_MAX_RETRIES", "3")),
-            )
-        from agent.adb_manager import ADBManager
-        return ADBManager(
-            host="127.0.0.1",
-            port=5037,
-            screenshot_timeout=float(os.getenv("SCREENSHOT_TIMEOUT", "10.0")),
-            screenshot_max_retries=int(os.getenv("SCREENSHOT_MAX_RETRIES", "3")),
         )
 
     def _init_vision_detector(self):
@@ -116,6 +98,7 @@ class ExecutionService:
         scenario: TestScenario,
         game: Game,
         device_udid: str,
+        build: Build,
     ) -> None:
         session_id = run_id
         context_svc = ContextService(system_prompt=SYSTEM_PROMPT_WITH_TODO, keep_full_steps=4)
@@ -132,6 +115,19 @@ class ExecutionService:
             device_udid=device_udid,
             context_service=context_svc,
         )
+
+        try:
+            session.action_executor = await asyncio.to_thread(
+                create_action_executor_for_build,
+                device_udid=device_udid,
+                build=build,
+                use_appium=USE_APPIUM,
+            )
+        except Exception as e:
+            logger.error(f"Build prepare / install failed for run {run_id}: {e}", exc_info=True)
+            await self._execution_repo.fail(run_id, failure_reason=f"Build prepare failed: {e}")
+            return
+
         self._sessions[device_udid] = session
         self._seed_todo_list(session, scenario.steps)
 
@@ -193,7 +189,7 @@ class ExecutionService:
         os.makedirs(screenshots_dir, exist_ok=True)
         screenshot_path = os.path.join(screenshots_dir, f"step_{step_num}.png")
 
-        result = self._action_executor.get_screenshot(screenshot_path)
+        result = session.action_executor.get_screenshot(screenshot_path)
         if not result.success:
             logger.error(
                 f"❌ Screenshot capture failed: {result.error_message} "
@@ -333,7 +329,7 @@ class ExecutionService:
                     f"   action ({idx}/{total}): {action.action_type} "
                     f"x={action.x} y={action.y} duration={action.duration}"
                 )
-                batch = await self._action_executor.execute_actions_sequential([action])
+                batch = await session.action_executor.execute_actions_sequential([action])
                 self._on_action_batch_results(session, batch.results)
 
     def _parse_response(self, response) -> AgentOutput:

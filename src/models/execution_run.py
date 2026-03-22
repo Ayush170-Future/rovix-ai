@@ -17,6 +17,7 @@ class AssertionResult(BaseModel):
 class ExecutionRun(Document):
     scenario_id: str
     game_id: str
+    build_id: Optional[str] = None
     org_id: str
     device_udid: str
     status: Literal["queued", "running", "completed", "failed", "cancelled"] = "queued"
@@ -32,4 +33,4 @@ class ExecutionRun(Document):
 
     class Settings:
         name = "execution_runs"
-        indexes = ["scenario_id", "org_id", "game_id", "status"]
+        indexes = ["scenario_id", "org_id", "game_id", "build_id", "status"]

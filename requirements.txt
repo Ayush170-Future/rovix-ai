@@ -19,6 +19,7 @@ numpy>=1.24.0
 # Utilities
 python-dotenv>=1.0.0
 redis>=5.0.0
+google-cloud-storage>=2.18.0
 
 # ADB integration
 pure-python-adb>=0.3.0

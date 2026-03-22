@@ -17,6 +17,7 @@ from database import init_db
 from services.execution_service import ExecutionService
 from routes.orgs import router as orgs_router
 from routes.games import router as games_router
+from routes.builds import router as builds_router
 from routes.test_scenarios import router as scenarios_router
 from routes.executions import router as executions_router
 
@@ -42,6 +43,7 @@ app.add_middleware(
 
 app.include_router(orgs_router)
 app.include_router(games_router)
+app.include_router(builds_router)
 app.include_router(scenarios_router)
 app.include_router(executions_router)
 

@@ -46,7 +46,11 @@ def _setup():
 def get_logger(name: str) -> logging.Logger:
     """
     Return a named child logger under the 'agent' hierarchy.
-    Call this at module level: logger = get_logger(__name__)
+
+    Handlers attach to logging.getLogger("agent"), so names must start with
+    "agent." (e.g. get_logger("agent.services.foo")) or records will not reach
+    the session file / console handlers. For src/services/* and src/database,
+    use agent.services.* / agent.database.
     """
     _setup()
     return logging.getLogger(name)
