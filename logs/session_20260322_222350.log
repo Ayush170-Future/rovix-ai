@@ -1,0 +1,39 @@
+2026-03-22 22:23:52 | INFO     | agent.database                      | Connected to MongoDB: game_testing
+2026-03-22 22:25:49 | INFO     | agent.services.android_build_runner | Downloading build from gs://rovix_ai_bucket/game_builds/69a1a52bddccbd191280e7eb/69a1a5a2ddccbd191280e7ec/android/20260322024514_fb604f32a5ca4f508384cef7f9b025a0_Diamond League Hatchback.apk
+2026-03-22 22:26:35 | INFO     | agent.services.android_build_runner | Installing APK on RZCW31HH47R (package=cricketgames.hitwicket.strategy)
+2026-03-22 22:26:35 | INFO     | agent.services.android_build_runner | Launching cricketgames.hitwicket.strategy / com.unity3d.player.UnityPlayerActivity
+2026-03-22 22:26:36 | INFO     | agent.appium_manager                | 📱 Using device with UDID: RZCW31HH47R
+2026-03-22 22:26:36 | INFO     | agent.appium_manager                | 🎯 Appium will launch app: cricketgames.hitwicket.strategy
+2026-03-22 22:26:36 | INFO     | agent.appium_manager                | 🔌 Connecting to Appium server at http://localhost:4723...
+2026-03-22 22:26:36 | ERROR    | agent.appium_manager                | ❌ Failed to start Appium session: HTTPConnectionPool(host='localhost', port=4723): Max retries exceeded with url: /session (Caused by NewConnectionError("HTTPConnection(host='localhost', port=4723): Failed to establish a new connection: [Errno 61] Connection refused"))
+2026-03-22 22:26:36 | ERROR    | agent.appium_manager                |    Make sure Appium server is running: appium
+2026-03-22 22:26:36 | INFO     | agent.services.execution_service    | Starting execution 69c01f152e29a84b7bd185f2 on device RZCW31HH47R
+2026-03-22 22:26:36 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 0 | Run 69c01f15
+================================================================================
+2026-03-22 22:26:36 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[PENDING] [step_1] [ACTION] Launch the Bingo Game app.
+[PENDING] [step_2] [VERIFY] Complete the new player sign-up or login flow and verify the game home screen appears. (depends on: step_1)
+[PENDING] [step_3] [ACTION] Tap to accept the Terms of Service, Privacy Policy, and any regulation prompts. (depends on: step_2)
+[PENDING] [step_4] [VERIFY] Confirm that all consent screens are dismissed and the game proceeds to the main interface. (depends on: step_3)
+[PENDING] [step_5] [ACTION] Navigate to the world map and tap on 'Catalina City'. (depends on: step_4)
+[PENDING] [step_6] [VERIFY] Verify the Catalina City entry screen or room environment is visible. (depends on: step_5)
+[PENDING] [step_7] [ACTION] Follow all on-screen tutorial prompts to complete the 'How to Play' walkthrough. (depends on: step_6)
+[PENDING] [step_8] [VERIFY] Verify the tutorial is marked complete and the standard card selection screen is accessible. (depends on: step_7)
+[PENDING] [step_9] [ACTION] Select exactly 2 cards on the selection screen and tap to start the round. (depends on: step_8)
+[PENDING] [step_10] [VERIFY] Verify the bingo round begins with exactly 2 cards displayed on the screen. (depends on: step_9)
+[PENDING] [step_11] [ACTION] Tap the matching numbers on both cards as they are drawn and displayed on the board. (depends on: step_10)
+[PENDING] [step_12] [VERIFY] Verify that every tapped number is visually marked/daubed on the bingo cards. (depends on: step_11)
+[PENDING] [step_13] [ACTION] Continue gameplay until all available bingos are claimed by players. (depends on: step_12)
+[PENDING] [step_14] [VERIFY] Verify the Round Summary screen appears displaying XP, rewards, or treasure chests. (depends on: step_13)
+[PENDING] [step_15] [ACTION] Tap the navigation button to return to the main world map. (depends on: step_14)
+[PENDING] [step_16] [VERIFY] Verify the main world map is visible and the player is no longer inside a specific room. (depends on: step_15)
+============================================================
+2026-03-22 22:26:36 | ERROR    | agent.services.execution_service    | ❌ Screenshot capture failed: No Appium session active (type: DeviceErrorType.DEVICE_DISCONNECTED, retries: 0)
+2026-03-22 22:26:36 | ERROR    | agent.services.execution_service    | Execution 69c01f152e29a84b7bd185f2 aborted: No Appium session active

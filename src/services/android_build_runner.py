@@ -10,7 +10,6 @@ import shutil
 import subprocess
 import tempfile
 from typing import Any, Optional, Tuple
-
 from google.cloud import storage
 from ppadb.client import Client as AdbClient
 
@@ -104,7 +103,7 @@ def download_apk_from_gcs(bucket_name: str, object_key: str, dest_path: str) -> 
 
 def adb_install(serial: str, apk_path: str) -> None:
     r = subprocess.run(
-        ["adb", "-s", serial, "install", "-r", "-d", apk_path],
+        ["adb", "-s", serial, "install", "-r", apk_path],
         capture_output=True,
         text=True,
         timeout=600,
@@ -112,6 +111,7 @@ def adb_install(serial: str, apk_path: str) -> None:
     if r.returncode != 0:
         msg = (r.stdout or "") + (r.stderr or "")
         raise RuntimeError(f"adb install failed: {msg.strip() or r.returncode}")
+
 
 
 def adb_launch_app(serial: str, package: str, activity: str) -> None:
