@@ -1,13 +1,21 @@
+import asyncio
+import os
 from datetime import datetime
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.params import Query
+from fastapi.responses import StreamingResponse
+from google.cloud import storage as gcs
 
 from dependencies import get_org
 from models.organization import Organization
 from repositories.execution_repository import ExecutionRepository
 from repositories.execution_step_repository import ExecutionStepRepository
+
+GCS_BUCKET_NAME = os.getenv("GCS_BUCKET_NAME", "rovix_ai_bucket")
+_gcs_client = gcs.Client()
+_gcs_bucket = _gcs_client.bucket(GCS_BUCKET_NAME)
 
 router = APIRouter(prefix="/api/executions", tags=["Executions"])
 _execution_repo = ExecutionRepository()
@@ -67,3 +75,27 @@ async def get_execution_steps(
         }
         for s in steps
     ]
+
+
+@router.get("/{execution_run_id}/steps/{step_num}/screenshot")
+async def get_step_screenshot(
+    execution_run_id: str,
+    step_num: int,
+    org: Organization = Depends(get_org),
+):
+    run = await _execution_repo.find_by_id(execution_run_id)
+    if not run or run.org_id != str(org.id):
+        raise HTTPException(status_code=404, detail="Execution not found")
+
+    blob_name = f"screenshots/{execution_run_id}/step_{step_num}.png"
+    try:
+        blob = _gcs_bucket.blob(blob_name)
+        data = await asyncio.to_thread(blob.download_as_bytes)
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=f"Screenshot not found: {e}")
+
+    return StreamingResponse(
+        iter([data]),
+        media_type="image/png",
+        headers={"Cache-Control": "max-age=86400"},
+    )

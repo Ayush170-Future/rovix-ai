@@ -1,6 +1,9 @@
 # TODO: Have to use padb to interact with ADB and also take care of error handling when running ADB commands
 # right now the launch failure is not getting logged properly in the code
 
+# TODO: Failures are often because the ADB server is not listening (default 127.0.0.1:5037) or
+# Appium is not running (default http://localhost:4723 / APPIUM_URL) — surface clearer errors.
+
 from __future__ import annotations
 
 import glob
@@ -149,14 +152,6 @@ def create_action_executor_for_build(
     build: Build,
     use_appium: bool,
 ) -> Any:
-    """
-    Edge cases handled:
-    - Only Android + APK supported for install path.
-    - Device must appear in `adb devices`.
-    - APK downloaded from GCS, installed, launched, then executor is created bound to that serial.
-    """
-    # TODO: Failures are often because the ADB server is not listening (default 127.0.0.1:5037) or
-    # Appium is not running (default http://localhost:4723 / APPIUM_URL) — surface clearer errors.
     if build.platform != "android":
         raise RuntimeError(f"Device install path only supports Android builds (got platform={build.platform})")
     if build.artifact_type != "apk":
@@ -173,11 +168,11 @@ def create_action_executor_for_build(
     os.close(fd)
     try:
         logger.info(f"Downloading build from gs://{build.bucket_name}/{build.object_key}")
-        download_apk_from_gcs(build.bucket_name, build.object_key, tmp_apk)
+        # download_apk_from_gcs(build.bucket_name, build.object_key, tmp_apk)
 
         package, activity = resolve_launch_components(tmp_apk, build)
         logger.info(f"Installing APK on {device_udid} (package={package})")
-        adb_install(device_udid, tmp_apk)
+        # adb_install(device_udid, tmp_apk)
 
         logger.info(f"Launching {package} / {activity}")
         adb_launch_app(device_udid, package, activity)

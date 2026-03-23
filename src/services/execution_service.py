@@ -6,6 +6,8 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
+from google.cloud import storage as gcs
+
 from langchain_google_genai import ChatGoogleGenerativeAI
 
 from agent.context import ContextService
@@ -30,6 +32,7 @@ USE_APPIUM = os.getenv("USE_APPIUM", "false").lower() == "true"
 POLLING_INTERVAL = float(os.getenv("POLLING_INTERVAL", "2.5"))
 MAX_STEPS = int(os.getenv("MAX_STEPS", "1000"))
 MAX_CONSECUTIVE_DEVICE_FAILURES = int(os.getenv("MAX_CONSECUTIVE_DEVICE_FAILURES", "3"))
+GCS_BUCKET_NAME = os.getenv("GCS_BUCKET_NAME", "rovix_ai_bucket")
 
 
 class FatalExecutionError(Exception):
@@ -62,10 +65,23 @@ class ExecutionService:
         self._step_repo = ExecutionStepRepository()
         self._structured_model = self._init_model()
         self._vision_detector = self._init_vision_detector()
+        self._gcs_client = gcs.Client()
+        self._gcs_bucket = self._gcs_client.bucket(GCS_BUCKET_NAME)
+
+    @staticmethod
+    def _bg_task(coro, label: str = "background task"):
+        """Fire-and-forget a coroutine, logging any exception instead of silently swallowing it."""
+        task = asyncio.create_task(coro)
+        task.add_done_callback(
+            lambda t: logger.error(f"❌ {label} failed: {t.exception()}")
+            if not t.cancelled() and t.exception()
+            else None
+        )
+        return task
 
     def _init_model(self):
         model = ChatGoogleGenerativeAI(
-            model="gemini-3-flash-preview",
+            model="gemini-3-pro-preview",
             temperature=1.0,
             api_key=os.getenv("GOOGLE_API_KEY"),
         )
@@ -184,7 +200,6 @@ class ExecutionService:
         todo_list = get_todo_list_for_context(session.session_id)
         logger.info(f"\n{'='*60}\n📋 CURRENT TODO LIST:\n{'='*60}\n{todo_list}\n{'='*60}")
 
-        # TODO: replace with S3 URL after upload for the screenshot
         screenshots_dir = os.path.join("screenshots", session.execution_run_id)
         os.makedirs(screenshots_dir, exist_ok=True)
         screenshot_path = os.path.join(screenshots_dir, f"step_{step_num}.png")
@@ -215,6 +230,10 @@ class ExecutionService:
             sdk_enabled=False,
             force_annotate=session.force_annotate,
         )
+
+        # TODO: error handling for the screenshot upload --> its failure shouldn't fail the entire run
+        screenshot_url = await self._upload_screenshot(screenshot_path, session.execution_run_id, step_num)
+        logger.info(f"☁️  Screenshot uploaded: {screenshot_url}")
 
         messages = session.context_service.get_messages_for_llm(session.session_id)
         logger.info("🤖 Getting agent decision from LLM...")
@@ -249,23 +268,26 @@ class ExecutionService:
                 completion=r.completion,
                 failure_reason=r.failure_reason,
                 comment=r.comment,
-                screenshot_url=screenshot_path,  # TODO: swap for S3 URL
+                screenshot_url=screenshot_url,
             )
             session.collected_results.append(assertion_result)
             step_assertion_results.append(assertion_result)
 
-        await self._step_repo.create(
-            execution_run_id=session.execution_run_id,
-            step_number=step_num,
-            screenshot_url=screenshot_path,  # TODO: swap for S3 URL after upload
-            game_state_summary=output.game_state_summary,
-            reason=output.reason,
-            actions_taken=[a.model_dump() for a in output.actions],
-            todo_snapshot=self._get_todo_snapshot(session.session_id),
-            assertion_results_reported=step_assertion_results,
-            token_usage=token_usage,
+        self._bg_task(
+            self._step_repo.create(
+                execution_run_id=session.execution_run_id,
+                step_number=step_num,
+                screenshot_url=screenshot_url,
+                game_state_summary=output.game_state_summary,
+                reason=output.reason,
+                actions_taken=[a.model_dump() for a in output.actions],
+                todo_snapshot=self._get_todo_snapshot(session.session_id),
+                assertion_results_reported=step_assertion_results,
+                token_usage=token_usage,
+            ),
+            label=f"ExecutionStep {step_num} DB write",
         )
-        logger.info(f"💾 ExecutionStep {step_num} written to DB")
+        logger.info(f"💾 ExecutionStep {step_num} DB write dispatched (background)")
 
         if output.end_game:
             logger.info("🛑 Agent signaled end of execution")
@@ -351,6 +373,20 @@ class ExecutionService:
         except Exception:
             pass
         return TokenUsage()
+
+    async def _upload_screenshot(self, local_path: str, execution_run_id: str, step_num: int) -> str:
+        blob_name = f"screenshots/{execution_run_id}/step_{step_num}.png"
+
+        def _do_upload():
+            blob = self._gcs_bucket.blob(blob_name)
+            blob.upload_from_filename(local_path)
+
+        await asyncio.to_thread(_do_upload)
+        try:
+            os.remove(local_path)
+        except OSError:
+            pass
+        return f"/api/executions/{execution_run_id}/steps/{step_num}/screenshot"
 
     def _get_todo_snapshot(self, session_id: str) -> List[dict]:
         return [t.to_dict() for t in TodoPersistenceService.get_todo_list(session_id)]
