@@ -1,0 +1,3 @@
+2026-03-25 19:45:17 | INFO     | agent.database                      | Connected to MongoDB: game_testing
+2026-03-25 19:45:17 | INFO     | agent.services.execution_service    | 🤖 Using Azure OpenAI model: gpt-4o (instance=ayush-ma9djmae-eastus2)
+2026-03-25 19:45:17 | INFO     | agent.services.execution_service    | Marked 1 stale execution run(s) as failed on startup

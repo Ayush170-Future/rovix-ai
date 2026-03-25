@@ -1,0 +1,1446 @@
+2026-03-25 16:17:31 | INFO     | agent.database                      | Connected to MongoDB: game_testing
+2026-03-25 16:17:31 | INFO     | agent.services.execution_service    | 🤖 Using Google model: gemini-3-pro-preview
+2026-03-25 16:17:52 | INFO     | agent.services.android_build_runner | Downloading build from gs://rovix_ai_bucket/game_builds/69a1a52bddccbd191280e7eb/69c3b570cfc0a8cd9c2e6e04/android/20260325102923_6ca0bfff363c4c34bf60bd6a64575ee1_cooking-fever-mod_26.1.2-an1.com.apk
+2026-03-25 16:18:19 | INFO     | agent.services.android_build_runner | Installing APK on RZCW31HH47R (package=com.nordcurrent.canteenhd)
+2026-03-25 16:18:34 | INFO     | agent.services.android_build_runner | Launching com.nordcurrent.canteenhd / com.nordcurrent.canteenhd.MainActivity
+2026-03-25 16:18:35 | INFO     | agent.appium_manager                | 📱 Using device with UDID: RZCW31HH47R
+2026-03-25 16:18:35 | INFO     | agent.appium_manager                | 🎯 Appium will launch app: com.nordcurrent.canteenhd
+2026-03-25 16:18:35 | INFO     | agent.appium_manager                | 🔌 Connecting to Appium server at http://localhost:4723...
+2026-03-25 16:18:46 | INFO     | agent.appium_manager                | ✅ Appium session started: 6493eba0-c9e4-46cb-b510-02bbb986398a
+2026-03-25 16:18:46 | INFO     | agent.services.execution_service    | Starting execution 69c3bd584acc0170d3e1c7ae on device RZCW31HH47R
+2026-03-25 16:18:46 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 0 | Run 69c3bd58
+================================================================================
+2026-03-25 16:18:46 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[PENDING] [1] [ACTION] Launch the game and wait for the tutorial narrative to begin.
+[PENDING] [2] [VERIFY] Verify that the narrative dialogue box and character sprites are rendered correctly on the screen. (depends on: 1)
+[PENDING] [3] [VERIFY] Verify that the dialogue text is grammatically correct and contains no spelling errors. (depends on: 2)
+[PENDING] [4] [ACTION] Follow the on-screen tutorial prompts to select ingredients, cook the patty, and assemble the burger or hotdog. (depends on: 3)
+[PENDING] [5] [ACTION] Serve the completed item to the customer by tapping the finished dish. (depends on: 4)
+[PENDING] [6] [VERIFY] Verify that the Level 1 completion screen is displayed indicating the tutorial step is successful. (depends on: 5)
+============================================================
+2026-03-25 16:18:49 | INFO     | agent.services.execution_service    | 💾 step_0.png (captured in 2.60s)
+2026-03-25 16:18:49 | INFO     | agent.context.context_service       | 🆕 No cached annotation yet, running first annotation
+2026-03-25 16:18:49 | INFO     | agent.vision_element_detector       | 🔍 Vision detection
+2026-03-25 16:18:57 | INFO     | agent.vision_element_detector       | ⏱️  Vision API response time: 7.73s
+2026-03-25 16:18:57 | INFO     | agent.vision_element_detector       | ✅ Detected 11 elements via vision
+2026-03-25 16:18:57 | DEBUG    | agent.context.context_service       | 💾 Annotation cache updated for step 0
+2026-03-25 16:18:57 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-03-25 16:18:57 | INFO     | agent.vision_element_detector       | 📸 Annotated image saved
+2026-03-25 16:19:12 | INFO     | agent.services.execution_service    | ⏱️  LLM response time: 15.35s
+2026-03-25 16:19:12 | INFO     | agent.services.execution_service    | ☁️  Screenshot uploaded: /api/executions/69c3bd584acc0170d3e1c7ae/steps/0/screenshot
+2026-03-25 16:19:12 | INFO     | agent.services.execution_service    | ✅ Agent decision received
+2026-03-25 16:19:12 | INFO     | agent.services.execution_service    |    📝 Game state: The game is currently launching, displaying the Nordcurrent logo and a chef character against a background of a map.
+2026-03-25 16:19:12 | INFO     | agent.services.execution_service    |    🤔 Reasoning: The game has just been launched and is on the loading screen showing the publisher's logo. I need to wait for the game to fully load and transition to the tutorial narrative.
+2026-03-25 16:19:12 | INFO     | agent.services.execution_service    |    🔍 Force annotate: False
+2026-03-25 16:19:12 | INFO     | agent.services.execution_service    |    🎯 Actions count: 2
+2026-03-25 16:19:12 | INFO     | agent.services.execution_service    |    🏁 End game: False
+2026-03-25 16:19:12 | INFO     | agent.services.execution_service    |    📋 Test results: []
+2026-03-25 16:19:12 | INFO     | agent.services.execution_service    |    📊 Token usage — Input: 0, Output: 0, Total: 0
+2026-03-25 16:19:12 | INFO     | agent.services.execution_service    | 💾 ExecutionStep 0 DB write dispatched (background)
+2026-03-25 16:19:12 | INFO     | agent.services.execution_service    |    todo_write (1/2): updated 6 tasks {'pending': 5, 'in_progress': 1, 'completed': 0, 'cancelled': 0, 'actions': 3, 'verifications': 3}
+2026-03-25 16:19:12 | INFO     | agent.services.execution_service    |    action (2/2): wait x=None y=None duration=5.0
+2026-03-25 16:19:12 | INFO     | agent.appium_manager                | ⏳ WAIT: 5.0s
+2026-03-25 16:19:19 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 1 | Run 69c3bd58
+================================================================================
+2026-03-25 16:19:19 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[IN_PROGRESS] [1] [ACTION] Launch the game and wait for the tutorial narrative to begin.
+[PENDING] [2] [VERIFY] Verify that the narrative dialogue box and character sprites are rendered correctly on the screen. (depends on: 1)
+[PENDING] [3] [VERIFY] Verify that the dialogue text is grammatically correct and contains no spelling errors. (depends on: 2)
+[PENDING] [4] [ACTION] Follow the on-screen tutorial prompts to select ingredients, cook the patty, and assemble the burger or hotdog. (depends on: 3)
+[PENDING] [5] [ACTION] Serve the completed item to the customer by tapping the finished dish. (depends on: 4)
+[PENDING] [6] [VERIFY] Verify that the Level 1 completion screen is displayed indicating the tutorial step is successful. (depends on: 5)
+============================================================
+2026-03-25 16:19:20 | INFO     | agent.services.execution_service    | 💾 step_1.png (captured in 0.84s)
+2026-03-25 16:19:20 | DEBUG    | agent.context.context_service       | 🔍 Annotation cache: dhash distance=24 (threshold=15)
+2026-03-25 16:19:20 | INFO     | agent.context.context_service       | 🆕 Screen changed (distance=24 >= 15), running fresh annotation
+2026-03-25 16:19:20 | INFO     | agent.vision_element_detector       | 🔍 Vision detection
+2026-03-25 16:19:26 | INFO     | agent.vision_element_detector       | ⏱️  Vision API response time: 6.47s
+2026-03-25 16:19:26 | INFO     | agent.vision_element_detector       | ✅ Detected 4 elements via vision
+2026-03-25 16:19:26 | DEBUG    | agent.context.context_service       | 💾 Annotation cache updated for step 1
+2026-03-25 16:19:26 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-03-25 16:19:27 | INFO     | agent.vision_element_detector       | 📸 Annotated image saved
+2026-03-25 16:19:37 | INFO     | agent.services.execution_service    | ⏱️  LLM response time: 10.45s
+2026-03-25 16:19:37 | INFO     | agent.services.execution_service    | ☁️  Screenshot uploaded: /api/executions/69c3bd584acc0170d3e1c7ae/steps/1/screenshot
+2026-03-25 16:19:37 | INFO     | agent.services.execution_service    | ✅ Agent decision received
+2026-03-25 16:19:37 | INFO     | agent.services.execution_service    |    📝 Game state: A Google Play Games sign-in prompt is displayed over the game background, asking to select a Play Games profile.
+2026-03-25 16:19:37 | INFO     | agent.services.execution_service    |    🤔 Reasoning: To continue launching the game and reach the tutorial, I need to dismiss the Google Play Games prompt. I will click the 'Continue' button to proceed with the selected profile.
+2026-03-25 16:19:37 | INFO     | agent.services.execution_service    |    🔍 Force annotate: False
+2026-03-25 16:19:37 | INFO     | agent.services.execution_service    |    🎯 Actions count: 2
+2026-03-25 16:19:37 | INFO     | agent.services.execution_service    |    🏁 End game: False
+2026-03-25 16:19:37 | INFO     | agent.services.execution_service    |    📋 Test results: []
+2026-03-25 16:19:37 | INFO     | agent.services.execution_service    |    📊 Token usage — Input: 0, Output: 0, Total: 0
+2026-03-25 16:19:37 | INFO     | agent.services.execution_service    | 💾 ExecutionStep 1 DB write dispatched (background)
+2026-03-25 16:19:37 | INFO     | agent.services.execution_service    |    action (1/2): click x=1907 y=176 duration=0.1
+2026-03-25 16:19:37 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (1907, 176) duration=0.1s
+2026-03-25 16:19:37 | INFO     | agent.services.execution_service    |    action (2/2): wait x=None y=None duration=5.0
+2026-03-25 16:19:37 | INFO     | agent.appium_manager                | ⏳ WAIT: 5.0s
+2026-03-25 16:19:44 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 2 | Run 69c3bd58
+================================================================================
+2026-03-25 16:19:44 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[IN_PROGRESS] [1] [ACTION] Launch the game and wait for the tutorial narrative to begin.
+[PENDING] [2] [VERIFY] Verify that the narrative dialogue box and character sprites are rendered correctly on the screen. (depends on: 1)
+[PENDING] [3] [VERIFY] Verify that the dialogue text is grammatically correct and contains no spelling errors. (depends on: 2)
+[PENDING] [4] [ACTION] Follow the on-screen tutorial prompts to select ingredients, cook the patty, and assemble the burger or hotdog. (depends on: 3)
+[PENDING] [5] [ACTION] Serve the completed item to the customer by tapping the finished dish. (depends on: 4)
+[PENDING] [6] [VERIFY] Verify that the Level 1 completion screen is displayed indicating the tutorial step is successful. (depends on: 5)
+============================================================
+2026-03-25 16:19:47 | INFO     | agent.services.execution_service    | 💾 step_2.png (captured in 2.69s)
+2026-03-25 16:19:47 | DEBUG    | agent.context.context_service       | 🔍 Annotation cache: dhash distance=27 (threshold=15)
+2026-03-25 16:19:47 | INFO     | agent.context.context_service       | 🆕 Screen changed (distance=27 >= 15), running fresh annotation
+2026-03-25 16:19:47 | INFO     | agent.vision_element_detector       | 🔍 Vision detection
+2026-03-25 16:19:52 | INFO     | agent.vision_element_detector       | ⏱️  Vision API response time: 4.66s
+2026-03-25 16:19:52 | INFO     | agent.vision_element_detector       | ✅ Detected 4 elements via vision
+2026-03-25 16:19:52 | DEBUG    | agent.context.context_service       | 💾 Annotation cache updated for step 2
+2026-03-25 16:19:52 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-03-25 16:19:52 | INFO     | agent.vision_element_detector       | 📸 Annotated image saved
+2026-03-25 16:19:59 | INFO     | agent.services.execution_service    | ⏱️  LLM response time: 6.95s
+2026-03-25 16:19:59 | INFO     | agent.services.execution_service    | ☁️  Screenshot uploaded: /api/executions/69c3bd584acc0170d3e1c7ae/steps/2/screenshot
+2026-03-25 16:19:59 | INFO     | agent.services.execution_service    | ✅ Agent decision received
+2026-03-25 16:19:59 | INFO     | agent.services.execution_service    |    📝 Game state: The game is currently on the loading screen, displaying the 'Cooking Fever' logo, the chef character, and a 'LOADING' text with a tip about coins.
+2026-03-25 16:19:59 | INFO     | agent.services.execution_service    |    🤔 Reasoning: The game is still in the process of loading. I need to wait further until the loading finishes and the game transitions to the actual gameplay or tutorial narrative.
+2026-03-25 16:19:59 | INFO     | agent.services.execution_service    |    🔍 Force annotate: False
+2026-03-25 16:19:59 | INFO     | agent.services.execution_service    |    🎯 Actions count: 1
+2026-03-25 16:19:59 | INFO     | agent.services.execution_service    |    🏁 End game: False
+2026-03-25 16:19:59 | INFO     | agent.services.execution_service    |    📋 Test results: []
+2026-03-25 16:19:59 | INFO     | agent.services.execution_service    |    📊 Token usage — Input: 0, Output: 0, Total: 0
+2026-03-25 16:19:59 | INFO     | agent.services.execution_service    | 💾 ExecutionStep 2 DB write dispatched (background)
+2026-03-25 16:19:59 | INFO     | agent.services.execution_service    |    action (1/1): wait x=None y=None duration=5.0
+2026-03-25 16:19:59 | INFO     | agent.appium_manager                | ⏳ WAIT: 5.0s
+2026-03-25 16:20:06 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 3 | Run 69c3bd58
+================================================================================
+2026-03-25 16:20:06 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[IN_PROGRESS] [1] [ACTION] Launch the game and wait for the tutorial narrative to begin.
+[PENDING] [2] [VERIFY] Verify that the narrative dialogue box and character sprites are rendered correctly on the screen. (depends on: 1)
+[PENDING] [3] [VERIFY] Verify that the dialogue text is grammatically correct and contains no spelling errors. (depends on: 2)
+[PENDING] [4] [ACTION] Follow the on-screen tutorial prompts to select ingredients, cook the patty, and assemble the burger or hotdog. (depends on: 3)
+[PENDING] [5] [ACTION] Serve the completed item to the customer by tapping the finished dish. (depends on: 4)
+[PENDING] [6] [VERIFY] Verify that the Level 1 completion screen is displayed indicating the tutorial step is successful. (depends on: 5)
+============================================================
+2026-03-25 16:20:08 | INFO     | agent.services.execution_service    | 💾 step_3.png (captured in 1.90s)
+2026-03-25 16:20:08 | DEBUG    | agent.context.context_service       | 🔍 Annotation cache: dhash distance=21 (threshold=15)
+2026-03-25 16:20:08 | INFO     | agent.context.context_service       | 🆕 Screen changed (distance=21 >= 15), running fresh annotation
+2026-03-25 16:20:08 | INFO     | agent.vision_element_detector       | 🔍 Vision detection
+2026-03-25 16:20:17 | INFO     | agent.vision_element_detector       | ⏱️  Vision API response time: 8.85s
+2026-03-25 16:20:17 | INFO     | agent.vision_element_detector       | ✅ Detected 10 elements via vision
+2026-03-25 16:20:17 | DEBUG    | agent.context.context_service       | 💾 Annotation cache updated for step 3
+2026-03-25 16:20:17 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-03-25 16:20:17 | INFO     | agent.vision_element_detector       | 📸 Annotated image saved
+2026-03-25 16:22:21 | INFO     | agent.services.execution_service    | ⏱️  LLM response time: 124.54s
+2026-03-25 16:22:21 | INFO     | agent.services.execution_service    | ☁️  Screenshot uploaded: /api/executions/69c3bd584acc0170d3e1c7ae/steps/3/screenshot
+2026-03-25 16:22:21 | INFO     | agent.services.execution_service    | ✅ Agent decision received
+2026-03-25 16:22:21 | INFO     | agent.services.execution_service    |    📝 Game state: The game has finished loading the initial screen, but a 'Progress rollback' popup message is displayed in the center of the screen, blocking the main view.
+2026-03-25 16:22:21 | INFO     | agent.services.execution_service    |    🤔 Reasoning: I need to dismiss the 'Progress rollback' popup by clicking the 'OK' button to proceed into the game and reach the tutorial narrative.
+2026-03-25 16:22:21 | INFO     | agent.services.execution_service    |    🔍 Force annotate: False
+2026-03-25 16:22:21 | INFO     | agent.services.execution_service    |    🎯 Actions count: 2
+2026-03-25 16:22:21 | INFO     | agent.services.execution_service    |    🏁 End game: False
+2026-03-25 16:22:21 | INFO     | agent.services.execution_service    |    📋 Test results: []
+2026-03-25 16:22:21 | INFO     | agent.services.execution_service    |    📊 Token usage — Input: 0, Output: 0, Total: 0
+2026-03-25 16:22:21 | INFO     | agent.services.execution_service    | 💾 ExecutionStep 3 DB write dispatched (background)
+2026-03-25 16:22:21 | INFO     | agent.services.execution_service    |    action (1/2): click x=1239 y=794 duration=0.1
+2026-03-25 16:22:21 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (1239, 794) duration=0.1s
+2026-03-25 16:22:22 | INFO     | agent.services.execution_service    |    action (2/2): wait x=None y=None duration=2.0
+2026-03-25 16:22:22 | INFO     | agent.appium_manager                | ⏳ WAIT: 2.0s
+2026-03-25 16:22:26 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 4 | Run 69c3bd58
+================================================================================
+2026-03-25 16:22:26 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[IN_PROGRESS] [1] [ACTION] Launch the game and wait for the tutorial narrative to begin.
+[PENDING] [2] [VERIFY] Verify that the narrative dialogue box and character sprites are rendered correctly on the screen. (depends on: 1)
+[PENDING] [3] [VERIFY] Verify that the dialogue text is grammatically correct and contains no spelling errors. (depends on: 2)
+[PENDING] [4] [ACTION] Follow the on-screen tutorial prompts to select ingredients, cook the patty, and assemble the burger or hotdog. (depends on: 3)
+[PENDING] [5] [ACTION] Serve the completed item to the customer by tapping the finished dish. (depends on: 4)
+[PENDING] [6] [VERIFY] Verify that the Level 1 completion screen is displayed indicating the tutorial step is successful. (depends on: 5)
+============================================================
+2026-03-25 16:22:27 | INFO     | agent.services.execution_service    | 💾 step_4.png (captured in 1.72s)
+2026-03-25 16:22:28 | DEBUG    | agent.context.context_service       | 🔍 Annotation cache: dhash distance=12 (threshold=15)
+2026-03-25 16:22:28 | INFO     | agent.context.context_service       | ♻️  Reusing cached annotations from step 3 (distance=12 < 15)
+2026-03-25 16:22:28 | DEBUG    | agent.context.context_service       |    Cached text: Detected interactive elements on screen:
+- Player profile icon at (652, 83) bbox: [570, 20, 734, 147] - Player profile icon
+- Experience progress bar at (864, 83) bbox: [748, 20, 980, 147] - Experience progress bar
+- Add currency button at (1049, 83) bbox: [994, 20, 1105, 147] - Add currency button
+- Gold currency display at (1269, 83) bbox: [1119, 20, 1420, 147] - Gold currency display
+- Add currency button at (1490, 83) bbox: [1435, 20, 1545, 147] - Add currency button
+- Diamond currency display at (1710, 83) bbox: [1560, 20, 1861, 147] - Diamond currency display
+- Progress rollback message box at (1238, 615) bbox: [903, 369, 1574, 862] - Progress rollback message box
+- OK button at (1239, 794) bbox: [1083, 758, 1396, 830] - OK button
+- Trophy icon at (2235, 872) bbox: [2164, 824, 2306, 920] - Trophy icon
+- Settings icon at (2235, 1002) bbox: [2164, 954, 2306, 1050] - Settings icon
+2026-03-25 16:22:28 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-03-25 16:22:38 | INFO     | agent.services.execution_service    | ⏱️  LLM response time: 10.78s
+2026-03-25 16:22:38 | INFO     | agent.services.execution_service    | ☁️  Screenshot uploaded: /api/executions/69c3bd584acc0170d3e1c7ae/steps/4/screenshot
+2026-03-25 16:22:38 | INFO     | agent.services.execution_service    | ✅ Agent decision received
+2026-03-25 16:22:38 | INFO     | agent.services.execution_service    |    📝 Game state: The game map is displayed with several locked locations. One location in the bottom-left area has a green 'play' arrow, indicating it is the playable starting level. The 'Progress rollback' modal from the previous step has been successfully dismissed.
+2026-03-25 16:22:38 | INFO     | agent.services.execution_service    |    🤔 Reasoning: The 'Progress rollback' modal is no longer on the screen, but the cached elements still list it. I need to force an annotation update to get the correct coordinates for the green 'play' button over the starting restaurant to begin the level and trigger the tutorial.
+2026-03-25 16:22:38 | INFO     | agent.services.execution_service    |    🔍 Force annotate: True
+2026-03-25 16:22:38 | INFO     | agent.services.execution_service    |    🎯 Actions count: 0
+2026-03-25 16:22:38 | INFO     | agent.services.execution_service    |    🏁 End game: False
+2026-03-25 16:22:38 | INFO     | agent.services.execution_service    |    📋 Test results: []
+2026-03-25 16:22:38 | INFO     | agent.services.execution_service    |    📊 Token usage — Input: 0, Output: 0, Total: 0
+2026-03-25 16:22:38 | INFO     | agent.services.execution_service    | 💾 ExecutionStep 4 DB write dispatched (background)
+2026-03-25 16:22:40 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 5 | Run 69c3bd58
+================================================================================
+2026-03-25 16:22:40 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[IN_PROGRESS] [1] [ACTION] Launch the game and wait for the tutorial narrative to begin.
+[PENDING] [2] [VERIFY] Verify that the narrative dialogue box and character sprites are rendered correctly on the screen. (depends on: 1)
+[PENDING] [3] [VERIFY] Verify that the dialogue text is grammatically correct and contains no spelling errors. (depends on: 2)
+[PENDING] [4] [ACTION] Follow the on-screen tutorial prompts to select ingredients, cook the patty, and assemble the burger or hotdog. (depends on: 3)
+[PENDING] [5] [ACTION] Serve the completed item to the customer by tapping the finished dish. (depends on: 4)
+[PENDING] [6] [VERIFY] Verify that the Level 1 completion screen is displayed indicating the tutorial step is successful. (depends on: 5)
+============================================================
+2026-03-25 16:22:42 | INFO     | agent.services.execution_service    | 💾 step_5.png (captured in 1.65s)
+2026-03-25 16:22:42 | INFO     | agent.context.context_service       | 🔄 Force annotation requested, bypassing cache
+2026-03-25 16:22:42 | INFO     | agent.vision_element_detector       | 🔍 Vision detection
+2026-03-25 16:22:55 | INFO     | agent.vision_element_detector       | ⏱️  Vision API response time: 12.77s
+2026-03-25 16:22:55 | INFO     | agent.vision_element_detector       | ✅ Detected 20 elements via vision
+2026-03-25 16:22:55 | DEBUG    | agent.context.context_service       | 💾 Annotation cache updated for step 5
+2026-03-25 16:22:55 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-03-25 16:22:55 | INFO     | agent.vision_element_detector       | 📸 Annotated image saved
+2026-03-25 16:23:07 | INFO     | agent.services.execution_service    | ⏱️  LLM response time: 11.78s
+2026-03-25 16:23:07 | INFO     | agent.services.execution_service    | ☁️  Screenshot uploaded: /api/executions/69c3bd584acc0170d3e1c7ae/steps/5/screenshot
+2026-03-25 16:23:07 | INFO     | agent.services.execution_service    | ✅ Agent decision received
+2026-03-25 16:23:07 | INFO     | agent.services.execution_service    |    📝 Game state: The game map is displayed with the starting location highlighted by a green 'play' button over a fast-food restaurant. The UI elements such as currency, experience, and locked levels are fully loaded.
+2026-03-25 16:23:07 | INFO     | agent.services.execution_service    |    🤔 Reasoning: To progress to the tutorial narrative, I need to select the starting level. I will click the prominent green 'Play level button' located at the fast-food restaurant on the map.
+2026-03-25 16:23:07 | INFO     | agent.services.execution_service    |    🔍 Force annotate: False
+2026-03-25 16:23:07 | INFO     | agent.services.execution_service    |    🎯 Actions count: 2
+2026-03-25 16:23:07 | INFO     | agent.services.execution_service    |    🏁 End game: False
+2026-03-25 16:23:07 | INFO     | agent.services.execution_service    |    📋 Test results: []
+2026-03-25 16:23:07 | INFO     | agent.services.execution_service    |    📊 Token usage — Input: 0, Output: 0, Total: 0
+2026-03-25 16:23:07 | INFO     | agent.services.execution_service    | 💾 ExecutionStep 5 DB write dispatched (background)
+2026-03-25 16:23:07 | INFO     | agent.services.execution_service    |    action (1/2): click x=795 y=862 duration=0.1
+2026-03-25 16:23:07 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (795, 862) duration=0.1s
+2026-03-25 16:23:07 | INFO     | agent.services.execution_service    |    action (2/2): wait x=None y=None duration=3.0
+2026-03-25 16:23:07 | INFO     | agent.appium_manager                | ⏳ WAIT: 3.0s
+2026-03-25 16:23:12 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 6 | Run 69c3bd58
+================================================================================
+2026-03-25 16:23:12 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[IN_PROGRESS] [1] [ACTION] Launch the game and wait for the tutorial narrative to begin.
+[PENDING] [2] [VERIFY] Verify that the narrative dialogue box and character sprites are rendered correctly on the screen. (depends on: 1)
+[PENDING] [3] [VERIFY] Verify that the dialogue text is grammatically correct and contains no spelling errors. (depends on: 2)
+[PENDING] [4] [ACTION] Follow the on-screen tutorial prompts to select ingredients, cook the patty, and assemble the burger or hotdog. (depends on: 3)
+[PENDING] [5] [ACTION] Serve the completed item to the customer by tapping the finished dish. (depends on: 4)
+[PENDING] [6] [VERIFY] Verify that the Level 1 completion screen is displayed indicating the tutorial step is successful. (depends on: 5)
+============================================================
+2026-03-25 16:23:13 | INFO     | agent.services.execution_service    | 💾 step_6.png (captured in 1.41s)
+2026-03-25 16:23:14 | DEBUG    | agent.context.context_service       | 🔍 Annotation cache: dhash distance=12 (threshold=15)
+2026-03-25 16:23:14 | INFO     | agent.context.context_service       | ♻️  Reusing cached annotations from step 5 (distance=12 < 15)
+2026-03-25 16:23:14 | DEBUG    | agent.context.context_service       |    Cached text: Detected interactive elements on screen:
+- Player profile avatar at (658, 82) bbox: [570, 18, 746, 147] - Player profile avatar
+- Experience progress bar at (907, 49) bbox: [756, 14, 1059, 84] - Experience progress bar
+- Gold currency display at (1245, 50) bbox: [1071, 16, 1420, 84] - Gold currency display
+- Gem currency display at (1666, 50) bbox: [1435, 16, 1897, 84] - Gem currency display
+- Level number display at (717, 116) bbox: [688, 93, 746, 140] - Level number display
+- Locked level icon at (336, 340) bbox: [281, 293, 392, 388] - Locked level icon
+- Locked level icon at (123, 505) bbox: [67, 460, 180, 550] - Locked level icon
+- Locked level icon at (284, 619) bbox: [228, 573, 341, 666] - Locked level icon
+- Locked level icon at (561, 553) bbox: [505, 508, 618, 599] - Locked level icon
+- Locked level icon at (803, 295) bbox: [748, 250, 859, 341] - Locked level icon
+- Locked level icon at (972, 567) bbox: [917, 521, 1028, 613] - Locked level icon
+- Locked level icon at (1368, 462) bbox: [1312, 416, 1425, 508] - Locked level icon
+- Locked level icon at (1385, 225) bbox: [1331, 181, 1439, 270] - Locked level icon
+- Locked level icon at (1832, 370) bbox: [1774, 324, 1890, 416] - Locked level icon
+- Locked level icon at (1676, 567) bbox: [1620, 521, 1733, 613] - Locked level icon
+- Locked level icon at (1470, 846) bbox: [1415, 801, 1526, 891] - Locked level icon
+- Trophy icon at (2233, 872) bbox: [2164, 824, 2302, 921] - Trophy icon
+- Settings menu icon at (2233, 983) bbox: [2164, 935, 2302, 1032] - Settings menu icon
+- Free gift button at (223, 1001) bbox: [142, 946, 305, 1056] - Free gift button
+- Play level button at (795, 862) bbox: [539, 693, 1052, 1032] - Play level button
+2026-03-25 16:23:14 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-03-25 16:23:29 | INFO     | agent.services.execution_service    | ⏱️  LLM response time: 15.91s
+2026-03-25 16:23:29 | INFO     | agent.services.execution_service    | ☁️  Screenshot uploaded: /api/executions/69c3bd584acc0170d3e1c7ae/steps/6/screenshot
+2026-03-25 16:23:29 | INFO     | agent.services.execution_service    | ✅ Agent decision received
+2026-03-25 16:23:29 | INFO     | agent.services.execution_service    |    📝 Game state: The 'Progress rollback' popup has reappeared after attempting to start the level. I need to acknowledge this message to proceed.
+2026-03-25 16:23:29 | INFO     | agent.services.execution_service    |    🤔 Reasoning: The 'Progress rollback' popup is blocking the screen again. I need to click the 'OK' button to dismiss it and continue. Since the elements cache might be stale or misaligned with the popup reappearing, I will use the previously known coordinates for the 'OK' button.
+2026-03-25 16:23:29 | INFO     | agent.services.execution_service    |    🔍 Force annotate: False
+2026-03-25 16:23:29 | INFO     | agent.services.execution_service    |    🎯 Actions count: 2
+2026-03-25 16:23:29 | INFO     | agent.services.execution_service    |    🏁 End game: False
+2026-03-25 16:23:29 | INFO     | agent.services.execution_service    |    📋 Test results: []
+2026-03-25 16:23:29 | INFO     | agent.services.execution_service    |    📊 Token usage — Input: 0, Output: 0, Total: 0
+2026-03-25 16:23:29 | INFO     | agent.services.execution_service    | 💾 ExecutionStep 6 DB write dispatched (background)
+2026-03-25 16:23:29 | INFO     | agent.services.execution_service    |    action (1/2): click x=1239 y=794 duration=0.1
+2026-03-25 16:23:29 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (1239, 794) duration=0.1s
+2026-03-25 16:23:30 | INFO     | agent.services.execution_service    |    action (2/2): wait x=None y=None duration=2.0
+2026-03-25 16:23:30 | INFO     | agent.appium_manager                | ⏳ WAIT: 2.0s
+2026-03-25 16:23:34 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 7 | Run 69c3bd58
+================================================================================
+2026-03-25 16:23:34 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[IN_PROGRESS] [1] [ACTION] Launch the game and wait for the tutorial narrative to begin.
+[PENDING] [2] [VERIFY] Verify that the narrative dialogue box and character sprites are rendered correctly on the screen. (depends on: 1)
+[PENDING] [3] [VERIFY] Verify that the dialogue text is grammatically correct and contains no spelling errors. (depends on: 2)
+[PENDING] [4] [ACTION] Follow the on-screen tutorial prompts to select ingredients, cook the patty, and assemble the burger or hotdog. (depends on: 3)
+[PENDING] [5] [ACTION] Serve the completed item to the customer by tapping the finished dish. (depends on: 4)
+[PENDING] [6] [VERIFY] Verify that the Level 1 completion screen is displayed indicating the tutorial step is successful. (depends on: 5)
+============================================================
+2026-03-25 16:23:36 | INFO     | agent.services.execution_service    | 💾 step_7.png (captured in 1.66s)
+2026-03-25 16:23:36 | DEBUG    | agent.context.context_service       | 🔍 Annotation cache: dhash distance=27 (threshold=15)
+2026-03-25 16:23:36 | INFO     | agent.context.context_service       | 🆕 Screen changed (distance=27 >= 15), running fresh annotation
+2026-03-25 16:23:36 | INFO     | agent.vision_element_detector       | 🔍 Vision detection
+2026-03-25 16:23:42 | INFO     | agent.vision_element_detector       | ⏱️  Vision API response time: 6.38s
+2026-03-25 16:23:42 | INFO     | agent.vision_element_detector       | ✅ Detected 14 elements via vision
+2026-03-25 16:23:42 | DEBUG    | agent.context.context_service       | 💾 Annotation cache updated for step 7
+2026-03-25 16:23:42 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-03-25 16:23:42 | INFO     | agent.vision_element_detector       | 📸 Annotated image saved
+2026-03-25 16:23:55 | INFO     | agent.services.execution_service    | ⏱️  LLM response time: 12.62s
+2026-03-25 16:23:55 | INFO     | agent.services.execution_service    | ☁️  Screenshot uploaded: /api/executions/69c3bd584acc0170d3e1c7ae/steps/7/screenshot
+2026-03-25 16:23:55 | INFO     | agent.services.execution_service    | ✅ Agent decision received
+2026-03-25 16:23:55 | INFO     | agent.services.execution_service    |    📝 Game state: The game has transitioned into the first level, showing the restaurant interior behind the counter. Cooking stations and ingredients are visible, but no customers or tutorial dialogues are present yet.
+2026-03-25 16:23:55 | INFO     | agent.services.execution_service    |    🤔 Reasoning: The level has just loaded. I need to wait a few seconds to see if the tutorial dialogue or the first customer appears as part of the First Time User Experience (FTUE).
+2026-03-25 16:23:55 | INFO     | agent.services.execution_service    |    🔍 Force annotate: False
+2026-03-25 16:23:55 | INFO     | agent.services.execution_service    |    🎯 Actions count: 1
+2026-03-25 16:23:55 | INFO     | agent.services.execution_service    |    🏁 End game: False
+2026-03-25 16:23:55 | INFO     | agent.services.execution_service    |    📋 Test results: []
+2026-03-25 16:23:55 | INFO     | agent.services.execution_service    |    📊 Token usage — Input: 0, Output: 0, Total: 0
+2026-03-25 16:23:55 | INFO     | agent.services.execution_service    | 💾 ExecutionStep 7 DB write dispatched (background)
+2026-03-25 16:23:55 | INFO     | agent.services.execution_service    |    action (1/1): wait x=None y=None duration=3.0
+2026-03-25 16:23:55 | INFO     | agent.appium_manager                | ⏳ WAIT: 3.0s
+2026-03-25 16:24:00 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 8 | Run 69c3bd58
+================================================================================
+2026-03-25 16:24:00 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[IN_PROGRESS] [1] [ACTION] Launch the game and wait for the tutorial narrative to begin.
+[PENDING] [2] [VERIFY] Verify that the narrative dialogue box and character sprites are rendered correctly on the screen. (depends on: 1)
+[PENDING] [3] [VERIFY] Verify that the dialogue text is grammatically correct and contains no spelling errors. (depends on: 2)
+[PENDING] [4] [ACTION] Follow the on-screen tutorial prompts to select ingredients, cook the patty, and assemble the burger or hotdog. (depends on: 3)
+[PENDING] [5] [ACTION] Serve the completed item to the customer by tapping the finished dish. (depends on: 4)
+[PENDING] [6] [VERIFY] Verify that the Level 1 completion screen is displayed indicating the tutorial step is successful. (depends on: 5)
+============================================================
+2026-03-25 16:24:02 | INFO     | agent.services.execution_service    | 💾 step_8.png (captured in 1.84s)
+2026-03-25 16:24:02 | DEBUG    | agent.context.context_service       | 🔍 Annotation cache: dhash distance=14 (threshold=15)
+2026-03-25 16:24:02 | INFO     | agent.context.context_service       | ♻️  Reusing cached annotations from step 7 (distance=14 < 15)
+2026-03-25 16:24:02 | DEBUG    | agent.context.context_service       |    Cached text: Detected interactive elements on screen:
+- Menu button at (702, 58) bbox: [635, 12, 770, 105] - Menu button
+- Level progress display at (853, 58) bbox: [777, 12, 929, 105] - Level progress display
+- Coin currency display at (1010, 58) bbox: [934, 12, 1086, 105] - Coin currency display
+- Star rating display at (1166, 58) bbox: [1090, 12, 1242, 105] - Star rating display
+- Profile icon at (1323, 58) bbox: [1247, 12, 1399, 105] - Profile icon
+- Settings icon at (1479, 58) bbox: [1403, 12, 1555, 105] - Settings icon
+- XP progress bar at (1636, 58) bbox: [1560, 12, 1712, 105] - XP progress bar
+- Level number display at (1792, 58) bbox: [1716, 12, 1868, 105] - Level number display
+- Locked food slot at (1006, 586) bbox: [922, 527, 1090, 645] - Locked food slot
+- Locked food slot at (1174, 586) bbox: [1090, 527, 1259, 645] - Locked food slot
+- Locked food slot at (1006, 707) bbox: [922, 648, 1090, 766] - Locked food slot
+- Locked food slot at (1174, 707) bbox: [1090, 648, 1259, 766] - Locked food slot
+- Burger buns at (1006, 856) bbox: [922, 797, 1090, 915] - Burger buns
+- Raw meat patties at (1601, 931) bbox: [1517, 872, 1685, 991] - Raw meat patties
+2026-03-25 16:24:02 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-03-25 16:24:39 | INFO     | agent.services.execution_service    | ⏱️  LLM response time: 37.10s
+2026-03-25 16:24:39 | INFO     | agent.services.execution_service    | ☁️  Screenshot uploaded: /api/executions/69c3bd584acc0170d3e1c7ae/steps/8/screenshot
+2026-03-25 16:24:39 | INFO     | agent.services.execution_service    | ✅ Agent decision received
+2026-03-25 16:24:39 | INFO     | agent.services.execution_service    |    📝 Game state: The game is in the first level tutorial. Two customers are at the counter, and the chef character is displayed with a dialogue box saying 'Finally! Take the glass...'. A yellow arrow points to the filled drink glass on the dispenser.
+2026-03-25 16:24:39 | INFO     | agent.services.execution_service    |    🤔 Reasoning: The game has started the tutorial and displayed a narrative dialogue box along with character sprites. However, the cached interactive elements do not include the drink glass or the tooltip, which are newly appeared elements that I need to interact with. I will force a re-annotation to get the correct coordinates for the drink glass.
+2026-03-25 16:24:39 | INFO     | agent.services.execution_service    |    🔍 Force annotate: True
+2026-03-25 16:24:39 | INFO     | agent.services.execution_service    |    🎯 Actions count: 0
+2026-03-25 16:24:39 | INFO     | agent.services.execution_service    |    🏁 End game: False
+2026-03-25 16:24:39 | INFO     | agent.services.execution_service    |    📋 Test results: []
+2026-03-25 16:24:39 | INFO     | agent.services.execution_service    |    📊 Token usage — Input: 0, Output: 0, Total: 0
+2026-03-25 16:24:39 | INFO     | agent.services.execution_service    | 💾 ExecutionStep 8 DB write dispatched (background)
+2026-03-25 16:24:41 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 9 | Run 69c3bd58
+================================================================================
+2026-03-25 16:24:41 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[IN_PROGRESS] [1] [ACTION] Launch the game and wait for the tutorial narrative to begin.
+[PENDING] [2] [VERIFY] Verify that the narrative dialogue box and character sprites are rendered correctly on the screen. (depends on: 1)
+[PENDING] [3] [VERIFY] Verify that the dialogue text is grammatically correct and contains no spelling errors. (depends on: 2)
+[PENDING] [4] [ACTION] Follow the on-screen tutorial prompts to select ingredients, cook the patty, and assemble the burger or hotdog. (depends on: 3)
+[PENDING] [5] [ACTION] Serve the completed item to the customer by tapping the finished dish. (depends on: 4)
+[PENDING] [6] [VERIFY] Verify that the Level 1 completion screen is displayed indicating the tutorial step is successful. (depends on: 5)
+============================================================
+2026-03-25 16:24:43 | INFO     | agent.services.execution_service    | 💾 step_9.png (captured in 1.88s)
+2026-03-25 16:24:43 | INFO     | agent.context.context_service       | 🔄 Force annotation requested, bypassing cache
+2026-03-25 16:24:43 | INFO     | agent.vision_element_detector       | 🔍 Vision detection
+2026-03-25 16:24:57 | INFO     | agent.vision_element_detector       | ⏱️  Vision API response time: 13.91s
+2026-03-25 16:24:57 | INFO     | agent.vision_element_detector       | ✅ Detected 38 elements via vision
+2026-03-25 16:24:57 | DEBUG    | agent.context.context_service       | 💾 Annotation cache updated for step 9
+2026-03-25 16:24:57 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-03-25 16:24:57 | INFO     | agent.vision_element_detector       | 📸 Annotated image saved
+2026-03-25 16:25:12 | INFO     | agent.services.execution_service    | ⏱️  LLM response time: 14.87s
+2026-03-25 16:25:12 | INFO     | agent.services.execution_service    | ☁️  Screenshot uploaded: /api/executions/69c3bd584acc0170d3e1c7ae/steps/9/screenshot
+2026-03-25 16:25:12 | INFO     | agent.services.execution_service    | ✅ Agent decision received
+2026-03-25 16:25:12 | INFO     | agent.services.execution_service    |    📝 Game state: The tutorial has started. The chef character is instructing the player to take the glass from the drink dispenser to serve the customer. The narrative dialogue box is visible and reads 'Finally! Take the glass...'.
+2026-03-25 16:25:12 | INFO     | agent.services.execution_service    |    🤔 Reasoning: The tutorial narrative has begun, and the dialogue and sprites are rendered correctly. The text has no grammatical errors. I am completing tasks 1, 2, and 3, and moving to task 4 which involves following the tutorial prompts. I will click the glass on the drink dispenser as indicated by the yellow arrow.
+2026-03-25 16:25:12 | INFO     | agent.services.execution_service    |    🔍 Force annotate: False
+2026-03-25 16:25:12 | INFO     | agent.services.execution_service    |    🎯 Actions count: 3
+2026-03-25 16:25:12 | INFO     | agent.services.execution_service    |    🏁 End game: False
+2026-03-25 16:25:12 | INFO     | agent.services.execution_service    |    📋 Test results: [TestResult(test_case_id='1', completion=True, failure_reason='NA', virdict='pass', comment='The narrative dialogue box and character sprites are visible and properly positioned without any obvious visual artifacts.'), TestResult(test_case_id='2', completion=True, failure_reason='NA', virdict='pass', comment="The dialogue text 'Finally! Take the glass...' is grammatically correct and spelled properly.")]
+2026-03-25 16:25:12 | INFO     | agent.services.execution_service    |    📊 Token usage — Input: 0, Output: 0, Total: 0
+2026-03-25 16:25:12 | INFO     | agent.services.execution_service    | 💾 ExecutionStep 9 DB write dispatched (background)
+2026-03-25 16:25:12 | INFO     | agent.services.execution_service    |    todo_write (1/3): updated 6 tasks {'pending': 2, 'in_progress': 1, 'completed': 3, 'cancelled': 0, 'actions': 3, 'verifications': 3}
+2026-03-25 16:25:12 | INFO     | agent.services.execution_service    |    action (2/3): click x=790 y=620 duration=0.1
+2026-03-25 16:25:12 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (790, 620) duration=0.1s
+2026-03-25 16:25:12 | INFO     | agent.services.execution_service    |    action (3/3): wait x=None y=None duration=2.0
+2026-03-25 16:25:12 | INFO     | agent.appium_manager                | ⏳ WAIT: 2.0s
+2026-03-25 16:25:16 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 10 | Run 69c3bd58
+================================================================================
+2026-03-25 16:25:16 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1] [ACTION] Launch the game and wait for the tutorial narrative to begin.
+[COMPLETED] [2] [VERIFY] Verify that the narrative dialogue box and character sprites are rendered correctly on the screen. (depends on: 1)
+[COMPLETED] [3] [VERIFY] Verify that the dialogue text is grammatically correct and contains no spelling errors. (depends on: 2)
+[IN_PROGRESS] [4] [ACTION] Follow the on-screen tutorial prompts to select ingredients, cook the patty, and assemble the burger or hotdog. (depends on: 3)
+[PENDING] [5] [ACTION] Serve the completed item to the customer by tapping the finished dish. (depends on: 4)
+[PENDING] [6] [VERIFY] Verify that the Level 1 completion screen is displayed indicating the tutorial step is successful. (depends on: 5)
+============================================================
+2026-03-25 16:25:18 | INFO     | agent.services.execution_service    | 💾 step_10.png (captured in 1.92s)
+2026-03-25 16:25:18 | DEBUG    | agent.context.context_service       | 🔍 Annotation cache: dhash distance=1 (threshold=15)
+2026-03-25 16:25:18 | INFO     | agent.context.context_service       | ♻️  Reusing cached annotations from step 9 (distance=1 < 15)
+2026-03-25 16:25:18 | DEBUG    | agent.context.context_service       |    Cached text: Detected interactive elements on screen:
+- Menu icon at (664, 42) bbox: [604, 11, 724, 74] - Menu icon
+- Level progress display at (834, 42) bbox: [739, 11, 929, 74] - Level progress display
+- Coins display at (1033, 42) bbox: [965, 11, 1102, 74] - Coins display
+- Gems display at (1197, 42) bbox: [1129, 11, 1266, 74] - Gems display
+- Settings icon at (1361, 42) bbox: [1293, 11, 1430, 74] - Settings icon
+- Leaderboard icon at (1525, 42) bbox: [1456, 11, 1594, 74] - Leaderboard icon
+- Experience points display at (1688, 42) bbox: [1620, 11, 1757, 74] - Experience points display
+- Star rating display at (1852, 42) bbox: [1784, 11, 1921, 74] - Star rating display
+- Timer display at (2016, 42) bbox: [1948, 11, 2085, 74] - Timer display
+- Hint icon at (2180, 42) bbox: [2111, 11, 2249, 74] - Hint icon
+- Pause icon at (2341, 42) bbox: [2275, 11, 2408, 74] - Pause icon
+- Fever Duels advertisement at (182, 171) bbox: [89, 123, 276, 219] - Fever Duels advertisement
+- Fever Duels advertisement at (806, 171) bbox: [712, 123, 900, 219] - Fever Duels advertisement
+- Fever Duels advertisement at (1483, 171) bbox: [1389, 123, 1577, 219] - Fever Duels advertisement
+- Order ticket burger at (983, 270) bbox: [903, 135, 1064, 405] - Order ticket burger
+- Order ticket drink at (1826, 270) bbox: [1745, 135, 1907, 405] - Order ticket drink
+- Locked recipe slot at (980, 550) bbox: [903, 508, 1057, 592] - Locked recipe slot
+- Locked recipe slot at (1141, 550) bbox: [1064, 508, 1218, 592] - Locked recipe slot
+- Locked recipe slot at (1302, 550) bbox: [1225, 508, 1379, 592] - Locked recipe slot
+- Locked recipe slot at (980, 636) bbox: [903, 594, 1057, 678] - Locked recipe slot
+- Locked recipe slot at (1141, 636) bbox: [1064, 594, 1218, 678] - Locked recipe slot
+- Locked recipe slot at (1302, 636) bbox: [1225, 594, 1379, 678] - Locked recipe slot
+- Locked recipe slot at (980, 721) bbox: [903, 679, 1057, 763] - Locked recipe slot
+- Locked recipe slot at (1141, 721) bbox: [1064, 679, 1218, 763] - Locked recipe slot
+- Locked recipe slot at (1302, 721) bbox: [1225, 679, 1379, 763] - Locked recipe slot
+- Tutorial text box at (777, 874) bbox: [652, 803, 903, 945] - Tutorial text box
+- Stove burner at (1521, 566) bbox: [1456, 531, 1586, 602] - Stove burner
+- Stove burner at (1659, 566) bbox: [1594, 531, 1724, 602] - Stove burner
+- Stove burner at (1521, 641) bbox: [1456, 605, 1586, 678] - Stove burner
+- Stove burner at (1659, 641) bbox: [1594, 605, 1724, 678] - Stove burner
+- Stove burner at (1521, 725) bbox: [1456, 689, 1586, 761] - Stove burner
+- Stove burner at (1659, 725) bbox: [1594, 689, 1724, 761] - Stove burner
+- Stove burner at (1521, 807) bbox: [1456, 771, 1586, 843] - Stove burner
+- Stove burner at (1659, 807) bbox: [1594, 771, 1724, 843] - Stove burner
+- Stove burner at (1521, 882) bbox: [1456, 846, 1586, 919] - Stove burner
+- Stove burner at (1659, 882) bbox: [1594, 846, 1724, 919] - Stove burner
+- Raw burger patties at (1602, 935) bbox: [1514, 894, 1690, 977] - Raw burger patties
+- Frying pan at (1579, 804) bbox: [1514, 763, 1644, 846] - Frying pan
+2026-03-25 16:25:18 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-03-25 16:25:50 | INFO     | agent.services.execution_service    | ⏱️  LLM response time: 32.07s
+2026-03-25 16:25:50 | INFO     | agent.services.execution_service    | ☁️  Screenshot uploaded: /api/executions/69c3bd584acc0170d3e1c7ae/steps/10/screenshot
+2026-03-25 16:25:50 | INFO     | agent.services.execution_service    | ✅ Agent decision received
+2026-03-25 16:25:50 | INFO     | agent.services.execution_service    |    📝 Game state: The game is still in the tutorial, waiting for the player to hand the cola to the customer. The yellow arrow points to the cola glass.
+2026-03-25 16:25:50 | INFO     | agent.services.execution_service    |    🤔 Reasoning: The previous tap might have missed the precise hitbox of the glass or the game requires a drag action. I will attempt both tapping the exact center of the glass and swiping it to the customer to ensure the action registers.
+2026-03-25 16:25:50 | INFO     | agent.services.execution_service    |    🔍 Force annotate: False
+2026-03-25 16:25:50 | INFO     | agent.services.execution_service    |    🎯 Actions count: 3
+2026-03-25 16:25:50 | INFO     | agent.services.execution_service    |    🏁 End game: False
+2026-03-25 16:25:50 | INFO     | agent.services.execution_service    |    📋 Test results: []
+2026-03-25 16:25:50 | INFO     | agent.services.execution_service    |    📊 Token usage — Input: 0, Output: 0, Total: 0
+2026-03-25 16:25:50 | INFO     | agent.services.execution_service    | 💾 ExecutionStep 10 DB write dispatched (background)
+2026-03-25 16:25:50 | INFO     | agent.services.execution_service    |    action (1/3): click x=795 y=630 duration=0.1
+2026-03-25 16:25:50 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (795, 630) duration=0.1s
+2026-03-25 16:25:50 | INFO     | agent.services.execution_service    |    action (2/3): swipe x=795 y=630 duration=0.5
+2026-03-25 16:25:50 | INFO     | agent.appium_manager                | 🔄 SWIPE (Appium): (795, 630) → (1826, 270) duration=0.5s
+2026-03-25 16:25:51 | INFO     | agent.appium_manager                | 🔄 SWIPE (Appium): (795, 630) → (1826, 270) duration=0.5s
+2026-03-25 16:25:51 | INFO     | agent.services.execution_service    |    action (3/3): wait x=None y=None duration=3.0
+2026-03-25 16:25:51 | INFO     | agent.appium_manager                | ⏳ WAIT: 3.0s
+2026-03-25 16:25:56 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 11 | Run 69c3bd58
+================================================================================
+2026-03-25 16:25:56 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1] [ACTION] Launch the game and wait for the tutorial narrative to begin.
+[COMPLETED] [2] [VERIFY] Verify that the narrative dialogue box and character sprites are rendered correctly on the screen. (depends on: 1)
+[COMPLETED] [3] [VERIFY] Verify that the dialogue text is grammatically correct and contains no spelling errors. (depends on: 2)
+[IN_PROGRESS] [4] [ACTION] Follow the on-screen tutorial prompts to select ingredients, cook the patty, and assemble the burger or hotdog. (depends on: 3)
+[PENDING] [5] [ACTION] Serve the completed item to the customer by tapping the finished dish. (depends on: 4)
+[PENDING] [6] [VERIFY] Verify that the Level 1 completion screen is displayed indicating the tutorial step is successful. (depends on: 5)
+============================================================
+2026-03-25 16:25:58 | INFO     | agent.services.execution_service    | 💾 step_11.png (captured in 1.91s)
+2026-03-25 16:25:58 | DEBUG    | agent.context.context_service       | 🔍 Annotation cache: dhash distance=11 (threshold=15)
+2026-03-25 16:25:58 | INFO     | agent.context.context_service       | ♻️  Reusing cached annotations from step 9 (distance=11 < 15)
+2026-03-25 16:25:58 | DEBUG    | agent.context.context_service       |    Cached text: Detected interactive elements on screen:
+- Menu icon at (664, 42) bbox: [604, 11, 724, 74] - Menu icon
+- Level progress display at (834, 42) bbox: [739, 11, 929, 74] - Level progress display
+- Coins display at (1033, 42) bbox: [965, 11, 1102, 74] - Coins display
+- Gems display at (1197, 42) bbox: [1129, 11, 1266, 74] - Gems display
+- Settings icon at (1361, 42) bbox: [1293, 11, 1430, 74] - Settings icon
+- Leaderboard icon at (1525, 42) bbox: [1456, 11, 1594, 74] - Leaderboard icon
+- Experience points display at (1688, 42) bbox: [1620, 11, 1757, 74] - Experience points display
+- Star rating display at (1852, 42) bbox: [1784, 11, 1921, 74] - Star rating display
+- Timer display at (2016, 42) bbox: [1948, 11, 2085, 74] - Timer display
+- Hint icon at (2180, 42) bbox: [2111, 11, 2249, 74] - Hint icon
+- Pause icon at (2341, 42) bbox: [2275, 11, 2408, 74] - Pause icon
+- Fever Duels advertisement at (182, 171) bbox: [89, 123, 276, 219] - Fever Duels advertisement
+- Fever Duels advertisement at (806, 171) bbox: [712, 123, 900, 219] - Fever Duels advertisement
+- Fever Duels advertisement at (1483, 171) bbox: [1389, 123, 1577, 219] - Fever Duels advertisement
+- Order ticket burger at (983, 270) bbox: [903, 135, 1064, 405] - Order ticket burger
+- Order ticket drink at (1826, 270) bbox: [1745, 135, 1907, 405] - Order ticket drink
+- Locked recipe slot at (980, 550) bbox: [903, 508, 1057, 592] - Locked recipe slot
+- Locked recipe slot at (1141, 550) bbox: [1064, 508, 1218, 592] - Locked recipe slot
+- Locked recipe slot at (1302, 550) bbox: [1225, 508, 1379, 592] - Locked recipe slot
+- Locked recipe slot at (980, 636) bbox: [903, 594, 1057, 678] - Locked recipe slot
+- Locked recipe slot at (1141, 636) bbox: [1064, 594, 1218, 678] - Locked recipe slot
+- Locked recipe slot at (1302, 636) bbox: [1225, 594, 1379, 678] - Locked recipe slot
+- Locked recipe slot at (980, 721) bbox: [903, 679, 1057, 763] - Locked recipe slot
+- Locked recipe slot at (1141, 721) bbox: [1064, 679, 1218, 763] - Locked recipe slot
+- Locked recipe slot at (1302, 721) bbox: [1225, 679, 1379, 763] - Locked recipe slot
+- Tutorial text box at (777, 874) bbox: [652, 803, 903, 945] - Tutorial text box
+- Stove burner at (1521, 566) bbox: [1456, 531, 1586, 602] - Stove burner
+- Stove burner at (1659, 566) bbox: [1594, 531, 1724, 602] - Stove burner
+- Stove burner at (1521, 641) bbox: [1456, 605, 1586, 678] - Stove burner
+- Stove burner at (1659, 641) bbox: [1594, 605, 1724, 678] - Stove burner
+- Stove burner at (1521, 725) bbox: [1456, 689, 1586, 761] - Stove burner
+- Stove burner at (1659, 725) bbox: [1594, 689, 1724, 761] - Stove burner
+- Stove burner at (1521, 807) bbox: [1456, 771, 1586, 843] - Stove burner
+- Stove burner at (1659, 807) bbox: [1594, 771, 1724, 843] - Stove burner
+- Stove burner at (1521, 882) bbox: [1456, 846, 1586, 919] - Stove burner
+- Stove burner at (1659, 882) bbox: [1594, 846, 1724, 919] - Stove burner
+- Raw burger patties at (1602, 935) bbox: [1514, 894, 1690, 977] - Raw burger patties
+- Frying pan at (1579, 804) bbox: [1514, 763, 1644, 846] - Frying pan
+2026-03-25 16:25:58 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-03-25 16:26:23 | INFO     | agent.services.execution_service    | ⏱️  LLM response time: 25.13s
+2026-03-25 16:26:23 | INFO     | agent.services.execution_service    | ☁️  Screenshot uploaded: /api/executions/69c3bd584acc0170d3e1c7ae/steps/11/screenshot
+2026-03-25 16:26:23 | INFO     | agent.services.execution_service    | ✅ Agent decision received
+2026-03-25 16:26:23 | INFO     | agent.services.execution_service    |    📝 Game state: The customer who ordered a drink has been served and left coins on the counter. There are now two customers waiting for burgers. The tutorial arrow has disappeared, indicating it's time to manually proceed with making burgers and collecting the coins.
+2026-03-25 16:26:23 | INFO     | agent.services.execution_service    |    🤔 Reasoning: The previous customer was successfully served the cola, and they left coins on the counter. To free up the space and increase the score, I should collect the coins. Meanwhile, the current customers are waiting for burgers. I need to start cooking the patties by tapping on the raw meat to proceed with the level.
+2026-03-25 16:26:23 | INFO     | agent.services.execution_service    |    🔍 Force annotate: False
+2026-03-25 16:26:23 | INFO     | agent.services.execution_service    |    🎯 Actions count: 4
+2026-03-25 16:26:23 | INFO     | agent.services.execution_service    |    🏁 End game: False
+2026-03-25 16:26:23 | INFO     | agent.services.execution_service    |    📋 Test results: []
+2026-03-25 16:26:23 | INFO     | agent.services.execution_service    |    📊 Token usage — Input: 0, Output: 0, Total: 0
+2026-03-25 16:26:23 | INFO     | agent.services.execution_service    | 💾 ExecutionStep 11 DB write dispatched (background)
+2026-03-25 16:26:23 | INFO     | agent.services.execution_service    |    action (1/4): click x=1450 y=400 duration=0.1
+2026-03-25 16:26:23 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (1450, 400) duration=0.1s
+2026-03-25 16:26:24 | INFO     | agent.services.execution_service    |    action (2/4): click x=1602 y=935 duration=0.1
+2026-03-25 16:26:24 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (1602, 935) duration=0.1s
+2026-03-25 16:26:24 | INFO     | agent.services.execution_service    |    action (3/4): click x=1602 y=935 duration=0.1
+2026-03-25 16:26:24 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (1602, 935) duration=0.1s
+2026-03-25 16:26:25 | INFO     | agent.services.execution_service    |    action (4/4): wait x=None y=None duration=3.0
+2026-03-25 16:26:25 | INFO     | agent.appium_manager                | ⏳ WAIT: 3.0s
+2026-03-25 16:26:30 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 12 | Run 69c3bd58
+================================================================================
+2026-03-25 16:26:30 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1] [ACTION] Launch the game and wait for the tutorial narrative to begin.
+[COMPLETED] [2] [VERIFY] Verify that the narrative dialogue box and character sprites are rendered correctly on the screen. (depends on: 1)
+[COMPLETED] [3] [VERIFY] Verify that the dialogue text is grammatically correct and contains no spelling errors. (depends on: 2)
+[IN_PROGRESS] [4] [ACTION] Follow the on-screen tutorial prompts to select ingredients, cook the patty, and assemble the burger or hotdog. (depends on: 3)
+[PENDING] [5] [ACTION] Serve the completed item to the customer by tapping the finished dish. (depends on: 4)
+[PENDING] [6] [VERIFY] Verify that the Level 1 completion screen is displayed indicating the tutorial step is successful. (depends on: 5)
+============================================================
+2026-03-25 16:26:32 | INFO     | agent.services.execution_service    | 💾 step_12.png (captured in 2.12s)
+2026-03-25 16:26:32 | DEBUG    | agent.context.context_service       | 🔍 Annotation cache: dhash distance=15 (threshold=15)
+2026-03-25 16:26:32 | INFO     | agent.context.context_service       | 🆕 Screen changed (distance=15 >= 15), running fresh annotation
+2026-03-25 16:26:32 | INFO     | agent.vision_element_detector       | 🔍 Vision detection
+2026-03-25 16:27:17 | ERROR    | agent.vision_element_detector       | ❌ [TIMEOUT] Vision detection timed out after 45.0s
+2026-03-25 16:27:17 | WARNING  | agent.context.context_service       | ⚠️ Context service: Vision detection failed, providing fallback message
+2026-03-25 16:27:17 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-03-25 16:27:30 | INFO     | agent.services.execution_service    | ⏱️  LLM response time: 13.54s
+2026-03-25 16:27:30 | INFO     | agent.services.execution_service    | ☁️  Screenshot uploaded: /api/executions/69c3bd584acc0170d3e1c7ae/steps/12/screenshot
+2026-03-25 16:27:30 | INFO     | agent.services.execution_service    | ✅ Agent decision received
+2026-03-25 16:27:30 | INFO     | agent.services.execution_service    |    📝 Game state: Two customers are waiting: one for a burger, one for a cola. Coins from a previous order are on the counter. One patty is currently cooking on the stove.
+2026-03-25 16:27:30 | INFO     | agent.services.execution_service    |    🤔 Reasoning: I need to continue serving the customers to progress through the level. I will serve the cola to the customer on the right, collect the coins from the counter, and wait for the cooking patty to finish so I can assemble the burger for the customer on the left.
+2026-03-25 16:27:30 | INFO     | agent.services.execution_service    |    🔍 Force annotate: False
+2026-03-25 16:27:30 | INFO     | agent.services.execution_service    |    🎯 Actions count: 3
+2026-03-25 16:27:30 | INFO     | agent.services.execution_service    |    🏁 End game: False
+2026-03-25 16:27:30 | INFO     | agent.services.execution_service    |    📋 Test results: []
+2026-03-25 16:27:30 | INFO     | agent.services.execution_service    |    📊 Token usage — Input: 0, Output: 0, Total: 0
+2026-03-25 16:27:30 | INFO     | agent.services.execution_service    | 💾 ExecutionStep 12 DB write dispatched (background)
+2026-03-25 16:27:30 | INFO     | agent.services.execution_service    |    action (1/3): click x=795 y=630 duration=0.1
+2026-03-25 16:27:30 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (795, 630) duration=0.1s
+2026-03-25 16:27:31 | INFO     | agent.services.execution_service    |    action (2/3): click x=1450 y=400 duration=0.1
+2026-03-25 16:27:31 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (1450, 400) duration=0.1s
+2026-03-25 16:27:31 | INFO     | agent.services.execution_service    |    action (3/3): wait x=None y=None duration=3.0
+2026-03-25 16:27:31 | INFO     | agent.appium_manager                | ⏳ WAIT: 3.0s
+2026-03-25 16:27:36 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 13 | Run 69c3bd58
+================================================================================
+2026-03-25 16:27:36 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1] [ACTION] Launch the game and wait for the tutorial narrative to begin.
+[COMPLETED] [2] [VERIFY] Verify that the narrative dialogue box and character sprites are rendered correctly on the screen. (depends on: 1)
+[COMPLETED] [3] [VERIFY] Verify that the dialogue text is grammatically correct and contains no spelling errors. (depends on: 2)
+[IN_PROGRESS] [4] [ACTION] Follow the on-screen tutorial prompts to select ingredients, cook the patty, and assemble the burger or hotdog. (depends on: 3)
+[PENDING] [5] [ACTION] Serve the completed item to the customer by tapping the finished dish. (depends on: 4)
+[PENDING] [6] [VERIFY] Verify that the Level 1 completion screen is displayed indicating the tutorial step is successful. (depends on: 5)
+============================================================
+2026-03-25 16:27:38 | INFO     | agent.services.execution_service    | 💾 step_13.png (captured in 1.88s)
+2026-03-25 16:27:38 | INFO     | agent.context.context_service       | 🆕 Previous vision run failed, running fresh annotation (cache invalid)
+2026-03-25 16:27:38 | INFO     | agent.vision_element_detector       | 🔍 Vision detection
+2026-03-25 16:28:10 | INFO     | agent.vision_element_detector       | ⏱️  Vision API response time: 32.00s
+2026-03-25 16:28:10 | INFO     | agent.vision_element_detector       | ✅ Detected 105 elements via vision
+2026-03-25 16:28:10 | DEBUG    | agent.context.context_service       | 💾 Annotation cache updated for step 13
+2026-03-25 16:28:10 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-03-25 16:28:11 | INFO     | agent.vision_element_detector       | 📸 Annotated image saved
+2026-03-25 16:28:33 | INFO     | agent.services.execution_service    | ⏱️  LLM response time: 22.37s
+2026-03-25 16:28:33 | INFO     | agent.services.execution_service    | ☁️  Screenshot uploaded: /api/executions/69c3bd584acc0170d3e1c7ae/steps/13/screenshot
+2026-03-25 16:28:33 | INFO     | agent.services.execution_service    | ✅ Agent decision received
+2026-03-25 16:28:33 | INFO     | agent.services.execution_service    |    📝 Game state: A tutorial message has appeared instructing the player to throw away burnt food into the bin, as throwing food away costs money. The patty on the stove has burnt, indicated by a yellow arrow pointing to it. Three customers are waiting for their orders (two burgers, one cola).
+2026-03-25 16:28:33 | INFO     | agent.services.execution_service    |    🤔 Reasoning: I need to follow the tutorial instruction to drag the burnt patty to the trash bin located on the bottom left. After disposing of the burnt food, I will immediately tap the raw meat to start cooking new patties and tap the filled cola glass to serve the waiting customer.
+2026-03-25 16:28:33 | INFO     | agent.services.execution_service    |    🔍 Force annotate: False
+2026-03-25 16:28:33 | INFO     | agent.services.execution_service    |    🎯 Actions count: 5
+2026-03-25 16:28:33 | INFO     | agent.services.execution_service    |    🏁 End game: False
+2026-03-25 16:28:33 | INFO     | agent.services.execution_service    |    📋 Test results: []
+2026-03-25 16:28:33 | INFO     | agent.services.execution_service    |    📊 Token usage — Input: 0, Output: 0, Total: 0
+2026-03-25 16:28:33 | INFO     | agent.services.execution_service    | 💾 ExecutionStep 13 DB write dispatched (background)
+2026-03-25 16:28:33 | INFO     | agent.services.execution_service    |    action (1/5): swipe x=1609 y=746 duration=0.5
+2026-03-25 16:28:33 | INFO     | agent.appium_manager                | 🔄 SWIPE (Appium): (1609, 746) → (250, 850) duration=0.5s
+2026-03-25 16:28:34 | INFO     | agent.appium_manager                | 🔄 SWIPE (Appium): (1609, 746) → (250, 850) duration=0.5s
+2026-03-25 16:28:34 | INFO     | agent.services.execution_service    |    action (2/5): click x=1609 y=941 duration=0.1
+2026-03-25 16:28:34 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (1609, 941) duration=0.1s
+2026-03-25 16:28:34 | INFO     | agent.services.execution_service    |    action (3/5): click x=1609 y=941 duration=0.1
+2026-03-25 16:28:34 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (1609, 941) duration=0.1s
+2026-03-25 16:28:34 | INFO     | agent.services.execution_service    |    action (4/5): click x=766 y=682 duration=0.1
+2026-03-25 16:28:34 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (766, 682) duration=0.1s
+2026-03-25 16:28:35 | INFO     | agent.services.execution_service    |    action (5/5): wait x=None y=None duration=3.0
+2026-03-25 16:28:35 | INFO     | agent.appium_manager                | ⏳ WAIT: 3.0s
+2026-03-25 16:28:40 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 14 | Run 69c3bd58
+================================================================================
+2026-03-25 16:28:40 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1] [ACTION] Launch the game and wait for the tutorial narrative to begin.
+[COMPLETED] [2] [VERIFY] Verify that the narrative dialogue box and character sprites are rendered correctly on the screen. (depends on: 1)
+[COMPLETED] [3] [VERIFY] Verify that the dialogue text is grammatically correct and contains no spelling errors. (depends on: 2)
+[IN_PROGRESS] [4] [ACTION] Follow the on-screen tutorial prompts to select ingredients, cook the patty, and assemble the burger or hotdog. (depends on: 3)
+[PENDING] [5] [ACTION] Serve the completed item to the customer by tapping the finished dish. (depends on: 4)
+[PENDING] [6] [VERIFY] Verify that the Level 1 completion screen is displayed indicating the tutorial step is successful. (depends on: 5)
+============================================================
+2026-03-25 16:28:42 | INFO     | agent.services.execution_service    | 💾 step_14.png (captured in 1.87s)
+2026-03-25 16:28:42 | DEBUG    | agent.context.context_service       | 🔍 Annotation cache: dhash distance=2 (threshold=15)
+2026-03-25 16:28:42 | INFO     | agent.context.context_service       | ♻️  Reusing cached annotations from step 13 (distance=2 < 15)
+2026-03-25 16:28:42 | DEBUG    | agent.context.context_service       |    Cached text: Detected interactive elements on screen:
+- Menu button at (596, 46) bbox: [546, 16, 647, 77] - Menu button
+- Currency counter at (719, 46) bbox: [669, 16, 770, 77] - Currency counter
+- Lives counter at (858, 46) bbox: [797, 16, 919, 77] - Lives counter
+- Coin counter at (1008, 46) bbox: [948, 16, 1069, 77] - Coin counter
+- Star counter at (1155, 46) bbox: [1095, 16, 1216, 77] - Star counter
+- Trophy counter at (1304, 46) bbox: [1244, 16, 1365, 77] - Trophy counter
+- Settings button at (1454, 46) bbox: [1394, 16, 1514, 77] - Settings button
+- XP progress bar at (1603, 46) bbox: [1543, 16, 1663, 77] - XP progress bar
+- Level indicator at (1752, 46) bbox: [1692, 16, 1813, 77] - Level indicator
+- Level number at (1902, 46) bbox: [1842, 16, 1962, 77] - Level number
+- Customer order slot at (635, 282) bbox: [546, 125, 724, 439] - Customer order slot
+- Customer character at (813, 282) bbox: [724, 125, 903, 439] - Customer character
+- Customer order slot at (992, 282) bbox: [903, 125, 1081, 439] - Customer order slot
+- Customer character at (1170, 282) bbox: [1081, 125, 1259, 439] - Customer character
+- Customer order slot at (1348, 282) bbox: [1259, 125, 1437, 439] - Customer order slot
+- Customer character at (1526, 282) bbox: [1437, 125, 1615, 439] - Customer character
+- Burger ingredient slot at (986, 552) bbox: [939, 525, 1033, 579] - Burger ingredient slot
+- Burger ingredient slot at (1104, 552) bbox: [1057, 525, 1151, 579] - Burger ingredient slot
+- Burger ingredient slot at (1222, 552) bbox: [1175, 525, 1269, 579] - Burger ingredient slot
+- Burger ingredient slot at (986, 617) bbox: [939, 590, 1033, 644] - Burger ingredient slot
+- Burger ingredient slot at (1104, 617) bbox: [1057, 590, 1151, 644] - Burger ingredient slot
+- Burger ingredient slot at (1222, 617) bbox: [1175, 590, 1269, 644] - Burger ingredient slot
+- Burger ingredient slot at (986, 703) bbox: [939, 655, 1033, 752] - Burger ingredient slot
+- Burger ingredient slot at (1104, 703) bbox: [1057, 655, 1151, 752] - Burger ingredient slot
+- Burger ingredient slot at (1222, 703) bbox: [1175, 655, 1269, 752] - Burger ingredient slot
+- Burger ingredient slot at (986, 790) bbox: [939, 763, 1033, 817] - Burger ingredient slot
+- Burger ingredient slot at (1104, 790) bbox: [1057, 763, 1151, 817] - Burger ingredient slot
+- Burger ingredient slot at (1222, 790) bbox: [1175, 763, 1269, 817] - Burger ingredient slot
+- Locked ingredient slot at (986, 552) bbox: [939, 525, 1033, 579] - Locked ingredient slot
+- Locked ingredient slot at (1104, 552) bbox: [1057, 525, 1151, 579] - Locked ingredient slot
+- Locked ingredient slot at (1222, 552) bbox: [1175, 525, 1269, 579] - Locked ingredient slot
+- Locked ingredient slot at (986, 617) bbox: [939, 590, 1033, 644] - Locked ingredient slot
+- Locked ingredient slot at (1104, 617) bbox: [1057, 590, 1151, 644] - Locked ingredient slot
+- Locked ingredient slot at (1222, 617) bbox: [1175, 590, 1269, 644] - Locked ingredient slot
+- Locked ingredient slot at (986, 703) bbox: [939, 655, 1033, 752] - Locked ingredient slot
+- Locked ingredient slot at (1104, 703) bbox: [1057, 655, 1151, 752] - Locked ingredient slot
+- Locked ingredient slot at (1222, 703) bbox: [1175, 655, 1269, 752] - Locked ingredient slot
+- Locked ingredient slot at (986, 790) bbox: [939, 763, 1033, 817] - Locked ingredient slot
+- Locked ingredient slot at (1104, 790) bbox: [1057, 763, 1151, 817] - Locked ingredient slot
+- Locked ingredient slot at (1222, 790) bbox: [1175, 763, 1269, 817] - Locked ingredient slot
+- Burger bun image at (1104, 703) bbox: [1057, 655, 1151, 752] - Burger bun image
+- Burger buns tray at (1045, 865) bbox: [939, 817, 1151, 914] - Burger buns tray
+- Raw patty tray at (1609, 941) bbox: [1514, 893, 1704, 990] - Raw patty tray
+- Cooking pan at (1609, 746) bbox: [1514, 644, 1704, 849] - Cooking pan
+- Ice cream machine at (766, 536) bbox: [676, 461, 857, 612] - Ice cream machine
+- Ice cream cup dispenser at (766, 682) bbox: [676, 612, 857, 752] - Ice cream cup dispenser
+- Burnt food indicator at (1609, 746) bbox: [1514, 644, 1704, 849] - Burnt food indicator
+- Burnt patty in pan at (1609, 746) bbox: [1514, 644, 1704, 849] - Burnt patty in pan
+- Ice cold drink machine at (766, 536) bbox: [676, 461, 857, 612] - Ice cold drink machine
+- Drink dispenser at (766, 682) bbox: [676, 612, 857, 752] - Drink dispenser
+- Pan on stove at (1609, 746) bbox: [1514, 644, 1704, 849] - Pan on stove
+- Raw meat patty at (1609, 941) bbox: [1514, 893, 1704, 990] - Raw meat patty
+- Chef character at (1793, 379) bbox: [1704, 320, 1883, 439] - Chef character
+- Game instruction popup at (1587, 568) bbox: [1394, 439, 1781, 698] - Game instruction popup
+- Burger bun tray at (1045, 865) bbox: [939, 817, 1151, 914] - Burger bun tray
+- Locked food item at (986, 790) bbox: [939, 763, 1033, 817] - Locked food item
+- Locked food item at (1104, 790) bbox: [1057, 763, 1151, 817] - Locked food item
+- Locked food item at (1222, 790) bbox: [1175, 763, 1269, 817] - Locked food item
+- Locked food item at (986, 703) bbox: [939, 655, 1033, 752] - Locked food item
+- Locked food item at (1104, 703) bbox: [1057, 655, 1151, 752] - Locked food item
+- Locked food item at (1222, 703) bbox: [1175, 655, 1269, 752] - Locked food item
+- Locked food item at (986, 617) bbox: [939, 590, 1033, 644] - Locked food item
+- Locked food item at (1104, 617) bbox: [1057, 590, 1151, 644] - Locked food item
+- Locked food item at (1222, 617) bbox: [1175, 590, 1269, 644] - Locked food item
+- Locked food item at (986, 552) bbox: [939, 525, 1033, 579] - Locked food item
+- Locked food item at (1104, 552) bbox: [1057, 525, 1151, 579] - Locked food item
+- Locked food item at (1222, 552) bbox: [1175, 525, 1269, 579] - Locked food item
+- Burnt food message at (1587, 568) bbox: [1394, 439, 1781, 698] - Burnt food message
+- Customer order display at (635, 282) bbox: [546, 125, 724, 439] - Customer order display
+- Customer order display at (992, 282) bbox: [903, 125, 1081, 439] - Customer order display
+- Customer order display at (1348, 282) bbox: [1259, 125, 1437, 439] - Customer order display
+- Burger order icon at (635, 282) bbox: [546, 125, 724, 439] - Burger order icon
+- Burger order icon at (992, 282) bbox: [903, 125, 1081, 439] - Burger order icon
+- Drink order icon at (1348, 282) bbox: [1259, 125, 1437, 439] - Drink order icon
+- Boy customer avatar at (813, 282) bbox: [724, 125, 903, 439] - Boy customer avatar
+- Girl customer avatar at (1170, 282) bbox: [1081, 125, 1259, 439] - Girl customer avatar
+- Girl customer avatar at (1526, 282) bbox: [1437, 125, 1615, 439] - Girl customer avatar
+- Drink cup icon at (1348, 282) bbox: [1259, 125, 1437, 439] - Drink cup icon
+- Locked food slot at (986, 617) bbox: [939, 590, 1033, 644] - Locked food slot
+- Locked food slot at (1104, 617) bbox: [1057, 590, 1151, 644] - Locked food slot
+- Locked food slot at (1222, 617) bbox: [1175, 590, 1269, 644] - Locked food slot
+- Locked food slot at (986, 703) bbox: [939, 655, 1033, 752] - Locked food slot
+- Locked food slot at (1104, 703) bbox: [1057, 655, 1151, 752] - Locked food slot
+- Locked food slot at (1222, 703) bbox: [1175, 655, 1269, 752] - Locked food slot
+- Locked food slot at (986, 790) bbox: [939, 763, 1033, 817] - Locked food slot
+- Locked food slot at (1104, 790) bbox: [1057, 763, 1151, 817] - Locked food slot
+- Locked food slot at (1222, 790) bbox: [1175, 763, 1269, 817] - Locked food slot
+- Locked food slot at (986, 552) bbox: [939, 525, 1033, 579] - Locked food slot
+- Locked food slot at (1104, 552) bbox: [1057, 525, 1151, 579] - Locked food slot
+- Locked food slot at (1222, 552) bbox: [1175, 525, 1269, 579] - Locked food slot
+- Burnt food item at (1609, 746) bbox: [1514, 644, 1704, 849] - Burnt food item
+- Raw patty ingredient at (1609, 941) bbox: [1514, 893, 1704, 990] - Raw patty ingredient
+- Drink machine at (766, 536) bbox: [676, 461, 857, 612] - Drink machine
+- Drink cup at (766, 682) bbox: [676, 612, 857, 752] - Drink cup
+- Chef character at (1793, 379) bbox: [1704, 320, 1883, 439] - Chef character
+- Tutorial message at (1587, 568) bbox: [1394, 439, 1781, 698] - Tutorial message
+- Order ticket at (635, 282) bbox: [546, 125, 724, 439] - Order ticket
+- Order ticket at (992, 282) bbox: [903, 125, 1081, 439] - Order ticket
+- Order ticket at (1348, 282) bbox: [1259, 125, 1437, 439] - Order ticket
+- Raw patty tray at (1609, 941) bbox: [1514, 893, 1704, 990] - Raw patty tray
+- Cooking station at (1609, 746) bbox: [1514, 644, 1704, 849] - Cooking station
+- Beverage machine at (766, 536) bbox: [676, 461, 857, 612] - Beverage machine
+- Beverage cup at (766, 682) bbox: [676, 612, 857, 752] - Beverage cup
+- Burger bun storage at (1045, 865) bbox: [939, 817, 1151, 914] - Burger bun storage
+- Game tip at (1587, 568) bbox: [1394, 439, 1781, 698] - Game tip
+2026-03-25 16:28:42 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-03-25 16:29:01 | INFO     | agent.services.execution_service    | ⏱️  LLM response time: 19.06s
+2026-03-25 16:29:01 | INFO     | agent.services.execution_service    | ☁️  Screenshot uploaded: /api/executions/69c3bd584acc0170d3e1c7ae/steps/14/screenshot
+2026-03-25 16:29:01 | INFO     | agent.services.execution_service    | ✅ Agent decision received
+2026-03-25 16:29:01 | INFO     | agent.services.execution_service    |    📝 Game state: The game is paused with a tutorial message instructing the player to drag the burnt food to the trash bin. The previous swipe action likely did not register properly or the game requires a slower drag.
+2026-03-25 16:29:01 | INFO     | agent.services.execution_service    |    🤔 Reasoning: Since the game state hasn't changed, the tutorial is still waiting for the burnt food to be discarded. I will perform a slower, more deliberate swipe from the burnt patty on the stove to the trash bin located at the bottom left, and I will only send this single action so the game can process it and unfreeze.
+2026-03-25 16:29:01 | INFO     | agent.services.execution_service    |    🔍 Force annotate: False
+2026-03-25 16:29:01 | INFO     | agent.services.execution_service    |    🎯 Actions count: 2
+2026-03-25 16:29:01 | INFO     | agent.services.execution_service    |    🏁 End game: False
+2026-03-25 16:29:01 | INFO     | agent.services.execution_service    |    📋 Test results: []
+2026-03-25 16:29:01 | INFO     | agent.services.execution_service    |    📊 Token usage — Input: 0, Output: 0, Total: 0
+2026-03-25 16:29:01 | INFO     | agent.services.execution_service    | 💾 ExecutionStep 14 DB write dispatched (background)
+2026-03-25 16:29:01 | INFO     | agent.services.execution_service    |    action (1/2): swipe x=1609 y=746 duration=1.0
+2026-03-25 16:29:01 | INFO     | agent.appium_manager                | 🔄 SWIPE (Appium): (1609, 746) → (250, 850) duration=1.0s
+2026-03-25 16:29:02 | INFO     | agent.appium_manager                | 🔄 SWIPE (Appium): (1609, 746) → (250, 850) duration=1.0s
+2026-03-25 16:29:02 | INFO     | agent.services.execution_service    |    action (2/2): wait x=None y=None duration=3.0
+2026-03-25 16:29:02 | INFO     | agent.appium_manager                | ⏳ WAIT: 3.0s
+2026-03-25 16:29:07 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 15 | Run 69c3bd58
+================================================================================
+2026-03-25 16:29:07 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1] [ACTION] Launch the game and wait for the tutorial narrative to begin.
+[COMPLETED] [2] [VERIFY] Verify that the narrative dialogue box and character sprites are rendered correctly on the screen. (depends on: 1)
+[COMPLETED] [3] [VERIFY] Verify that the dialogue text is grammatically correct and contains no spelling errors. (depends on: 2)
+[IN_PROGRESS] [4] [ACTION] Follow the on-screen tutorial prompts to select ingredients, cook the patty, and assemble the burger or hotdog. (depends on: 3)
+[PENDING] [5] [ACTION] Serve the completed item to the customer by tapping the finished dish. (depends on: 4)
+[PENDING] [6] [VERIFY] Verify that the Level 1 completion screen is displayed indicating the tutorial step is successful. (depends on: 5)
+============================================================
+2026-03-25 16:29:09 | INFO     | agent.services.execution_service    | 💾 step_15.png (captured in 1.87s)
+2026-03-25 16:29:09 | DEBUG    | agent.context.context_service       | 🔍 Annotation cache: dhash distance=1 (threshold=15)
+2026-03-25 16:29:09 | INFO     | agent.context.context_service       | ♻️  Reusing cached annotations from step 13 (distance=1 < 15)
+2026-03-25 16:29:09 | DEBUG    | agent.context.context_service       |    Cached text: Detected interactive elements on screen:
+- Menu button at (596, 46) bbox: [546, 16, 647, 77] - Menu button
+- Currency counter at (719, 46) bbox: [669, 16, 770, 77] - Currency counter
+- Lives counter at (858, 46) bbox: [797, 16, 919, 77] - Lives counter
+- Coin counter at (1008, 46) bbox: [948, 16, 1069, 77] - Coin counter
+- Star counter at (1155, 46) bbox: [1095, 16, 1216, 77] - Star counter
+- Trophy counter at (1304, 46) bbox: [1244, 16, 1365, 77] - Trophy counter
+- Settings button at (1454, 46) bbox: [1394, 16, 1514, 77] - Settings button
+- XP progress bar at (1603, 46) bbox: [1543, 16, 1663, 77] - XP progress bar
+- Level indicator at (1752, 46) bbox: [1692, 16, 1813, 77] - Level indicator
+- Level number at (1902, 46) bbox: [1842, 16, 1962, 77] - Level number
+- Customer order slot at (635, 282) bbox: [546, 125, 724, 439] - Customer order slot
+- Customer character at (813, 282) bbox: [724, 125, 903, 439] - Customer character
+- Customer order slot at (992, 282) bbox: [903, 125, 1081, 439] - Customer order slot
+- Customer character at (1170, 282) bbox: [1081, 125, 1259, 439] - Customer character
+- Customer order slot at (1348, 282) bbox: [1259, 125, 1437, 439] - Customer order slot
+- Customer character at (1526, 282) bbox: [1437, 125, 1615, 439] - Customer character
+- Burger ingredient slot at (986, 552) bbox: [939, 525, 1033, 579] - Burger ingredient slot
+- Burger ingredient slot at (1104, 552) bbox: [1057, 525, 1151, 579] - Burger ingredient slot
+- Burger ingredient slot at (1222, 552) bbox: [1175, 525, 1269, 579] - Burger ingredient slot
+- Burger ingredient slot at (986, 617) bbox: [939, 590, 1033, 644] - Burger ingredient slot
+- Burger ingredient slot at (1104, 617) bbox: [1057, 590, 1151, 644] - Burger ingredient slot
+- Burger ingredient slot at (1222, 617) bbox: [1175, 590, 1269, 644] - Burger ingredient slot
+- Burger ingredient slot at (986, 703) bbox: [939, 655, 1033, 752] - Burger ingredient slot
+- Burger ingredient slot at (1104, 703) bbox: [1057, 655, 1151, 752] - Burger ingredient slot
+- Burger ingredient slot at (1222, 703) bbox: [1175, 655, 1269, 752] - Burger ingredient slot
+- Burger ingredient slot at (986, 790) bbox: [939, 763, 1033, 817] - Burger ingredient slot
+- Burger ingredient slot at (1104, 790) bbox: [1057, 763, 1151, 817] - Burger ingredient slot
+- Burger ingredient slot at (1222, 790) bbox: [1175, 763, 1269, 817] - Burger ingredient slot
+- Locked ingredient slot at (986, 552) bbox: [939, 525, 1033, 579] - Locked ingredient slot
+- Locked ingredient slot at (1104, 552) bbox: [1057, 525, 1151, 579] - Locked ingredient slot
+- Locked ingredient slot at (1222, 552) bbox: [1175, 525, 1269, 579] - Locked ingredient slot
+- Locked ingredient slot at (986, 617) bbox: [939, 590, 1033, 644] - Locked ingredient slot
+- Locked ingredient slot at (1104, 617) bbox: [1057, 590, 1151, 644] - Locked ingredient slot
+- Locked ingredient slot at (1222, 617) bbox: [1175, 590, 1269, 644] - Locked ingredient slot
+- Locked ingredient slot at (986, 703) bbox: [939, 655, 1033, 752] - Locked ingredient slot
+- Locked ingredient slot at (1104, 703) bbox: [1057, 655, 1151, 752] - Locked ingredient slot
+- Locked ingredient slot at (1222, 703) bbox: [1175, 655, 1269, 752] - Locked ingredient slot
+- Locked ingredient slot at (986, 790) bbox: [939, 763, 1033, 817] - Locked ingredient slot
+- Locked ingredient slot at (1104, 790) bbox: [1057, 763, 1151, 817] - Locked ingredient slot
+- Locked ingredient slot at (1222, 790) bbox: [1175, 763, 1269, 817] - Locked ingredient slot
+- Burger bun image at (1104, 703) bbox: [1057, 655, 1151, 752] - Burger bun image
+- Burger buns tray at (1045, 865) bbox: [939, 817, 1151, 914] - Burger buns tray
+- Raw patty tray at (1609, 941) bbox: [1514, 893, 1704, 990] - Raw patty tray
+- Cooking pan at (1609, 746) bbox: [1514, 644, 1704, 849] - Cooking pan
+- Ice cream machine at (766, 536) bbox: [676, 461, 857, 612] - Ice cream machine
+- Ice cream cup dispenser at (766, 682) bbox: [676, 612, 857, 752] - Ice cream cup dispenser
+- Burnt food indicator at (1609, 746) bbox: [1514, 644, 1704, 849] - Burnt food indicator
+- Burnt patty in pan at (1609, 746) bbox: [1514, 644, 1704, 849] - Burnt patty in pan
+- Ice cold drink machine at (766, 536) bbox: [676, 461, 857, 612] - Ice cold drink machine
+- Drink dispenser at (766, 682) bbox: [676, 612, 857, 752] - Drink dispenser
+- Pan on stove at (1609, 746) bbox: [1514, 644, 1704, 849] - Pan on stove
+- Raw meat patty at (1609, 941) bbox: [1514, 893, 1704, 990] - Raw meat patty
+- Chef character at (1793, 379) bbox: [1704, 320, 1883, 439] - Chef character
+- Game instruction popup at (1587, 568) bbox: [1394, 439, 1781, 698] - Game instruction popup
+- Burger bun tray at (1045, 865) bbox: [939, 817, 1151, 914] - Burger bun tray
+- Locked food item at (986, 790) bbox: [939, 763, 1033, 817] - Locked food item
+- Locked food item at (1104, 790) bbox: [1057, 763, 1151, 817] - Locked food item
+- Locked food item at (1222, 790) bbox: [1175, 763, 1269, 817] - Locked food item
+- Locked food item at (986, 703) bbox: [939, 655, 1033, 752] - Locked food item
+- Locked food item at (1104, 703) bbox: [1057, 655, 1151, 752] - Locked food item
+- Locked food item at (1222, 703) bbox: [1175, 655, 1269, 752] - Locked food item
+- Locked food item at (986, 617) bbox: [939, 590, 1033, 644] - Locked food item
+- Locked food item at (1104, 617) bbox: [1057, 590, 1151, 644] - Locked food item
+- Locked food item at (1222, 617) bbox: [1175, 590, 1269, 644] - Locked food item
+- Locked food item at (986, 552) bbox: [939, 525, 1033, 579] - Locked food item
+- Locked food item at (1104, 552) bbox: [1057, 525, 1151, 579] - Locked food item
+- Locked food item at (1222, 552) bbox: [1175, 525, 1269, 579] - Locked food item
+- Burnt food message at (1587, 568) bbox: [1394, 439, 1781, 698] - Burnt food message
+- Customer order display at (635, 282) bbox: [546, 125, 724, 439] - Customer order display
+- Customer order display at (992, 282) bbox: [903, 125, 1081, 439] - Customer order display
+- Customer order display at (1348, 282) bbox: [1259, 125, 1437, 439] - Customer order display
+- Burger order icon at (635, 282) bbox: [546, 125, 724, 439] - Burger order icon
+- Burger order icon at (992, 282) bbox: [903, 125, 1081, 439] - Burger order icon
+- Drink order icon at (1348, 282) bbox: [1259, 125, 1437, 439] - Drink order icon
+- Boy customer avatar at (813, 282) bbox: [724, 125, 903, 439] - Boy customer avatar
+- Girl customer avatar at (1170, 282) bbox: [1081, 125, 1259, 439] - Girl customer avatar
+- Girl customer avatar at (1526, 282) bbox: [1437, 125, 1615, 439] - Girl customer avatar
+- Drink cup icon at (1348, 282) bbox: [1259, 125, 1437, 439] - Drink cup icon
+- Locked food slot at (986, 617) bbox: [939, 590, 1033, 644] - Locked food slot
+- Locked food slot at (1104, 617) bbox: [1057, 590, 1151, 644] - Locked food slot
+- Locked food slot at (1222, 617) bbox: [1175, 590, 1269, 644] - Locked food slot
+- Locked food slot at (986, 703) bbox: [939, 655, 1033, 752] - Locked food slot
+- Locked food slot at (1104, 703) bbox: [1057, 655, 1151, 752] - Locked food slot
+- Locked food slot at (1222, 703) bbox: [1175, 655, 1269, 752] - Locked food slot
+- Locked food slot at (986, 790) bbox: [939, 763, 1033, 817] - Locked food slot
+- Locked food slot at (1104, 790) bbox: [1057, 763, 1151, 817] - Locked food slot
+- Locked food slot at (1222, 790) bbox: [1175, 763, 1269, 817] - Locked food slot
+- Locked food slot at (986, 552) bbox: [939, 525, 1033, 579] - Locked food slot
+- Locked food slot at (1104, 552) bbox: [1057, 525, 1151, 579] - Locked food slot
+- Locked food slot at (1222, 552) bbox: [1175, 525, 1269, 579] - Locked food slot
+- Burnt food item at (1609, 746) bbox: [1514, 644, 1704, 849] - Burnt food item
+- Raw patty ingredient at (1609, 941) bbox: [1514, 893, 1704, 990] - Raw patty ingredient
+- Drink machine at (766, 536) bbox: [676, 461, 857, 612] - Drink machine
+- Drink cup at (766, 682) bbox: [676, 612, 857, 752] - Drink cup
+- Chef character at (1793, 379) bbox: [1704, 320, 1883, 439] - Chef character
+- Tutorial message at (1587, 568) bbox: [1394, 439, 1781, 698] - Tutorial message
+- Order ticket at (635, 282) bbox: [546, 125, 724, 439] - Order ticket
+- Order ticket at (992, 282) bbox: [903, 125, 1081, 439] - Order ticket
+- Order ticket at (1348, 282) bbox: [1259, 125, 1437, 439] - Order ticket
+- Raw patty tray at (1609, 941) bbox: [1514, 893, 1704, 990] - Raw patty tray
+- Cooking station at (1609, 746) bbox: [1514, 644, 1704, 849] - Cooking station
+- Beverage machine at (766, 536) bbox: [676, 461, 857, 612] - Beverage machine
+- Beverage cup at (766, 682) bbox: [676, 612, 857, 752] - Beverage cup
+- Burger bun storage at (1045, 865) bbox: [939, 817, 1151, 914] - Burger bun storage
+- Game tip at (1587, 568) bbox: [1394, 439, 1781, 698] - Game tip
+2026-03-25 16:29:09 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-03-25 16:29:23 | INFO     | agent.services.execution_service    | ⏱️  LLM response time: 13.85s
+2026-03-25 16:29:23 | INFO     | agent.services.execution_service    | ☁️  Screenshot uploaded: /api/executions/69c3bd584acc0170d3e1c7ae/steps/15/screenshot
+2026-03-25 16:29:23 | INFO     | agent.services.execution_service    | ✅ Agent decision received
+2026-03-25 16:29:23 | INFO     | agent.services.execution_service    |    📝 Game state: The game remains paused with the tutorial prompt to throw away the burnt food. Previous swipe actions failed to register the drag-and-drop mechanics required to discard the burnt patty into the trash bin.
+2026-03-25 16:29:23 | INFO     | agent.services.execution_service    |    🤔 Reasoning: Since standard swipes failed to discard the burnt food, I will attempt a multi-point swipe to simulate a more deliberate and smoother drag-and-drop motion from the stove to the trash bin located at the bottom left of the screen.
+2026-03-25 16:29:23 | INFO     | agent.services.execution_service    |    🔍 Force annotate: False
+2026-03-25 16:29:23 | INFO     | agent.services.execution_service    |    🎯 Actions count: 2
+2026-03-25 16:29:23 | INFO     | agent.services.execution_service    |    🏁 End game: False
+2026-03-25 16:29:23 | INFO     | agent.services.execution_service    |    📋 Test results: []
+2026-03-25 16:29:23 | INFO     | agent.services.execution_service    |    📊 Token usage — Input: 0, Output: 0, Total: 0
+2026-03-25 16:29:23 | INFO     | agent.services.execution_service    | 💾 ExecutionStep 15 DB write dispatched (background)
+2026-03-25 16:29:23 | INFO     | agent.services.execution_service    |    action (1/2): multi_swipe x=None y=None duration=1.5
+2026-03-25 16:29:25 | INFO     | agent.appium_manager                | 🔄 MULTI-SWIPE (Appium): (1609,746) → (900,800) → (250,850) duration=1.5s
+2026-03-25 16:29:25 | INFO     | agent.services.execution_service    |    action (2/2): wait x=None y=None duration=3.0
+2026-03-25 16:29:25 | INFO     | agent.appium_manager                | ⏳ WAIT: 3.0s
+2026-03-25 16:29:30 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 16 | Run 69c3bd58
+================================================================================
+2026-03-25 16:29:30 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1] [ACTION] Launch the game and wait for the tutorial narrative to begin.
+[COMPLETED] [2] [VERIFY] Verify that the narrative dialogue box and character sprites are rendered correctly on the screen. (depends on: 1)
+[COMPLETED] [3] [VERIFY] Verify that the dialogue text is grammatically correct and contains no spelling errors. (depends on: 2)
+[IN_PROGRESS] [4] [ACTION] Follow the on-screen tutorial prompts to select ingredients, cook the patty, and assemble the burger or hotdog. (depends on: 3)
+[PENDING] [5] [ACTION] Serve the completed item to the customer by tapping the finished dish. (depends on: 4)
+[PENDING] [6] [VERIFY] Verify that the Level 1 completion screen is displayed indicating the tutorial step is successful. (depends on: 5)
+============================================================
+2026-03-25 16:29:32 | INFO     | agent.services.execution_service    | 💾 step_16.png (captured in 1.88s)
+2026-03-25 16:29:32 | DEBUG    | agent.context.context_service       | 🔍 Annotation cache: dhash distance=1 (threshold=15)
+2026-03-25 16:29:32 | INFO     | agent.context.context_service       | ♻️  Reusing cached annotations from step 13 (distance=1 < 15)
+2026-03-25 16:29:32 | DEBUG    | agent.context.context_service       |    Cached text: Detected interactive elements on screen:
+- Menu button at (596, 46) bbox: [546, 16, 647, 77] - Menu button
+- Currency counter at (719, 46) bbox: [669, 16, 770, 77] - Currency counter
+- Lives counter at (858, 46) bbox: [797, 16, 919, 77] - Lives counter
+- Coin counter at (1008, 46) bbox: [948, 16, 1069, 77] - Coin counter
+- Star counter at (1155, 46) bbox: [1095, 16, 1216, 77] - Star counter
+- Trophy counter at (1304, 46) bbox: [1244, 16, 1365, 77] - Trophy counter
+- Settings button at (1454, 46) bbox: [1394, 16, 1514, 77] - Settings button
+- XP progress bar at (1603, 46) bbox: [1543, 16, 1663, 77] - XP progress bar
+- Level indicator at (1752, 46) bbox: [1692, 16, 1813, 77] - Level indicator
+- Level number at (1902, 46) bbox: [1842, 16, 1962, 77] - Level number
+- Customer order slot at (635, 282) bbox: [546, 125, 724, 439] - Customer order slot
+- Customer character at (813, 282) bbox: [724, 125, 903, 439] - Customer character
+- Customer order slot at (992, 282) bbox: [903, 125, 1081, 439] - Customer order slot
+- Customer character at (1170, 282) bbox: [1081, 125, 1259, 439] - Customer character
+- Customer order slot at (1348, 282) bbox: [1259, 125, 1437, 439] - Customer order slot
+- Customer character at (1526, 282) bbox: [1437, 125, 1615, 439] - Customer character
+- Burger ingredient slot at (986, 552) bbox: [939, 525, 1033, 579] - Burger ingredient slot
+- Burger ingredient slot at (1104, 552) bbox: [1057, 525, 1151, 579] - Burger ingredient slot
+- Burger ingredient slot at (1222, 552) bbox: [1175, 525, 1269, 579] - Burger ingredient slot
+- Burger ingredient slot at (986, 617) bbox: [939, 590, 1033, 644] - Burger ingredient slot
+- Burger ingredient slot at (1104, 617) bbox: [1057, 590, 1151, 644] - Burger ingredient slot
+- Burger ingredient slot at (1222, 617) bbox: [1175, 590, 1269, 644] - Burger ingredient slot
+- Burger ingredient slot at (986, 703) bbox: [939, 655, 1033, 752] - Burger ingredient slot
+- Burger ingredient slot at (1104, 703) bbox: [1057, 655, 1151, 752] - Burger ingredient slot
+- Burger ingredient slot at (1222, 703) bbox: [1175, 655, 1269, 752] - Burger ingredient slot
+- Burger ingredient slot at (986, 790) bbox: [939, 763, 1033, 817] - Burger ingredient slot
+- Burger ingredient slot at (1104, 790) bbox: [1057, 763, 1151, 817] - Burger ingredient slot
+- Burger ingredient slot at (1222, 790) bbox: [1175, 763, 1269, 817] - Burger ingredient slot
+- Locked ingredient slot at (986, 552) bbox: [939, 525, 1033, 579] - Locked ingredient slot
+- Locked ingredient slot at (1104, 552) bbox: [1057, 525, 1151, 579] - Locked ingredient slot
+- Locked ingredient slot at (1222, 552) bbox: [1175, 525, 1269, 579] - Locked ingredient slot
+- Locked ingredient slot at (986, 617) bbox: [939, 590, 1033, 644] - Locked ingredient slot
+- Locked ingredient slot at (1104, 617) bbox: [1057, 590, 1151, 644] - Locked ingredient slot
+- Locked ingredient slot at (1222, 617) bbox: [1175, 590, 1269, 644] - Locked ingredient slot
+- Locked ingredient slot at (986, 703) bbox: [939, 655, 1033, 752] - Locked ingredient slot
+- Locked ingredient slot at (1104, 703) bbox: [1057, 655, 1151, 752] - Locked ingredient slot
+- Locked ingredient slot at (1222, 703) bbox: [1175, 655, 1269, 752] - Locked ingredient slot
+- Locked ingredient slot at (986, 790) bbox: [939, 763, 1033, 817] - Locked ingredient slot
+- Locked ingredient slot at (1104, 790) bbox: [1057, 763, 1151, 817] - Locked ingredient slot
+- Locked ingredient slot at (1222, 790) bbox: [1175, 763, 1269, 817] - Locked ingredient slot
+- Burger bun image at (1104, 703) bbox: [1057, 655, 1151, 752] - Burger bun image
+- Burger buns tray at (1045, 865) bbox: [939, 817, 1151, 914] - Burger buns tray
+- Raw patty tray at (1609, 941) bbox: [1514, 893, 1704, 990] - Raw patty tray
+- Cooking pan at (1609, 746) bbox: [1514, 644, 1704, 849] - Cooking pan
+- Ice cream machine at (766, 536) bbox: [676, 461, 857, 612] - Ice cream machine
+- Ice cream cup dispenser at (766, 682) bbox: [676, 612, 857, 752] - Ice cream cup dispenser
+- Burnt food indicator at (1609, 746) bbox: [1514, 644, 1704, 849] - Burnt food indicator
+- Burnt patty in pan at (1609, 746) bbox: [1514, 644, 1704, 849] - Burnt patty in pan
+- Ice cold drink machine at (766, 536) bbox: [676, 461, 857, 612] - Ice cold drink machine
+- Drink dispenser at (766, 682) bbox: [676, 612, 857, 752] - Drink dispenser
+- Pan on stove at (1609, 746) bbox: [1514, 644, 1704, 849] - Pan on stove
+- Raw meat patty at (1609, 941) bbox: [1514, 893, 1704, 990] - Raw meat patty
+- Chef character at (1793, 379) bbox: [1704, 320, 1883, 439] - Chef character
+- Game instruction popup at (1587, 568) bbox: [1394, 439, 1781, 698] - Game instruction popup
+- Burger bun tray at (1045, 865) bbox: [939, 817, 1151, 914] - Burger bun tray
+- Locked food item at (986, 790) bbox: [939, 763, 1033, 817] - Locked food item
+- Locked food item at (1104, 790) bbox: [1057, 763, 1151, 817] - Locked food item
+- Locked food item at (1222, 790) bbox: [1175, 763, 1269, 817] - Locked food item
+- Locked food item at (986, 703) bbox: [939, 655, 1033, 752] - Locked food item
+- Locked food item at (1104, 703) bbox: [1057, 655, 1151, 752] - Locked food item
+- Locked food item at (1222, 703) bbox: [1175, 655, 1269, 752] - Locked food item
+- Locked food item at (986, 617) bbox: [939, 590, 1033, 644] - Locked food item
+- Locked food item at (1104, 617) bbox: [1057, 590, 1151, 644] - Locked food item
+- Locked food item at (1222, 617) bbox: [1175, 590, 1269, 644] - Locked food item
+- Locked food item at (986, 552) bbox: [939, 525, 1033, 579] - Locked food item
+- Locked food item at (1104, 552) bbox: [1057, 525, 1151, 579] - Locked food item
+- Locked food item at (1222, 552) bbox: [1175, 525, 1269, 579] - Locked food item
+- Burnt food message at (1587, 568) bbox: [1394, 439, 1781, 698] - Burnt food message
+- Customer order display at (635, 282) bbox: [546, 125, 724, 439] - Customer order display
+- Customer order display at (992, 282) bbox: [903, 125, 1081, 439] - Customer order display
+- Customer order display at (1348, 282) bbox: [1259, 125, 1437, 439] - Customer order display
+- Burger order icon at (635, 282) bbox: [546, 125, 724, 439] - Burger order icon
+- Burger order icon at (992, 282) bbox: [903, 125, 1081, 439] - Burger order icon
+- Drink order icon at (1348, 282) bbox: [1259, 125, 1437, 439] - Drink order icon
+- Boy customer avatar at (813, 282) bbox: [724, 125, 903, 439] - Boy customer avatar
+- Girl customer avatar at (1170, 282) bbox: [1081, 125, 1259, 439] - Girl customer avatar
+- Girl customer avatar at (1526, 282) bbox: [1437, 125, 1615, 439] - Girl customer avatar
+- Drink cup icon at (1348, 282) bbox: [1259, 125, 1437, 439] - Drink cup icon
+- Locked food slot at (986, 617) bbox: [939, 590, 1033, 644] - Locked food slot
+- Locked food slot at (1104, 617) bbox: [1057, 590, 1151, 644] - Locked food slot
+- Locked food slot at (1222, 617) bbox: [1175, 590, 1269, 644] - Locked food slot
+- Locked food slot at (986, 703) bbox: [939, 655, 1033, 752] - Locked food slot
+- Locked food slot at (1104, 703) bbox: [1057, 655, 1151, 752] - Locked food slot
+- Locked food slot at (1222, 703) bbox: [1175, 655, 1269, 752] - Locked food slot
+- Locked food slot at (986, 790) bbox: [939, 763, 1033, 817] - Locked food slot
+- Locked food slot at (1104, 790) bbox: [1057, 763, 1151, 817] - Locked food slot
+- Locked food slot at (1222, 790) bbox: [1175, 763, 1269, 817] - Locked food slot
+- Locked food slot at (986, 552) bbox: [939, 525, 1033, 579] - Locked food slot
+- Locked food slot at (1104, 552) bbox: [1057, 525, 1151, 579] - Locked food slot
+- Locked food slot at (1222, 552) bbox: [1175, 525, 1269, 579] - Locked food slot
+- Burnt food item at (1609, 746) bbox: [1514, 644, 1704, 849] - Burnt food item
+- Raw patty ingredient at (1609, 941) bbox: [1514, 893, 1704, 990] - Raw patty ingredient
+- Drink machine at (766, 536) bbox: [676, 461, 857, 612] - Drink machine
+- Drink cup at (766, 682) bbox: [676, 612, 857, 752] - Drink cup
+- Chef character at (1793, 379) bbox: [1704, 320, 1883, 439] - Chef character
+- Tutorial message at (1587, 568) bbox: [1394, 439, 1781, 698] - Tutorial message
+- Order ticket at (635, 282) bbox: [546, 125, 724, 439] - Order ticket
+- Order ticket at (992, 282) bbox: [903, 125, 1081, 439] - Order ticket
+- Order ticket at (1348, 282) bbox: [1259, 125, 1437, 439] - Order ticket
+- Raw patty tray at (1609, 941) bbox: [1514, 893, 1704, 990] - Raw patty tray
+- Cooking station at (1609, 746) bbox: [1514, 644, 1704, 849] - Cooking station
+- Beverage machine at (766, 536) bbox: [676, 461, 857, 612] - Beverage machine
+- Beverage cup at (766, 682) bbox: [676, 612, 857, 752] - Beverage cup
+- Burger bun storage at (1045, 865) bbox: [939, 817, 1151, 914] - Burger bun storage
+- Game tip at (1587, 568) bbox: [1394, 439, 1781, 698] - Game tip
+2026-03-25 16:29:32 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-03-25 16:29:51 | INFO     | agent.services.execution_service    | ⏱️  LLM response time: 18.71s
+2026-03-25 16:29:51 | INFO     | agent.services.execution_service    | ☁️  Screenshot uploaded: /api/executions/69c3bd584acc0170d3e1c7ae/steps/16/screenshot
+2026-03-25 16:29:51 | INFO     | agent.services.execution_service    | ✅ Agent decision received
+2026-03-25 16:29:51 | INFO     | agent.services.execution_service    |    📝 Game state: The game remains paused on the tutorial prompt to throw away the burnt food. Previous attempts to drag the burnt patty to the trash bin have not registered.
+2026-03-25 16:29:51 | INFO     | agent.services.execution_service    |    🤔 Reasoning: Since standard and multi-point swipes with varying durations haven't worked, the game might require a slower, more deliberate drag specifically targeting the exact opening of the trash bin (the black hole at the top of the green bin). I will perform a slow swipe to the top of the bin.
+2026-03-25 16:29:51 | INFO     | agent.services.execution_service    |    🔍 Force annotate: False
+2026-03-25 16:29:51 | INFO     | agent.services.execution_service    |    🎯 Actions count: 2
+2026-03-25 16:29:51 | INFO     | agent.services.execution_service    |    🏁 End game: False
+2026-03-25 16:29:51 | INFO     | agent.services.execution_service    |    📋 Test results: []
+2026-03-25 16:29:51 | INFO     | agent.services.execution_service    |    📊 Token usage — Input: 0, Output: 0, Total: 0
+2026-03-25 16:29:51 | INFO     | agent.services.execution_service    | 💾 ExecutionStep 16 DB write dispatched (background)
+2026-03-25 16:29:51 | INFO     | agent.services.execution_service    |    action (1/2): swipe x=1609 y=746 duration=2.5
+2026-03-25 16:29:51 | INFO     | agent.appium_manager                | 🔄 SWIPE (Appium): (1609, 746) → (255, 800) duration=2.5s
+2026-03-25 16:29:54 | INFO     | agent.appium_manager                | 🔄 SWIPE (Appium): (1609, 746) → (255, 800) duration=2.5s
+2026-03-25 16:29:54 | INFO     | agent.services.execution_service    |    action (2/2): wait x=None y=None duration=3.0
+2026-03-25 16:29:54 | INFO     | agent.appium_manager                | ⏳ WAIT: 3.0s
+2026-03-25 16:29:59 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 17 | Run 69c3bd58
+================================================================================
+2026-03-25 16:29:59 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1] [ACTION] Launch the game and wait for the tutorial narrative to begin.
+[COMPLETED] [2] [VERIFY] Verify that the narrative dialogue box and character sprites are rendered correctly on the screen. (depends on: 1)
+[COMPLETED] [3] [VERIFY] Verify that the dialogue text is grammatically correct and contains no spelling errors. (depends on: 2)
+[IN_PROGRESS] [4] [ACTION] Follow the on-screen tutorial prompts to select ingredients, cook the patty, and assemble the burger or hotdog. (depends on: 3)
+[PENDING] [5] [ACTION] Serve the completed item to the customer by tapping the finished dish. (depends on: 4)
+[PENDING] [6] [VERIFY] Verify that the Level 1 completion screen is displayed indicating the tutorial step is successful. (depends on: 5)
+============================================================
+2026-03-25 16:30:01 | INFO     | agent.services.execution_service    | 💾 step_17.png (captured in 1.95s)
+2026-03-25 16:30:01 | DEBUG    | agent.context.context_service       | 🔍 Annotation cache: dhash distance=1 (threshold=15)
+2026-03-25 16:30:01 | INFO     | agent.context.context_service       | ♻️  Reusing cached annotations from step 13 (distance=1 < 15)
+2026-03-25 16:30:01 | DEBUG    | agent.context.context_service       |    Cached text: Detected interactive elements on screen:
+- Menu button at (596, 46) bbox: [546, 16, 647, 77] - Menu button
+- Currency counter at (719, 46) bbox: [669, 16, 770, 77] - Currency counter
+- Lives counter at (858, 46) bbox: [797, 16, 919, 77] - Lives counter
+- Coin counter at (1008, 46) bbox: [948, 16, 1069, 77] - Coin counter
+- Star counter at (1155, 46) bbox: [1095, 16, 1216, 77] - Star counter
+- Trophy counter at (1304, 46) bbox: [1244, 16, 1365, 77] - Trophy counter
+- Settings button at (1454, 46) bbox: [1394, 16, 1514, 77] - Settings button
+- XP progress bar at (1603, 46) bbox: [1543, 16, 1663, 77] - XP progress bar
+- Level indicator at (1752, 46) bbox: [1692, 16, 1813, 77] - Level indicator
+- Level number at (1902, 46) bbox: [1842, 16, 1962, 77] - Level number
+- Customer order slot at (635, 282) bbox: [546, 125, 724, 439] - Customer order slot
+- Customer character at (813, 282) bbox: [724, 125, 903, 439] - Customer character
+- Customer order slot at (992, 282) bbox: [903, 125, 1081, 439] - Customer order slot
+- Customer character at (1170, 282) bbox: [1081, 125, 1259, 439] - Customer character
+- Customer order slot at (1348, 282) bbox: [1259, 125, 1437, 439] - Customer order slot
+- Customer character at (1526, 282) bbox: [1437, 125, 1615, 439] - Customer character
+- Burger ingredient slot at (986, 552) bbox: [939, 525, 1033, 579] - Burger ingredient slot
+- Burger ingredient slot at (1104, 552) bbox: [1057, 525, 1151, 579] - Burger ingredient slot
+- Burger ingredient slot at (1222, 552) bbox: [1175, 525, 1269, 579] - Burger ingredient slot
+- Burger ingredient slot at (986, 617) bbox: [939, 590, 1033, 644] - Burger ingredient slot
+- Burger ingredient slot at (1104, 617) bbox: [1057, 590, 1151, 644] - Burger ingredient slot
+- Burger ingredient slot at (1222, 617) bbox: [1175, 590, 1269, 644] - Burger ingredient slot
+- Burger ingredient slot at (986, 703) bbox: [939, 655, 1033, 752] - Burger ingredient slot
+- Burger ingredient slot at (1104, 703) bbox: [1057, 655, 1151, 752] - Burger ingredient slot
+- Burger ingredient slot at (1222, 703) bbox: [1175, 655, 1269, 752] - Burger ingredient slot
+- Burger ingredient slot at (986, 790) bbox: [939, 763, 1033, 817] - Burger ingredient slot
+- Burger ingredient slot at (1104, 790) bbox: [1057, 763, 1151, 817] - Burger ingredient slot
+- Burger ingredient slot at (1222, 790) bbox: [1175, 763, 1269, 817] - Burger ingredient slot
+- Locked ingredient slot at (986, 552) bbox: [939, 525, 1033, 579] - Locked ingredient slot
+- Locked ingredient slot at (1104, 552) bbox: [1057, 525, 1151, 579] - Locked ingredient slot
+- Locked ingredient slot at (1222, 552) bbox: [1175, 525, 1269, 579] - Locked ingredient slot
+- Locked ingredient slot at (986, 617) bbox: [939, 590, 1033, 644] - Locked ingredient slot
+- Locked ingredient slot at (1104, 617) bbox: [1057, 590, 1151, 644] - Locked ingredient slot
+- Locked ingredient slot at (1222, 617) bbox: [1175, 590, 1269, 644] - Locked ingredient slot
+- Locked ingredient slot at (986, 703) bbox: [939, 655, 1033, 752] - Locked ingredient slot
+- Locked ingredient slot at (1104, 703) bbox: [1057, 655, 1151, 752] - Locked ingredient slot
+- Locked ingredient slot at (1222, 703) bbox: [1175, 655, 1269, 752] - Locked ingredient slot
+- Locked ingredient slot at (986, 790) bbox: [939, 763, 1033, 817] - Locked ingredient slot
+- Locked ingredient slot at (1104, 790) bbox: [1057, 763, 1151, 817] - Locked ingredient slot
+- Locked ingredient slot at (1222, 790) bbox: [1175, 763, 1269, 817] - Locked ingredient slot
+- Burger bun image at (1104, 703) bbox: [1057, 655, 1151, 752] - Burger bun image
+- Burger buns tray at (1045, 865) bbox: [939, 817, 1151, 914] - Burger buns tray
+- Raw patty tray at (1609, 941) bbox: [1514, 893, 1704, 990] - Raw patty tray
+- Cooking pan at (1609, 746) bbox: [1514, 644, 1704, 849] - Cooking pan
+- Ice cream machine at (766, 536) bbox: [676, 461, 857, 612] - Ice cream machine
+- Ice cream cup dispenser at (766, 682) bbox: [676, 612, 857, 752] - Ice cream cup dispenser
+- Burnt food indicator at (1609, 746) bbox: [1514, 644, 1704, 849] - Burnt food indicator
+- Burnt patty in pan at (1609, 746) bbox: [1514, 644, 1704, 849] - Burnt patty in pan
+- Ice cold drink machine at (766, 536) bbox: [676, 461, 857, 612] - Ice cold drink machine
+- Drink dispenser at (766, 682) bbox: [676, 612, 857, 752] - Drink dispenser
+- Pan on stove at (1609, 746) bbox: [1514, 644, 1704, 849] - Pan on stove
+- Raw meat patty at (1609, 941) bbox: [1514, 893, 1704, 990] - Raw meat patty
+- Chef character at (1793, 379) bbox: [1704, 320, 1883, 439] - Chef character
+- Game instruction popup at (1587, 568) bbox: [1394, 439, 1781, 698] - Game instruction popup
+- Burger bun tray at (1045, 865) bbox: [939, 817, 1151, 914] - Burger bun tray
+- Locked food item at (986, 790) bbox: [939, 763, 1033, 817] - Locked food item
+- Locked food item at (1104, 790) bbox: [1057, 763, 1151, 817] - Locked food item
+- Locked food item at (1222, 790) bbox: [1175, 763, 1269, 817] - Locked food item
+- Locked food item at (986, 703) bbox: [939, 655, 1033, 752] - Locked food item
+- Locked food item at (1104, 703) bbox: [1057, 655, 1151, 752] - Locked food item
+- Locked food item at (1222, 703) bbox: [1175, 655, 1269, 752] - Locked food item
+- Locked food item at (986, 617) bbox: [939, 590, 1033, 644] - Locked food item
+- Locked food item at (1104, 617) bbox: [1057, 590, 1151, 644] - Locked food item
+- Locked food item at (1222, 617) bbox: [1175, 590, 1269, 644] - Locked food item
+- Locked food item at (986, 552) bbox: [939, 525, 1033, 579] - Locked food item
+- Locked food item at (1104, 552) bbox: [1057, 525, 1151, 579] - Locked food item
+- Locked food item at (1222, 552) bbox: [1175, 525, 1269, 579] - Locked food item
+- Burnt food message at (1587, 568) bbox: [1394, 439, 1781, 698] - Burnt food message
+- Customer order display at (635, 282) bbox: [546, 125, 724, 439] - Customer order display
+- Customer order display at (992, 282) bbox: [903, 125, 1081, 439] - Customer order display
+- Customer order display at (1348, 282) bbox: [1259, 125, 1437, 439] - Customer order display
+- Burger order icon at (635, 282) bbox: [546, 125, 724, 439] - Burger order icon
+- Burger order icon at (992, 282) bbox: [903, 125, 1081, 439] - Burger order icon
+- Drink order icon at (1348, 282) bbox: [1259, 125, 1437, 439] - Drink order icon
+- Boy customer avatar at (813, 282) bbox: [724, 125, 903, 439] - Boy customer avatar
+- Girl customer avatar at (1170, 282) bbox: [1081, 125, 1259, 439] - Girl customer avatar
+- Girl customer avatar at (1526, 282) bbox: [1437, 125, 1615, 439] - Girl customer avatar
+- Drink cup icon at (1348, 282) bbox: [1259, 125, 1437, 439] - Drink cup icon
+- Locked food slot at (986, 617) bbox: [939, 590, 1033, 644] - Locked food slot
+- Locked food slot at (1104, 617) bbox: [1057, 590, 1151, 644] - Locked food slot
+- Locked food slot at (1222, 617) bbox: [1175, 590, 1269, 644] - Locked food slot
+- Locked food slot at (986, 703) bbox: [939, 655, 1033, 752] - Locked food slot
+- Locked food slot at (1104, 703) bbox: [1057, 655, 1151, 752] - Locked food slot
+- Locked food slot at (1222, 703) bbox: [1175, 655, 1269, 752] - Locked food slot
+- Locked food slot at (986, 790) bbox: [939, 763, 1033, 817] - Locked food slot
+- Locked food slot at (1104, 790) bbox: [1057, 763, 1151, 817] - Locked food slot
+- Locked food slot at (1222, 790) bbox: [1175, 763, 1269, 817] - Locked food slot
+- Locked food slot at (986, 552) bbox: [939, 525, 1033, 579] - Locked food slot
+- Locked food slot at (1104, 552) bbox: [1057, 525, 1151, 579] - Locked food slot
+- Locked food slot at (1222, 552) bbox: [1175, 525, 1269, 579] - Locked food slot
+- Burnt food item at (1609, 746) bbox: [1514, 644, 1704, 849] - Burnt food item
+- Raw patty ingredient at (1609, 941) bbox: [1514, 893, 1704, 990] - Raw patty ingredient
+- Drink machine at (766, 536) bbox: [676, 461, 857, 612] - Drink machine
+- Drink cup at (766, 682) bbox: [676, 612, 857, 752] - Drink cup
+- Chef character at (1793, 379) bbox: [1704, 320, 1883, 439] - Chef character
+- Tutorial message at (1587, 568) bbox: [1394, 439, 1781, 698] - Tutorial message
+- Order ticket at (635, 282) bbox: [546, 125, 724, 439] - Order ticket
+- Order ticket at (992, 282) bbox: [903, 125, 1081, 439] - Order ticket
+- Order ticket at (1348, 282) bbox: [1259, 125, 1437, 439] - Order ticket
+- Raw patty tray at (1609, 941) bbox: [1514, 893, 1704, 990] - Raw patty tray
+- Cooking station at (1609, 746) bbox: [1514, 644, 1704, 849] - Cooking station
+- Beverage machine at (766, 536) bbox: [676, 461, 857, 612] - Beverage machine
+- Beverage cup at (766, 682) bbox: [676, 612, 857, 752] - Beverage cup
+- Burger bun storage at (1045, 865) bbox: [939, 817, 1151, 914] - Burger bun storage
+- Game tip at (1587, 568) bbox: [1394, 439, 1781, 698] - Game tip
+2026-03-25 16:30:01 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-03-25 16:30:26 | INFO     | agent.services.execution_service    | ⏱️  LLM response time: 24.75s
+2026-03-25 16:30:26 | INFO     | agent.services.execution_service    | ☁️  Screenshot uploaded: /api/executions/69c3bd584acc0170d3e1c7ae/steps/17/screenshot
+2026-03-25 16:30:26 | INFO     | agent.services.execution_service    | ✅ Agent decision received
+2026-03-25 16:30:26 | INFO     | agent.services.execution_service    |    📝 Game state: The game remains paused on the tutorial prompt to throw away the burnt food. Previous attempts to drag the burnt patty to the trash bin have not registered. The yellow arrow points to the burnt patty on the stove.
+2026-03-25 16:30:26 | INFO     | agent.services.execution_service    |    🤔 Reasoning: Since standard and multi-point swipes haven't worked, the game might require a very deliberate drag that simulates holding the patty before moving it and holding it over the bin before releasing. I will use a multi-point swipe with repeated start and end points to simulate 'touch down, hold, drag, hold, release' directly into the body of the trash bin.
+2026-03-25 16:30:26 | INFO     | agent.services.execution_service    |    🔍 Force annotate: False
+2026-03-25 16:30:26 | INFO     | agent.services.execution_service    |    🎯 Actions count: 2
+2026-03-25 16:30:26 | INFO     | agent.services.execution_service    |    🏁 End game: False
+2026-03-25 16:30:26 | INFO     | agent.services.execution_service    |    📋 Test results: []
+2026-03-25 16:30:26 | INFO     | agent.services.execution_service    |    📊 Token usage — Input: 0, Output: 0, Total: 0
+2026-03-25 16:30:26 | INFO     | agent.services.execution_service    | 💾 ExecutionStep 17 DB write dispatched (background)
+2026-03-25 16:30:26 | INFO     | agent.services.execution_service    |    action (1/2): multi_swipe x=None y=None duration=2.5
+2026-03-25 16:30:30 | ERROR    | agent.appium_manager                | ❌ Action failed: Message: Unable to perform W3C actions. Check the logcat output for possible error reports and make sure your input actions chain is valid.
+Stacktrace:
+io.appium.uiautomator2.common.exceptions.InvalidElementStateException: Unable to perform W3C actions. Check the logcat output for possible error reports and make sure your input actions chain is valid.
+	at io.appium.uiautomator2.handler.W3CActions.safeHandle(W3CActions.java:82)
+	at io.appium.uiautomator2.handler.request.SafeRequestHandler.handle(SafeRequestHandler.java:59)
+	at io.appium.uiautomator2.server.AppiumServlet.handleRequest(AppiumServlet.java:267)
+	at io.appium.uiautomator2.server.AppiumServlet.handleHttpRequest(AppiumServlet.java:261)
+	at io.appium.uiautomator2.http.ServerHandler.channelRead(ServerHandler.java:77)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:356)
+	at io.netty.handler.codec.MessageToMessageDecoder.channelRead(MessageToMessageDecoder.java:107)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:356)
+	at io.netty.channel.CombinedChannelDuplexHandler$DelegatingChannelHandlerContext.fireChannelRead(CombinedChannelDuplexHandler.java:434)
+	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:361)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:325)
+	at io.netty.channel.CombinedChannelDuplexHandler.channelRead(CombinedChannelDuplexHandler.java:249)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:354)
+	at io.netty.handler.timeout.IdleStateHandler.channelRead(IdleStateHandler.java:293)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:354)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1429)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:918)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:172)
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.handle(AbstractNioChannel.java:445)
+	at io.netty.channel.nio.NioIoHandler$DefaultNioRegistration.handle(NioIoHandler.java:388)
+	at io.netty.channel.nio.NioIoHandler.processSelectedKey(NioIoHandler.java:596)
+	at io.netty.channel.nio.NioIoHandler.processSelectedKeysOptimized(NioIoHandler.java:571)
+	at io.netty.channel.nio.NioIoHandler.processSelectedKeys(NioIoHandler.java:512)
+	at io.netty.channel.nio.NioIoHandler.run(NioIoHandler.java:484)
+	at io.netty.channel.SingleThreadIoEventLoop.runIo(SingleThreadIoEventLoop.java:225)
+	at io.netty.channel.SingleThreadIoEventLoop.run(SingleThreadIoEventLoop.java:196)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:1195)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:1012)
+
+2026-03-25 16:30:30 | ERROR    | agent.services.execution_service    | ❌ Action failed: type=multi_swipe error=Message: Unable to perform W3C actions. Check the logcat output for possible error reports and make sure your input actions chain is valid.
+Stacktrace:
+io.appium.uiautomator2.common.exceptions.InvalidElementStateException: Unable to perform W3C actions. Check the logcat output for possible error reports and make sure your input actions chain is valid.
+	at io.appium.uiautomator2.handler.W3CActions.safeHandle(W3CActions.java:82)
+	at io.appium.uiautomator2.handler.request.SafeRequestHandler.handle(SafeRequestHandler.java:59)
+	at io.appium.uiautomator2.server.AppiumServlet.handleRequest(AppiumServlet.java:267)
+	at io.appium.uiautomator2.server.AppiumServlet.handleHttpRequest(AppiumServlet.java:261)
+	at io.appium.uiautomator2.http.ServerHandler.channelRead(ServerHandler.java:77)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:356)
+	at io.netty.handler.codec.MessageToMessageDecoder.channelRead(MessageToMessageDecoder.java:107)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:356)
+	at io.netty.channel.CombinedChannelDuplexHandler$DelegatingChannelHandlerContext.fireChannelRead(CombinedChannelDuplexHandler.java:434)
+	at io.netty.handler.codec.ByteToMessageDecoder.fireChannelRead(ByteToMessageDecoder.java:361)
+	at io.netty.handler.codec.ByteToMessageDecoder.channelRead(ByteToMessageDecoder.java:325)
+	at io.netty.channel.CombinedChannelDuplexHandler.channelRead(CombinedChannelDuplexHandler.java:249)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:354)
+	at io.netty.handler.timeout.IdleStateHandler.channelRead(IdleStateHandler.java:293)
+	at io.netty.channel.AbstractChannelHandlerContext.fireChannelRead(AbstractChannelHandlerContext.java:354)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.channelRead(DefaultChannelPipeline.java:1429)
+	at io.netty.channel.DefaultChannelPipeline.fireChannelRead(DefaultChannelPipeline.java:918)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:172)
+	at io.netty.channel.nio.AbstractNioChannel$AbstractNioUnsafe.handle(AbstractNioChannel.java:445)
+	at io.netty.channel.nio.NioIoHandler$DefaultNioRegistration.handle(NioIoHandler.java:388)
+	at io.netty.channel.nio.NioIoHandler.processSelectedKey(NioIoHandler.java:596)
+	at io.netty.channel.nio.NioIoHandler.processSelectedKeysOptimized(NioIoHandler.java:571)
+	at io.netty.channel.nio.NioIoHandler.processSelectedKeys(NioIoHandler.java:512)
+	at io.netty.channel.nio.NioIoHandler.run(NioIoHandler.java:484)
+	at io.netty.channel.SingleThreadIoEventLoop.runIo(SingleThreadIoEventLoop.java:225)
+	at io.netty.channel.SingleThreadIoEventLoop.run(SingleThreadIoEventLoop.java:196)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$5.run(SingleThreadEventExecutor.java:1195)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:1012)
+ (type=DeviceErrorType.UNKNOWN)
+2026-03-25 16:30:30 | INFO     | agent.services.execution_service    |    action (2/2): wait x=None y=None duration=3.0
+2026-03-25 16:30:30 | INFO     | agent.appium_manager                | ⏳ WAIT: 3.0s
+2026-03-25 16:30:35 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 18 | Run 69c3bd58
+================================================================================
+2026-03-25 16:30:35 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[COMPLETED] [1] [ACTION] Launch the game and wait for the tutorial narrative to begin.
+[COMPLETED] [2] [VERIFY] Verify that the narrative dialogue box and character sprites are rendered correctly on the screen. (depends on: 1)
+[COMPLETED] [3] [VERIFY] Verify that the dialogue text is grammatically correct and contains no spelling errors. (depends on: 2)
+[IN_PROGRESS] [4] [ACTION] Follow the on-screen tutorial prompts to select ingredients, cook the patty, and assemble the burger or hotdog. (depends on: 3)
+[PENDING] [5] [ACTION] Serve the completed item to the customer by tapping the finished dish. (depends on: 4)
+[PENDING] [6] [VERIFY] Verify that the Level 1 completion screen is displayed indicating the tutorial step is successful. (depends on: 5)
+============================================================
+2026-03-25 16:30:37 | INFO     | agent.services.execution_service    | 💾 step_18.png (captured in 1.92s)
+2026-03-25 16:30:37 | DEBUG    | agent.context.context_service       | 🔍 Annotation cache: dhash distance=6 (threshold=15)
+2026-03-25 16:30:37 | INFO     | agent.context.context_service       | ♻️  Reusing cached annotations from step 13 (distance=6 < 15)
+2026-03-25 16:30:37 | DEBUG    | agent.context.context_service       |    Cached text: Detected interactive elements on screen:
+- Menu button at (596, 46) bbox: [546, 16, 647, 77] - Menu button
+- Currency counter at (719, 46) bbox: [669, 16, 770, 77] - Currency counter
+- Lives counter at (858, 46) bbox: [797, 16, 919, 77] - Lives counter
+- Coin counter at (1008, 46) bbox: [948, 16, 1069, 77] - Coin counter
+- Star counter at (1155, 46) bbox: [1095, 16, 1216, 77] - Star counter
+- Trophy counter at (1304, 46) bbox: [1244, 16, 1365, 77] - Trophy counter
+- Settings button at (1454, 46) bbox: [1394, 16, 1514, 77] - Settings button
+- XP progress bar at (1603, 46) bbox: [1543, 16, 1663, 77] - XP progress bar
+- Level indicator at (1752, 46) bbox: [1692, 16, 1813, 77] - Level indicator
+- Level number at (1902, 46) bbox: [1842, 16, 1962, 77] - Level number
+- Customer order slot at (635, 282) bbox: [546, 125, 724, 439] - Customer order slot
+- Customer character at (813, 282) bbox: [724, 125, 903, 439] - Customer character
+- Customer order slot at (992, 282) bbox: [903, 125, 1081, 439] - Customer order slot
+- Customer character at (1170, 282) bbox: [1081, 125, 1259, 439] - Customer character
+- Customer order slot at (1348, 282) bbox: [1259, 125, 1437, 439] - Customer order slot
+- Customer character at (1526, 282) bbox: [1437, 125, 1615, 439] - Customer character
+- Burger ingredient slot at (986, 552) bbox: [939, 525, 1033, 579] - Burger ingredient slot
+- Burger ingredient slot at (1104, 552) bbox: [1057, 525, 1151, 579] - Burger ingredient slot
+- Burger ingredient slot at (1222, 552) bbox: [1175, 525, 1269, 579] - Burger ingredient slot
+- Burger ingredient slot at (986, 617) bbox: [939, 590, 1033, 644] - Burger ingredient slot
+- Burger ingredient slot at (1104, 617) bbox: [1057, 590, 1151, 644] - Burger ingredient slot
+- Burger ingredient slot at (1222, 617) bbox: [1175, 590, 1269, 644] - Burger ingredient slot
+- Burger ingredient slot at (986, 703) bbox: [939, 655, 1033, 752] - Burger ingredient slot
+- Burger ingredient slot at (1104, 703) bbox: [1057, 655, 1151, 752] - Burger ingredient slot
+- Burger ingredient slot at (1222, 703) bbox: [1175, 655, 1269, 752] - Burger ingredient slot
+- Burger ingredient slot at (986, 790) bbox: [939, 763, 1033, 817] - Burger ingredient slot
+- Burger ingredient slot at (1104, 790) bbox: [1057, 763, 1151, 817] - Burger ingredient slot
+- Burger ingredient slot at (1222, 790) bbox: [1175, 763, 1269, 817] - Burger ingredient slot
+- Locked ingredient slot at (986, 552) bbox: [939, 525, 1033, 579] - Locked ingredient slot
+- Locked ingredient slot at (1104, 552) bbox: [1057, 525, 1151, 579] - Locked ingredient slot
+- Locked ingredient slot at (1222, 552) bbox: [1175, 525, 1269, 579] - Locked ingredient slot
+- Locked ingredient slot at (986, 617) bbox: [939, 590, 1033, 644] - Locked ingredient slot
+- Locked ingredient slot at (1104, 617) bbox: [1057, 590, 1151, 644] - Locked ingredient slot
+- Locked ingredient slot at (1222, 617) bbox: [1175, 590, 1269, 644] - Locked ingredient slot
+- Locked ingredient slot at (986, 703) bbox: [939, 655, 1033, 752] - Locked ingredient slot
+- Locked ingredient slot at (1104, 703) bbox: [1057, 655, 1151, 752] - Locked ingredient slot
+- Locked ingredient slot at (1222, 703) bbox: [1175, 655, 1269, 752] - Locked ingredient slot
+- Locked ingredient slot at (986, 790) bbox: [939, 763, 1033, 817] - Locked ingredient slot
+- Locked ingredient slot at (1104, 790) bbox: [1057, 763, 1151, 817] - Locked ingredient slot
+- Locked ingredient slot at (1222, 790) bbox: [1175, 763, 1269, 817] - Locked ingredient slot
+- Burger bun image at (1104, 703) bbox: [1057, 655, 1151, 752] - Burger bun image
+- Burger buns tray at (1045, 865) bbox: [939, 817, 1151, 914] - Burger buns tray
+- Raw patty tray at (1609, 941) bbox: [1514, 893, 1704, 990] - Raw patty tray
+- Cooking pan at (1609, 746) bbox: [1514, 644, 1704, 849] - Cooking pan
+- Ice cream machine at (766, 536) bbox: [676, 461, 857, 612] - Ice cream machine
+- Ice cream cup dispenser at (766, 682) bbox: [676, 612, 857, 752] - Ice cream cup dispenser
+- Burnt food indicator at (1609, 746) bbox: [1514, 644, 1704, 849] - Burnt food indicator
+- Burnt patty in pan at (1609, 746) bbox: [1514, 644, 1704, 849] - Burnt patty in pan
+- Ice cold drink machine at (766, 536) bbox: [676, 461, 857, 612] - Ice cold drink machine
+- Drink dispenser at (766, 682) bbox: [676, 612, 857, 752] - Drink dispenser
+- Pan on stove at (1609, 746) bbox: [1514, 644, 1704, 849] - Pan on stove
+- Raw meat patty at (1609, 941) bbox: [1514, 893, 1704, 990] - Raw meat patty
+- Chef character at (1793, 379) bbox: [1704, 320, 1883, 439] - Chef character
+- Game instruction popup at (1587, 568) bbox: [1394, 439, 1781, 698] - Game instruction popup
+- Burger bun tray at (1045, 865) bbox: [939, 817, 1151, 914] - Burger bun tray
+- Locked food item at (986, 790) bbox: [939, 763, 1033, 817] - Locked food item
+- Locked food item at (1104, 790) bbox: [1057, 763, 1151, 817] - Locked food item
+- Locked food item at (1222, 790) bbox: [1175, 763, 1269, 817] - Locked food item
+- Locked food item at (986, 703) bbox: [939, 655, 1033, 752] - Locked food item
+- Locked food item at (1104, 703) bbox: [1057, 655, 1151, 752] - Locked food item
+- Locked food item at (1222, 703) bbox: [1175, 655, 1269, 752] - Locked food item
+- Locked food item at (986, 617) bbox: [939, 590, 1033, 644] - Locked food item
+- Locked food item at (1104, 617) bbox: [1057, 590, 1151, 644] - Locked food item
+- Locked food item at (1222, 617) bbox: [1175, 590, 1269, 644] - Locked food item
+- Locked food item at (986, 552) bbox: [939, 525, 1033, 579] - Locked food item
+- Locked food item at (1104, 552) bbox: [1057, 525, 1151, 579] - Locked food item
+- Locked food item at (1222, 552) bbox: [1175, 525, 1269, 579] - Locked food item
+- Burnt food message at (1587, 568) bbox: [1394, 439, 1781, 698] - Burnt food message
+- Customer order display at (635, 282) bbox: [546, 125, 724, 439] - Customer order display
+- Customer order display at (992, 282) bbox: [903, 125, 1081, 439] - Customer order display
+- Customer order display at (1348, 282) bbox: [1259, 125, 1437, 439] - Customer order display
+- Burger order icon at (635, 282) bbox: [546, 125, 724, 439] - Burger order icon
+- Burger order icon at (992, 282) bbox: [903, 125, 1081, 439] - Burger order icon
+- Drink order icon at (1348, 282) bbox: [1259, 125, 1437, 439] - Drink order icon
+- Boy customer avatar at (813, 282) bbox: [724, 125, 903, 439] - Boy customer avatar
+- Girl customer avatar at (1170, 282) bbox: [1081, 125, 1259, 439] - Girl customer avatar
+- Girl customer avatar at (1526, 282) bbox: [1437, 125, 1615, 439] - Girl customer avatar
+- Drink cup icon at (1348, 282) bbox: [1259, 125, 1437, 439] - Drink cup icon
+- Locked food slot at (986, 617) bbox: [939, 590, 1033, 644] - Locked food slot
+- Locked food slot at (1104, 617) bbox: [1057, 590, 1151, 644] - Locked food slot
+- Locked food slot at (1222, 617) bbox: [1175, 590, 1269, 644] - Locked food slot
+- Locked food slot at (986, 703) bbox: [939, 655, 1033, 752] - Locked food slot
+- Locked food slot at (1104, 703) bbox: [1057, 655, 1151, 752] - Locked food slot
+- Locked food slot at (1222, 703) bbox: [1175, 655, 1269, 752] - Locked food slot
+- Locked food slot at (986, 790) bbox: [939, 763, 1033, 817] - Locked food slot
+- Locked food slot at (1104, 790) bbox: [1057, 763, 1151, 817] - Locked food slot
+- Locked food slot at (1222, 790) bbox: [1175, 763, 1269, 817] - Locked food slot
+- Locked food slot at (986, 552) bbox: [939, 525, 1033, 579] - Locked food slot
+- Locked food slot at (1104, 552) bbox: [1057, 525, 1151, 579] - Locked food slot
+- Locked food slot at (1222, 552) bbox: [1175, 525, 1269, 579] - Locked food slot
+- Burnt food item at (1609, 746) bbox: [1514, 644, 1704, 849] - Burnt food item
+- Raw patty ingredient at (1609, 941) bbox: [1514, 893, 1704, 990] - Raw patty ingredient
+- Drink machine at (766, 536) bbox: [676, 461, 857, 612] - Drink machine
+- Drink cup at (766, 682) bbox: [676, 612, 857, 752] - Drink cup
+- Chef character at (1793, 379) bbox: [1704, 320, 1883, 439] - Chef character
+- Tutorial message at (1587, 568) bbox: [1394, 439, 1781, 698] - Tutorial message
+- Order ticket at (635, 282) bbox: [546, 125, 724, 439] - Order ticket
+- Order ticket at (992, 282) bbox: [903, 125, 1081, 439] - Order ticket
+- Order ticket at (1348, 282) bbox: [1259, 125, 1437, 439] - Order ticket
+- Raw patty tray at (1609, 941) bbox: [1514, 893, 1704, 990] - Raw patty tray
+- Cooking station at (1609, 746) bbox: [1514, 644, 1704, 849] - Cooking station
+- Beverage machine at (766, 536) bbox: [676, 461, 857, 612] - Beverage machine
+- Beverage cup at (766, 682) bbox: [676, 612, 857, 752] - Beverage cup
+- Burger bun storage at (1045, 865) bbox: [939, 817, 1151, 914] - Burger bun storage
+- Game tip at (1587, 568) bbox: [1394, 439, 1781, 698] - Game tip
+2026-03-25 16:30:37 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...

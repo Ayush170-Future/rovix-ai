@@ -9,10 +9,12 @@ from typing import Any, Dict, List, Optional
 from google.cloud import storage as gcs
 
 from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_google_vertexai.model_garden import ChatAnthropicVertex
+from langchain_openai import AzureChatOpenAI
 
 from agent.context import ContextService
 from agent.device_results import ActionResult, DeviceErrorType, ScreenshotResult
-from agent.prompts import SYSTEM_PROMPT_WITH_TODO
+from agent.prompts import SYSTEM_PROMPT_WITH_TODO, SYSTEM_PROMPT_WITH_TODO_IMPROVED
 from agent.logger import get_logger
 from services.views import Action, AgentOutput
 from models.test_scenario import TestScenario, Step
@@ -34,10 +36,26 @@ MAX_STEPS = int(os.getenv("MAX_STEPS", "1000"))
 MAX_CONSECUTIVE_DEVICE_FAILURES = int(os.getenv("MAX_CONSECUTIVE_DEVICE_FAILURES", "3"))
 GCS_BUCKET_NAME = os.getenv("GCS_BUCKET_NAME", "rovix_ai_bucket")
 
+# Model provider selection: "google" (default) | "anthropic" | "azure"
+MODEL_PROVIDER = os.getenv("MODEL_PROVIDER", "google")
+
+# Google / Gemini
+GOOGLE_MODEL = os.getenv("GOOGLE_MODEL", "gemini-3-pro-preview")
+
+# Anthropic via Vertex AI
+ANTHROPIC_PROJECT_ID = os.getenv("ANTHROPIC_PROJECT_ID", "")
+ANTHROPIC_LOCATION = os.getenv("ANTHROPIC_LOCATION", "us-east5")
+ANTHROPIC_MODEL = os.getenv("ANTHROPIC_MODEL", "claude-sonnet-4-6")
+
+# Azure OpenAI
+AZURE_OPENAI_API_KEY = os.getenv("AZURE_OPENAI_API_KEY", "")
+AZURE_OPENAI_INSTANCE_NAME = os.getenv("AZURE_OPENAI_API_INSTANCE_NAME", "")
+AZURE_OPENAI_DEPLOYMENT = os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME", "gpt-4o")
+AZURE_OPENAI_API_VERSION = os.getenv("AZURE_OPENAI_API_VERSION", "2024-12-01-preview")
+
 
 class FatalExecutionError(Exception):
     """Stops the run with a persisted failure_reason (device / invalid action)."""
-
     pass
 
 
@@ -80,11 +98,31 @@ class ExecutionService:
         return task
 
     def _init_model(self):
-        model = ChatGoogleGenerativeAI(
-            model="gemini-3-pro-preview",
-            temperature=1.0,
-            api_key=os.getenv("GOOGLE_API_KEY"),
-        )
+        if MODEL_PROVIDER == "anthropic":
+            logger.info(f"🤖 Using Anthropic model: {ANTHROPIC_MODEL} (Vertex AI, location={ANTHROPIC_LOCATION})")
+            model = ChatAnthropicVertex(
+                model_name=ANTHROPIC_MODEL,
+                project=ANTHROPIC_PROJECT_ID,
+                location=ANTHROPIC_LOCATION,
+                max_tokens=4096,
+            )
+        elif MODEL_PROVIDER == "azure":
+            logger.info(f"🤖 Using Azure OpenAI model: {AZURE_OPENAI_DEPLOYMENT} (instance={AZURE_OPENAI_INSTANCE_NAME})")
+            model = AzureChatOpenAI(
+                temperature=0.0,
+                azure_deployment=AZURE_OPENAI_DEPLOYMENT,
+                azure_endpoint=f"https://{AZURE_OPENAI_INSTANCE_NAME}.openai.azure.com",
+                api_key=AZURE_OPENAI_API_KEY,
+                api_version=AZURE_OPENAI_API_VERSION,
+            )
+        else:
+            logger.info(f"🤖 Using Google model: {GOOGLE_MODEL}")
+            model = ChatGoogleGenerativeAI(
+                model=GOOGLE_MODEL,
+                temperature=1.0,
+                api_key=os.getenv("GOOGLE_API_KEY"),
+            )
+
         return model.with_structured_output(
             schema=AgentOutput.model_json_schema(),
             method="json_schema",
@@ -117,7 +155,7 @@ class ExecutionService:
         build: Build,
     ) -> None:
         session_id = run_id
-        context_svc = ContextService(system_prompt=SYSTEM_PROMPT_WITH_TODO, keep_full_steps=4)
+        context_svc = ContextService(system_prompt=SYSTEM_PROMPT_WITH_TODO_IMPROVED, keep_full_steps=4)
         context_svc._ensure_session(
             session_id,
             game_description=game.description or "A mobile game application.",
@@ -231,16 +269,27 @@ class ExecutionService:
             force_annotate=session.force_annotate,
         )
 
-        # TODO: error handling for the screenshot upload --> its failure shouldn't fail the entire run
-        screenshot_url = await self._upload_screenshot(screenshot_path, session.execution_run_id, step_num)
-        logger.info(f"☁️  Screenshot uploaded: {screenshot_url}")
+        # Upload runs concurrently with LLM inference; we await the result after LLM returns.
+        # Upload failure is non-fatal — we fall back to an empty URL and log the error.
+        upload_task = asyncio.create_task(
+            self._upload_screenshot(screenshot_path, session.execution_run_id, step_num)
+        )
 
         messages = session.context_service.get_messages_for_llm(session.session_id)
         logger.info("🤖 Getting agent decision from LLM...")
         start = time.time()
+
+        # TODO: add time limit to the LLM call like vision api call.
         raw_response = await asyncio.to_thread(self._structured_model.invoke, messages)
         elapsed = time.time() - start
         logger.info(f"⏱️  LLM response time: {elapsed:.2f}s")
+
+        try:
+            screenshot_url = await upload_task
+            logger.info(f"☁️  Screenshot uploaded: {screenshot_url}")
+        except Exception as exc:
+            logger.error(f"❌ Screenshot upload failed (non-fatal): {exc}")
+            screenshot_url = ""
 
         output = self._parse_response(raw_response)
         token_usage = self._extract_token_usage(raw_response)
@@ -323,7 +372,7 @@ class ExecutionService:
             if r.error_type == DeviceErrorType.DEVICE_DISCONNECTED:
                 raise FatalExecutionError(r.error_message or "Device disconnected (action)")
             if r.error_type == DeviceErrorType.INVALID_INPUT:
-                raise FatalExecutionError(f"Invalid action: {r.error_message}")
+                logger.error(f"Invalid input: {r.error_message}")
             session.consecutive_device_failures += 1
             if session.consecutive_device_failures >= MAX_CONSECUTIVE_DEVICE_FAILURES:
                 raise FatalExecutionError(
@@ -363,15 +412,34 @@ class ExecutionService:
     def _extract_token_usage(self, response) -> TokenUsage:
         try:
             raw = response.get("raw") if isinstance(response, dict) else None
-            if raw and hasattr(raw, "usage_metadata") and raw.usage_metadata:
-                meta = raw.usage_metadata
-                return TokenUsage(
-                    input_tokens=getattr(meta, "input_tokens", 0) or 0,
-                    output_tokens=getattr(meta, "output_tokens", 0) or 0,
-                    total_tokens=getattr(meta, "total_tokens", 0) or 0,
-                )
-        except Exception:
-            pass
+            if raw is None:
+                return TokenUsage()
+
+            input_tokens, output_tokens, total_tokens = 0, 0, 0
+
+            usage_meta = getattr(raw, "usage_metadata", None)
+            if usage_meta:
+                if isinstance(usage_meta, dict):
+                    input_tokens = usage_meta.get("input_tokens", 0) or 0
+                    output_tokens = usage_meta.get("output_tokens", 0) or 0
+                    total_tokens = usage_meta.get("total_tokens", 0) or 0
+                else:
+                    input_tokens = getattr(usage_meta, "input_tokens", 0) or 0
+                    output_tokens = getattr(usage_meta, "output_tokens", 0) or 0
+                    total_tokens = getattr(usage_meta, "total_tokens", 0) or 0
+
+            if input_tokens == 0 and output_tokens == 0:
+                usage = (getattr(raw, "response_metadata", {}) or {}).get("usage", {}) or {}
+                input_tokens = usage.get("input_tokens", 0) or 0
+                output_tokens = usage.get("output_tokens", 0) or 0
+
+            return TokenUsage(
+                input_tokens=input_tokens,
+                output_tokens=output_tokens,
+                total_tokens=total_tokens or (input_tokens + output_tokens),
+            )
+        except Exception as e:
+            logger.warning(f"⚠️  Failed to extract token usage: {e}")
         return TokenUsage()
 
     async def _upload_screenshot(self, local_path: str, execution_run_id: str, step_num: int) -> str:

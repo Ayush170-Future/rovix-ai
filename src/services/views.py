@@ -24,7 +24,7 @@ class Action(BaseModel):
         default=None,
         description="Ending Y-coordinate for 'swipe' action. Required only for 'swipe'. Not used for 'multi_swipe' or 'todo_write'."
     )
-    waypoints: List[tuple[int, int]] | None = Field(
+    waypoints: List[List[int]] | None = Field(
         default=None,
         description="List of (x, y) coordinate tuples for 'multi_swipe' action ONLY. The gesture will follow this path smoothly from first point to last. Includes start, middle, and end points. Example: [(100, 100), (200, 150), (300, 100)] creates a curved path starting at (100,100) and ending at (300,100). Required for 'multi_swipe', ignored for other actions."
     )
@@ -61,11 +61,13 @@ class TestResult(BaseModel):
 
 
 class AgentOutput(BaseModel):
+    """Structured output produced by the agent for each decision step."""
+
     game_state_summary: str = Field(
-        description="A concise summary of the current game state, key observations, and important context that should be remembered for future steps. This summary will be preserved in the conversation history even when screenshots are removed. Include: current game situation, player status, important objects/entities, recent changes, and any critical information needed for decision-making."
+        description="A concise summary of the current game state, key observations, and important context that should be remembered for future steps. This summary will be preserved in the conversation history even when screenshots are removed. Include: current game situation, player status, important objects/entities, recent changes, and any critical information needed for decision-making. Max 100 words."
     )
     reason: str = Field(
-        description="Use this field to reason about the current game state and your overall performance, observations, goals that will help you complete the game and figure out the next set of actions."
+        description="Use this field to reason about the current game state and your overall performance, observations, goals that will help you complete the game and figure out the next set of actions. Max 100 words."
     )
     end_game: bool = Field(
         default=False,
@@ -73,12 +75,14 @@ class AgentOutput(BaseModel):
     )
     force_annotate: bool = Field(
         default=False,
-        description="'true' if you think the cached annotation does not match the current game screen, otherwise 'false'. No need to execute any actions when this is 'true'."
+        description="Set to true if you believe the cached UI annotation is stale and a fresh vision scan is needed. This is a top-level boolean flag — do NOT add any action to the actions list for this. Simply set this field to true and leave actions empty."
     )
     actions: List[Action] = Field(
+        default_factory=list,
         description="A list of actions to be executed sequentially. This can be a combination of keyboard and button press actions."
     )
     test_results: List[TestResult] = Field(
+        default_factory=list,
         description="List of test results. You are not expected to fill this always. Only fill it when you have executed atleast one test case and have a result to report otherwise keep it empty."
     )
 

@@ -180,12 +180,14 @@ class ContextService:
         return HumanMessage(content=[{"type": "text", "text": text}])
     
     def _build_screenshot_message(self, screenshot_path: str, step: int, frame: int) -> HumanMessage:
-        screenshot_base64 = self._image_file_to_base64(screenshot_path)
+        screenshot_base64, orig_w, orig_h = self._image_file_to_base64(screenshot_path)
         
         message_content = [
             {
                 "type": "text",
                 "text": f"Here is the current game state. This is a 2d game. "
+                       f"Screen dimensions: {orig_w}x{orig_h}px (width x height, top-left origin). "
+                       f"All element coordinates and your click/swipe actions use this coordinate space. "
                        f"Your goal is to clearly identify the next set of actions or a single action. "
                        f"Analyze the screenshot and decide on the next actions."
             },
@@ -361,12 +363,14 @@ class ContextService:
                 "text": "No todo context available."
             }])
     
-    def _image_file_to_base64(self, filepath: str, max_size=(1024, 1024), quality=75) -> str:
+    def _image_file_to_base64(self, filepath: str, max_size=(1024, 1024), quality=75) -> tuple:
         """Resize to fit within max_size (keeps aspect ratio), then encode as JPEG base64.
-        e.g. 1080x1920 → 576x1024. 1024 cap keeps vision API payload small and within typical limits."""
+        e.g. 1080x1920 → 576x1024. 1024 cap keeps vision API payload small and within typical limits.
+        Returns (base64_str, original_width, original_height)."""
         img = Image.open(filepath).convert("RGB")
-        img.thumbnail(max_size)
+        orig_w, orig_h = img.size
+        img.thumbnail(max_size, Image.Resampling.LANCZOS)
         buf = io.BytesIO()
         img.save(buf, format="JPEG", quality=quality, optimize=True)
         image_bytes = buf.getvalue()
-        return base64.b64encode(image_bytes).decode("utf-8")
+        return base64.b64encode(image_bytes).decode("utf-8"), orig_w, orig_h

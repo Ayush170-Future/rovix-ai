@@ -15,8 +15,8 @@ class Step(BaseModel):
 
 class Assertion(BaseModel):
     id: str
-    title: str
-    description: str
+    title: str  # Name of what is being tested
+    description: str  # Expected outcome — what the app should do for this to pass
 
 
 class TestScenario(Document):

@@ -1,0 +1,4 @@
+2026-03-25 16:55:59 | INFO     | agent.database                      | Connected to MongoDB: game_testing
+2026-03-25 16:55:59 | INFO     | agent.services.execution_service    | 🤖 Using Azure OpenAI model: gpt-4o (instance=ayush-ma9djmae-eastus2)
+2026-03-25 16:55:59 | INFO     | agent.services.execution_service    | Marked 1 stale execution run(s) as failed on startup
+2026-03-25 17:00:27 | INFO     | agent.services.android_build_runner | Downloading build from gs://rovix_ai_bucket/game_builds/69a1a52bddccbd191280e7eb/69c3b570cfc0a8cd9c2e6e04/android/20260325102923_6ca0bfff363c4c34bf60bd6a64575ee1_cooking-fever-mod_26.1.2-an1.com.apk

@@ -9,13 +9,14 @@ import json
 from datetime import datetime
 from PIL import Image
 from typing import List, Optional
-from langchain_openai import ChatOpenAI
+from langchain_openai import ChatOpenAI, AzureChatOpenAI
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 from dotenv import load_dotenv
 import sys
 import time
 from langchain_aws import ChatBedrockConverse
 from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_google_vertexai.model_garden import ChatAnthropicVertex
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 try:
@@ -46,15 +47,42 @@ MAX_STEPS = int(os.getenv("MAX_STEPS", "1000"))
 SESSION_ID = "game_session_main"
 FORCE_ANNOTATE = False
 
-model = ChatGoogleGenerativeAI(
-    model="gemini-3-flash-preview",
-    temperature=1.0,
-    max_tokens=None,
-    timeout=None,
-    max_retries=2,
-    api_key=os.getenv("GOOGLE_API_KEY")
-)
-logger.info("🤖 Using model: gemini-3-flash-preview")
+# Model provider selection: "google" (default) | "anthropic" | "azure"
+_MODEL_PROVIDER = os.getenv("MODEL_PROVIDER", "google")
+
+if _MODEL_PROVIDER == "anthropic":
+    _anthropic_model = os.getenv("ANTHROPIC_MODEL", "claude-sonnet-4-6")
+    _anthropic_project = os.getenv("ANTHROPIC_PROJECT_ID", "")
+    _anthropic_location = os.getenv("ANTHROPIC_LOCATION", "us-east5")
+    logger.info(f"🤖 Using Anthropic model: {_anthropic_model} (Vertex AI, location={_anthropic_location})")
+    model = ChatAnthropicVertex(
+        model_name=_anthropic_model,
+        project=_anthropic_project,
+        location=_anthropic_location,
+    )
+elif _MODEL_PROVIDER == "azure":
+    _azure_deployment = os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME", "gpt-4o")
+    _azure_instance = os.getenv("AZURE_OPENAI_API_INSTANCE_NAME", "")
+    _azure_api_version = os.getenv("AZURE_OPENAI_API_VERSION", "2024-12-01-preview")
+    logger.info(f"🤖 Using Azure OpenAI model: {_azure_deployment} (instance={_azure_instance})")
+    model = AzureChatOpenAI(
+        temperature=0.0,
+        azure_deployment=_azure_deployment,
+        azure_endpoint=f"https://{_azure_instance}.openai.azure.com",
+        api_key=os.getenv("AZURE_OPENAI_API_KEY"),
+        api_version=_azure_api_version,
+    )
+else:
+    _google_model = os.getenv("GOOGLE_MODEL", "gemini-3-flash-preview")
+    logger.info(f"🤖 Using Google model: {_google_model}")
+    model = ChatGoogleGenerativeAI(
+        model=_google_model,
+        temperature=1.0,
+        max_tokens=None,
+        timeout=None,
+        max_retries=2,
+        api_key=os.getenv("GOOGLE_API_KEY"),
+    )
 
 if SDK_ENABLED:
     logger.info("Initializing AltTesterClient...")
