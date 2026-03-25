@@ -1,0 +1,146 @@
+2026-03-25 17:02:51 | INFO     | agent.database                      | Connected to MongoDB: game_testing
+2026-03-25 17:02:51 | INFO     | agent.services.execution_service    | 🤖 Using Azure OpenAI model: gpt-4o (instance=ayush-ma9djmae-eastus2)
+2026-03-25 17:02:57 | INFO     | agent.services.android_build_runner | Downloading build from gs://rovix_ai_bucket/game_builds/69a1a52bddccbd191280e7eb/69c3b570cfc0a8cd9c2e6e04/android/20260325102923_6ca0bfff363c4c34bf60bd6a64575ee1_cooking-fever-mod_26.1.2-an1.com.apk
+2026-03-25 17:02:57 | INFO     | agent.services.android_build_runner | Installing APK on RZCW31HH47R (package=com.nordcurrent.canteenhd)
+2026-03-25 17:02:57 | INFO     | agent.services.android_build_runner | Launching com.nordcurrent.canteenhd / com.nordcurrent.canteenhd.MainActivity
+2026-03-25 17:02:58 | INFO     | agent.appium_manager                | 📱 Using device with UDID: RZCW31HH47R
+2026-03-25 17:02:58 | INFO     | agent.appium_manager                | 🎯 Appium will launch app: com.nordcurrent.canteenhd
+2026-03-25 17:02:58 | INFO     | agent.appium_manager                | 🔌 Connecting to Appium server at http://localhost:4723...
+2026-03-25 17:03:12 | INFO     | agent.appium_manager                | ✅ Appium session started: cfd055bb-1e7d-4397-861b-17f179eea76a
+2026-03-25 17:03:12 | INFO     | agent.services.execution_service    | Starting execution 69c3c7e9ce2f2b2f64e67d11 on device RZCW31HH47R
+2026-03-25 17:03:12 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 0 | Run 69c3c7e9
+================================================================================
+2026-03-25 17:03:12 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[PENDING] [1] [ACTION] Launch the game and wait for the tutorial narrative to begin.
+[PENDING] [2] [VERIFY] Verify that the narrative dialogue box and character sprites are rendered correctly on the screen. (depends on: 1)
+[PENDING] [3] [VERIFY] Verify that the dialogue text is grammatically correct and contains no spelling errors. (depends on: 2)
+[PENDING] [4] [ACTION] Follow the on-screen tutorial prompts to select ingredients, cook the patty, and assemble the burger or hotdog. (depends on: 3)
+[PENDING] [5] [ACTION] Serve the completed item to the customer by tapping the finished dish. (depends on: 4)
+[PENDING] [6] [VERIFY] Verify that the Level 1 completion screen is displayed indicating the tutorial step is successful. (depends on: 5)
+============================================================
+2026-03-25 17:03:13 | INFO     | agent.services.execution_service    | 💾 step_0.png (captured in 1.58s)
+2026-03-25 17:03:13 | INFO     | agent.context.context_service       | 🆕 No cached annotation yet, running first annotation
+2026-03-25 17:03:13 | INFO     | agent.vision_element_detector       | 🔍 Vision detection
+2026-03-25 17:03:21 | INFO     | agent.vision_element_detector       | ⏱️  Vision API response time: 8.17s
+2026-03-25 17:03:21 | INFO     | agent.vision_element_detector       | ✅ Detected 16 elements via vision
+2026-03-25 17:03:21 | DEBUG    | agent.context.context_service       | 💾 Annotation cache updated for step 0
+2026-03-25 17:03:21 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-03-25 17:03:22 | INFO     | agent.vision_element_detector       | 📸 Annotated image saved
+2026-03-25 17:03:24 | ERROR    | agent.services.execution_service    | Execution 69c3c7e9ce2f2b2f64e67d11 failed: Error code: 400 - {'error': {'message': "Invalid schema for response_format 'AgentOutput': In context=('properties', 'waypoints', 'anyOf', '0', 'items'), array schema missing items.", 'type': 'invalid_request_error', 'param': 'response_format', 'code': None}}
+Traceback (most recent call last):
+  File "/Users/ayushsingh/Documents/programming/alttester/src/services/execution_service.py", line 215, in _run_execution
+    end_game = await self._handle_step(session, step_num)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ayushsingh/Documents/programming/alttester/src/services/execution_service.py", line 281, in _handle_step
+    raw_response = await asyncio.to_thread(self._structured_model.invoke, messages)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/asyncio/threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 86, in run
+    result = ctx.run(self.task)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 73, in run
+    return fn(*args, **kwargs)
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/langchain_core/runnables/base.py", line 3149, in invoke
+    input_ = context.run(step.invoke, input_, config, **kwargs)
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/langchain_core/runnables/base.py", line 3876, in invoke
+    key: future.result()
+         ~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/_base.py", line 450, in result
+    return self.__get_result()
+           ~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/_base.py", line 395, in __get_result
+    raise self._exception
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 86, in run
+    result = ctx.run(self.task)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 73, in run
+    return fn(*args, **kwargs)
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/langchain_core/runnables/base.py", line 3859, in _invoke_step
+    return context.run(
+           ~~~~~~~~~~~^
+        step.invoke,
+        ^^^^^^^^^^^^
+        input_,
+        ^^^^^^^
+        child_config,
+        ^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/langchain_core/runnables/base.py", line 5557, in invoke
+    return self.bound.invoke(
+           ~~~~~~~~~~~~~~~~~^
+        input,
+        ^^^^^^
+        self._merge_configs(config),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        **{**self.kwargs, **kwargs},
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/langchain_core/language_models/chat_models.py", line 398, in invoke
+    self.generate_prompt(
+    ~~~~~~~~~~~~~~~~~~~~^
+        [self._convert_input(input)],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    ).generations[0][0],
+    ^
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/langchain_core/language_models/chat_models.py", line 1117, in generate_prompt
+    return self.generate(prompt_messages, stop=stop, callbacks=callbacks, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/langchain_core/language_models/chat_models.py", line 927, in generate
+    self._generate_with_cache(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        m,
+        ^^
+    ...<2 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/langchain_core/language_models/chat_models.py", line 1221, in _generate_with_cache
+    result = self._generate(
+        messages, stop=stop, run_manager=run_manager, **kwargs
+    )
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/langchain_openai/chat_models/base.py", line 1380, in _generate
+    raise e
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/langchain_openai/chat_models/base.py", line 1354, in _generate
+    _handle_openai_bad_request(e)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/langchain_openai/chat_models/base.py", line 467, in _handle_openai_bad_request
+    raise e
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/langchain_openai/chat_models/base.py", line 1348, in _generate
+    self.root_client.chat.completions.with_raw_response.parse(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        **payload
+        ^^^^^^^^^
+    )
+    ^
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/openai/_legacy_response.py", line 364, in wrapped
+    return cast(LegacyAPIResponse[R], func(*args, **kwargs))
+                                      ~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/openai/resources/chat/completions/completions.py", line 184, in parse
+    return self._post(
+           ~~~~~~~~~~^
+        "/chat/completions",
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<50 lines>...
+        stream=False,
+        ^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/openai/_base_client.py", line 1259, in post
+    return cast(ResponseT, self.request(cast_to, opts, stream=stream, stream_cls=stream_cls))
+                           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/openai/_base_client.py", line 1047, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.BadRequestError: Error code: 400 - {'error': {'message': "Invalid schema for response_format 'AgentOutput': In context=('properties', 'waypoints', 'anyOf', '0', 'items'), array schema missing items.", 'type': 'invalid_request_error', 'param': 'response_format', 'code': None}}

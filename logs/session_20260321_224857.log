@@ -1,0 +1,5 @@
+2026-03-21 22:49:01 | INFO     | agent.appium_manager                | 📱 Using device with UDID: RZCW31HH47R
+2026-03-21 22:49:01 | INFO     | agent.appium_manager                | 🖥️  Appium will control current screen (no app launch)
+2026-03-21 22:49:01 | INFO     | agent.appium_manager                | 🔌 Connecting to Appium server at http://localhost:4723...
+2026-03-21 22:49:01 | ERROR    | agent.appium_manager                | ❌ Failed to start Appium session: HTTPConnectionPool(host='localhost', port=4723): Max retries exceeded with url: /session (Caused by NewConnectionError("HTTPConnection(host='localhost', port=4723): Failed to establish a new connection: [Errno 61] Connection refused"))
+2026-03-21 22:49:01 | ERROR    | agent.appium_manager                |    Make sure Appium server is running: appium

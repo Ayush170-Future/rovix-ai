@@ -1,0 +1,103 @@
+2026-03-22 22:50:03 | INFO     | agent.database                      | Connected to MongoDB: game_testing
+2026-03-22 22:50:47 | INFO     | agent.services.android_build_runner | Downloading build from gs://rovix_ai_bucket/game_builds/69a1a52bddccbd191280e7eb/69a1a5a2ddccbd191280e7ec/android/20260322024514_fb604f32a5ca4f508384cef7f9b025a0_Diamond League Hatchback.apk
+2026-03-22 22:50:47 | INFO     | agent.services.android_build_runner | Installing APK on RZCW31HH47R (package=cricketgames.hitwicket.strategy)
+2026-03-22 22:50:47 | ERROR    | agent.services.execution_service    | Build prepare / install failed for run 69c024ef44c3fb348b943b0f: adb install failed: Performing Streamed Install
+adb: failed to install /var/folders/4q/px6vthmd3vv782wvf23dc6w40000gn/T/tmp0ui2seon.apk: 
+Exception occurred while executing 'install':
+java.lang.IllegalArgumentException: Size must be positive
+	at com.android.server.pm.PackageManagerShellCommand.makeInstallParams(PackageManagerShellCommand.java:3197)
+	at com.android.server.pm.PackageManagerShellCommand.runInstall(PackageManagerShellCommand.java:1446)
+	at com.android.server.pm.PackageManagerShellCommand.onCommand(PackageManagerShellCommand.java:238)
+	at com.android.modules.utils.BasicShellCommandHandler.exec(BasicShellCommandHandler.java:97)
+	at android.os.ShellCommand.exec(ShellCommand.java:38)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onShellCommand(PackageManagerService.java:7071)
+	at android.os.Binder.shellCommand(Binder.java:1085)
+	at android.os.Binder.onTransact(Binder.java:903)
+	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:4962)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onTransact(PackageManagerService.java:7055)
+	at android.os.Binder.execTransactInternal(Bi
+Traceback (most recent call last):
+  File "/Users/ayushsingh/Documents/programming/alttester/src/services/execution_service.py", line 120, in start_execution
+    session.action_executor = await asyncio.to_thread(
+                              ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/asyncio/threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 86, in run
+    result = ctx.run(self.task)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 73, in run
+    return fn(*args, **kwargs)
+  File "/Users/ayushsingh/Documents/programming/alttester/src/agent/context/../../services/android_build_runner.py", line 204, in create_action_executor_for_build
+    adb_install(device_udid, tmp_apk)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ayushsingh/Documents/programming/alttester/src/agent/context/../../services/android_build_runner.py", line 113, in adb_install
+    raise RuntimeError(f"adb install failed: {msg.strip() or r.returncode}")
+RuntimeError: adb install failed: Performing Streamed Install
+adb: failed to install /var/folders/4q/px6vthmd3vv782wvf23dc6w40000gn/T/tmp0ui2seon.apk: 
+Exception occurred while executing 'install':
+java.lang.IllegalArgumentException: Size must be positive
+	at com.android.server.pm.PackageManagerShellCommand.makeInstallParams(PackageManagerShellCommand.java:3197)
+	at com.android.server.pm.PackageManagerShellCommand.runInstall(PackageManagerShellCommand.java:1446)
+	at com.android.server.pm.PackageManagerShellCommand.onCommand(PackageManagerShellCommand.java:238)
+	at com.android.modules.utils.BasicShellCommandHandler.exec(BasicShellCommandHandler.java:97)
+	at android.os.ShellCommand.exec(ShellCommand.java:38)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onShellCommand(PackageManagerService.java:7071)
+	at android.os.Binder.shellCommand(Binder.java:1085)
+	at android.os.Binder.onTransact(Binder.java:903)
+	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:4962)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onTransact(PackageManagerService.java:7055)
+	at android.os.Binder.execTransactInternal(Bi
+2026-03-22 22:51:36 | INFO     | agent.services.android_build_runner | Downloading build from gs://rovix_ai_bucket/game_builds/69a1a52bddccbd191280e7eb/69a1a5a2ddccbd191280e7ec/android/20260322024514_fb604f32a5ca4f508384cef7f9b025a0_Diamond League Hatchback.apk
+2026-03-22 22:51:36 | INFO     | agent.services.android_build_runner | Installing APK on RZCW31HH47R (package=cricketgames.hitwicket.strategy)
+2026-03-22 22:51:36 | ERROR    | agent.services.execution_service    | Build prepare / install failed for run 69c0252044c3fb348b943b10: adb install failed: Performing Streamed Install
+adb: failed to install /var/folders/4q/px6vthmd3vv782wvf23dc6w40000gn/T/tmp6bc5et_d.apk: 
+Exception occurred while executing 'install':
+java.lang.IllegalArgumentException: Size must be positive
+	at com.android.server.pm.PackageManagerShellCommand.makeInstallParams(PackageManagerShellCommand.java:3197)
+	at com.android.server.pm.PackageManagerShellCommand.runInstall(PackageManagerShellCommand.java:1446)
+	at com.android.server.pm.PackageManagerShellCommand.onCommand(PackageManagerShellCommand.java:238)
+	at com.android.modules.utils.BasicShellCommandHandler.exec(BasicShellCommandHandler.java:97)
+	at android.os.ShellCommand.exec(ShellCommand.java:38)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onShellCommand(PackageManagerService.java:7071)
+	at android.os.Binder.shellCommand(Binder.java:1085)
+	at android.os.Binder.onTransact(Binder.java:903)
+	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:4962)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onTransact(PackageManagerService.java:7055)
+	at android.os.Binder.execTransactInternal(Bi
+Traceback (most recent call last):
+  File "/Users/ayushsingh/Documents/programming/alttester/src/services/execution_service.py", line 120, in start_execution
+    session.action_executor = await asyncio.to_thread(
+                              ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/asyncio/threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 86, in run
+    result = ctx.run(self.task)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 73, in run
+    return fn(*args, **kwargs)
+  File "/Users/ayushsingh/Documents/programming/alttester/src/agent/context/../../services/android_build_runner.py", line 204, in create_action_executor_for_build
+    adb_install(device_udid, tmp_apk)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ayushsingh/Documents/programming/alttester/src/agent/context/../../services/android_build_runner.py", line 113, in adb_install
+    raise RuntimeError(f"adb install failed: {msg.strip() or r.returncode}")
+RuntimeError: adb install failed: Performing Streamed Install
+adb: failed to install /var/folders/4q/px6vthmd3vv782wvf23dc6w40000gn/T/tmp6bc5et_d.apk: 
+Exception occurred while executing 'install':
+java.lang.IllegalArgumentException: Size must be positive
+	at com.android.server.pm.PackageManagerShellCommand.makeInstallParams(PackageManagerShellCommand.java:3197)
+	at com.android.server.pm.PackageManagerShellCommand.runInstall(PackageManagerShellCommand.java:1446)
+	at com.android.server.pm.PackageManagerShellCommand.onCommand(PackageManagerShellCommand.java:238)
+	at com.android.modules.utils.BasicShellCommandHandler.exec(BasicShellCommandHandler.java:97)
+	at android.os.ShellCommand.exec(ShellCommand.java:38)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onShellCommand(PackageManagerService.java:7071)
+	at android.os.Binder.shellCommand(Binder.java:1085)
+	at android.os.Binder.onTransact(Binder.java:903)
+	at android.content.pm.IPackageManager$Stub.onTransact(IPackageManager.java:4962)
+	at com.android.server.pm.PackageManagerService$IPackageManagerImpl.onTransact(PackageManagerService.java:7055)
+	at android.os.Binder.execTransactInternal(Bi

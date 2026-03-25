@@ -1,0 +1,51 @@
+2026-03-22 08:41:08 | INFO     | agent.database                      | Connected to MongoDB: game_testing
+2026-03-22 08:41:33 | INFO     | agent.services.android_build_runner | Downloading build from gs://rovix_ai_bucket/game_builds/69a1a52bddccbd191280e7eb/69a1a5a2ddccbd191280e7ec/android/20260322024514_fb604f32a5ca4f508384cef7f9b025a0_Diamond League Hatchback.apk
+2026-03-22 08:42:19 | INFO     | agent.services.android_build_runner | Installing APK on RZCW31HH47R (package=cricketgames.hitwicket.strategy)
+2026-03-22 08:42:39 | ERROR    | agent.services.execution_service    | Build prepare / install failed for run 69bf5de5ea14f3289b5ed3c7: adb install failed: Performing Streamed Install
+adb: failed to install /var/folders/4q/px6vthmd3vv782wvf23dc6w40000gn/T/tmpvo0g7xpp.apk: Failure [INSTALL_FAILED_INSUFFICIENT_STORAGE]
+Traceback (most recent call last):
+  File "/Users/ayushsingh/Documents/programming/alttester/src/services/execution_service.py", line 120, in start_execution
+    session.action_executor = await asyncio.to_thread(
+                              ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/asyncio/threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 86, in run
+    result = ctx.run(self.task)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 73, in run
+    return fn(*args, **kwargs)
+  File "/Users/ayushsingh/Documents/programming/alttester/src/agent/context/../../services/android_build_runner.py", line 210, in create_action_executor_for_build
+    adb_install(device_udid, tmp_apk)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ayushsingh/Documents/programming/alttester/src/agent/context/../../services/android_build_runner.py", line 115, in adb_install
+    raise RuntimeError(f"adb install failed: {msg.strip() or r.returncode}")
+RuntimeError: adb install failed: Performing Streamed Install
+adb: failed to install /var/folders/4q/px6vthmd3vv782wvf23dc6w40000gn/T/tmpvo0g7xpp.apk: Failure [INSTALL_FAILED_INSUFFICIENT_STORAGE]
+2026-03-22 08:43:33 | INFO     | agent.services.android_build_runner | Downloading build from gs://rovix_ai_bucket/game_builds/69a1a52bddccbd191280e7eb/69a1a5a2ddccbd191280e7ec/android/20260322024514_fb604f32a5ca4f508384cef7f9b025a0_Diamond League Hatchback.apk
+2026-03-22 08:44:18 | INFO     | agent.services.android_build_runner | Installing APK on RZCW31HH47R (package=cricketgames.hitwicket.strategy)
+2026-03-22 08:44:37 | ERROR    | agent.services.execution_service    | Build prepare / install failed for run 69bf5e5dea14f3289b5ed3c8: adb install failed: Performing Streamed Install
+adb: failed to install /var/folders/4q/px6vthmd3vv782wvf23dc6w40000gn/T/tmphk2qk2i0.apk: Failure [INSTALL_FAILED_INSUFFICIENT_STORAGE]
+Traceback (most recent call last):
+  File "/Users/ayushsingh/Documents/programming/alttester/src/services/execution_service.py", line 120, in start_execution
+    session.action_executor = await asyncio.to_thread(
+                              ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/asyncio/threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 86, in run
+    result = ctx.run(self.task)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 73, in run
+    return fn(*args, **kwargs)
+  File "/Users/ayushsingh/Documents/programming/alttester/src/agent/context/../../services/android_build_runner.py", line 210, in create_action_executor_for_build
+    adb_install(device_udid, tmp_apk)
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ayushsingh/Documents/programming/alttester/src/agent/context/../../services/android_build_runner.py", line 115, in adb_install
+    raise RuntimeError(f"adb install failed: {msg.strip() or r.returncode}")
+RuntimeError: adb install failed: Performing Streamed Install
+adb: failed to install /var/folders/4q/px6vthmd3vv782wvf23dc6w40000gn/T/tmphk2qk2i0.apk: Failure [INSTALL_FAILED_INSUFFICIENT_STORAGE]

@@ -10,6 +10,9 @@ langchain-openai>=0.0.2
 langchain-aws>=0.0.1
 langchain-google-genai>=0.0.5
 openai>=1.0.0
+google-genai>=1.0.0
+langchain-google-vertexai>=2.0.0
+anthropic[vertex]>=0.40.0
 
 # Image processing
 Pillow>=10.0.0
@@ -18,6 +21,7 @@ numpy>=1.24.0
 # Utilities
 python-dotenv>=1.0.0
 redis>=5.0.0
+google-cloud-storage>=2.18.0
 
 # ADB integration
 pure-python-adb>=0.3.0

@@ -1,0 +1,2 @@
+2026-03-23 16:56:36 | INFO     | agent.database                      | Connected to MongoDB: game_testing
+2026-03-23 16:56:36 | INFO     | agent.services.execution_service    | Marked 1 stale execution run(s) as failed on startup

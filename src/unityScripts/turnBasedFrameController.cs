@@ -11,6 +11,7 @@ public class frameController : MonoBehaviour
     private int currentStep = 0;
     private int lastEventStep = 0;
     private int eventInterval = 600;
+    private bool eventSendEnabled = true;
     
     private string pythonServerUrl = "http://10.0.2.2:8000";
     
@@ -44,7 +45,7 @@ public class frameController : MonoBehaviour
     {
         currentStep++;
         
-        if (currentStep - lastEventStep >= eventInterval && actionsExecuted)
+        if (eventSendEnabled && currentStep - lastEventStep >= eventInterval && actionsExecuted)
         {
             SendEventToPython();
         }
@@ -128,6 +129,59 @@ public class frameController : MonoBehaviour
     {
         eventInterval = interval;
         Debug.Log($"[FrameController] Event interval set to {interval} steps");
+    }
+    
+    [Preserve]
+    public void EnableEventSend()
+    {
+        eventSendEnabled = true;
+        Debug.Log("[FrameController] Event sending enabled");
+    }
+    
+    [Preserve]
+    public void DisableEventSend()
+    {
+        eventSendEnabled = false;
+        Debug.Log("[FrameController] Event sending disabled - no events will be sent to Python");
+    }
+    
+    [Preserve]
+    public bool IsEventSendEnabled()
+    {
+        return eventSendEnabled;
+    }
+    
+    [Preserve]
+    public void PauseGame()
+    {
+        Time.timeScale = 0f;
+        Debug.Log("[FrameController] Game paused (timeScale = 0)");
+    }
+    
+    [Preserve]
+    public void ResumeGame()
+    {
+        Time.timeScale = 1f;
+        Debug.Log("[FrameController] Game resumed (timeScale = 1)");
+    }
+    
+    [Preserve]
+    public bool IsGamePaused()
+    {
+        return Time.timeScale == 0f;
+    }
+    
+    [Preserve]
+    public float GetTimeScale()
+    {
+        return Time.timeScale;
+    }
+    
+    [Preserve]
+    public void SetTimeScale(float scale)
+    {
+        Time.timeScale = scale;
+        Debug.Log($"[FrameController] Time scale set to {scale}");
     }
     
     void OnDestroy()

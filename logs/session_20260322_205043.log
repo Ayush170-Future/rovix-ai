@@ -1,0 +1,106 @@
+2026-03-22 20:50:46 | INFO     | agent.database                      | Connected to MongoDB: game_testing
+2026-03-22 20:57:49 | INFO     | agent.services.android_build_runner | Downloading build from gs://rovix_ai_bucket/game_builds/69a1a52bddccbd191280e7eb/69a1a5a2ddccbd191280e7ec/android/20260322024514_fb604f32a5ca4f508384cef7f9b025a0_Diamond League Hatchback.apk
+2026-03-22 20:57:50 | ERROR    | agent.services.execution_service    | Build prepare / install failed for run 69c00a75e5575176eb267a3e: Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.
+Traceback (most recent call last):
+  File "/Users/ayushsingh/Documents/programming/alttester/src/services/execution_service.py", line 120, in start_execution
+    session.action_executor = await asyncio.to_thread(
+                              ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/asyncio/threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 86, in run
+    result = ctx.run(self.task)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 73, in run
+    return fn(*args, **kwargs)
+  File "/Users/ayushsingh/Documents/programming/alttester/src/agent/context/../../services/android_build_runner.py", line 176, in create_action_executor_for_build
+    download_apk_from_gcs(build.bucket_name, build.object_key, tmp_apk)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ayushsingh/Documents/programming/alttester/src/agent/context/../../services/android_build_runner.py", line 98, in download_apk_from_gcs
+    if not blob.exists(client=client):
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/google/cloud/storage/blob.py", line 773, in exists
+    client._get_resource(
+    ~~~~~~~~~~~~~~~~~~~~^
+        self.path,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _target_object=None,
+        ^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/google/cloud/storage/client.py", line 523, in _get_resource
+    return self._connection.api_request(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        method="GET",
+        ^^^^^^^^^^^^^
+    ...<5 lines>...
+        _target_object=_target_object,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/google/cloud/storage/_http.py", line 90, in api_request
+    return call()
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+        target,
+    ...<3 lines>...
+        on_error=on_error,
+    )
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+        exc,
+    ...<6 lines>...
+        timeout,
+    )
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/google/api_core/retry/retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/google/cloud/_http/__init__.py", line 482, in api_request
+    response = self._make_request(
+        method=method,
+    ...<6 lines>...
+        extra_api_info=extra_api_info,
+    )
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/google/cloud/_http/__init__.py", line 341, in _make_request
+    return self._do_request(
+           ~~~~~~~~~~~~~~~~^
+        method, url, headers, data, target_object, timeout=timeout
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/google/cloud/_http/__init__.py", line 379, in _do_request
+    return self.http.request(
+           ~~~~~~~~~~~~~~~~~^
+        url=url, method=method, headers=headers, data=data, timeout=timeout
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/google/auth/transport/requests.py", line 537, in request
+    self.credentials.before_request(auth_request, method, url, request_headers)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/google/auth/credentials.py", line 228, in before_request
+    self._blocking_refresh(request)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/google/auth/credentials.py", line 191, in _blocking_refresh
+    self.refresh(request)
+    ~~~~~~~~~~~~^^^^^^^^^
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/google/oauth2/credentials.py", line 409, in refresh
+    ) = reauth.refresh_grant(
+        ~~~~~~~~~~~~~~~~~~~~^
+        request,
+        ^^^^^^^^
+    ...<6 lines>...
+        enable_reauth_refresh=self._enable_reauth_refresh,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/ayushsingh/Documents/programming/alttester/venv/lib/python3.14/site-packages/google/oauth2/reauth.py", line 349, in refresh_grant
+    raise exceptions.RefreshError(
+        "Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate."
+    )
+google.auth.exceptions.RefreshError: Reauthentication is needed. Please run `gcloud auth application-default login` to reauthenticate.
+2026-03-22 20:59:14 | INFO     | agent.services.android_build_runner | Downloading build from gs://rovix_ai_bucket/game_builds/69a1a52bddccbd191280e7eb/69a1a5a2ddccbd191280e7ec/android/20260322024514_fb604f32a5ca4f508384cef7f9b025a0_Diamond League Hatchback.apk
