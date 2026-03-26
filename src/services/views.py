@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Literal, List
+from typing import Literal, List, Optional
 
 from tools.todo_management import TODO_WRITE_INPUT_DESCRIPTION
 
@@ -10,23 +10,23 @@ class Action(BaseModel):
     )
     x: int | None = Field(
         default=None,
-        description="X-coordinate on the screen. Required for 'click' action. For 'swipe' action, this is the starting X-coordinate. Not used for 'multi_swipe' or 'todo_write'."
+        description="Normalised X-coordinate in 0–1000 scale (0 = left edge, 1000 = right edge). Required for 'click'. For 'swipe' this is the starting X. Not used for 'multi_swipe' or 'todo_write'."
     )
     y: int | None = Field(
         default=None,
-        description="Y-coordinate on the screen. Required for 'click' action. For 'swipe' action, this is the starting Y-coordinate. Not used for 'multi_swipe' or 'todo_write'."
+        description="Normalised Y-coordinate in 0–1000 scale (0 = top edge, 1000 = bottom edge). Required for 'click'. For 'swipe' this is the starting Y. Not used for 'multi_swipe' or 'todo_write'."
     )
     end_x: int | None = Field(
         default=None,
-        description="Ending X-coordinate for 'swipe' action. Required only for 'swipe'. Not used for 'multi_swipe' or 'todo_write'."
+        description="Normalised ending X-coordinate in 0–1000 scale. Required only for 'swipe'. Not used for 'multi_swipe' or 'todo_write'."
     )
     end_y: int | None = Field(
         default=None,
-        description="Ending Y-coordinate for 'swipe' action. Required only for 'swipe'. Not used for 'multi_swipe' or 'todo_write'."
+        description="Normalised ending Y-coordinate in 0–1000 scale. Required only for 'swipe'. Not used for 'multi_swipe' or 'todo_write'."
     )
     waypoints: List[List[int]] | None = Field(
         default=None,
-        description="List of (x, y) coordinate tuples for 'multi_swipe' action ONLY. The gesture will follow this path smoothly from first point to last. Includes start, middle, and end points. Example: [(100, 100), (200, 150), (300, 100)] creates a curved path starting at (100,100) and ending at (300,100). Required for 'multi_swipe', ignored for other actions."
+        description="List of [x, y] normalised coordinate pairs (0–1000 scale each) for 'multi_swipe' ONLY. Example: [[100, 200], [500, 400], [900, 200]]. Required for 'multi_swipe', ignored for other actions."
     )
     key_name: str | None = Field(
         default=None,
@@ -60,6 +60,23 @@ class TestResult(BaseModel):
     )
 
 
+class GroundedObject(BaseModel):
+    """An interactive element visually identified and grounded from the current screenshot."""
+    name: str = Field(
+        description="Short name or label for the element (e.g. 'Play button', 'Health bar', 'Enemy card')."
+    )
+    x: int = Field(
+        description="Normalised X-coordinate in 0–1000 scale (0 = left edge, 1000 = right edge). Estimate the element's horizontal position as a fraction of screen width × 1000."
+    )
+    y: int = Field(
+        description="Normalised Y-coordinate in 0–1000 scale (0 = top edge, 1000 = bottom edge). Estimate the element's vertical position as a fraction of screen height × 1000."
+    )
+    description: Optional[str] = Field(
+        default=None,
+        description="Optional one-line description of what this element does or why it is relevant to the current action."
+    )
+
+
 class AgentOutput(BaseModel):
     """Structured output produced by the agent for each decision step."""
 
@@ -73,9 +90,21 @@ class AgentOutput(BaseModel):
         default=False,
         description="This represents whether the game has ended or not. If the game has ended, the player should not take any action."
     )
+    # co_ordinates_reasoning: str = Field(
+    #     description="Use this field to reason about the co-ordinates you are using to click on the screen. Max 100 words."
+    # )
+    grounded_objects: List[GroundedObject] = Field(
+        default_factory=list,
+        description=(
+            "List of interactive elements you have visually identified from the screenshot and plan to act on this turn. "
+            "Only include objects relevant to your current actions — do NOT list every element on screen. "
+            "Coordinates must be in the original screen coordinate space (apply scaling if the image was resized). "
+            "Populate this before the actions list so your grounding is explicit and verifiable."
+        )
+    )
     force_annotate: bool = Field(
         default=False,
-        description="Set to true if you believe the cached UI annotation is stale and a fresh vision scan is needed. This is a top-level boolean flag — do NOT add any action to the actions list for this. Simply set this field to true and leave actions empty."
+        description="NOT AVAILABLE in single-model mode. Always set this to false."
     )
     actions: List[Action] = Field(
         default_factory=list,

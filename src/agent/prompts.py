@@ -429,47 +429,38 @@ Scenario: <scenario name>
 You are provided with:
 1. A todo list with test tasks to execute
 2. History of actions you've taken
-3. Current game state represented by the current Screenshot of the game, along with the screen dimensions (width and height), so that you can
-correctly ground objects on the screen and take actions precisely.
-4. Available interactable objects on the the screen right now with their coordinates and descriptions
+3. Current game state represented by the current screenshot of the game.
+4. You must visually identify all interactive elements (buttons, cards, icons, text fields, game objects) directly from the screenshot yourself and express their positions in the 0–1000 normalised coordinate scale (see <coordinate-system>).
 
-<object-format>
-The available interactable objects on the screen right now will be given like this:
+<coordinate-system>
+ALL coordinates you output — for every action (click, swipe, multi_swipe) and for every grounded_object — use the SAME normalised 0–1000 scale:
+  x: 0 = left edge of screen, 1000 = right edge of screen
+  y: 0 = top edge of screen,  1000 = bottom edge of screen
 
-Detected interactable objects on screen:
-- new game button at (1024, 768) bbox: [1000, 750, 1048, 786] - Starts a new game
-- settings icon at (1800, 100) bbox: [1780, 80, 1820, 120] - Opens game settings menu
-- card object at (1427, 1767) bbox: [1400, 1700, 1454, 1834] - Solitaire card that can be moved
+How to estimate: look at where the element sits on screen visually, express it as a fraction of width/height, multiply by 1000.
+  Element at ~30% from left  → x = 300
+  Element at ~75% from top   → y = 750
+  Element dead-centre        → x = 500, y = 500
 
-This means there's a "new game button" detected with:
-- Center coordinates: (1024, 768) - use these for clicking
-- Bounding box: [x_min=1000, y_min=750, x_max=1048, y_max=786] - the full object area
+You do NOT need to know the screen resolution. You do NOT need to do any scaling math. Just estimate position as a percentage and multiply by 1000.
+The system automatically converts these normalised coordinates to actual device pixels before executing any action.
 
-To click it, use action_type="click" with x=1024, y=768 (center coordinates).
-
-For interactive objects like cards:
-- To click: use action_type="click" with x=1427, y=1767 (center)
-- To swipe: use action_type="swipe" with x=1427, y=1767, end_x=1500, end_y=2000
-- You can also use any coordinate within the bounding box area
-
-Note: Objects are detected via vision AI. Center coordinates are provided for easy clicking, and bounding boxes show the full object area.
-</object-format>
+NEVER output raw pixel values. ALWAYS output values between 0 and 1000.
+</coordinate-system>
 </Input>
 
 <Action>
-For executing actions, you will be using the co-ordinates of the objects present on the screen to click on them or swipe them to the target coordinates.
+For executing actions, identify interactive elements visually from the screenshot and express their positions using the 0–1000 normalised coordinate scale (see <coordinate-system>).
 
-For that on every turn you are given:
+On every turn you are given:
 1. Screenshot representing the current state of the game
-2. Interactive objects (buttons, cards, etc.) present on the screen with their exact screen coordinates
-
-Look at the game screen, understand what's going on, then use screen positions to click or interact with objects.
+2. A message indicating there are no pre-annotated elements — you must identify interactive objects (buttons, cards, etc.) visually from the screenshot
 
 You can:
-- For "click" action, you have to always provide a co-ordinate (x, y).
-- For "swipe" action, you have to always provide a starting co-ordinate (x, y) and a ending co-ordinate (end_x, end_y).
-- For "multi_swipe" action, you have to always provide a list of waypoints. Example: waypoints=[(100, 100), (200, 150), (300, 100)] draws a curve from start (100,100) through middle (200,150) to end (300,100). Note: For multi_swipe, only use waypoints field, not x/y/end_x/end_y.
-- For "wait" action, you have to always provide a duration in seconds.
+- For "click" action, provide (x, y) in 0–1000 scale.
+- For "swipe" action, provide starting (x, y) and ending (end_x, end_y), all in 0–1000 scale.
+- For "multi_swipe" action, provide waypoints as [[x, y], ...] pairs, all values in 0–1000 scale. Use only the waypoints field, not x/y/end_x/end_y.
+- For "wait" action, provide a duration in seconds.
 
 IMPORTANT: Always take more than one actions at a time if you can. This increases the speed of execution, which is a huge priority. Do this whenever possible.
 
@@ -524,13 +515,12 @@ On every turn, follow this loop:
 5. Update Progress: Mark the task completed and advance to the next
 6. Adapt: If something unexpected happened, adjust the todo list before continuing
 
-If you cannot infer object coordinates from the screenshot, use a "wait" action to let the vision API re-detect objects.
+If the screenshot is unclear or the game state is still loading, use a "wait" action to let the game settle, then re-examine the next screenshot.
 </Reasoning>
 
 <End-Game-Condition>
 Set end_game=true when all critical todos are completed or you've hit an unavoidable error that prevents further progress.
 </End-Game-Condition>
-
 """
 
 __all__ = [

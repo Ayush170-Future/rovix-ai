@@ -105,6 +105,16 @@ class ContextService:
             
             self._sessions[session_id]['step_counter'] += 1
     
+    def add_parse_error(self, session_id: str, error: str):
+        with self._lock:
+            self._ensure_session(session_id)
+            self._sessions[session_id]['messages'].append(
+                HumanMessage(content=[{
+                    "type": "text",
+                    "text": f"Your previous response could not be parsed and was skipped. Error: {error}. Please respond again with a valid JSON structure."
+                }])
+            )
+
     def add_todo_result(self, session_id: str, result: str):
         with self._lock:
             self._ensure_session(session_id)
@@ -186,7 +196,8 @@ class ContextService:
             {
                 "type": "text",
                 "text": f"Here is the current game state. This is a 2d game. "
-                       f"Screen dimensions: {orig_w}x{orig_h}px (width x height, top-left origin). "
+                       f"Screen dimensions: {orig_w}x{orig_h}px (width x height, top-left origin, x is on the righ and y is on the bottom). "
+                       f"[Imp]As mentioned above there is not scaling or de-scaling/resizing of the image done, so please identify co-ordinate based on the original size only."
                        f"All element coordinates and your click/swipe actions use this coordinate space. "
                        f"Your goal is to clearly identify the next set of actions or a single action. "
                        f"Analyze the screenshot and decide on the next actions."
@@ -214,63 +225,78 @@ class ContextService:
     ) -> HumanMessage:
         
         if not sdk_enabled and vision_detector:
-            session = self._sessions[session_id]
-            current_hash = imagehash.dhash(Image.open(screenshot_path))
-            last_success = session.get('last_annotation_success', True)
+            # --- SINGLE-MODEL MODE ---
+            # Vision annotation (VisionElementDetector) is bypassed. The main model receives the
+            # full-resolution screenshot directly and is responsible for visually grounding all
+            # interactive elements and their coordinates. Re-enable this block to restore the
+            # dual-model pipeline (separate annotation pass via gemini-robotics-er).
+            if not sdk_enabled:
+                logger.info("🖼️  Single-model mode: skipping vision annotation, relying on screenshot grounding")
+                return HumanMessage(content=[{
+                    "type": "text",
+                    "text": (
+                        "No pre-annotated elements. Visually analyze the screenshot above to identify "
+                        "all interactive elements (buttons, icons, game objects, text fields, etc.). "
+                        "Ground their coordinates to the original screen dimensions provided."
+                    )
+                }])
+            # session = self._sessions[session_id]
+            # current_hash = imagehash.dhash(Image.open(screenshot_path))
+            # last_success = session.get('last_annotation_success', True)
 
-            if force_annotate:
-                logger.info(f"🔄 Force annotation requested, bypassing cache")
-            elif not last_success:
-                logger.info("🆕 Previous vision run failed, running fresh annotation (cache invalid)")
-            elif session['last_annotation_hash'] is None:
-                logger.info("🆕 No cached annotation yet, running first annotation")
-            else:
-                distance = current_hash - session['last_annotation_hash']
-                logger.debug(f"🔍 Annotation cache: dhash distance={distance} (threshold={ANNOTATION_CACHE_THRESHOLD})")
+            # if force_annotate:
+            #     logger.info(f"🔄 Force annotation requested, bypassing cache")
+            # elif not last_success:
+            #     logger.info("🆕 Previous vision run failed, running fresh annotation (cache invalid)")
+            # elif session['last_annotation_hash'] is None:
+            #     logger.info("🆕 No cached annotation yet, running first annotation")
+            # else:
+            #     distance = current_hash - session['last_annotation_hash']
+            #     logger.debug(f"🔍 Annotation cache: dhash distance={distance} (threshold={ANNOTATION_CACHE_THRESHOLD})")
 
-                if distance < ANNOTATION_CACHE_THRESHOLD:
-                    cached_step = session['last_annotation_step']
-                    cached_text = session['last_annotation_message'].content[0]["text"]
-                    logger.info(f"♻️  Reusing cached annotations from step {cached_step} (distance={distance} < {ANNOTATION_CACHE_THRESHOLD})")
-                    logger.debug(f"   Cached text: {cached_text}")
-                    reused_text = cached_text + f"\n\n(Cached from step {cached_step} — screen unchanged, dhash distance={distance})"
-                    return HumanMessage(content=[{"type": "text", "text": reused_text}])
-                else:
-                    logger.info(f"🆕 Screen changed (distance={distance} >= {ANNOTATION_CACHE_THRESHOLD}), running fresh annotation")
+            #     if distance < ANNOTATION_CACHE_THRESHOLD:
+            #         cached_step = session['last_annotation_step']
+            #         cached_text = session['last_annotation_message'].content[0]["text"]
+            #         logger.info(f"♻️  Reusing cached annotations from step {cached_step} (distance={distance} < {ANNOTATION_CACHE_THRESHOLD})")
+            #         logger.debug(f"   Cached text: {cached_text}")
+            #         reused_text = cached_text + f"\n\n(Cached from step {cached_step} — screen unchanged, dhash distance={distance})"
+            #         return HumanMessage(content=[{"type": "text", "text": reused_text}])
+            #     else:
+            #         logger.info(f"🆕 Screen changed (distance={distance} >= {ANNOTATION_CACHE_THRESHOLD}), running fresh annotation")
 
-            detection_result = await vision_detector.detect_elements(screenshot_path)
+            # detection_result = await vision_detector.detect_elements(screenshot_path)
             
-            if detection_result.success:
-                action_message_content = "Detected interactive elements on screen:"
-                if detection_result.elements:
-                    for element in detection_result.elements:
-                        name = element['name']
-                        desc = element['description']
-                        pos = element['screen_position']
-                        bbox = element['bounding_box']
-                        action_message_content += f"\n- {name} at ({pos[0]}, {pos[1]}) bbox: [{bbox[0]}, {bbox[1]}, {bbox[2]}, {bbox[3]}] - {desc}"
-                else:
-                    action_message_content += "\n- No elements detected. Analyze the screenshot to identify clickable areas."
-            else:
-                action_message_content = (
-                    f"⚠️ Vision detection failed after {detection_result.retry_count} attempts: "
-                    f"{detection_result.error_message}\n"
-                    "Fallback: Analyze the screenshot carefully to identify clickable areas and their positions."
-                )
-                logger.warning(f"⚠️ Context service: Vision detection failed, providing fallback message")
+            # if detection_result.success:
+            #     action_message_content = "Detected interactive elements on screen:"
+            #     if detection_result.elements:
+            #         for element in detection_result.elements:
+            #             name = element['name']
+            #             desc = element['description']
+            #             pos = element['screen_position']
+            #             bbox = element['bounding_box']
+            #             action_message_content += f"\n- {name} at ({pos[0]}, {pos[1]}) bbox: [{bbox[0]}, {bbox[1]}, {bbox[2]}, {bbox[3]}] - {desc}"
+            #     else:
+            #         action_message_content += "\n- No elements detected. Analyze the screenshot to identify clickable areas."
+            # else:
+            #     action_message_content = (
+            #         f"⚠️ Vision detection failed after {detection_result.retry_count} attempts: "
+            #         f"{detection_result.error_message}\n"
+            #         "Fallback: Analyze the screenshot carefully to identify clickable areas and their positions."
+            #     )
+            #     logger.warning(f"⚠️ Context service: Vision detection failed, providing fallback message")
             
-            built_message = HumanMessage(content=[{"type": "text", "text": action_message_content}])
+            # built_message = HumanMessage(content=[{"type": "text", "text": action_message_content}])
 
-            if detection_result.success:
-                session['last_annotation_hash'] = current_hash
-                session['last_annotation_step'] = step
-                session['last_annotation_message'] = built_message
-                session['last_annotation_success'] = True
-                logger.debug(f"💾 Annotation cache updated for step {step}")
-            else:
-                session['last_annotation_success'] = False
+            # if detection_result.success:
+            #     session['last_annotation_hash'] = current_hash
+            #     session['last_annotation_step'] = step
+            #     session['last_annotation_message'] = built_message
+            #     session['last_annotation_success'] = True
+            #     logger.debug(f"💾 Annotation cache updated for step {step}")
+            # else:
+            #     session['last_annotation_success'] = False
 
-            return built_message
+            # return built_message
         
         action_message_content = "You can currently interact with the following controls on the screen: \n Buttons available to click:"
         buttons = available_actions.get("buttons", [])
@@ -363,7 +389,7 @@ class ContextService:
                 "text": "No todo context available."
             }])
     
-    def _image_file_to_base64(self, filepath: str, max_size=(1024, 1024), quality=75) -> tuple:
+    def _image_file_to_base64(self, filepath: str, max_size=(2500, 2500), quality=75) -> tuple:
         """Resize to fit within max_size (keeps aspect ratio), then encode as JPEG base64.
         e.g. 1080x1920 → 576x1024. 1024 cap keeps vision API payload small and within typical limits.
         Returns (base64_str, original_width, original_height)."""

@@ -6,6 +6,8 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
+from PIL import Image, ImageDraw, ImageFont
+
 from google.cloud import storage as gcs
 
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -72,6 +74,8 @@ class AgentSession:
     step_count: int = 0
     collected_results: List[AssertionResult] = field(default_factory=list)
     consecutive_device_failures: int = 0
+    screen_width: int = 0   # set from first screenshot; used to de-normalise 0-1000 coords
+    screen_height: int = 0
 
 
 # ── Service ──────────────────────────────────────────────────────────────────
@@ -253,6 +257,12 @@ class ExecutionService:
 
         session.consecutive_device_failures = 0
 
+        # Cache screen dimensions for 0-1000 → pixel de-normalisation (read once; stable across steps)
+        if session.screen_width == 0:
+            with Image.open(screenshot_path) as _img:
+                session.screen_width, session.screen_height = _img.size
+            logger.info(f"📐 Screen dimensions: {session.screen_width}×{session.screen_height}")
+
         logger.info(f"💾 step_{step_num}.png (captured in {result.elapsed_time:.2f}s)")
         if result.retry_count > 0:
             logger.warning(f"🔄 Screenshot required {result.retry_count} retry(ies)")
@@ -291,12 +301,21 @@ class ExecutionService:
             logger.error(f"❌ Screenshot upload failed (non-fatal): {exc}")
             screenshot_url = ""
 
-        output = self._parse_response(raw_response)
+        try:
+            output = self._parse_response(raw_response)
+        except Exception as parse_err:
+            # TODO: fix _parse_response to handle double-encoded fields (e.g. actions as a JSON string)
+            # For now, skip this step and let the LLM course-correct on the next iteration
+            logger.warning(f"Step {step_num}: failed to parse LLM response, skipping — {parse_err}")
+            session.context_service.add_parse_error(session.session_id, str(parse_err))
+            return False
         token_usage = self._extract_token_usage(raw_response)
 
         logger.info("✅ Agent decision received")
         logger.info(f"   📝 Game state: {output.game_state_summary}")
         logger.info(f"   🤔 Reasoning: {output.reason}")
+        logger.info(f"   Grounded objects: {output.grounded_objects}")
+        # logger.info(f"   Co-ordinates reasoning: {output.co_ordinates_reasoning}")
         logger.info(f"   🔍 Force annotate: {output.force_annotate}")
         logger.info(f"   🎯 Actions count: {len(output.actions)}")
         logger.info(f"   🏁 End game: {output.end_game}")
@@ -308,6 +327,12 @@ class ExecutionService:
 
         session.force_annotate = output.force_annotate
         session.context_service.add_ai_response(session.session_id, output)
+
+        if output.grounded_objects:
+            self._bg_task(
+                self._save_grounded_annotation(screenshot_path, output.grounded_objects),
+                label=f"Grounded annotation step {step_num}",
+            )
 
         step_assertion_results = []
         for r in output.test_results:
@@ -380,6 +405,27 @@ class ExecutionService:
                     f"(last action: {r.error_message})"
                 )
 
+    def _denorm_action(self, action: Action, screen_w: int, screen_h: int) -> Action:
+        """Convert a 0-1000 normalised action to actual pixel coordinates."""
+        def sx(v): return int((v / 1000.0) * screen_w) if v is not None else None
+        def sy(v): return int((v / 1000.0) * screen_h) if v is not None else None
+
+        converted_waypoints = None
+        if action.waypoints:
+            converted_waypoints = [[sx(wp[0]), sy(wp[1])] for wp in action.waypoints]
+
+        return Action(
+            action_type=action.action_type,
+            x=sx(action.x),
+            y=sy(action.y),
+            end_x=sx(action.end_x),
+            end_y=sy(action.end_y),
+            waypoints=converted_waypoints,
+            key_name=action.key_name,
+            duration=action.duration,
+            todo_input=action.todo_input,
+        )
+
     async def _execute_actions(self, session: AgentSession, actions: List[Action]) -> None:
         total = len(actions)
         for idx, action in enumerate(actions, 1):
@@ -396,11 +442,13 @@ class ExecutionService:
                     logger.warning(f"   todo_write ({idx}/{total}): failed — {result_dict.get('message')}")
                 session.context_service.add_todo_result(session.session_id, result)
             else:
+                pixel_action = self._denorm_action(action, session.screen_width, session.screen_height)
                 logger.info(
                     f"   action ({idx}/{total}): {action.action_type} "
-                    f"x={action.x} y={action.y} duration={action.duration}"
+                    f"norm=({action.x},{action.y}) → px=({pixel_action.x},{pixel_action.y}) "
+                    f"duration={action.duration}"
                 )
-                batch = await session.action_executor.execute_actions_sequential([action])
+                batch = await session.action_executor.execute_actions_sequential([pixel_action])
                 self._on_action_batch_results(session, batch.results)
 
     def _parse_response(self, response) -> AgentOutput:
@@ -450,14 +498,48 @@ class ExecutionService:
             blob.upload_from_filename(local_path)
 
         await asyncio.to_thread(_do_upload)
-        try:
-            os.remove(local_path)
-        except OSError:
-            pass
         return f"/api/executions/{execution_run_id}/steps/{step_num}/screenshot"
 
     def _get_todo_snapshot(self, session_id: str) -> List[dict]:
         return [t.to_dict() for t in TodoPersistenceService.get_todo_list(session_id)]
+
+    async def _save_grounded_annotation(self, screenshot_path: str, grounded_objects: List) -> None:
+        """Draw a small square marker for every grounded object the LLM reported and save as *_annotated.png.
+        grounded_objects carry 0-1000 normalised coordinates; we convert to pixels using the image dimensions."""
+        def _draw():
+            image = Image.open(screenshot_path)
+            img_w, img_h = image.size
+            draw = ImageDraw.Draw(image)
+
+            try:
+                font = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 11)
+            except Exception:
+                font = ImageFont.load_default()
+
+            colors = ['red', 'green', 'blue', 'yellow', 'purple', 'orange', 'cyan', 'magenta']
+            dot_half = 8
+
+            for idx, obj in enumerate(grounded_objects):
+                color = colors[idx % len(colors)]
+                # Convert 0-1000 normalised → pixel coordinates
+                cx = int((obj.x / 1000.0) * img_w)
+                cy = int((obj.y / 1000.0) * img_h)
+                cx = max(dot_half, min(cx, img_w - dot_half))
+                cy = max(dot_half, min(cy, img_h - dot_half))
+
+                draw.rectangle(
+                    [cx - dot_half, cy - dot_half, cx + dot_half, cy + dot_half],
+                    fill=color,
+                    outline='white',
+                    width=1,
+                )
+                draw.text((cx + dot_half + 3, cy - 6), obj.name, fill=color, font=font)
+
+            base = os.path.splitext(screenshot_path)[0]
+            image.save(f"{base}_annotated.png")
+
+        await asyncio.to_thread(_draw)
+        logger.info(f"📸 Grounded annotation saved ({len(grounded_objects)} objects)")
 
     def _cleanup_session(self, device_udid: str) -> None:
         session = self._sessions.pop(device_udid, None)
