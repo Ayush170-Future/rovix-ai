@@ -1,0 +1,120 @@
+2026-03-28 12:00:45 | INFO     | agent.database                      | Connected to MongoDB: game_testing
+2026-03-28 12:00:45 | INFO     | agent.services.execution_service    | 🤖 Using Google model: gemini-3-pro-preview
+2026-03-28 12:00:56 | INFO     | agent.services.android_build_runner | Downloading build from gs://rovix_ai_bucket/game_builds/69c6c43675f3e45c87279199/69c6c4b475f3e45c8727919a/android/20260328061500_0ba388ccec5b494bb177431bfc7d39b7_Diamond League Hatchback.apk
+2026-03-28 12:04:49 | ERROR    | agent.services.execution_service    | Build prepare / install failed for run 69c775a070952e7e7f45127c: Timeout of 120.0s exceeded, last exception: ('Connection broken: IncompleteRead(329495454 bytes read, 114017370 more expected)', IncompleteRead(329495454 bytes read, 114017370 more expected))
+Traceback (most recent call last):
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/venv/lib/python3.14/site-packages/urllib3/response.py", line 903, in _error_catcher
+    yield
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/venv/lib/python3.14/site-packages/urllib3/response.py", line 1049, in _raw_read
+    raise IncompleteRead(self._fp_bytes_read, self.length_remaining)
+urllib3.exceptions.IncompleteRead: IncompleteRead(329495454 bytes read, 114017370 more expected)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/venv/lib/python3.14/site-packages/requests/models.py", line 820, in generate
+    yield from self.raw.stream(chunk_size, decode_content=True)
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/venv/lib/python3.14/site-packages/urllib3/response.py", line 1257, in stream
+    data = self.read(amt=amt, decode_content=decode_content)
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/venv/lib/python3.14/site-packages/urllib3/response.py", line 1149, in read
+    data = self._raw_read(amt)
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/venv/lib/python3.14/site-packages/urllib3/response.py", line 1027, in _raw_read
+    with self._error_catcher():
+         ~~~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/contextlib.py", line 162, in __exit__
+    self.gen.throw(value)
+    ~~~~~~~~~~~~~~^^^^^^^
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/venv/lib/python3.14/site-packages/urllib3/response.py", line 927, in _error_catcher
+    raise ProtocolError(arg, e) from e
+urllib3.exceptions.ProtocolError: ('Connection broken: IncompleteRead(329495454 bytes read, 114017370 more expected)', IncompleteRead(329495454 bytes read, 114017370 more expected))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/venv/lib/python3.14/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/venv/lib/python3.14/site-packages/google/cloud/storage/_media/requests/download.py", line 276, in retriable_request
+    self._write_to_stream(result)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/venv/lib/python3.14/site-packages/google/cloud/storage/_media/requests/download.py", line 149, in _write_to_stream
+    for chunk in body_iter:
+                 ^^^^^^^^^
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/venv/lib/python3.14/site-packages/requests/models.py", line 822, in generate
+    raise ChunkedEncodingError(e)
+requests.exceptions.ChunkedEncodingError: ('Connection broken: IncompleteRead(329495454 bytes read, 114017370 more expected)', IncompleteRead(329495454 bytes read, 114017370 more expected))
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/services/execution_service.py", line 178, in start_execution
+    session.action_executor = await asyncio.to_thread(
+                              ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/asyncio/threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 86, in run
+    result = ctx.run(self.task)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 73, in run
+    return fn(*args, **kwargs)
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/agent/context/../../services/android_build_runner.py", line 171, in create_action_executor_for_build
+    download_apk_from_gcs(build.bucket_name, build.object_key, tmp_apk)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/agent/context/../../services/android_build_runner.py", line 102, in download_apk_from_gcs
+    blob.download_to_filename(dest_path, client=client)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/venv/lib/python3.14/site-packages/google/cloud/storage/blob.py", line 1403, in download_to_filename
+    self._handle_filename_and_download(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        filename,
+        ^^^^^^^^^
+    ...<13 lines>...
+        single_shot_download=single_shot_download,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/venv/lib/python3.14/site-packages/google/cloud/storage/blob.py", line 1276, in _handle_filename_and_download
+    self._prep_and_do_download(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        file_obj,
+        ^^^^^^^^^
+        *args,
+        ^^^^^^
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/venv/lib/python3.14/site-packages/google/cloud/storage/blob.py", line 4659, in _prep_and_do_download
+    self._do_download(
+    ~~~~~~~~~~~~~~~~~^
+        transport,
+        ^^^^^^^^^^
+    ...<9 lines>...
+        single_shot_download=single_shot_download,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/venv/lib/python3.14/site-packages/google/cloud/storage/blob.py", line 1094, in _do_download
+    response = download.consume(transport, timeout=timeout)
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/venv/lib/python3.14/site-packages/google/cloud/storage/_media/requests/download.py", line 280, in consume
+    return _request_helpers.wait_and_retry(retriable_request, self._retry_strategy)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/venv/lib/python3.14/site-packages/google/cloud/storage/_media/requests/_request_helpers.py", line 107, in wait_and_retry
+    return func()
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/venv/lib/python3.14/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+        target,
+    ...<3 lines>...
+        on_error=on_error,
+    )
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/venv/lib/python3.14/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+        exc,
+    ...<6 lines>...
+        timeout,
+    )
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/venv/lib/python3.14/site-packages/google/api_core/retry/retry_base.py", line 231, in _retry_error_helper
+    raise final_exc from source_exc
+google.api_core.exceptions.RetryError: Timeout of 120.0s exceeded, last exception: ('Connection broken: IncompleteRead(329495454 bytes read, 114017370 more expected)', IncompleteRead(329495454 bytes read, 114017370 more expected))

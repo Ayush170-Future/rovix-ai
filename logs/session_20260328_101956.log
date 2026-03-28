@@ -1,0 +1,233 @@
+2026-03-28 10:20:02 | INFO     | agent.database                      | Connected to MongoDB: game_testing
+2026-03-28 10:20:02 | INFO     | agent.services.execution_service    | 🤖 Using Google model: gemini-3-pro-preview
+2026-03-28 11:18:53 | ERROR    | agent.services.execution_service    | Build prepare / install failed for run 69c76bc5fba01c0a4b928902: ADB device 'RZCW31HH47R' is not connected (available: ['emulator-5554']). Check USB debugging and `adb devices`.
+Traceback (most recent call last):
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/services/execution_service.py", line 178, in start_execution
+    session.action_executor = await asyncio.to_thread(
+                              ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/asyncio/threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 86, in run
+    result = ctx.run(self.task)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 73, in run
+    return fn(*args, **kwargs)
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/agent/context/../../services/android_build_runner.py", line 165, in create_action_executor_for_build
+    assert_device_connected(device_udid)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/agent/context/../../services/android_build_runner.py", line 90, in assert_device_connected
+    raise RuntimeError(
+    ...<2 lines>...
+    )
+RuntimeError: ADB device 'RZCW31HH47R' is not connected (available: ['emulator-5554']). Check USB debugging and `adb devices`.
+2026-03-28 11:21:56 | ERROR    | agent.services.execution_service    | Build prepare / install failed for run 69c76c7cfba01c0a4b928903: ADB device 'RZCW31HH47R' is not connected (available: ['emulator-5554']). Check USB debugging and `adb devices`.
+Traceback (most recent call last):
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/services/execution_service.py", line 178, in start_execution
+    session.action_executor = await asyncio.to_thread(
+                              ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/asyncio/threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 86, in run
+    result = ctx.run(self.task)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 73, in run
+    return fn(*args, **kwargs)
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/agent/context/../../services/android_build_runner.py", line 165, in create_action_executor_for_build
+    assert_device_connected(device_udid)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/agent/context/../../services/android_build_runner.py", line 90, in assert_device_connected
+    raise RuntimeError(
+    ...<2 lines>...
+    )
+RuntimeError: ADB device 'RZCW31HH47R' is not connected (available: ['emulator-5554']). Check USB debugging and `adb devices`.
+2026-03-28 11:26:35 | INFO     | agent.services.android_build_runner | Downloading build from gs://rovix_ai_bucket/game_builds/69c6c43675f3e45c87279199/69c6c4b475f3e45c8727919a/android/20260328054221_d562346d99184eed90d3177c8dbe83ac_Diamond League Hatchback.apk
+2026-03-28 11:26:35 | ERROR    | agent.services.execution_service    | Build prepare / install failed for run 69c76d93fba01c0a4b928904: Command '['/Users/ashwanikottapalli/Library/Android/sdk/build-tools/36.1.0/aapt', 'dump', 'badging', '/var/folders/6q/c4szyhw108v8wtc775qf0tnw0000gn/T/tmpm38fea5g.apk']' returned non-zero exit status 1.
+Traceback (most recent call last):
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/services/execution_service.py", line 178, in start_execution
+    session.action_executor = await asyncio.to_thread(
+                              ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/asyncio/threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 86, in run
+    result = ctx.run(self.task)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 73, in run
+    return fn(*args, **kwargs)
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/agent/context/../../services/android_build_runner.py", line 173, in create_action_executor_for_build
+    package, activity = resolve_launch_components(tmp_apk, build)
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/agent/context/../../services/android_build_runner.py", line 75, in resolve_launch_components
+    parsed_pkg, parsed_act = parse_apk_package_and_activity(apk_path)
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/agent/context/../../services/android_build_runner.py", line 45, in parse_apk_package_and_activity
+    out = subprocess.check_output(
+        [aapt, "dump", "badging", apk_path],
+    ...<2 lines>...
+        timeout=120,
+    )
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 472, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+               **kwargs).stdout
+               ^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 577, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['/Users/ashwanikottapalli/Library/Android/sdk/build-tools/36.1.0/aapt', 'dump', 'badging', '/var/folders/6q/c4szyhw108v8wtc775qf0tnw0000gn/T/tmpm38fea5g.apk']' returned non-zero exit status 1.
+2026-03-28 11:29:16 | INFO     | agent.services.android_build_runner | Downloading build from gs://rovix_ai_bucket/game_builds/69c6c43675f3e45c87279199/69c6c4b475f3e45c8727919a/android/20260328054221_d562346d99184eed90d3177c8dbe83ac_Diamond League Hatchback.apk
+2026-03-28 11:29:16 | ERROR    | agent.services.execution_service    | Build prepare / install failed for run 69c76e34fba01c0a4b928905: Command '['/Users/ashwanikottapalli/Library/Android/sdk/build-tools/36.1.0/aapt', 'dump', 'badging', '/var/folders/6q/c4szyhw108v8wtc775qf0tnw0000gn/T/tmp5jh1_oht.apk']' returned non-zero exit status 1.
+Traceback (most recent call last):
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/services/execution_service.py", line 178, in start_execution
+    session.action_executor = await asyncio.to_thread(
+                              ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/asyncio/threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 86, in run
+    result = ctx.run(self.task)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 73, in run
+    return fn(*args, **kwargs)
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/agent/context/../../services/android_build_runner.py", line 173, in create_action_executor_for_build
+    package, activity = resolve_launch_components(tmp_apk, build)
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/agent/context/../../services/android_build_runner.py", line 75, in resolve_launch_components
+    parsed_pkg, parsed_act = parse_apk_package_and_activity(apk_path)
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/agent/context/../../services/android_build_runner.py", line 45, in parse_apk_package_and_activity
+    out = subprocess.check_output(
+        [aapt, "dump", "badging", apk_path],
+    ...<2 lines>...
+        timeout=120,
+    )
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 472, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+               **kwargs).stdout
+               ^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 577, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['/Users/ashwanikottapalli/Library/Android/sdk/build-tools/36.1.0/aapt', 'dump', 'badging', '/var/folders/6q/c4szyhw108v8wtc775qf0tnw0000gn/T/tmp5jh1_oht.apk']' returned non-zero exit status 1.
+2026-03-28 11:29:27 | INFO     | agent.services.android_build_runner | Downloading build from gs://rovix_ai_bucket/game_builds/69c6c43675f3e45c87279199/69c6c4b475f3e45c8727919a/android/20260328054221_d562346d99184eed90d3177c8dbe83ac_Diamond League Hatchback.apk
+2026-03-28 11:29:27 | ERROR    | agent.services.execution_service    | Build prepare / install failed for run 69c76e3ffba01c0a4b928906: Command '['/Users/ashwanikottapalli/Library/Android/sdk/build-tools/36.1.0/aapt', 'dump', 'badging', '/var/folders/6q/c4szyhw108v8wtc775qf0tnw0000gn/T/tmp78ol7dze.apk']' returned non-zero exit status 1.
+Traceback (most recent call last):
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/services/execution_service.py", line 178, in start_execution
+    session.action_executor = await asyncio.to_thread(
+                              ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/asyncio/threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 86, in run
+    result = ctx.run(self.task)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 73, in run
+    return fn(*args, **kwargs)
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/agent/context/../../services/android_build_runner.py", line 173, in create_action_executor_for_build
+    package, activity = resolve_launch_components(tmp_apk, build)
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/agent/context/../../services/android_build_runner.py", line 75, in resolve_launch_components
+    parsed_pkg, parsed_act = parse_apk_package_and_activity(apk_path)
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/agent/context/../../services/android_build_runner.py", line 45, in parse_apk_package_and_activity
+    out = subprocess.check_output(
+        [aapt, "dump", "badging", apk_path],
+    ...<2 lines>...
+        timeout=120,
+    )
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 472, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+               **kwargs).stdout
+               ^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 577, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['/Users/ashwanikottapalli/Library/Android/sdk/build-tools/36.1.0/aapt', 'dump', 'badging', '/var/folders/6q/c4szyhw108v8wtc775qf0tnw0000gn/T/tmp78ol7dze.apk']' returned non-zero exit status 1.
+2026-03-28 11:50:43 | INFO     | agent.services.android_build_runner | Downloading build from gs://rovix_ai_bucket/game_builds/69c6c43675f3e45c87279199/69c6c4b475f3e45c8727919a/android/20260328061500_0ba388ccec5b494bb177431bfc7d39b7_Diamond League Hatchback.apk
+2026-03-28 11:50:43 | ERROR    | agent.services.execution_service    | Build prepare / install failed for run 69c7733bfba01c0a4b928909: Command '['/Users/ashwanikottapalli/Library/Android/sdk/build-tools/36.1.0/aapt', 'dump', 'badging', '/var/folders/6q/c4szyhw108v8wtc775qf0tnw0000gn/T/tmp13ia5c1p.apk']' returned non-zero exit status 1.
+Traceback (most recent call last):
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/services/execution_service.py", line 178, in start_execution
+    session.action_executor = await asyncio.to_thread(
+                              ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/asyncio/threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 86, in run
+    result = ctx.run(self.task)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 73, in run
+    return fn(*args, **kwargs)
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/agent/context/../../services/android_build_runner.py", line 173, in create_action_executor_for_build
+    package, activity = resolve_launch_components(tmp_apk, build)
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/agent/context/../../services/android_build_runner.py", line 75, in resolve_launch_components
+    parsed_pkg, parsed_act = parse_apk_package_and_activity(apk_path)
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/agent/context/../../services/android_build_runner.py", line 45, in parse_apk_package_and_activity
+    out = subprocess.check_output(
+        [aapt, "dump", "badging", apk_path],
+    ...<2 lines>...
+        timeout=120,
+    )
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 472, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+               **kwargs).stdout
+               ^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 577, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['/Users/ashwanikottapalli/Library/Android/sdk/build-tools/36.1.0/aapt', 'dump', 'badging', '/var/folders/6q/c4szyhw108v8wtc775qf0tnw0000gn/T/tmp13ia5c1p.apk']' returned non-zero exit status 1.
+2026-03-28 11:51:45 | INFO     | agent.services.android_build_runner | Downloading build from gs://rovix_ai_bucket/game_builds/69c6c43675f3e45c87279199/69c6c4b475f3e45c8727919a/android/20260328061500_0ba388ccec5b494bb177431bfc7d39b7_Diamond League Hatchback.apk
+2026-03-28 11:51:45 | ERROR    | agent.services.execution_service    | Build prepare / install failed for run 69c77379fba01c0a4b92890b: Command '['/Users/ashwanikottapalli/Library/Android/sdk/build-tools/36.1.0/aapt', 'dump', 'badging', '/var/folders/6q/c4szyhw108v8wtc775qf0tnw0000gn/T/tmp6stkw8cc.apk']' returned non-zero exit status 1.
+Traceback (most recent call last):
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/services/execution_service.py", line 178, in start_execution
+    session.action_executor = await asyncio.to_thread(
+                              ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/asyncio/threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 86, in run
+    result = ctx.run(self.task)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 73, in run
+    return fn(*args, **kwargs)
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/agent/context/../../services/android_build_runner.py", line 173, in create_action_executor_for_build
+    package, activity = resolve_launch_components(tmp_apk, build)
+                        ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/agent/context/../../services/android_build_runner.py", line 75, in resolve_launch_components
+    parsed_pkg, parsed_act = parse_apk_package_and_activity(apk_path)
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/agent/context/../../services/android_build_runner.py", line 45, in parse_apk_package_and_activity
+    out = subprocess.check_output(
+        [aapt, "dump", "badging", apk_path],
+    ...<2 lines>...
+        timeout=120,
+    )
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 472, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+               **kwargs).stdout
+               ^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 577, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['/Users/ashwanikottapalli/Library/Android/sdk/build-tools/36.1.0/aapt', 'dump', 'badging', '/var/folders/6q/c4szyhw108v8wtc775qf0tnw0000gn/T/tmp6stkw8cc.apk']' returned non-zero exit status 1.

@@ -99,7 +99,7 @@ def download_apk_from_gcs(bucket_name: str, object_key: str, dest_path: str) -> 
     blob = bucket.blob(object_key)
     if not blob.exists(client=client):
         raise RuntimeError(f"Build artifact not found in GCS: gs://{bucket_name}/{object_key}")
-    blob.download_to_filename(dest_path, client=client)
+    blob.download_to_filename(dest_path, client=client, timeout=600)
     if not os.path.exists(dest_path) or os.path.getsize(dest_path) == 0:
         raise RuntimeError("Downloaded APK is missing or empty")
 
@@ -168,11 +168,11 @@ def create_action_executor_for_build(
     os.close(fd)
     try:
         logger.info(f"Downloading build from gs://{build.bucket_name}/{build.object_key}")
-        # download_apk_from_gcs(build.bucket_name, build.object_key, tmp_apk)
+        download_apk_from_gcs(build.bucket_name, build.object_key, tmp_apk)
 
         package, activity = resolve_launch_components(tmp_apk, build)
         logger.info(f"Installing APK on {device_udid} (package={package})")
-        # adb_install(device_udid, tmp_apk)
+        adb_install(device_udid, tmp_apk)
 
         logger.info(f"Launching {package} / {activity}")
         adb_launch_app(device_udid, package, activity)
