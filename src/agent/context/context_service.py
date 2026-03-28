@@ -130,9 +130,6 @@ class ContextService:
             self._ensure_session(session_id)
             return self._sessions[session_id]['messages'].copy()
     
-    # TODO: Remove TODO write from comment.
-    # Can improve Structured output for better context management.
-    # Better removal logic because its hardcoded, can be done better in a modular, class structure.
     def cleanup_old_messages(self, session_id: str):
         with self._lock:
             self._ensure_session(session_id)
@@ -140,6 +137,10 @@ class ContextService:
             messages = self._sessions[session_id]['messages']
             step_counter = self._sessions[session_id]['step_counter']
             
+            # 1. Update the marker message of the just-completed step to "PAST"
+            # In add_ai_response, Todo was popped, so now Step N consists of:
+            # [Marker, Screenshot, Actions, AI Response]. 
+            # If a todo_result was added, it's at messages[-1].
             has_todo_result = False
             if len(messages) >= 1 and isinstance(messages[-1], HumanMessage):
                 content = str(messages[-1].content)
@@ -149,18 +150,25 @@ class ContextService:
             marker_offset = -5 if has_todo_result else -4
             
             if len(messages) >= abs(marker_offset):
-                messages[marker_offset].content[0]["text"] = f"[PAST GAME STATE - Step {step_counter}]"
+                # Ensure we are actually targeting the Marker (it's always a HumanMessage with specific text)
+                marker_msg = messages[marker_offset]
+                if isinstance(marker_msg, HumanMessage) and isinstance(marker_msg.content, list):
+                    marker_msg.content[0]["text"] = f"[PAST GAME STATE - Step {step_counter}]"
             
-            total_messages = len(messages)
-            adjusted_total = total_messages - 1 if has_todo_result else total_messages
+            # 2. Aggressively prune old steps using list slicing
+            # Each full step has 4 messages: Marker, Screenshot, Actions, AI Response.
+            # Total to keep: SystemMessage (index 0) + (keep_full_steps * 4) + (1 if trailing todo_result)
+            messages_per_step = 4
+            num_to_keep = self.keep_full_steps * messages_per_step
+            if has_todo_result:
+                num_to_keep += 1
             
-            if adjusted_total <= 1 + self.keep_full_steps * 4:
-                return
-            
-            oldest_ai_index = adjusted_total - 1 - self.keep_full_steps * 4
-            
-            messages.pop(oldest_ai_index - 1)
-            messages.pop(oldest_ai_index - 2)
+            # We want to keep messages[0] AND the last num_to_keep messages.
+            # Slice starts from max(1, len(messages) - num_to_keep) to never drop messages[0].
+            if len(messages) > 1 + num_to_keep:
+                keep_from_index = len(messages) - num_to_keep
+                self._sessions[session_id]['messages'] = [messages[0]] + messages[keep_from_index:]
+                logger.info(f"🧹 Context cleaned up for session {session_id}: kept System Prompt + last {num_to_keep} messages.")
     
     def get_message_count(self, session_id: str) -> int:
         with self._lock:

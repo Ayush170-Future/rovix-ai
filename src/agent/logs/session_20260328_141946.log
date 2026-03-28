@@ -1,0 +1,3 @@
+2026-03-28 14:19:46 | INFO     | agent.context.context_service       | 🧹 Context cleaned up for session test-session: kept System Prompt + last 8 messages.
+2026-03-28 14:19:46 | INFO     | agent.context.context_service       | 🧹 Context cleaned up for session test-session: kept System Prompt + last 9 messages.
+2026-03-28 14:19:46 | INFO     | agent.context.context_service       | 🧹 Context cleaned up for session test-session: kept System Prompt + last 8 messages.

@@ -181,10 +181,13 @@ class ExecutionService:
                 build=build,
                 use_appium=USE_APPIUM,
             )
-        except Exception as e:
+        except BaseException as e:
+            # Use BaseException to catch asyncio.CancelledError (BaseException subclass in Python 3.8+)
+            # which is raised when the HTTP request is cancelled (e.g. server restart), so the run
+            # doesn't get stranded in QUEUED status.
             logger.error(f"Build prepare / install failed for run {run_id}: {e}", exc_info=True)
             await self._execution_repo.fail(run_id, failure_reason=f"Build prepare failed: {e}")
-            return
+            raise
 
         self._sessions[device_udid] = session
         self._seed_todo_list(session, scenario.steps)

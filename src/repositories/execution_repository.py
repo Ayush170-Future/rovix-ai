@@ -76,9 +76,12 @@ class ExecutionRepository:
         return run
 
     async def mark_stale_as_failed(self) -> int:
-        stale = await ExecutionRun.find(ExecutionRun.status == "running").to_list()
+        stale = await ExecutionRun.find(
+            {"status": {"$in": ["running", "queued"]}}
+        ).to_list()
         for run in stale:
             run.status = "failed"
+            run.failure_reason = "Server restarted while execution was in-flight"
             run.completed_at = datetime.utcnow()
             await run.save()
         return len(stale)
