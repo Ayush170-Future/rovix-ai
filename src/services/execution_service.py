@@ -72,6 +72,8 @@ class AgentSession:
     step_count: int = 0
     collected_results: List[AssertionResult] = field(default_factory=list)
     consecutive_device_failures: int = 0
+    # Background atomic $push/$inc to execution_runs; await before complete/fail.
+    pending_run_append_tasks: List[Any] = field(default_factory=list)
 
 
 # ── Service ──────────────────────────────────────────────────────────────────
@@ -96,6 +98,15 @@ class ExecutionService:
             else None
         )
         return task
+
+    async def _await_pending_run_appends(self, session: AgentSession) -> None:
+        if not session.pending_run_append_tasks:
+            return
+        results = await asyncio.gather(*session.pending_run_append_tasks, return_exceptions=True)
+        session.pending_run_append_tasks.clear()
+        for r in results:
+            if isinstance(r, Exception):
+                logger.error(f"❌ ExecutionRun incremental update failed: {r}")
 
     def _init_model(self):
         if MODEL_PROVIDER == "anthropic":
@@ -217,6 +228,7 @@ class ExecutionService:
                     break
                 await asyncio.sleep(POLLING_INTERVAL)
 
+            await self._await_pending_run_appends(session)
             await self._execution_repo.complete(session.execution_run_id, session.collected_results)
             logger.info(
                 f"Execution {session.execution_run_id} completed — "
@@ -225,9 +237,11 @@ class ExecutionService:
         except FatalExecutionError as e:
             msg = str(e)
             logger.error(f"Execution {session.execution_run_id} aborted: {msg}")
+            await self._await_pending_run_appends(session)
             await self._execution_repo.fail(session.execution_run_id, failure_reason=msg)
         except Exception as e:
             logger.error(f"Execution {session.execution_run_id} failed: {e}", exc_info=True)
+            await self._await_pending_run_appends(session)
             await self._execution_repo.fail(session.execution_run_id, failure_reason=str(e))
         finally:
             self._cleanup_session(session.device_udid)
@@ -321,6 +335,15 @@ class ExecutionService:
             )
             session.collected_results.append(assertion_result)
             step_assertion_results.append(assertion_result)
+
+        if step_assertion_results:
+            t = self._bg_task(
+                self._execution_repo.append_assertion_results_delta(
+                    session.execution_run_id, step_assertion_results
+                ),
+                label=f"ExecutionRun append step {step_num}",
+            )
+            session.pending_run_append_tasks.append(t)
 
         self._bg_task(
             self._step_repo.create(

@@ -46,6 +46,25 @@ class ExecutionRepository:
         await run.save()
         return run
 
+    async def append_assertion_results_delta(
+        self, run_id: str, new_results: List[AssertionResult]
+    ) -> None:
+        """Atomically append assertion rows and bump pass/fail counts (one MongoDB update).
+
+        Safe under overlapping writes: uses $push / $inc, not read-modify-write on the full array.
+        """
+        if not new_results:
+            return
+        docs = [r.model_dump(mode="python") for r in new_results]
+        delta_pass = sum(1 for r in new_results if r.verdict == "pass")
+        delta_fail = sum(1 for r in new_results if r.verdict == "fail")
+        await ExecutionRun.find_one(ExecutionRun.id == run_id).update(
+            {
+                "$push": {"assertion_results": {"$each": docs}},
+                "$inc": {"passed": delta_pass, "failed": delta_fail},
+            }
+        )
+
     async def complete(
         self, run_id: str, assertion_results: List[AssertionResult]
     ) -> Optional[ExecutionRun]:
