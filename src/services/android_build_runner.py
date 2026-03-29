@@ -1,9 +1,3 @@
-# TODO: Have to use padb to interact with ADB and also take care of error handling when running ADB commands
-# right now the launch failure is not getting logged properly in the code
-
-# TODO: Failures are often because the ADB server is not listening (default 127.0.0.1:5037) or
-# Appium is not running (default http://localhost:4723 / APPIUM_URL) — surface clearer errors.
-
 from __future__ import annotations
 
 import glob
@@ -20,6 +14,30 @@ from agent.logger import get_logger
 from models.build import Build
 
 logger = get_logger("agent.services.android_build_runner")
+
+# ADB server location — override for split-VM deployments where the ADB server
+# (and emulator) live on a separate host from the backend.
+ADB_HOST = os.getenv("ADB_HOST", "127.0.0.1")
+ADB_PORT = int(os.getenv("ADB_PORT", "5037"))
+
+
+def _adb_client() -> AdbClient:
+    """Return a ppadb client pointed at the configured ADB server."""
+    return AdbClient(host=ADB_HOST, port=ADB_PORT)
+
+
+def _get_device(client: AdbClient, serial: str):
+    """Return the ppadb device object for *serial*, or raise a clear RuntimeError."""
+    devices = client.devices()
+    for d in devices:
+        if d.serial == serial:
+            return d
+    available = sorted(d.serial for d in devices)
+    raise RuntimeError(
+        f"ADB device '{serial}' not found (ADB server: {ADB_HOST}:{ADB_PORT}, "
+        f"available: {available or 'none'}). "
+        "Ensure the emulator is running and `adb devices` lists it."
+    )
 
 
 def find_aapt_binary() -> Optional[str]:
@@ -83,14 +101,9 @@ def resolve_launch_components(apk_path: str, build: Build) -> Tuple[str, str]:
 
 
 def assert_device_connected(serial: str) -> None:
-    client = AdbClient(host="127.0.0.1", port=5037)
-    devices = client.devices()
-    found = {d.serial for d in devices}
-    if serial not in found:
-        raise RuntimeError(
-            f"ADB device '{serial}' is not connected (available: {sorted(found) if found else 'none'}). "
-            "Check USB debugging and `adb devices`."
-        )
+    """Raise RuntimeError if *serial* is not visible to the configured ADB server."""
+    client = _adb_client()
+    _get_device(client, serial)  # raises with a descriptive message if not found
 
 
 def download_apk_from_gcs(bucket_name: str, object_key: str, dest_path: str) -> None:
@@ -105,45 +118,36 @@ def download_apk_from_gcs(bucket_name: str, object_key: str, dest_path: str) -> 
 
 
 def adb_install(serial: str, apk_path: str) -> None:
-    r = subprocess.run(
-        ["adb", "-s", serial, "install", "-r", apk_path],
-        capture_output=True,
-        text=True,
-        timeout=600,
-    )
-    if r.returncode != 0:
-        msg = (r.stdout or "") + (r.stderr or "")
-        raise RuntimeError(f"adb install failed: {msg.strip() or r.returncode}")
-
+    client = _adb_client()
+    device = _get_device(client, serial)
+    # ppadb pushes to /data/local/tmp then runs pm install -r
+    result = device.install(apk_path)
+    if result is not True and "Success" not in str(result):
+        raise RuntimeError(f"adb install failed: {result}")
 
 
 def adb_launch_app(serial: str, package: str, activity: str) -> None:
     """
-    Bring app to foreground. Prefer explicit component; fall back to monkey launcher.
+    Bring app to foreground via ppadb device.shell().
+    Prefer explicit component (package/activity); fall back to monkey launcher.
     """
-    if "/" in activity:
-        comp = activity
-    else:
-        comp = f"{package}/{activity}"
+    client = _adb_client()
+    device = _get_device(client, serial)
 
-    r = subprocess.run(
-        ["adb", "-s", serial, "shell", "am", "start", "-n", comp],
-        capture_output=True,
-        text=True,
-        timeout=90,
-    )
-    if r.returncode == 0:
-        return
-    logger.warning(f"am start failed ({r.stderr or r.stdout}); trying monkey launcher")
-    r2 = subprocess.run(
-        ["adb", "-s", serial, "shell", "monkey", "-p", package, "-c", "android.intent.category.LAUNCHER", "1"],
-        capture_output=True,
-        text=True,
-        timeout=90,
-    )
-    if r2.returncode != 0:
-        msg = (r2.stdout or "") + (r2.stderr or "")
-        raise RuntimeError(f"Could not launch app {package}: {msg.strip() or r2.returncode}")
+    comp = activity if "/" in activity else f"{package}/{activity}"
+
+    out = device.shell(f"am start -n {comp}")
+    logger.debug(f"am start output: {out!r}")
+
+    # `am start` exits 0 even on some errors; check the output text instead.
+    if out and ("Error" in out or "Exception" in out):
+        logger.warning(f"am start may have failed ({out.strip()}); trying monkey launcher")
+        out2 = device.shell(
+            f"monkey -p {package} -c android.intent.category.LAUNCHER 1"
+        )
+        logger.debug(f"monkey output: {out2!r}")
+        if out2 and ("Error" in out2 or "Exception" in out2):
+            raise RuntimeError(f"Could not launch app {package}: {out2.strip()}")
 
 
 def create_action_executor_for_build(
@@ -162,20 +166,42 @@ def create_action_executor_for_build(
     if build.status != "ready":
         raise RuntimeError(f"Build must be ready (status={build.status})")
 
-    assert_device_connected(device_udid)
+    # ── Step 1: device check ──────────────────────────────────────────────────
+    try:
+        assert_device_connected(device_udid)
+    except RuntimeError as e:
+        raise RuntimeError(f"[device_check] {e}") from e
 
     fd, tmp_apk = tempfile.mkstemp(suffix=".apk")
     os.close(fd)
     try:
-        logger.info(f"Downloading build from gs://{build.bucket_name}/{build.object_key}")
-        # download_apk_from_gcs(build.bucket_name, build.object_key, tmp_apk)
+        # ── Step 2: download APK from GCS ─────────────────────────────────────
+        try:
+            logger.info(f"Downloading build from gs://{build.bucket_name}/{build.object_key}")
+            download_apk_from_gcs(build.bucket_name, build.object_key, tmp_apk)
+        except Exception as e:
+            raise RuntimeError(f"[apk_download] {e}") from e
 
-        package, activity = resolve_launch_components(tmp_apk, build)
-        logger.info(f"Installing APK on {device_udid} (package={package})")
-        # adb_install(device_udid, tmp_apk)
+        # ── Step 3: resolve package / activity ────────────────────────────────
+        try:
+            package, activity = resolve_launch_components(tmp_apk, build)
+        except Exception as e:
+            raise RuntimeError(f"[apk_parse] {e}") from e
 
-        logger.info(f"Launching {package} / {activity}")
-        adb_launch_app(device_udid, package, activity)
+        # ── Step 4: install APK ───────────────────────────────────────────────
+        try:
+            logger.info(f"Installing APK on {device_udid} (package={package})")
+            adb_install(device_udid, tmp_apk)
+        except Exception as e:
+            raise RuntimeError(f"[apk_install] {e}") from e
+
+        # ── Step 5: launch app ────────────────────────────────────────────────
+        try:
+            logger.info(f"Launching {package} / {activity}")
+            adb_launch_app(device_udid, package, activity)
+        except Exception as e:
+            raise RuntimeError(f"[app_launch] {e}") from e
+
     finally:
         try:
             os.unlink(tmp_apk)
@@ -198,8 +224,8 @@ def create_action_executor_for_build(
     from agent.adb_manager import ADBManager
 
     return ADBManager(
-        host="127.0.0.1",
-        port=5037,
+        host=ADB_HOST,
+        port=ADB_PORT,
         serial=device_udid,
         screenshot_timeout=float(os.getenv("SCREENSHOT_TIMEOUT", "10.0")),
         screenshot_max_retries=int(os.getenv("SCREENSHOT_MAX_RETRIES", "3")),
