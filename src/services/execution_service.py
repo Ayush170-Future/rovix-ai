@@ -20,6 +20,7 @@ from services.views import Action, AgentOutput
 from models.test_scenario import TestScenario, Step
 from models.game import Game
 from models.build import Build
+from models.device import Device
 from models.execution_run import AssertionResult
 from models.execution_step import TokenUsage
 from repositories.execution_repository import ExecutionRepository
@@ -80,6 +81,10 @@ class AgentSession:
 
 class ExecutionService:
     def __init__(self):
+        # TODO: Multi-instance / horizontal scale — _sessions is per-process memory only.
+        # With several API replicas or multiple workers, coordinate device busy/locks centrally
+        # (e.g. Redis key per device_udid, Mongo lease, or sticky routing) so GET /api/devices
+        # and execute cannot double-book the same physical device across instances.
         self._sessions: Dict[str, AgentSession] = {}
         self._execution_repo = ExecutionRepository()
         self._step_repo = ExecutionStepRepository()
@@ -162,7 +167,7 @@ class ExecutionService:
         run_id: str,
         scenario: TestScenario,
         game: Game,
-        device_udid: str,
+        device: Device,
         build: Build,
     ) -> None:
         session_id = run_id
@@ -177,23 +182,26 @@ class ExecutionService:
         session = AgentSession(
             execution_run_id=run_id,
             session_id=session_id,
-            device_udid=device_udid,
+            device_udid=device.udid,
             context_service=context_svc,
         )
 
         try:
             session.action_executor = await asyncio.to_thread(
                 create_action_executor_for_build,
-                device_udid=device_udid,
+                device_udid=device.udid,
                 build=build,
                 use_appium=USE_APPIUM,
+                appium_url=device.appium_url,
+                adb_host=device.adb_host,
+                adb_port=device.adb_port,
             )
         except Exception as e:
             logger.error(f"Build prepare / install failed for run {run_id}: {e}", exc_info=True)
             await self._execution_repo.fail(run_id, failure_reason=f"Build prepare failed: {e}")
             return
 
-        self._sessions[device_udid] = session
+        self._sessions[device.udid] = session
         self._seed_todo_list(session, scenario.steps)
 
         await self._execution_repo.start(run_id)

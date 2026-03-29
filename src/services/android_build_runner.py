@@ -15,15 +15,15 @@ from models.build import Build
 
 logger = get_logger("agent.services.android_build_runner")
 
-# ADB server location — override for split-VM deployments where the ADB server
-# (and emulator) live on a separate host from the backend.
+# Defaults — override per-device via create_action_executor_for_build for multi-host setups.
 ADB_HOST = os.getenv("ADB_HOST", "127.0.0.1")
 ADB_PORT = int(os.getenv("ADB_PORT", "5037"))
 
 
-def _adb_client() -> AdbClient:
-    """Return a ppadb client pointed at the configured ADB server."""
-    return AdbClient(host=ADB_HOST, port=ADB_PORT)
+def _adb_client(host: Optional[str] = None, port: Optional[int] = None) -> AdbClient:
+    h = ADB_HOST if host is None else host
+    p = ADB_PORT if port is None else port
+    return AdbClient(host=h, port=p)
 
 
 def _get_device(client: AdbClient, serial: str):
@@ -33,8 +33,11 @@ def _get_device(client: AdbClient, serial: str):
         if d.serial == serial:
             return d
     available = sorted(d.serial for d in devices)
+    host = getattr(client, "host", None)
+    port = getattr(client, "port", None)
+    where = f"{host}:{port}" if host is not None and port is not None else "configured ADB server"
     raise RuntimeError(
-        f"ADB device '{serial}' not found (ADB server: {ADB_HOST}:{ADB_PORT}, "
+        f"ADB device '{serial}' not found (ADB server: {where}, "
         f"available: {available or 'none'}). "
         "Ensure the emulator is running and `adb devices` lists it."
     )
@@ -100,9 +103,16 @@ def resolve_launch_components(apk_path: str, build: Build) -> Tuple[str, str]:
     return pkg, act
 
 
-def assert_device_connected(serial: str) -> None:
+def assert_device_connected(
+    serial: str,
+    *,
+    adb_host: Optional[str] = None,
+    adb_port: Optional[int] = None,
+) -> None:
     """Raise RuntimeError if *serial* is not visible to the configured ADB server."""
-    client = _adb_client()
+    ah = ADB_HOST if adb_host is None else adb_host
+    ap = ADB_PORT if adb_port is None else adb_port
+    client = _adb_client(ah, ap)
     _get_device(client, serial)  # raises with a descriptive message if not found
 
 
@@ -117,21 +127,44 @@ def download_apk_from_gcs(bucket_name: str, object_key: str, dest_path: str) -> 
         raise RuntimeError("Downloaded APK is missing or empty")
 
 
-def adb_install(serial: str, apk_path: str) -> None:
-    client = _adb_client()
-    device = _get_device(client, serial)
-    # ppadb pushes to /data/local/tmp then runs pm install -r
-    result = device.install(apk_path)
-    if result is not True and "Success" not in str(result):
-        raise RuntimeError(f"adb install failed: {result}")
+def adb_install(
+    serial: str,
+    apk_path: str,
+    *,
+    adb_host: Optional[str] = None,
+    adb_port: Optional[int] = None,
+) -> None:
+    ah = ADB_HOST if adb_host is None else adb_host
+    ap = ADB_PORT if adb_port is None else adb_port
+    adb = shutil.which("adb")
+    if not adb:
+        raise RuntimeError("adb binary not found in PATH. Install Android SDK platform-tools.")
+    result = subprocess.run(
+        [adb, "-H", ah, "-P", str(ap), "-s", serial, "install", "-r", apk_path],
+        capture_output=True,
+        text=True,
+        timeout=300,
+    )
+    if result.returncode != 0 or "Success" not in result.stdout:
+        detail = (result.stdout + result.stderr).strip()
+        raise RuntimeError(f"adb install failed: {detail}")
 
 
-def adb_launch_app(serial: str, package: str, activity: str) -> None:
+def adb_launch_app(
+    serial: str,
+    package: str,
+    activity: str,
+    *,
+    adb_host: Optional[str] = None,
+    adb_port: Optional[int] = None,
+) -> None:
     """
     Bring app to foreground via ppadb device.shell().
     Prefer explicit component (package/activity); fall back to monkey launcher.
     """
-    client = _adb_client()
+    ah = ADB_HOST if adb_host is None else adb_host
+    ap = ADB_PORT if adb_port is None else adb_port
+    client = _adb_client(ah, ap)
     device = _get_device(client, serial)
 
     comp = activity if "/" in activity else f"{package}/{activity}"
@@ -155,6 +188,9 @@ def create_action_executor_for_build(
     device_udid: str,
     build: Build,
     use_appium: bool,
+    appium_url: Optional[str] = None,
+    adb_host: Optional[str] = None,
+    adb_port: Optional[int] = None,
 ) -> Any:
     if build.platform != "android":
         raise RuntimeError(f"Device install path only supports Android builds (got platform={build.platform})")
@@ -166,9 +202,13 @@ def create_action_executor_for_build(
     if build.status != "ready":
         raise RuntimeError(f"Build must be ready (status={build.status})")
 
+    ah = ADB_HOST if adb_host is None else adb_host
+    ap = ADB_PORT if adb_port is None else adb_port
+    au = os.getenv("APPIUM_URL", "http://localhost:4723") if appium_url is None else appium_url
+
     # ── Step 1: device check ──────────────────────────────────────────────────
     try:
-        assert_device_connected(device_udid)
+        assert_device_connected(device_udid, adb_host=ah, adb_port=ap)
     except RuntimeError as e:
         raise RuntimeError(f"[device_check] {e}") from e
 
@@ -191,14 +231,14 @@ def create_action_executor_for_build(
         # ── Step 4: install APK ───────────────────────────────────────────────
         try:
             logger.info(f"Installing APK on {device_udid} (package={package})")
-            adb_install(device_udid, tmp_apk)
+            adb_install(device_udid, tmp_apk, adb_host=ah, adb_port=ap)
         except Exception as e:
             raise RuntimeError(f"[apk_install] {e}") from e
 
-        # ── Step 5: launch app ────────────────────────────────────────────────
+        # ── Step 5: launch app ───────────────────────────────────────────────
         try:
             logger.info(f"Launching {package} / {activity}")
-            adb_launch_app(device_udid, package, activity)
+            adb_launch_app(device_udid, package, activity, adb_host=ah, adb_port=ap)
         except Exception as e:
             raise RuntimeError(f"[app_launch] {e}") from e
 
@@ -212,7 +252,7 @@ def create_action_executor_for_build(
         from agent.appium_manager import AppiumManager
 
         return AppiumManager(
-            appium_url=os.getenv("APPIUM_URL", "http://localhost:4723"),
+            appium_url=au,
             device_name=os.getenv("DEVICE_NAME"),
             udid=device_udid,
             app_package=package,
@@ -224,8 +264,8 @@ def create_action_executor_for_build(
     from agent.adb_manager import ADBManager
 
     return ADBManager(
-        host=ADB_HOST,
-        port=ADB_PORT,
+        host=ah,
+        port=ap,
         serial=device_udid,
         screenshot_timeout=float(os.getenv("SCREENSHOT_TIMEOUT", "10.0")),
         screenshot_max_retries=int(os.getenv("SCREENSHOT_MAX_RETRIES", "3")),
