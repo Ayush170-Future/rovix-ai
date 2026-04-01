@@ -117,6 +117,9 @@ def assert_device_connected(
 
 
 def download_apk_from_gcs(bucket_name: str, object_key: str, dest_path: str) -> None:
+    # TODO: Build prep is slow when backend pulls from GCS then pushes to a remote emulator VM.
+    # Optimize: regional GCS / artifact cache on the emulator host, download APK directly on the VM,
+    # rsync sidecar, skip reinstall when build checksum matches last install, or stream install.
     client = storage.Client()
     bucket = client.bucket(bucket_name)
     blob = bucket.blob(object_key)

@@ -32,6 +32,8 @@ from tools.todo_management.todo_service import TodoPersistenceService
 logger = get_logger("agent.services.execution_service")
 
 USE_APPIUM = os.getenv("USE_APPIUM", "false").lower() == "true"
+# TODO: Expose Appium (or uiautomator) as explicit agent tool calls — structured actions beyond
+# coordinate taps from the LLM, aligned with Appium session capabilities when USE_APPIUM is true.
 POLLING_INTERVAL = float(os.getenv("POLLING_INTERVAL", "2.5"))
 MAX_STEPS = int(os.getenv("MAX_STEPS", "1000"))
 MAX_CONSECUTIVE_DEVICE_FAILURES = int(os.getenv("MAX_CONSECUTIVE_DEVICE_FAILURES", "3"))
@@ -491,6 +493,8 @@ class ExecutionService:
         return [t.to_dict() for t in TodoPersistenceService.get_todo_list(session_id)]
 
     def _cleanup_session(self, device_udid: str) -> None:
+        # TODO: After run (success or failure), uninstall the installed APK / clear app data on the
+        # device so emulators do not accumulate packages, stale state, or disk use across runs.
         session = self._sessions.pop(device_udid, None)
         if session:
             TodoPersistenceService.clear_todo_list(session.session_id)
