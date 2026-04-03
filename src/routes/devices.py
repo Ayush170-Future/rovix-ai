@@ -1,7 +1,7 @@
 import asyncio
 import urllib.error
 import urllib.request
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field
@@ -23,6 +23,7 @@ class RegisterDeviceRequest(BaseModel):
     adb_host: str = Field(..., min_length=1)
     adb_port: int = Field(default=5037, ge=1, le=65535)
     appium_url: str = Field(..., min_length=1)
+    agent_url: Optional[str] = None  # URL of device_agent.py sidecar on the VM
     enabled: bool = True
 
 
@@ -87,6 +88,7 @@ async def register_device(request_body: RegisterDeviceRequest, org: Organization
         adb_host=request_body.adb_host.strip(),
         adb_port=request_body.adb_port,
         appium_url=request_body.appium_url.strip(),
+        agent_url=request_body.agent_url,
         enabled=request_body.enabled,
     )
     return {
@@ -96,6 +98,7 @@ async def register_device(request_body: RegisterDeviceRequest, org: Organization
         "adb_host": device.adb_host,
         "adb_port": device.adb_port,
         "appium_url": device.appium_url,
+        "agent_url": device.agent_url,
         "platform": device.platform,
         "enabled": device.enabled,
         "created_at": device.created_at,

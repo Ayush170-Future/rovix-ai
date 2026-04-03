@@ -197,6 +197,7 @@ class ExecutionService:
                 appium_url=device.appium_url,
                 adb_host=device.adb_host,
                 adb_port=device.adb_port,
+                agent_url=device.agent_url,
             )
         except Exception as e:
             logger.error(f"Build prepare / install failed for run {run_id}: {e}", exc_info=True)

@@ -24,6 +24,7 @@ class DeviceRepository:
         adb_host: str,
         adb_port: int = 5037,
         appium_url: str,
+        agent_url: Optional[str] = None,
         enabled: bool = True,
     ) -> Device:
         device = Device(
@@ -34,6 +35,7 @@ class DeviceRepository:
             adb_host=adb_host,
             adb_port=adb_port,
             appium_url=appium_url,
+            agent_url=agent_url,
             enabled=enabled,
             created_at=datetime.utcnow(),
         )

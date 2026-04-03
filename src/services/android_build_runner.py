@@ -6,7 +6,10 @@ import re
 import shutil
 import subprocess
 import tempfile
+from datetime import timedelta
 from typing import Any, Optional, Tuple
+
+import requests as _requests
 from google.cloud import storage
 from ppadb.client import Client as AdbClient
 
@@ -116,10 +119,27 @@ def assert_device_connected(
     _get_device(client, serial)  # raises with a descriptive message if not found
 
 
+def generate_signed_url(bucket_name: str, object_key: str, expiry_minutes: int = 30) -> str:
+    """
+    Generate a V4 signed GET URL for a GCS object.
+    Works with ADC on GCP VMs (uses IAM sign-blob under the hood).
+    The VM agent downloads via this URL — no GCS credentials needed on the VM.
+    """
+    client = storage.Client()
+    bucket = client.bucket(bucket_name)
+    blob = bucket.blob(object_key)
+    if not blob.exists(client=client):
+        raise RuntimeError(f"Build artifact not found in GCS: gs://{bucket_name}/{object_key}")
+    url = blob.generate_signed_url(
+        version="v4",
+        expiration=timedelta(minutes=expiry_minutes),
+        method="GET",
+    )
+    return url
+
+
 def download_apk_from_gcs(bucket_name: str, object_key: str, dest_path: str) -> None:
-    # TODO: Build prep is slow when backend pulls from GCS then pushes to a remote emulator VM.
-    # Optimize: regional GCS / artifact cache on the emulator host, download APK directly on the VM,
-    # rsync sidecar, skip reinstall when build checksum matches last install, or stream install.
+    """Download APK directly on this host (backend fallback when no agent_url is set)."""
     client = storage.Client()
     bucket = client.bucket(bucket_name)
     blob = bucket.blob(object_key)
@@ -128,6 +148,47 @@ def download_apk_from_gcs(bucket_name: str, object_key: str, dest_path: str) -> 
     blob.download_to_filename(dest_path, client=client)
     if not os.path.exists(dest_path) or os.path.getsize(dest_path) == 0:
         raise RuntimeError("Downloaded APK is missing or empty")
+
+
+def _install_via_agent(
+    agent_url: str,
+    download_url: str,
+    serial: str,
+    checksum_sha256: str = "",
+    agent_token: str = "",
+) -> tuple[str, str]:
+    """
+    POST to device_agent /install endpoint.
+    Returns (package, activity) — may be empty strings if aapt not on VM.
+    Raises RuntimeError on failure.
+    """
+    headers = {}
+    if agent_token:
+        headers["X-Agent-Token"] = agent_token
+
+    payload = {
+        "download_url": download_url,
+        "serial": serial,
+        "checksum_sha256": checksum_sha256,
+    }
+    try:
+        resp = _requests.post(
+            f"{agent_url.rstrip('/')}/install",
+            json=payload,
+            headers=headers,
+            timeout=900,
+        )
+    except _requests.RequestException as e:
+        raise RuntimeError(f"Agent unreachable: {e}")
+
+    if not resp.ok:
+        raise RuntimeError(f"Agent returned {resp.status_code}: {resp.text}")
+
+    data = resp.json()
+    if not data.get("success"):
+        raise RuntimeError(f"Agent install failed: {data.get('detail', 'unknown')}")
+
+    return data.get("package", ""), data.get("activity", "")
 
 
 def adb_install(
@@ -146,7 +207,7 @@ def adb_install(
         [adb, "-H", ah, "-P", str(ap), "-s", serial, "install", "-r", apk_path],
         capture_output=True,
         text=True,
-        timeout=300,
+        timeout=1200,
     )
     if result.returncode != 0 or "Success" not in result.stdout:
         detail = (result.stdout + result.stderr).strip()
@@ -194,6 +255,7 @@ def create_action_executor_for_build(
     appium_url: Optional[str] = None,
     adb_host: Optional[str] = None,
     adb_port: Optional[int] = None,
+    agent_url: Optional[str] = None,
 ) -> Any:
     if build.platform != "android":
         raise RuntimeError(f"Device install path only supports Android builds (got platform={build.platform})")
@@ -208,6 +270,7 @@ def create_action_executor_for_build(
     ah = ADB_HOST if adb_host is None else adb_host
     ap = ADB_PORT if adb_port is None else adb_port
     au = os.getenv("APPIUM_URL", "http://localhost:4723") if appium_url is None else appium_url
+    agent_token = os.getenv("AGENT_TOKEN", "")
 
     # ── Step 1: device check ──────────────────────────────────────────────────
     try:
@@ -215,41 +278,74 @@ def create_action_executor_for_build(
     except RuntimeError as e:
         raise RuntimeError(f"[device_check] {e}") from e
 
-    fd, tmp_apk = tempfile.mkstemp(suffix=".apk")
-    os.close(fd)
+    # ── Fast path: delegate download + install to VM-local device agent ────────
+    if agent_url:
+        try:
+            logger.info(
+                f"Agent path: generating signed URL for gs://{build.bucket_name}/{build.object_key}"
+            )
+            signed_url = generate_signed_url(build.bucket_name, build.object_key)
+        except Exception as e:
+            raise RuntimeError(f"[signed_url] {e}") from e
+
+        try:
+            logger.info(f"Delegating install to agent at {agent_url} (serial={device_udid})")
+            package, activity = _install_via_agent(
+                agent_url=agent_url,
+                download_url=signed_url,
+                serial=device_udid,
+                checksum_sha256=build.checksum_sha256 or "",
+                agent_token=agent_token,
+            )
+        except Exception as e:
+            raise RuntimeError(f"[agent_install] {e}") from e
+
+        # Agent may not have aapt — fall back to DB fields if empty.
+        if not package:
+            package = (build.android_app_package or "").strip()
+        if not activity:
+            activity = (build.android_app_activity or "").strip()
+        if not package or not activity:
+            raise RuntimeError(
+                "package/activity could not be resolved: agent did not return them and "
+                "build.android_app_package / android_app_activity are not set in DB."
+            )
+
+        logger.info(f"Agent install complete — package={package} activity={activity}")
+
+    # ── Slow path: backend downloads, pushes via ADB ──────────────────────────
+    else:
+        fd, tmp_apk = tempfile.mkstemp(suffix=".apk")
+        os.close(fd)
+        try:
+            try:
+                logger.info(f"Downloading build from gs://{build.bucket_name}/{build.object_key}")
+                download_apk_from_gcs(build.bucket_name, build.object_key, tmp_apk)
+            except Exception as e:
+                raise RuntimeError(f"[apk_download] {e}") from e
+
+            try:
+                package, activity = resolve_launch_components(tmp_apk, build)
+            except Exception as e:
+                raise RuntimeError(f"[apk_parse] {e}") from e
+
+            try:
+                logger.info(f"Installing APK on {device_udid} (package={package})")
+                adb_install(device_udid, tmp_apk, adb_host=ah, adb_port=ap)
+            except Exception as e:
+                raise RuntimeError(f"[apk_install] {e}") from e
+        finally:
+            try:
+                os.unlink(tmp_apk)
+            except OSError:
+                pass
+
+    # ── Step: launch app (both paths) ────────────────────────────────────────
     try:
-        # ── Step 2: download APK from GCS ─────────────────────────────────────
-        try:
-            logger.info(f"Downloading build from gs://{build.bucket_name}/{build.object_key}")
-            download_apk_from_gcs(build.bucket_name, build.object_key, tmp_apk)
-        except Exception as e:
-            raise RuntimeError(f"[apk_download] {e}") from e
-
-        # ── Step 3: resolve package / activity ────────────────────────────────
-        try:
-            package, activity = resolve_launch_components(tmp_apk, build)
-        except Exception as e:
-            raise RuntimeError(f"[apk_parse] {e}") from e
-
-        # ── Step 4: install APK ───────────────────────────────────────────────
-        try:
-            logger.info(f"Installing APK on {device_udid} (package={package})")
-            adb_install(device_udid, tmp_apk, adb_host=ah, adb_port=ap)
-        except Exception as e:
-            raise RuntimeError(f"[apk_install] {e}") from e
-
-        # ── Step 5: launch app ───────────────────────────────────────────────
-        try:
-            logger.info(f"Launching {package} / {activity}")
-            adb_launch_app(device_udid, package, activity, adb_host=ah, adb_port=ap)
-        except Exception as e:
-            raise RuntimeError(f"[app_launch] {e}") from e
-
-    finally:
-        try:
-            os.unlink(tmp_apk)
-        except OSError:
-            pass
+        logger.info(f"Launching {package} / {activity}")
+        adb_launch_app(device_udid, package, activity, adb_host=ah, adb_port=ap)
+    except Exception as e:
+        raise RuntimeError(f"[app_launch] {e}") from e
 
     if use_appium:
         from agent.appium_manager import AppiumManager

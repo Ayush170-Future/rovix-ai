@@ -1,6 +1,6 @@
 from beanie import Document
 from pydantic import Field
-from typing import Literal
+from typing import Literal, Optional
 from datetime import datetime
 
 
@@ -14,6 +14,9 @@ class Device(Document):
     adb_host: str
     adb_port: int = 5037
     appium_url: str  # e.g. http://10.0.0.11:4723
+    # When set, the backend delegates APK download+install to this agent running on the VM.
+    # e.g. "http://10.0.0.11:8080" — see emulator/device_agent.py
+    agent_url: Optional[str] = None
     platform: Literal["android"] = "android"
     enabled: bool = True
     created_at: datetime = Field(default_factory=datetime.utcnow)
