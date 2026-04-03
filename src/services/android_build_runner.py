@@ -191,6 +191,52 @@ def _install_via_agent(
     return data.get("package", ""), data.get("activity", "")
 
 
+def device_cleanup_after_run(
+    serial: str,
+    package: str,
+    *,
+    adb_host: Optional[str] = None,
+    adb_port: Optional[int] = None,
+) -> None:
+    """
+    After a run: HOME, then optional force-stop so the next test starts from a sane launcher state.
+    Never raises — callers can wrap in try/except if they prefer to log failures only.
+    """
+    ah = ADB_HOST if adb_host is None else adb_host
+    ap = ADB_PORT if adb_port is None else adb_port
+    adb = shutil.which("adb")
+    if not adb:
+        logger.warning("device_cleanup_after_run: adb not found in PATH")
+        return
+
+    result = subprocess.run(
+        [adb, "-H", ah, "-P", str(ap), "-s", serial, "shell", "input", "keyevent", "3"],
+        capture_output=True,
+        text=True,
+        timeout=60,
+    )
+    if result.returncode != 0:
+        logger.warning(
+            "device_cleanup_after_run: HOME keyevent failed: %s",
+            (result.stdout + result.stderr).strip() or result.returncode,
+        )
+
+    pkg = (package or "").strip()
+    if pkg:
+        fs = subprocess.run(
+            [adb, "-H", ah, "-P", str(ap), "-s", serial, "shell", "am", "force-stop", pkg],
+            capture_output=True,
+            text=True,
+            timeout=60,
+        )
+        if fs.returncode != 0:
+            logger.warning(
+                "device_cleanup_after_run: force-stop failed for %s: %s",
+                pkg,
+                (fs.stdout + fs.stderr).strip() or fs.returncode,
+            )
+
+
 def adb_install(
     serial: str,
     apk_path: str,
@@ -256,7 +302,7 @@ def create_action_executor_for_build(
     adb_host: Optional[str] = None,
     adb_port: Optional[int] = None,
     agent_url: Optional[str] = None,
-) -> Any:
+) -> Tuple[Any, str]:
     if build.platform != "android":
         raise RuntimeError(f"Device install path only supports Android builds (got platform={build.platform})")
     if build.artifact_type != "apk":
@@ -350,25 +396,31 @@ def create_action_executor_for_build(
     if use_appium:
         from agent.appium_manager import AppiumManager
 
-        return AppiumManager(
-            appium_url=au,
-            device_name=os.getenv("DEVICE_NAME"),
-            udid=device_udid,
-            app_package=package,
-            app_activity=activity,
-            screenshot_timeout=float(os.getenv("SCREENSHOT_TIMEOUT", "10.0")),
-            screenshot_max_retries=int(os.getenv("SCREENSHOT_MAX_RETRIES", "3")),
+        return (
+            AppiumManager(
+                appium_url=au,
+                device_name=os.getenv("DEVICE_NAME"),
+                udid=device_udid,
+                app_package=package,
+                app_activity=activity,
+                screenshot_timeout=float(os.getenv("SCREENSHOT_TIMEOUT", "10.0")),
+                screenshot_max_retries=int(os.getenv("SCREENSHOT_MAX_RETRIES", "3")),
+            ),
+            package,
         )
 
     from agent.adb_manager import ADBManager
 
-    return ADBManager(
-        host=ah,
-        port=ap,
-        serial=device_udid,
-        screenshot_timeout=float(os.getenv("SCREENSHOT_TIMEOUT", "10.0")),
-        screenshot_max_retries=int(os.getenv("SCREENSHOT_MAX_RETRIES", "3")),
+    return (
+        ADBManager(
+            host=ah,
+            port=ap,
+            serial=device_udid,
+            screenshot_timeout=float(os.getenv("SCREENSHOT_TIMEOUT", "10.0")),
+            screenshot_max_retries=int(os.getenv("SCREENSHOT_MAX_RETRIES", "3")),
+        ),
+        package,
     )
 
 
-__all__ = ["create_action_executor_for_build"]
+__all__ = ["create_action_executor_for_build", "device_cleanup_after_run"]

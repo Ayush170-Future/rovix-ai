@@ -25,7 +25,7 @@ from models.execution_run import AssertionResult
 from models.execution_step import TokenUsage
 from repositories.execution_repository import ExecutionRepository
 from repositories.execution_step_repository import ExecutionStepRepository
-from services.android_build_runner import create_action_executor_for_build
+from services.android_build_runner import create_action_executor_for_build, device_cleanup_after_run
 from tools.todo_management import todo_write_handler, get_todo_list_for_context
 from tools.todo_management.todo_service import TodoPersistenceService
 
@@ -69,8 +69,11 @@ class AgentSession:
     execution_run_id: str
     session_id: str
     device_udid: str
+    adb_host: str
+    adb_port: int
     context_service: ContextService
     action_executor: Any = None  # ADBManager | AppiumManager — set after APK install
+    installed_package: str = ""
     force_annotate: bool = False
     step_count: int = 0
     collected_results: List[AssertionResult] = field(default_factory=list)
@@ -185,11 +188,13 @@ class ExecutionService:
             execution_run_id=run_id,
             session_id=session_id,
             device_udid=device.udid,
+            adb_host=device.adb_host,
+            adb_port=device.adb_port,
             context_service=context_svc,
         )
 
         try:
-            session.action_executor = await asyncio.to_thread(
+            executor, installed_pkg = await asyncio.to_thread(
                 create_action_executor_for_build,
                 device_udid=device.udid,
                 build=build,
@@ -199,6 +204,8 @@ class ExecutionService:
                 adb_port=device.adb_port,
                 agent_url=device.agent_url,
             )
+            session.action_executor = executor
+            session.installed_package = installed_pkg
         except Exception as e:
             logger.error(f"Build prepare / install failed for run {run_id}: {e}", exc_info=True)
             await self._execution_repo.fail(run_id, failure_reason=f"Build prepare failed: {e}")
@@ -494,8 +501,16 @@ class ExecutionService:
         return [t.to_dict() for t in TodoPersistenceService.get_todo_list(session_id)]
 
     def _cleanup_session(self, device_udid: str) -> None:
-        # TODO: After run (success or failure), uninstall the installed APK / clear app data on the
-        # device so emulators do not accumulate packages, stale state, or disk use across runs.
         session = self._sessions.pop(device_udid, None)
-        if session:
-            TodoPersistenceService.clear_todo_list(session.session_id)
+        if not session:
+            return
+        try:
+            device_cleanup_after_run(
+                session.device_udid,
+                session.installed_package,
+                adb_host=session.adb_host,
+                adb_port=session.adb_port,
+            )
+        except Exception as e:
+            logger.warning(f"Post-run device cleanup failed (non-fatal): {e}")
+        TodoPersistenceService.clear_todo_list(session.session_id)
