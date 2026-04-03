@@ -1,0 +1,6 @@
+2026-03-31 20:14:41 | INFO     | agent.adb_manager                   | ✅ Connected to ADB device: RZCW31HH47R
+2026-03-31 20:14:41 | INFO     | agent.actions.action_handler        | ✅ Loaded action config from: /Users/ayushsingh/Documents/programming/alttester/src/agent/actions/config/action_config.json
+2026-03-31 20:14:44 | DEBUG    | agent.adb_manager                   | 🔍 Width: 1806, Height: 810
+2026-03-31 20:14:44 | INFO     | agent.actions.action_handler        | 🔍 Extracting interactive elements from game...
+2026-03-31 20:14:44 | INFO     | agent.actions.action_handler        |    ✅ Found 47 UnityEngine.UI.Button element(s)
+2026-03-31 20:14:46 | INFO     | agent.actions.action_handler        | ✅ Extracted 47 unique interactive elements

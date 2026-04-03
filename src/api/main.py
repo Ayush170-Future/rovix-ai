@@ -20,6 +20,7 @@ from routes.games import router as games_router
 from routes.builds import router as builds_router
 from routes.test_scenarios import router as scenarios_router
 from routes.executions import router as executions_router
+from routes.devices import router as devices_router
 
 
 @asynccontextmanager
@@ -46,6 +47,7 @@ app.include_router(games_router)
 app.include_router(builds_router)
 app.include_router(scenarios_router)
 app.include_router(executions_router)
+app.include_router(devices_router)
 
 
 @app.get("/health")

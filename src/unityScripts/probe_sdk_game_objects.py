@@ -23,7 +23,7 @@ import os
 import sys
 import time
 
-ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 SRC = os.path.join(ROOT, "src")
 sys.path.insert(0, SRC)
 
@@ -130,6 +130,8 @@ def run_action_space() -> dict:
                 "name": b.get("name"),
                 "screen_position": b.get("screen_position"),
                 "enabled": b.get("enabled"),
+                "visible": b.get("visible"),
+                "on_screen": b.get("on_screen"),
             }
             for b in buttons
         ],
@@ -139,6 +141,9 @@ def run_action_space() -> dict:
                 "name": s.get("name"),
                 "screen_position": s.get("screen_position"),
                 "value": s.get("value"),
+                "enabled": s.get("enabled"),
+                "visible": s.get("visible"),
+                "on_screen": s.get("on_screen"),
             }
             for s in sliders
         ],
@@ -148,6 +153,9 @@ def run_action_space() -> dict:
                 "name": x.get("name"),
                 "type": x.get("type"),
                 "screen_position": x.get("screen_position"),
+                "enabled": x.get("enabled"),
+                "visible": x.get("visible"),
+                "on_screen": x.get("on_screen"),
             }
             for x in i2d
         ],
@@ -233,11 +241,17 @@ def main() -> None:
     else:
         print("First few buttons:")
         for b in summary["buttons"][:15]:
-            print(f"  - {b['name']} id={b['id']} pos={b['screen_position']} enabled={b['enabled']}")
+            print(
+                f"  - {b['name']} id={b['id']} pos={b['screen_position']} "
+                f"enabled={b['enabled']} visible={b.get('visible')} on_screen={b.get('on_screen')}"
+            )
         if c["interactable_2d"]:
             print("\nFirst few interactable_2d:")
             for x in summary["interactable_2d"][:15]:
-                print(f"  - {x['name']} ({x['type']}) id={x['id']} pos={x['screen_position']}")
+                print(
+                    f"  - {x['name']} ({x['type']}) id={x['id']} pos={x['screen_position']} "
+                    f"enabled={x.get('enabled')} visible={x.get('visible')} on_screen={x.get('on_screen')}"
+                )
 
 
 if __name__ == "__main__":

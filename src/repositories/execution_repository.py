@@ -12,6 +12,7 @@ class ExecutionRepository:
         org_id: str,
         device_udid: str,
         total_assertions: int,
+        device_id: Optional[str] = None,
     ) -> ExecutionRun:
         run = ExecutionRun(
             scenario_id=scenario_id,
@@ -19,6 +20,7 @@ class ExecutionRepository:
             build_id=build_id,
             org_id=org_id,
             device_udid=device_udid,
+            device_id=device_id,
             total_assertions=total_assertions,
         )
         await run.insert()

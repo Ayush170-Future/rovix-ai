@@ -8,6 +8,7 @@ from models.build import Build
 from models.test_scenario import TestScenario
 from models.execution_run import ExecutionRun
 from models.execution_step import ExecutionStep
+from models.device import Device
 from agent.logger import get_logger
 
 logger = get_logger("agent.database")
@@ -26,6 +27,7 @@ async def init_db():
             TestScenario,
             ExecutionRun,
             ExecutionStep,
+            Device,
         ],
     )
     logger.info(f"Connected to MongoDB: {DATABASE_NAME}")

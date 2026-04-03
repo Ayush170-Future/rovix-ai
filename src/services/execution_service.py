@@ -20,17 +20,20 @@ from services.views import Action, AgentOutput
 from models.test_scenario import TestScenario, Step
 from models.game import Game
 from models.build import Build
+from models.device import Device
 from models.execution_run import AssertionResult
 from models.execution_step import TokenUsage
 from repositories.execution_repository import ExecutionRepository
 from repositories.execution_step_repository import ExecutionStepRepository
-from services.android_build_runner import create_action_executor_for_build
+from services.android_build_runner import create_action_executor_for_build, device_cleanup_after_run
 from tools.todo_management import todo_write_handler, get_todo_list_for_context
 from tools.todo_management.todo_service import TodoPersistenceService
 
 logger = get_logger("agent.services.execution_service")
 
 USE_APPIUM = os.getenv("USE_APPIUM", "false").lower() == "true"
+# TODO: Expose Appium (or uiautomator) as explicit agent tool calls — structured actions beyond
+# coordinate taps from the LLM, aligned with Appium session capabilities when USE_APPIUM is true.
 POLLING_INTERVAL = float(os.getenv("POLLING_INTERVAL", "2.5"))
 MAX_STEPS = int(os.getenv("MAX_STEPS", "1000"))
 MAX_CONSECUTIVE_DEVICE_FAILURES = int(os.getenv("MAX_CONSECUTIVE_DEVICE_FAILURES", "3"))
@@ -66,8 +69,11 @@ class AgentSession:
     execution_run_id: str
     session_id: str
     device_udid: str
+    adb_host: str
+    adb_port: int
     context_service: ContextService
     action_executor: Any = None  # ADBManager | AppiumManager — set after APK install
+    installed_package: str = ""
     force_annotate: bool = False
     step_count: int = 0
     collected_results: List[AssertionResult] = field(default_factory=list)
@@ -80,6 +86,10 @@ class AgentSession:
 
 class ExecutionService:
     def __init__(self):
+        # TODO: Multi-instance / horizontal scale — _sessions is per-process memory only.
+        # With several API replicas or multiple workers, coordinate device busy/locks centrally
+        # (e.g. Redis key per device_udid, Mongo lease, or sticky routing) so GET /api/devices
+        # and execute cannot double-book the same physical device across instances.
         self._sessions: Dict[str, AgentSession] = {}
         self._execution_repo = ExecutionRepository()
         self._step_repo = ExecutionStepRepository()
@@ -162,7 +172,7 @@ class ExecutionService:
         run_id: str,
         scenario: TestScenario,
         game: Game,
-        device_udid: str,
+        device: Device,
         build: Build,
     ) -> None:
         session_id = run_id
@@ -177,23 +187,31 @@ class ExecutionService:
         session = AgentSession(
             execution_run_id=run_id,
             session_id=session_id,
-            device_udid=device_udid,
+            device_udid=device.udid,
+            adb_host=device.adb_host,
+            adb_port=device.adb_port,
             context_service=context_svc,
         )
 
         try:
-            session.action_executor = await asyncio.to_thread(
+            executor, installed_pkg = await asyncio.to_thread(
                 create_action_executor_for_build,
-                device_udid=device_udid,
+                device_udid=device.udid,
                 build=build,
                 use_appium=USE_APPIUM,
+                appium_url=device.appium_url,
+                adb_host=device.adb_host,
+                adb_port=device.adb_port,
+                agent_url=device.agent_url,
             )
+            session.action_executor = executor
+            session.installed_package = installed_pkg
         except Exception as e:
             logger.error(f"Build prepare / install failed for run {run_id}: {e}", exc_info=True)
             await self._execution_repo.fail(run_id, failure_reason=f"Build prepare failed: {e}")
             return
 
-        self._sessions[device_udid] = session
+        self._sessions[device.udid] = session
         self._seed_todo_list(session, scenario.steps)
 
         await self._execution_repo.start(run_id)
@@ -484,5 +502,15 @@ class ExecutionService:
 
     def _cleanup_session(self, device_udid: str) -> None:
         session = self._sessions.pop(device_udid, None)
-        if session:
-            TodoPersistenceService.clear_todo_list(session.session_id)
+        if not session:
+            return
+        try:
+            device_cleanup_after_run(
+                session.device_udid,
+                session.installed_package,
+                adb_host=session.adb_host,
+                adb_port=session.adb_port,
+            )
+        except Exception as e:
+            logger.warning(f"Post-run device cleanup failed (non-fatal): {e}")
+        TodoPersistenceService.clear_todo_list(session.session_id)

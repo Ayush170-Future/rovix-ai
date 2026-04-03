@@ -247,6 +247,16 @@ class ActionHandler:
             screen_y = int(round(mobile_y + bounds['offset_y']))
         
         return screen_x, screen_y
+
+    def _is_on_screen(self, screen_position: Optional[Tuple[int, int]]) -> Optional[bool]:
+        """Best-effort check using translated screen coordinates and Unity bounds."""
+        if screen_position is None or self._bounds is None:
+            return None
+        x, y = screen_position
+        return (
+            self._bounds["left"] <= x <= self._bounds["right"]
+            and self._bounds["top"] <= y <= self._bounds["bottom"]
+        )
     
     def _extract_element_info(self, obj: Any, component_type: str) -> Optional[Dict[str, Any]]:
         try:
@@ -276,6 +286,19 @@ class ActionHandler:
             enabled = True
             if hasattr(obj, 'enabled'):
                 enabled = obj.enabled
+
+            # Some AltTester/Unity objects expose visibility directly. If not available,
+            # keep None and rely on on_screen as a practical fallback.
+            visible = None
+            for attr in ("visible", "isVisible", "is_visible"):
+                if hasattr(obj, attr):
+                    try:
+                        visible = bool(getattr(obj, attr))
+                        break
+                    except Exception:
+                        pass
+
+            on_screen = self._is_on_screen(screen_position)
             
             element_info = {
                 "id": element_id,
@@ -285,6 +308,8 @@ class ActionHandler:
                 "screen_position": screen_position,
                 "text": text,
                 "enabled": enabled,
+                "visible": visible,
+                "on_screen": on_screen,
                 "object": obj
             }
             
@@ -341,7 +366,9 @@ class ActionHandler:
                 "position": elem["position"],
                 "screen_position": elem.get("screen_position"),
                 "text": elem.get("text"),
-                "enabled": elem["enabled"]
+                "enabled": elem["enabled"],
+                "visible": elem.get("visible"),
+                "on_screen": elem.get("on_screen"),
             }
             
             if elem_type == "UnityEngine.UI.Slider":

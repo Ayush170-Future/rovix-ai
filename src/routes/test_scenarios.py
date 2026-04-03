@@ -9,6 +9,7 @@ from repositories.game_repository import GameRepository
 from repositories.build_repository import BuildRepository
 from repositories.test_scenario_repository import TestScenarioRepository
 from repositories.execution_repository import ExecutionRepository
+from repositories.device_repository import DeviceRepository
 from services.step_generation_service import generate_steps
 from services.execution_service import ExecutionService
 
@@ -17,6 +18,7 @@ _scenario_repo = TestScenarioRepository()
 _game_repo = GameRepository()
 _build_repo = BuildRepository()
 _execution_repo = ExecutionRepository()
+_device_repo = DeviceRepository()
 
 
 class CreateScenarioRequest(BaseModel):
@@ -32,7 +34,7 @@ class SaveStepsRequest(BaseModel):
 
 
 class ExecuteRequest(BaseModel):
-    device_udid: str
+    device_id: str
     build_id: str
 
 
@@ -83,6 +85,7 @@ async def list_game_executions(game_id: str, org: Organization = Depends(get_org
             "build_id": r.build_id,
             "scenario_title": title_by_scenario_id.get(r.scenario_id, ""),
             "device_udid": r.device_udid,
+            "device_id": r.device_id,
             "status": r.status,
             "total_assertions": r.total_assertions,
             "passed": r.passed,
@@ -189,8 +192,14 @@ async def execute_scenario(
             detail=f"Build platform {build.platform} does not match game platform {game.platform}",
         )
 
+    device = await _device_repo.find_by_device_id(str(org.id), request.device_id)
+    if not device:
+        raise HTTPException(status_code=404, detail="Device not found")
+    if not device.enabled:
+        raise HTTPException(status_code=400, detail="Device is disabled")
+
     execution_service: ExecutionService = http_request.app.state.execution_service
-    if execution_service.is_device_busy(request.device_udid):
+    if execution_service.is_device_busy(device.udid):
         raise HTTPException(status_code=409, detail="Device is already running an execution")
 
     run = await _execution_repo.create(
@@ -198,15 +207,16 @@ async def execute_scenario(
         game_id=scenario.game_id,
         build_id=str(build.id),
         org_id=str(org.id),
-        device_udid=request.device_udid,
+        device_udid=device.udid,
         total_assertions=len(scenario.assertions),
+        device_id=device.device_id,
     )
 
     await execution_service.start_execution(
         run_id=str(run.id),
         scenario=scenario,
         game=game,
-        device_udid=request.device_udid,
+        device=device,
         build=build,
     )
 

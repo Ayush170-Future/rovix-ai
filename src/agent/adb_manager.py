@@ -98,7 +98,7 @@ class ADBManager:
             
             # Have to change this to something that always works
             for node in root.iter('node'):
-                if node.get('package') == 'com.ZoltanGubics.Solitaire':
+                if node.get('package') == 'cricketgames.hitwicket.strategy':
                     bounds_str = node.get('bounds')
                     bounds = self._parse_bounds(bounds_str)
                     if bounds:

@@ -20,6 +20,7 @@ class ExecutionRun(Document):
     build_id: Optional[str] = None
     org_id: str
     device_udid: str
+    device_id: Optional[str] = None  # registry slug when run used a Device row
     status: Literal["queued", "running", "completed", "failed", "cancelled"] = "queued"
     assertion_results: List[AssertionResult] = []
     total_assertions: int = 0
