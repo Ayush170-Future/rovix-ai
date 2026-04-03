@@ -23,6 +23,7 @@ class Build(Document):
     # Optional; if missing, resolved at execution via `aapt dump badging` after download.
     android_app_package: Optional[str] = None
     android_app_activity: Optional[str] = None
+    browserstack_app_url: Optional[str] = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 

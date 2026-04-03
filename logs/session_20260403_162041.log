@@ -1,0 +1,24 @@
+2026-04-03 16:20:49 | INFO     | agent.database                      | Connected to MongoDB: game_testing
+2026-04-03 16:20:49 | INFO     | agent.services.execution_service    | 🤖 Using Google model: gemini-3-pro-preview
+2026-04-03 16:24:14 | INFO     | agent.services.android_build_runner | ☁️ BrowserStack device: Samsung Galaxy S23 (Android 13.0)
+2026-04-03 16:24:14 | ERROR    | agent.services.execution_service    | Build prepare / install failed for run 69cf9c56f877fd967c669897: BROWSERSTACK_ACCESS_KEY must be set to start BrowserStack Local.
+Traceback (most recent call last):
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/services/execution_service.py", line 185, in start_execution
+    session.action_executor = await asyncio.to_thread(
+                              ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/asyncio/threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 86, in run
+    result = ctx.run(self.task)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 73, in run
+    return fn(*args, **kwargs)
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/agent/context/../../services/android_build_runner.py", line 176, in create_action_executor_for_build
+    BrowserstackService.start_local()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/agent/context/../../services/browserstack_service.py", line 52, in start_local
+    raise RuntimeError("BROWSERSTACK_ACCESS_KEY must be set to start BrowserStack Local.")
+RuntimeError: BROWSERSTACK_ACCESS_KEY must be set to start BrowserStack Local.

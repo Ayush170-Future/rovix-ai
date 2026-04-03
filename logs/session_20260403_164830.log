@@ -1,0 +1,70 @@
+2026-04-03 16:48:34 | INFO     | agent.database                      | Connected to MongoDB: game_testing
+2026-04-03 16:48:34 | INFO     | agent.services.execution_service    | 🤖 Using Google model: gemini-3-pro-preview
+2026-04-03 16:48:40 | INFO     | agent.services.android_build_runner | ☁️ BrowserStack device: Samsung Galaxy S23 (Android 13.0)
+2026-04-03 16:48:40 | INFO     | agent.services.browserstack         | 🔧 Starting BrowserStack Local tunnel...
+2026-04-03 16:48:50 | INFO     | agent.services.browserstack         | ✅ BrowserStack Local is running.
+2026-04-03 16:48:50 | INFO     | agent.services.android_build_runner | Downloading build from gs://rovix_ai_bucket/game_builds/69c6c43675f3e45c87279199/69c6c4b475f3e45c8727919a/android/20260328061500_0ba388ccec5b494bb177431bfc7d39b7_Diamond League Hatchback.apk
+2026-04-03 16:50:23 | INFO     | agent.services.browserstack         | ☁️ Uploading /var/folders/6q/c4szyhw108v8wtc775qf0tnw0000gn/T/tmp8oypj5e1.apk to BrowserStack...
+2026-04-03 16:51:47 | INFO     | agent.services.browserstack         | ✅ Successfully uploaded to BrowserStack: bs://dd02e24b7bcd28d72dc61a79c734b1496e4cd3de
+2026-04-03 16:51:47 | INFO     | agent.services.android_build_runner | Updating build with BrowserStack App URL
+2026-04-03 16:51:47 | INFO     | agent.appium_manager                | ☁️ BrowserStack session: device={'device': 'Samsung Galaxy S23', 'os_version': '13.0'}, app=bs://dd02e24b7bcd28d72dc61a79c734b1496e4cd3de
+2026-04-03 16:51:47 | INFO     | agent.appium_manager                | 🔌 Connecting to Appium server at https://hub-cloud.browserstack.com/wd/hub...
+2026-04-03 16:51:48 | ERROR    | agent.appium_manager                | ❌ Failed to start Appium session: Message: [BROWSERSTACK_MISSING_CAPS] The ["deviceName"] capabilities are missing in your test script. Please refer to our capability builder - https://www.browserstack.com/app-automate/capabilities?tag=w3c
+
+2026-04-03 16:51:48 | ERROR    | agent.services.execution_service    | Build prepare / install failed for run 69cfa2102367775f00dcc598: Appium session failed: Message: [BROWSERSTACK_MISSING_CAPS] The ["deviceName"] capabilities are missing in your test script. Please refer to our capability builder - https://www.browserstack.com/app-automate/capabilities?tag=w3c
+Traceback (most recent call last):
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/agent/context/../../agent/appium_manager.py", line 93, in _initialize_session
+    self.driver = webdriver.Remote(self.appium_url, options=options)
+                  ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/venv/lib/python3.14/site-packages/appium/webdriver/webdriver.py", line 249, in __init__
+    super().__init__(
+    ~~~~~~~~~~~~~~~~^
+        command_executor=command_executor,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+        client_config=client_config,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/venv/lib/python3.14/site-packages/selenium/webdriver/remote/webdriver.py", line 271, in __init__
+    self.start_session(capabilities)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/venv/lib/python3.14/site-packages/appium/webdriver/webdriver.py", line 342, in start_session
+    response = self.execute(RemoteCommand.NEW_SESSION, w3c_caps)
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/venv/lib/python3.14/site-packages/selenium/webdriver/remote/webdriver.py", line 446, in execute
+    self.error_handler.check_response(response)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/venv/lib/python3.14/site-packages/selenium/webdriver/remote/errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: [BROWSERSTACK_MISSING_CAPS] The ["deviceName"] capabilities are missing in your test script. Please refer to our capability builder - https://www.browserstack.com/app-automate/capabilities?tag=w3c
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/services/execution_service.py", line 185, in start_execution
+    session.action_executor = await asyncio.to_thread(
+                              ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+    )
+    ^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/asyncio/threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 86, in run
+    result = ctx.run(self.task)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 73, in run
+    return fn(*args, **kwargs)
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/agent/context/../../services/android_build_runner.py", line 214, in create_action_executor_for_build
+    return AppiumManager(
+        appium_url="https://hub-cloud.browserstack.com/wd/hub",
+    ...<4 lines>...
+        screenshot_max_retries=int(os.getenv("SCREENSHOT_MAX_RETRIES", "3")),
+    )
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/agent/context/../../agent/appium_manager.py", line 50, in __init__
+    self._initialize_session()
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/ashwanikottapalli/Documents/GitHub/Ludo_AITest/rovix-ai/src/agent/context/../../agent/appium_manager.py", line 98, in _initialize_session
+    raise RuntimeError(f"Appium session failed: {e}") from e
+RuntimeError: Appium session failed: Message: [BROWSERSTACK_MISSING_CAPS] The ["deviceName"] capabilities are missing in your test script. Please refer to our capability builder - https://www.browserstack.com/app-automate/capabilities?tag=w3c
+

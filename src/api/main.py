@@ -28,7 +28,10 @@ async def lifespan(app: FastAPI):
     execution_service = ExecutionService()
     await execution_service.mark_stale_runs_failed()
     app.state.execution_service = execution_service
-    yield
+    try:
+        yield
+    finally:
+        await execution_service.shutdown()
 
 
 app = FastAPI(title="AltTester Backend", lifespan=lifespan)

@@ -188,6 +188,15 @@ class ExecutionService:
                 build=build,
                 use_appium=USE_APPIUM,
             )
+            
+            # If the build URL was updated (new upload), persist it to MongoDB
+            if build.browserstack_app_url:
+                try:
+                    await build.save()
+                    logger.info(f"✅ Persisted BrowserStack app URL to build repository: {build.browserstack_app_url}")
+                except Exception as e:
+                    logger.error(f"❌ Failed to save build BrowserStack URL to DB: {e}")
+                    
         except Exception as e:
             logger.error(f"Build prepare / install failed for run {run_id}: {e}", exc_info=True)
             await self._execution_repo.fail(run_id, failure_reason=f"Build prepare failed: {e}")
@@ -485,4 +494,31 @@ class ExecutionService:
     def _cleanup_session(self, device_udid: str) -> None:
         session = self._sessions.pop(device_udid, None)
         if session:
+            if hasattr(session, "action_executor") and session.action_executor:
+                try:
+                    session.action_executor.close()
+                except Exception as e:
+                    logger.error(f"❌ Failed to close action executor: {e}")
+            
             TodoPersistenceService.clear_todo_list(session.session_id)
+            
+            # Check if we should stop BrowserStack local tunnel
+            if os.getenv("USE_BROWSERSTACK", "false").lower() == "true":
+                # Only stop if no other sessions are active
+                if not self._sessions:
+                    try:
+                        from services.browserstack_service import BrowserstackService
+                        BrowserstackService.stop_local()
+                    except Exception as e:
+                        logger.error(f"❌ Failed to stop BrowserStack local: {e}")
+
+    async def shutdown(self) -> None:
+        """Gracefully shut down all active sessions and cleanup resources."""
+        logger.info("🛑 Shutting down ExecutionService...")
+        uids = list(self._sessions.keys())
+        for udid in uids:
+            try:
+                self._cleanup_session(udid)
+            except Exception as e:
+                logger.error(f"❌ Error cleaning up session {udid} during shutdown: {e}")
+        logger.info("✅ ExecutionService shutdown complete.")

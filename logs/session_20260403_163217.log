@@ -1,0 +1,115 @@
+2026-04-03 16:32:22 | INFO     | agent.database                      | Connected to MongoDB: game_testing
+2026-04-03 16:32:22 | INFO     | agent.services.execution_service    | 🤖 Using Google model: gemini-3-pro-preview
+2026-04-03 16:32:31 | INFO     | agent.services.android_build_runner | ☁️ BrowserStack device: Samsung Galaxy S23 (Android 13.0)
+2026-04-03 16:32:31 | INFO     | agent.services.browserstack         | 🔧 Starting BrowserStack Local tunnel...
+2026-04-03 16:32:39 | INFO     | agent.services.browserstack         | ✅ BrowserStack Local is running.
+2026-04-03 16:32:39 | INFO     | agent.services.android_build_runner | Downloading build from gs://rovix_ai_bucket/game_builds/69c6c43675f3e45c87279199/69c6c4b475f3e45c8727919a/android/20260328061500_0ba388ccec5b494bb177431bfc7d39b7_Diamond League Hatchback.apk
+2026-04-03 16:34:06 | INFO     | agent.services.browserstack         | ☁️ Uploading /var/folders/6q/c4szyhw108v8wtc775qf0tnw0000gn/T/tmpwz6d821v.apk to BrowserStack...
+2026-04-03 16:35:32 | INFO     | agent.services.browserstack         | ✅ Successfully uploaded to BrowserStack: bs://dd02e24b7bcd28d72dc61a79c734b1496e4cd3de
+2026-04-03 16:35:32 | INFO     | agent.services.android_build_runner | Updating build with BrowserStack App URL
+2026-04-03 16:35:32 | INFO     | agent.appium_manager                | ☁️ Using BrowserStack App Automate: Rovix AI Tests
+2026-04-03 16:35:32 | INFO     | agent.appium_manager                | 🔌 Connecting to Appium server at http://localhost:4723...
+2026-04-03 16:35:32 | ERROR    | agent.appium_manager                | ❌ Failed to start Appium session: HTTPConnectionPool(host='localhost', port=4723): Max retries exceeded with url: /session (Caused by NewConnectionError("HTTPConnection(host='localhost', port=4723): Failed to establish a new connection: [Errno 61] Connection refused"))
+2026-04-03 16:35:32 | ERROR    | agent.appium_manager                |    Make sure Appium server is running: appium
+2026-04-03 16:35:32 | INFO     | agent.services.execution_service    | Starting execution 69cf9e47a2c0dfca3968b68e on device emulator-5554
+2026-04-03 16:35:32 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 0 | Run 69cf9e47
+================================================================================
+2026-04-03 16:35:32 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[PENDING] [s1] [ACTION] Launch the Hitwicket application on the device.
+[PENDING] [s4] [ACTION] Initiate a standard cricket match from the main menu. (depends on: s3)
+[PENDING] [s3] [ACTION] Progress through all onboarding steps and tutorials as instructed by the character. (depends on: s2)
+[PENDING] [s2] [VERIFY] Confirm that the Harsha Bhogle onboarding screens and dialogue appear. (depends on: s1)
+[PENDING] [s5] [VERIFY] Verify that the gameplay interface is active and the match mechanics are functional. (depends on: s4)
+[PENDING] [s6] [ACTION] Complete the full duration of the cricket match. (depends on: s5)
+[PENDING] [s7] [VERIFY] Verify that the post-match summary screen displays (depends on: s6)
+============================================================
+2026-04-03 16:35:32 | ERROR    | agent.services.execution_service    | ❌ Screenshot capture failed: No Appium session active (type: DeviceErrorType.DEVICE_DISCONNECTED, retries: 0)
+2026-04-03 16:35:32 | ERROR    | agent.services.execution_service    | Execution 69cf9e47a2c0dfca3968b68e aborted: No Appium session active
+2026-04-03 16:36:13 | INFO     | agent.services.android_build_runner | ☁️ BrowserStack device: Samsung Galaxy S23 (Android 13.0)
+2026-04-03 16:36:13 | INFO     | agent.services.android_build_runner | Downloading build from gs://rovix_ai_bucket/game_builds/69c6c43675f3e45c87279199/69c6c4b475f3e45c8727919a/android/20260328061500_0ba388ccec5b494bb177431bfc7d39b7_Diamond League Hatchback.apk
+2026-04-03 16:37:40 | INFO     | agent.services.browserstack         | ☁️ Uploading /var/folders/6q/c4szyhw108v8wtc775qf0tnw0000gn/T/tmpqx9hy809.apk to BrowserStack...
+2026-04-03 16:39:00 | INFO     | agent.services.browserstack         | ✅ Successfully uploaded to BrowserStack: bs://dd02e24b7bcd28d72dc61a79c734b1496e4cd3de
+2026-04-03 16:39:00 | INFO     | agent.services.android_build_runner | Updating build with BrowserStack App URL
+2026-04-03 16:39:00 | INFO     | agent.appium_manager                | ☁️ Using BrowserStack App Automate: Rovix AI Tests
+2026-04-03 16:39:00 | INFO     | agent.appium_manager                | 🔌 Connecting to Appium server at http://localhost:4723...
+2026-04-03 16:39:23 | ERROR    | agent.appium_manager                | ❌ Failed to start Appium session: Message: Could not find a connected Android device in 20000ms
+Stacktrace:
+UnknownError: Could not find a connected Android device in 20000ms
+    at getResponseForW3CError (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/build/lib/protocol/errors.js:824:36)
+    at asyncHandler (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/build/lib/protocol/protocol.js:430:77)
+The above error is caused by
+Error: Could not find a connected Android device in 20000ms
+    at ADB.getDevicesWithRetry (/Users/ashwanikottapalli/.appium/node_modules/appium-uiautomator2-driver/node_modules/appium-adb/build/lib/tools/system-calls.js:360:19)
+    at async AndroidUiautomator2Driver.getDeviceInfoFromCaps (/Users/ashwanikottapalli/.appium/node_modules/appium-uiautomator2-driver/node_modules/appium-android-driver/build/lib/commands/device/common.js:76:25)
+    at async AndroidUiautomator2Driver.createSession (/Users/ashwanikottapalli/.appium/node_modules/appium-uiautomator2-driver/build/lib/driver.js:211:38)
+    at async AppiumDriver.createSession (/opt/homebrew/lib/node_modules/appium/build/lib/appium.js:324:43)
+2026-04-03 16:39:23 | ERROR    | agent.appium_manager                |    Make sure Appium server is running: appium
+2026-04-03 16:39:23 | INFO     | agent.services.execution_service    | Starting execution 69cf9f25a2c0dfca3968b68f on device emulator-5554
+2026-04-03 16:39:23 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 0 | Run 69cf9f25
+================================================================================
+2026-04-03 16:39:23 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[PENDING] [s1] [ACTION] Launch the Hitwicket application on the device.
+[PENDING] [s4] [ACTION] Initiate a standard cricket match from the main menu. (depends on: s3)
+[PENDING] [s3] [ACTION] Progress through all onboarding steps and tutorials as instructed by the character. (depends on: s2)
+[PENDING] [s2] [VERIFY] Confirm that the Harsha Bhogle onboarding screens and dialogue appear. (depends on: s1)
+[PENDING] [s5] [VERIFY] Verify that the gameplay interface is active and the match mechanics are functional. (depends on: s4)
+[PENDING] [s6] [ACTION] Complete the full duration of the cricket match. (depends on: s5)
+[PENDING] [s7] [VERIFY] Verify that the post-match summary screen displays (depends on: s6)
+============================================================
+2026-04-03 16:39:23 | ERROR    | agent.services.execution_service    | ❌ Screenshot capture failed: No Appium session active (type: DeviceErrorType.DEVICE_DISCONNECTED, retries: 0)
+2026-04-03 16:39:23 | ERROR    | agent.services.execution_service    | Execution 69cf9f25a2c0dfca3968b68f aborted: No Appium session active
+2026-04-03 16:43:22 | INFO     | agent.services.android_build_runner | ☁️ BrowserStack device: Samsung Galaxy S23 (Android 13.0)
+2026-04-03 16:43:22 | INFO     | agent.services.android_build_runner | Downloading build from gs://rovix_ai_bucket/game_builds/69c6c43675f3e45c87279199/69c6c4b475f3e45c8727919a/android/20260328061500_0ba388ccec5b494bb177431bfc7d39b7_Diamond League Hatchback.apk
+2026-04-03 16:44:53 | INFO     | agent.services.browserstack         | ☁️ Uploading /var/folders/6q/c4szyhw108v8wtc775qf0tnw0000gn/T/tmp6swznaz7.apk to BrowserStack...
+2026-04-03 16:46:16 | INFO     | agent.services.browserstack         | ✅ Successfully uploaded to BrowserStack: bs://dd02e24b7bcd28d72dc61a79c734b1496e4cd3de
+2026-04-03 16:46:16 | INFO     | agent.services.android_build_runner | Updating build with BrowserStack App URL
+2026-04-03 16:46:16 | INFO     | agent.appium_manager                | ☁️ Using BrowserStack App Automate: Rovix AI Tests
+2026-04-03 16:46:16 | INFO     | agent.appium_manager                | 🔌 Connecting to Appium server at http://localhost:4723...
+2026-04-03 16:46:36 | ERROR    | agent.appium_manager                | ❌ Failed to start Appium session: Message: Could not find a connected Android device in 20000ms
+Stacktrace:
+UnknownError: Could not find a connected Android device in 20000ms
+    at getResponseForW3CError (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/build/lib/protocol/errors.js:824:36)
+    at asyncHandler (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/build/lib/protocol/protocol.js:430:77)
+The above error is caused by
+Error: Could not find a connected Android device in 20000ms
+    at ADB.getDevicesWithRetry (/Users/ashwanikottapalli/.appium/node_modules/appium-uiautomator2-driver/node_modules/appium-adb/build/lib/tools/system-calls.js:360:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async AndroidUiautomator2Driver.getDeviceInfoFromCaps (/Users/ashwanikottapalli/.appium/node_modules/appium-uiautomator2-driver/node_modules/appium-android-driver/build/lib/commands/device/common.js:76:25)
+    at async AndroidUiautomator2Driver.createSession (/Users/ashwanikottapalli/.appium/node_modules/appium-uiautomator2-driver/build/lib/driver.js:211:38)
+    at async AppiumDriver.createSession (/opt/homebrew/lib/node_modules/appium/build/lib/appium.js:324:43)
+2026-04-03 16:46:36 | ERROR    | agent.appium_manager                |    Make sure Appium server is running: appium
+2026-04-03 16:46:36 | INFO     | agent.services.execution_service    | Starting execution 69cfa0d2a2c0dfca3968b690 on device emulator-5554
+2026-04-03 16:46:36 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 0 | Run 69cfa0d2
+================================================================================
+2026-04-03 16:46:36 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[PENDING] [s1] [ACTION] Launch the Hitwicket application on the device.
+[PENDING] [s4] [ACTION] Initiate a standard cricket match from the main menu. (depends on: s3)
+[PENDING] [s3] [ACTION] Progress through all onboarding steps and tutorials as instructed by the character. (depends on: s2)
+[PENDING] [s2] [VERIFY] Confirm that the Harsha Bhogle onboarding screens and dialogue appear. (depends on: s1)
+[PENDING] [s5] [VERIFY] Verify that the gameplay interface is active and the match mechanics are functional. (depends on: s4)
+[PENDING] [s6] [ACTION] Complete the full duration of the cricket match. (depends on: s5)
+[PENDING] [s7] [VERIFY] Verify that the post-match summary screen displays (depends on: s6)
+============================================================
+2026-04-03 16:46:36 | ERROR    | agent.services.execution_service    | ❌ Screenshot capture failed: No Appium session active (type: DeviceErrorType.DEVICE_DISCONNECTED, retries: 0)
+2026-04-03 16:46:36 | ERROR    | agent.services.execution_service    | Execution 69cfa0d2a2c0dfca3968b690 aborted: No Appium session active

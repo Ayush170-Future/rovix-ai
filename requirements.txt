@@ -29,3 +29,6 @@ pure-python-adb>=0.3.0
 # Appium integration (optional)
 Appium-Python-Client>=3.0.0
 
+# BrowserStack
+requests>=2.25.0
+browserstack-local>=1.2.2

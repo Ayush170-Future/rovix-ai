@@ -34,6 +34,8 @@ class AppiumManager:
         app_activity: str = None,
         screenshot_timeout: float = 10.0,
         screenshot_max_retries: int = 3,
+        browserstack_app_url: str = None,
+        browserstack_device_config: dict = None,
     ):
         self.appium_url = appium_url
         self.device_name = device_name
@@ -42,13 +44,36 @@ class AppiumManager:
         self.app_activity = app_activity or "com.unity3d.player.UnityPlayerActivity"
         self.screenshot_timeout = screenshot_timeout
         self.screenshot_max_retries = screenshot_max_retries
+        self.browserstack_app_url = browserstack_app_url
+        self.browserstack_device_config = browserstack_device_config or {}
         self.driver = None
         self._initialize_session()
 
     def _initialize_session(self):
-        try:
-            options = UiAutomator2Options()
-            options.platform_name = "Android"
+        options = UiAutomator2Options()
+        options.platform_name = "Android"
+
+        use_browserstack = os.getenv("USE_BROWSERSTACK", "false").lower() == "true"
+
+        if use_browserstack:
+            options.set_capability("app", self.browserstack_app_url)
+            # Fresh BrowserStack device every session — no_reset must be False so the app actually launches
+            options.no_reset = False
+            options.full_reset = False
+            options.new_command_timeout = 3600
+
+            # BrowserStack W3C format: deviceName and osVersion go INSIDE bstack:options
+            bstack_options = {
+                "userName": os.getenv("BROWSERSTACK_USERNAME"),
+                "accessKey": os.getenv("BROWSERSTACK_ACCESS_KEY"),
+                "deviceName": self.browserstack_device_config.get("device", "Samsung Galaxy S23"),
+                "osVersion": self.browserstack_device_config.get("os_version", "13.0"),
+                "local": "true",
+                "projectName": "Rovix AI Tests",
+            }
+            options.set_capability("bstack:options", bstack_options)
+            logger.info(f"☁️ BrowserStack session: device={bstack_options['deviceName']} (Android {bstack_options['osVersion']}), app={self.browserstack_app_url}")
+        else:
             options.device_name = self.device_name or "Android Emulator"
             if self.udid:
                 options.udid = self.udid
@@ -64,14 +89,14 @@ class AppiumManager:
             else:
                 logger.info(f"🖥️  Appium will control current screen (no app launch)")
 
+        try:
             logger.info(f"🔌 Connecting to Appium server at {self.appium_url}...")
             self.driver = webdriver.Remote(self.appium_url, options=options)
             logger.info(f"✅ Appium session started: {self.driver.session_id}")
-
         except Exception as e:
+            # Re-raise so the caller (create_action_executor_for_build) surfaces the real error
             logger.error(f"❌ Failed to start Appium session: {e}")
-            logger.error(f"   Make sure Appium server is running: appium")
-            self.driver = None
+            raise RuntimeError(f"Appium session failed: {e}") from e
 
     def is_connected(self) -> bool:
         return self.driver is not None

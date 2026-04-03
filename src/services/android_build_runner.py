@@ -162,6 +162,51 @@ def create_action_executor_for_build(
     if build.status != "ready":
         raise RuntimeError(f"Build must be ready (status={build.status})")
 
+    use_browserstack = os.getenv("USE_BROWSERSTACK", "false").lower() == "true"
+    
+    if use_browserstack:
+        from services.browserstack_service import BrowserstackService
+        
+        device_config = {
+            "device": os.getenv("BROWSERSTACK_DEVICE", "Samsung Galaxy S23"),
+            "os_version": os.getenv("BROWSERSTACK_OS_VERSION", "13.0"),
+        }
+        logger.info(f"☁️ BrowserStack device: {device_config['device']} (Android {device_config['os_version']})")
+            
+        BrowserstackService.start_local()
+        
+        if build.browserstack_app_url:
+            app_url = build.browserstack_app_url
+            logger.info(f"Using cached BrowserStack App URL: {app_url}")
+        else:
+            fd, tmp_apk = tempfile.mkstemp(suffix=".apk")
+            os.close(fd)
+            try:
+                logger.info(f"Downloading build from gs://{build.bucket_name}/{build.object_key}")
+                download_apk_from_gcs(build.bucket_name, build.object_key, tmp_apk)
+                app_url = BrowserstackService.upload_app(tmp_apk)
+                
+                logger.info("Updating build with BrowserStack App URL")
+                build.browserstack_app_url = app_url
+            except Exception as e:
+                logger.error(f"Failed to upload to BrowserStack: {e}")
+                raise e
+            finally:
+                try:
+                    os.unlink(tmp_apk)
+                except OSError:
+                    pass
+                    
+        from agent.appium_manager import AppiumManager
+        return AppiumManager(
+            appium_url="https://hub-cloud.browserstack.com/wd/hub",
+            udid=device_udid,
+            browserstack_app_url=app_url,
+            browserstack_device_config=device_config,
+            screenshot_timeout=float(os.getenv("SCREENSHOT_TIMEOUT", "10.0")),
+            screenshot_max_retries=int(os.getenv("SCREENSHOT_MAX_RETRIES", "3")),
+        )
+
     assert_device_connected(device_udid)
 
     fd, tmp_apk = tempfile.mkstemp(suffix=".apk")
