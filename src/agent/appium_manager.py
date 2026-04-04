@@ -34,6 +34,9 @@ class AppiumManager:
         app_activity: str = None,
         screenshot_timeout: float = 10.0,
         screenshot_max_retries: int = 3,
+        *,
+        app_bs_url: Optional[str] = None,
+        bstack_options: Optional[dict] = None,
     ):
         self.appium_url = appium_url
         self.device_name = device_name
@@ -42,6 +45,9 @@ class AppiumManager:
         self.app_activity = app_activity or "com.unity3d.player.UnityPlayerActivity"
         self.screenshot_timeout = screenshot_timeout
         self.screenshot_max_retries = screenshot_max_retries
+        self.app_bs_url = app_bs_url
+        self.bstack_options = bstack_options
+        self._browserstack = bool(app_bs_url and bstack_options)
         self.driver = None
         self._initialize_session()
 
@@ -49,20 +55,33 @@ class AppiumManager:
         try:
             options = UiAutomator2Options()
             options.platform_name = "Android"
-            options.device_name = self.device_name or "Android Emulator"
-            if self.udid:
-                options.udid = self.udid
-                logger.info(f"📱 Using device with UDID: {self.udid}")
-            options.no_reset = True
-            options.full_reset = False
-            options.new_command_timeout = 3600
 
-            if self.app_package:
-                options.app_package = self.app_package
-                options.app_activity = self.app_activity
-                logger.info(f"🎯 Appium will launch app: {self.app_package}")
+            if self._browserstack and self.app_bs_url and self.bstack_options:
+                options.set_capability("app", self.app_bs_url)
+                options.set_capability("bstack:options", self.bstack_options)
+                options.no_reset = True
+                options.full_reset = False
+                # BrowserStack caps session length; keep within hub limits
+                options.new_command_timeout = min(3600, 5400)
+                logger.info(
+                    f"🌐 BrowserStack session: device={self.bstack_options.get('deviceName')} "
+                    f"os={self.bstack_options.get('osVersion')}"
+                )
             else:
-                logger.info(f"🖥️  Appium will control current screen (no app launch)")
+                options.device_name = self.device_name or "Android Emulator"
+                if self.udid:
+                    options.udid = self.udid
+                    logger.info(f"📱 Using device with UDID: {self.udid}")
+                options.no_reset = True
+                options.full_reset = False
+                options.new_command_timeout = 3600
+
+                if self.app_package:
+                    options.app_package = self.app_package
+                    options.app_activity = self.app_activity
+                    logger.info(f"🎯 Appium will launch app: {self.app_package}")
+                else:
+                    logger.info(f"🖥️  Appium will control current screen (no app launch)")
 
             logger.info(f"🔌 Connecting to Appium server at {self.appium_url}...")
             self.driver = webdriver.Remote(self.appium_url, options=options)
@@ -70,7 +89,8 @@ class AppiumManager:
 
         except Exception as e:
             logger.error(f"❌ Failed to start Appium session: {e}")
-            logger.error(f"   Make sure Appium server is running: appium")
+            if not self._browserstack:
+                logger.error(f"   Make sure Appium server is running: appium")
             self.driver = None
 
     def is_connected(self) -> bool:
@@ -196,7 +216,7 @@ class AppiumManager:
                 logger.warning(f"   🔄 Retrying in {wait_time}s...")
                 time.sleep(wait_time)
 
-                if last_error_type == DeviceErrorType.DEVICE_DISCONNECTED:
+                if last_error_type == DeviceErrorType.DEVICE_DISCONNECTED and not self._browserstack:
                     logger.info(f"   🔌 Attempting to reconnect session...")
                     try:
                         self._initialize_session()
@@ -204,6 +224,8 @@ class AppiumManager:
                             logger.error(f"   ❌ Reconnection failed")
                     except Exception as reconnect_error:
                         logger.error(f"   ❌ Reconnection error: {reconnect_error}")
+                elif last_error_type == DeviceErrorType.DEVICE_DISCONNECTED and self._browserstack:
+                    logger.warning("   BrowserStack cloud session cannot be recreated mid-run; not retrying init.")
             else:
                 total_elapsed = time.time() - overall_start
                 final_error_msg = f"Screenshot capture failed after {self.screenshot_max_retries} attempts: {last_error}"

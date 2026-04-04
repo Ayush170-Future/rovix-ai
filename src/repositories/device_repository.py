@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Optional
+from typing import List, Literal, Optional
 
 from models.device import Device
 
@@ -25,6 +25,9 @@ class DeviceRepository:
         adb_port: int = 5037,
         appium_url: str,
         agent_url: Optional[str] = None,
+        provider: Literal["local", "browserstack"] = "local",
+        bs_device_name: Optional[str] = None,
+        bs_os_version: Optional[str] = None,
         enabled: bool = True,
     ) -> Device:
         device = Device(
@@ -36,6 +39,9 @@ class DeviceRepository:
             adb_port=adb_port,
             appium_url=appium_url,
             agent_url=agent_url,
+            provider=provider,
+            bs_device_name=bs_device_name,
+            bs_os_version=bs_os_version,
             enabled=enabled,
             created_at=datetime.utcnow(),
         )

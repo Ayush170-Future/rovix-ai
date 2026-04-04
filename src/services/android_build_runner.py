@@ -7,7 +7,7 @@ import shutil
 import subprocess
 import tempfile
 from datetime import timedelta
-from typing import Any, Optional, Tuple
+from typing import Any, Literal, Optional, Tuple
 
 import requests as _requests
 from google.cloud import storage
@@ -21,6 +21,103 @@ logger = get_logger("agent.services.android_build_runner")
 # Defaults — override per-device via create_action_executor_for_build for multi-host setups.
 ADB_HOST = os.getenv("ADB_HOST", "127.0.0.1")
 ADB_PORT = int(os.getenv("ADB_PORT", "5037"))
+
+BS_UPLOAD_URL = "https://api-cloud.browserstack.com/app-automate/upload"
+
+
+def _parse_bs_response(resp: _requests.Response) -> str:
+    """Parse BrowserStack upload response → bs://... or raise RuntimeError."""
+    if not resp.ok:
+        raise RuntimeError(f"HTTP {resp.status_code}: {resp.text}")
+    try:
+        data = resp.json()
+    except Exception as e:
+        raise RuntimeError(f"invalid JSON: {resp.text[:500]}") from e
+    app_url = data.get("app_url") or data.get("url")
+    if not app_url:
+        raise RuntimeError(f"missing app_url in response: {data}")
+    return app_url
+
+
+def upload_build_to_browserstack(build: Build) -> str:
+    """
+    Upload the build APK to BrowserStack and return bs://... for the Appium `app` capability.
+
+    Primary path:   BrowserStack ingests the APK directly via a signed GCS URL (fastest; no
+                    local download).
+    Fallback path:  If URL ingest fails (e.g. BS cannot reach the signed URL), the APK is
+                    downloaded to a temp file here and sent to BS as a multipart file upload.
+    """
+    user = (os.getenv("BS_USERNAME") or "").strip()
+    key = (os.getenv("BS_ACCESS_KEY") or "").strip()
+    if not user or not key:
+        raise RuntimeError("BS_USERNAME and BS_ACCESS_KEY must be set for BrowserStack")
+
+    # ── Primary: URL ingest ───────────────────────────────────────────────────
+    try:
+        signed_url = generate_signed_url(build.bucket_name, build.object_key)
+        logger.info("Uploading build to BrowserStack (URL ingest from signed GCS link)…")
+        resp = _requests.post(
+            BS_UPLOAD_URL,
+            auth=(user, key),
+            data={"url": signed_url},
+            timeout=900,
+        )
+        app_url = _parse_bs_response(resp)
+        logger.info("BrowserStack app URL obtained (URL ingest)")
+        return app_url
+    except Exception as primary_err:
+        logger.warning(
+            f"BrowserStack URL ingest failed ({primary_err}); "
+            "falling back to local APK download + file upload…"
+        )
+
+    # ── Fallback: download APK locally then multipart-upload ─────────────────
+    fd, tmp_apk = tempfile.mkstemp(suffix=".apk")
+    os.close(fd)
+    try:
+        try:
+            logger.info(
+                f"Downloading APK from gs://{build.bucket_name}/{build.object_key} for BS fallback…"
+            )
+            download_apk_from_gcs(build.bucket_name, build.object_key, tmp_apk)
+        except Exception as e:
+            raise RuntimeError(f"[browserstack_fallback_download] {e}") from e
+
+        try:
+            logger.info("Uploading APK to BrowserStack (file upload fallback)…")
+            with open(tmp_apk, "rb") as apk_fh:
+                resp = _requests.post(
+                    BS_UPLOAD_URL,
+                    auth=(user, key),
+                    files={"file": (f"{build.object_key.split('/')[-1]}", apk_fh, "application/octet-stream")},
+                    timeout=900,
+                )
+            app_url = _parse_bs_response(resp)
+            logger.info("BrowserStack app URL obtained (file upload fallback)")
+            return app_url
+        except Exception as e:
+            raise RuntimeError(f"[browserstack_fallback_upload] {e}") from e
+    finally:
+        try:
+            os.unlink(tmp_apk)
+        except OSError:
+            pass
+
+
+def _resolve_package_from_build_apk(build: Build) -> str:
+    """Download APK once and resolve package name (for session metadata / cleanup)."""
+    fd, tmp_apk = tempfile.mkstemp(suffix=".apk")
+    os.close(fd)
+    try:
+        download_apk_from_gcs(build.bucket_name, build.object_key, tmp_apk)
+        package, _ = resolve_launch_components(tmp_apk, build)
+        return package
+    finally:
+        try:
+            os.unlink(tmp_apk)
+        except OSError:
+            pass
 
 
 def _adb_client(host: Optional[str] = None, port: Optional[int] = None) -> AdbClient:
@@ -302,6 +399,9 @@ def create_action_executor_for_build(
     adb_host: Optional[str] = None,
     adb_port: Optional[int] = None,
     agent_url: Optional[str] = None,
+    provider: Literal["local", "browserstack"] = "local",
+    bs_device_name: Optional[str] = None,
+    bs_os_version: Optional[str] = None,
 ) -> Tuple[Any, str]:
     if build.platform != "android":
         raise RuntimeError(f"Device install path only supports Android builds (got platform={build.platform})")
@@ -317,6 +417,54 @@ def create_action_executor_for_build(
     ap = ADB_PORT if adb_port is None else adb_port
     au = os.getenv("APPIUM_URL", "http://localhost:4723") if appium_url is None else appium_url
     agent_token = os.getenv("AGENT_TOKEN", "")
+
+    # ── BrowserStack: upload at runtime, Appium hub session (no local ADB) ────
+    if provider == "browserstack":
+        use_appium = True  # cloud path requires Appium client
+        bs_user = (os.getenv("BS_USERNAME") or "").strip()
+        bs_key = (os.getenv("BS_ACCESS_KEY") or "").strip()
+        dname = (bs_device_name or os.getenv("BS_DEVICE_NAME") or "").strip()
+        osver = (bs_os_version or os.getenv("BS_OS_VERSION") or "").strip()
+        if not dname or not osver:
+            raise RuntimeError(
+                "BrowserStack requires bs_device_name and bs_os_version on the Device, "
+                "or BS_DEVICE_NAME and BS_OS_VERSION in the environment."
+            )
+        try:
+            bs_app_url = upload_build_to_browserstack(build)
+        except Exception as e:
+            raise RuntimeError(f"[browserstack] {e}") from e
+
+        try:
+            package = _resolve_package_from_build_apk(build)
+        except Exception as e:
+            raise RuntimeError(f"[browserstack_package] {e}") from e
+
+        from agent.appium_manager import AppiumManager
+
+        bstack_options = {
+            "userName": bs_user,
+            "accessKey": bs_key,
+            "deviceName": dname,
+            "osVersion": osver,
+        }
+        hub = au.strip() or "https://hub-cloud.browserstack.com/wd/hub"
+
+        logger.info(f"Starting BrowserStack Appium session (hub={hub}, package={package})")
+        return (
+            AppiumManager(
+                appium_url=hub,
+                device_name=None,
+                udid=None,
+                app_package=None,
+                app_activity=None,
+                screenshot_timeout=float(os.getenv("SCREENSHOT_TIMEOUT", "10.0")),
+                screenshot_max_retries=int(os.getenv("SCREENSHOT_MAX_RETRIES", "3")),
+                app_bs_url=bs_app_url,
+                bstack_options=bstack_options,
+            ),
+            package,
+        )
 
     # ── Step 1: device check ──────────────────────────────────────────────────
     try:
@@ -423,4 +571,4 @@ def create_action_executor_for_build(
     )
 
 
-__all__ = ["create_action_executor_for_build", "device_cleanup_after_run"]
+__all__ = ["create_action_executor_for_build", "device_cleanup_after_run", "upload_build_to_browserstack"]

@@ -72,6 +72,7 @@ class AgentSession:
     adb_host: str
     adb_port: int
     context_service: ContextService
+    provider: str = "local"  # "local" | "browserstack"
     action_executor: Any = None  # ADBManager | AppiumManager — set after APK install
     installed_package: str = ""
     force_annotate: bool = False
@@ -191,6 +192,7 @@ class ExecutionService:
             adb_host=device.adb_host,
             adb_port=device.adb_port,
             context_service=context_svc,
+            provider=device.provider,
         )
 
         try:
@@ -198,11 +200,14 @@ class ExecutionService:
                 create_action_executor_for_build,
                 device_udid=device.udid,
                 build=build,
-                use_appium=USE_APPIUM,
+                use_appium=USE_APPIUM or device.provider == "browserstack",
                 appium_url=device.appium_url,
                 adb_host=device.adb_host,
                 adb_port=device.adb_port,
                 agent_url=device.agent_url,
+                provider=device.provider,
+                bs_device_name=device.bs_device_name,
+                bs_os_version=device.bs_os_version,
             )
             session.action_executor = executor
             session.installed_package = installed_pkg
@@ -505,12 +510,20 @@ class ExecutionService:
         if not session:
             return
         try:
-            device_cleanup_after_run(
-                session.device_udid,
-                session.installed_package,
-                adb_host=session.adb_host,
-                adb_port=session.adb_port,
-            )
+            if session.provider == "browserstack":
+                ex = session.action_executor
+                if ex is not None and hasattr(ex, "close"):
+                    try:
+                        ex.close()
+                    except Exception as e:
+                        logger.warning(f"BrowserStack Appium close failed (non-fatal): {e}")
+            else:
+                device_cleanup_after_run(
+                    session.device_udid,
+                    session.installed_package,
+                    adb_host=session.adb_host,
+                    adb_port=session.adb_port,
+                )
         except Exception as e:
             logger.warning(f"Post-run device cleanup failed (non-fatal): {e}")
         TodoPersistenceService.clear_todo_list(session.session_id)

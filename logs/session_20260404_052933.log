@@ -1,0 +1,2 @@
+2026-04-04 05:29:38 | INFO     | agent.database                      | Connected to MongoDB: game_testing
+2026-04-04 05:29:38 | INFO     | agent.services.execution_service    | 🤖 Using Anthropic model: claude-sonnet-4-6 (Vertex AI, location=global)
