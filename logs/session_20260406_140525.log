@@ -1,0 +1,97 @@
+2026-04-06 14:05:31 | INFO     | agent.database                      | Connected to MongoDB: game_testing
+2026-04-06 14:05:31 | INFO     | agent.services.execution_service    | 🤖 Using Google model: gemini-3-pro-preview
+2026-04-06 14:05:31 | INFO     | agent.services.execution_service    | Marked 1 stale execution run(s) as failed on startup
+2026-04-06 14:05:50 | INFO     | agent.services.android_build_runner | Downloading APK from gs://rovix_ai_bucket/game_builds/69a1a52bddccbd191280e7eb/69d28eb0cf05947fe6b5670a/android/20260405180924_12dd91d8ed4c4ca9a0938ae0a4cbe62d_uptodown-com.playrix.homescapes.apk (provider=local)
+2026-04-06 14:05:57 | INFO     | agent.services.android_build_runner | Installing APK on RZCW31HH47R (package=com.uptodown)
+2026-04-06 14:05:57 | INFO     | agent.services.android_build_runner | Launching com.uptodown / com.uptodown.activities.MainActivity
+2026-04-06 14:05:57 | INFO     | agent.appium_manager                | 📱 Using device with UDID: RZCW31HH47R
+2026-04-06 14:05:57 | INFO     | agent.appium_manager                | 🎯 Appium will launch app: com.uptodown
+2026-04-06 14:05:57 | INFO     | agent.appium_manager                | 🔌 Connecting to Appium server at http://127.0.0.1:4723...
+2026-04-06 14:05:57 | ERROR    | agent.appium_manager                | ❌ Failed to start Appium session: Message: Error getting device API level. Original error: Error executing adbExec. Original error: 'Command '/Users/ayushsingh/Library/Android/sdk/platform-tools/adb -P 5037 -s RZCW31HH47R shell getprop ro.build.version.sdk' exited with code 1'; Command output: adb: device unauthorized.
+This adb server's $ADB_VENDOR_KEYS is not set
+Try 'adb kill-server' if that seems wrong.
+Otherwise check for a confirmation dialog on your device.
+
+Stacktrace:
+UnknownError: Error getting device API level. Original error: Error executing adbExec. Original error: 'Command '/Users/ayushsingh/Library/Android/sdk/platform-tools/adb -P 5037 -s RZCW31HH47R shell getprop ro.build.version.sdk' exited with code 1'; Command output: adb: device unauthorized.
+This adb server's $ADB_VENDOR_KEYS is not set
+Try 'adb kill-server' if that seems wrong.
+Otherwise check for a confirmation dialog on your device.
+
+    at getResponseForW3CError (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/protocol/errors.ts:1103:34)
+    at asyncHandler (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/protocol/protocol.ts:507:57)
+The above error is caused by
+Error: Error getting device API level. Original error: Error executing adbExec. Original error: 'Command '/Users/ayushsingh/Library/Android/sdk/platform-tools/adb -P 5037 -s RZCW31HH47R shell getprop ro.build.version.sdk' exited with code 1'; Command output: adb: device unauthorized.
+This adb server's $ADB_VENDOR_KEYS is not set
+Try 'adb kill-server' if that seems wrong.
+Otherwise check for a confirmation dialog on your device.
+
+    at ADB.getApiLevel (/Users/ayushsingh/.appium/node_modules/appium-uiautomator2-driver/node_modules/appium-adb/lib/tools/general-commands.ts:90:13)
+    at AndroidUiautomator2Driver.deleteSession (/Users/ayushsingh/.appium/node_modules/appium-uiautomator2-driver/lib/driver.ts:928:12)
+    at AndroidUiautomator2Driver.createSession (/Users/ayushsingh/.appium/node_modules/appium-uiautomator2-driver/lib/driver.ts:416:7)
+    at AppiumDriver.createSession (/opt/homebrew/lib/node_modules/appium/lib/appium.js:360:35)
+2026-04-06 14:05:57 | ERROR    | agent.appium_manager                |    Make sure Appium server is running: appium
+2026-04-06 14:05:57 | INFO     | agent.services.execution_service    | Starting execution 69d37066d6e19334a26f12c7 on device RZCW31HH47R
+2026-04-06 14:05:57 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 0 | Run 69d37066
+================================================================================
+2026-04-06 14:05:57 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[PENDING] [s1] [ACTION] Just complete the match 3 game within total moves.
+[PENDING] [step-1775432926299] [VERIFY] Verify if the game ends
+============================================================
+2026-04-06 14:05:57 | ERROR    | agent.services.execution_service    | ❌ Screenshot capture failed: No Appium session active (type: DeviceErrorType.DEVICE_DISCONNECTED, retries: 0)
+2026-04-06 14:05:57 | ERROR    | agent.services.execution_service    | Execution 69d37066d6e19334a26f12c7 aborted: No Appium session active
+2026-04-06 14:05:57 | WARNING  | agent.services.android_build_runner | device_cleanup_after_run: HOME keyevent failed: adb: device unauthorized.
+This adb server's $ADB_VENDOR_KEYS is not set
+Try 'adb kill-server' if that seems wrong.
+Otherwise check for a confirmation dialog on your device.
+2026-04-06 14:05:57 | WARNING  | agent.services.android_build_runner | device_cleanup_after_run: force-stop failed for com.uptodown: adb: device unauthorized.
+This adb server's $ADB_VENDOR_KEYS is not set
+Try 'adb kill-server' if that seems wrong.
+Otherwise check for a confirmation dialog on your device.
+2026-04-06 14:07:16 | INFO     | agent.services.android_build_runner | Uploading build to BrowserStack (URL ingest from signed GCS link)…
+2026-04-06 14:07:27 | WARNING  | agent.services.android_build_runner | BrowserStack URL ingest failed (HTTP 422: {"error":"[BROWSERSTACK_UNPROCESSABLE_ENTITY] We could not upload your requested app to our platform due to internal reasons. Please reach out to our support team in case of any concerns. https://www.browserstack.com/contact"}); falling back to local APK download + file upload…
+2026-04-06 14:07:27 | INFO     | agent.services.android_build_runner | Downloading APK from gs://rovix_ai_bucket/game_builds/69a1a52bddccbd191280e7eb/69d28eb0cf05947fe6b5670a/android/20260405180924_12dd91d8ed4c4ca9a0938ae0a4cbe62d_uptodown-com.playrix.homescapes.apk for BS fallback…
+2026-04-06 14:07:34 | INFO     | agent.services.android_build_runner | Uploading APK to BrowserStack (file upload fallback)…
+2026-04-06 14:07:40 | ERROR    | agent.services.execution_service    | Build prepare / install failed for run 69d370bbd6e19334a26f12c8: [browserstack] [browserstack_fallback_upload] HTTP 422: {"error":"[BROWSERSTACK_UNPROCESSABLE_ENTITY] We could not upload your requested app to our platform due to internal reasons. Please reach out to our support team in case of any concerns. https://www.browserstack.com/contact"}
+Traceback (most recent call last):
+  File "/Users/ayushsingh/Documents/programming/alttester/src/agent/context/../../services/android_build_runner.py", line 96, in upload_build_to_browserstack
+    app_url = _parse_bs_response(resp)
+  File "/Users/ayushsingh/Documents/programming/alttester/src/agent/context/../../services/android_build_runner.py", line 31, in _parse_bs_response
+    raise RuntimeError(f"HTTP {resp.status_code}: {resp.text}")
+RuntimeError: HTTP 422: {"error":"[BROWSERSTACK_UNPROCESSABLE_ENTITY] We could not upload your requested app to our platform due to internal reasons. Please reach out to our support team in case of any concerns. https://www.browserstack.com/contact"}
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/ayushsingh/Documents/programming/alttester/src/agent/context/../../services/android_build_runner.py", line 434, in create_action_executor_for_build
+    bs_app_url = upload_build_to_browserstack(build)
+  File "/Users/ayushsingh/Documents/programming/alttester/src/agent/context/../../services/android_build_runner.py", line 100, in upload_build_to_browserstack
+    raise RuntimeError(f"[browserstack_fallback_upload] {e}") from e
+RuntimeError: [browserstack_fallback_upload] HTTP 422: {"error":"[BROWSERSTACK_UNPROCESSABLE_ENTITY] We could not upload your requested app to our platform due to internal reasons. Please reach out to our support team in case of any concerns. https://www.browserstack.com/contact"}
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/ayushsingh/Documents/programming/alttester/src/services/execution_service.py", line 200, in start_execution
+    executor, installed_pkg = await asyncio.to_thread(
+                              ^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<11 lines>...
+    )
+    ^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/asyncio/threads.py", line 25, in to_thread
+    return await loop.run_in_executor(None, func_call)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 86, in run
+    result = ctx.run(self.task)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py", line 73, in run
+    return fn(*args, **kwargs)
+  File "/Users/ayushsingh/Documents/programming/alttester/src/agent/context/../../services/android_build_runner.py", line 436, in create_action_executor_for_build
+    raise RuntimeError(f"[browserstack] {e}") from e
+RuntimeError: [browserstack] [browserstack_fallback_upload] HTTP 422: {"error":"[BROWSERSTACK_UNPROCESSABLE_ENTITY] We could not upload your requested app to our platform due to internal reasons. Please reach out to our support team in case of any concerns. https://www.browserstack.com/contact"}

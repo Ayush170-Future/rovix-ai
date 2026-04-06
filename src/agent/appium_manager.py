@@ -77,8 +77,8 @@ class AppiumManager:
                 options.new_command_timeout = 3600
 
                 if self.app_package:
-                    options.app_package = self.app_package
-                    options.app_activity = self.app_activity
+                    # options.app_package = self.app_package
+                    # options.app_activity = self.app_activity
                     logger.info(f"🎯 Appium will launch app: {self.app_package}")
                 else:
                     logger.info(f"🖥️  Appium will control current screen (no app launch)")

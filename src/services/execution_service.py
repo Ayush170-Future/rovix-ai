@@ -63,7 +63,6 @@ class FatalExecutionError(Exception):
 
 
 # ── Session state ────────────────────────────────────────────────────────────
-
 @dataclass
 class AgentSession:
     execution_run_id: str
@@ -72,10 +71,11 @@ class AgentSession:
     adb_host: str
     adb_port: int
     context_service: ContextService
-    provider: str = "local"  # "local" | "browserstack"
+    provider: str = "local"  # "local" | "vm" | "browserstack"
     action_executor: Any = None  # ADBManager | AppiumManager — set after APK install
     installed_package: str = ""
     force_annotate: bool = False
+    vision_prompt: str = None  # Game-specific vision detector prompt; None = use detector default
     step_count: int = 0
     collected_results: List[AssertionResult] = field(default_factory=list)
     consecutive_device_failures: int = 0
@@ -156,7 +156,7 @@ class ExecutionService:
         return VisionElementDetector(
             api_key=os.getenv("GOOGLE_API_KEY"),
             model_name="gemini-robotics-er-1.5-preview",
-            timeout=float(os.getenv("VISION_TIMEOUT", "45.0")),
+            timeout=float(os.getenv("VISION_TIMEOUT", "70.0")),
             max_retries=int(os.getenv("VISION_MAX_RETRIES", "3")),
         )
 
@@ -193,6 +193,7 @@ class ExecutionService:
             adb_port=device.adb_port,
             context_service=context_svc,
             provider=device.provider,
+            vision_prompt=game.vision_prompt,
         )
 
         try:
@@ -304,6 +305,7 @@ class ExecutionService:
             action_handler=None,
             sdk_enabled=False,
             force_annotate=session.force_annotate,
+            vision_prompt=session.vision_prompt,
         )
 
         # Upload runs concurrently with LLM inference; we await the result after LLM returns.

@@ -20,16 +20,19 @@ BS_DEFAULT_HUB = "https://hub-cloud.browserstack.com/wd/hub"
 
 
 class RegisterDeviceRequest(BaseModel):
-    provider: Literal["local", "browserstack"] = "local"
+    provider: Literal["local", "vm", "browserstack"] = "local"
     device_id: str = Field(..., min_length=1, max_length=128)
     label: str = Field(..., min_length=1, max_length=256)
-    # local: real ADB serial. browserstack: synthetic unique id per org (e.g. browserstack-pixel9)
+    # local/vm: real ADB serial (e.g. "R38M20LHKEX" or "emulator-5554").
+    # browserstack: synthetic unique id per org (e.g. "browserstack-pixel9")
     udid: Optional[str] = Field(default=None, max_length=256)
     adb_host: Optional[str] = Field(default=None, min_length=1)
     adb_port: int = Field(default=5037, ge=1, le=65535)
     appium_url: Optional[str] = Field(default=None, min_length=1)
-    agent_url: Optional[str] = None  # URL of device_agent.py sidecar on the VM (local only)
-    bs_device_name: Optional[str] = None  # e.g. "Google Pixel 9" (or "Pixel 9" — normalized to that)
+    # VM only: URL of device_agent.py sidecar (e.g. "http://10.0.0.11:8080").
+    # Must be None for local and browserstack providers.
+    agent_url: Optional[str] = None
+    bs_device_name: Optional[str] = None  # e.g. "Google Pixel 9"
     bs_os_version: Optional[str] = None  # e.g. "16.0"
     enabled: bool = True
 
@@ -38,6 +41,12 @@ class RegisterDeviceRequest(BaseModel):
         if self.provider == "local":
             if not self.udid or not self.adb_host or not self.appium_url:
                 raise ValueError("local devices require udid, adb_host, and appium_url")
+            if self.agent_url:
+                raise ValueError("agent_url must not be set for local provider (use vm provider for agent-delegated installs)")
+            return self
+        if self.provider == "vm":
+            if not self.udid or not self.adb_host or not self.appium_url:
+                raise ValueError("vm devices require udid, adb_host, and appium_url")
             return self
         # browserstack
         if not self.udid or not self.udid.strip():
@@ -168,6 +177,7 @@ async def device_health(device_id: str, org: Organization = Depends(get_org)):
             "note": "BrowserStack has no local ADB; hub /status checked for appium_reachable.",
         }
 
+    # local and vm both use ADB for health checks
     def _probe_adb() -> Dict[str, Any]:
         try:
             client = AdbClient(host=device.adb_host, port=device.adb_port)
@@ -190,7 +200,7 @@ async def device_health(device_id: str, org: Organization = Depends(get_org)):
 
     return {
         "device_id": device.device_id,
-        "provider": "local",
+        "provider": device.provider,
         "adb_reachable": adb_info["adb_reachable"],
         "appium_reachable": appium_reachable,
         "device_online": adb_info["device_online"],

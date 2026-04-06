@@ -1,0 +1,135 @@
+2026-04-06 13:16:19 | INFO     | agent.database                      | Connected to MongoDB: game_testing
+2026-04-06 13:16:19 | INFO     | agent.services.execution_service    | 🤖 Using Google model: gemini-3-pro-preview
+2026-04-06 13:16:19 | INFO     | agent.services.execution_service    | Marked 1 stale execution run(s) as failed on startup
+2026-04-06 13:30:28 | INFO     | agent.services.android_build_runner | Downloading APK from gs://rovix_ai_bucket/game_builds/69a1a52bddccbd191280e7eb/69d28eb0cf05947fe6b5670a/android/20260405180924_12dd91d8ed4c4ca9a0938ae0a4cbe62d_uptodown-com.playrix.homescapes.apk (provider=local)
+2026-04-06 13:30:35 | INFO     | agent.services.android_build_runner | Installing APK on RZCW31HH47R (package=com.uptodown)
+2026-04-06 13:30:35 | INFO     | agent.services.android_build_runner | Launching com.uptodown / com.uptodown.activities.MainActivity
+2026-04-06 13:30:35 | INFO     | agent.appium_manager                | 📱 Using device with UDID: RZCW31HH47R
+2026-04-06 13:30:35 | INFO     | agent.appium_manager                | 🎯 Appium will launch app: com.uptodown
+2026-04-06 13:30:35 | INFO     | agent.appium_manager                | 🔌 Connecting to Appium server at http://127.0.0.1:4723...
+2026-04-06 13:30:40 | INFO     | agent.appium_manager                | ✅ Appium session started: 8896e01a-9821-4475-83eb-1a79c39147b3
+2026-04-06 13:30:40 | INFO     | agent.services.execution_service    | Starting execution 69d3681c393be16e18adda61 on device RZCW31HH47R
+2026-04-06 13:30:40 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 0 | Run 69d3681c
+================================================================================
+2026-04-06 13:30:40 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[PENDING] [s1] [ACTION] Just complete the match 3 game within total moves.
+[PENDING] [step-1775432926299] [VERIFY] Verify if the game ends
+============================================================
+2026-04-06 13:30:42 | INFO     | agent.services.execution_service    | 💾 step_0.png (captured in 1.60s)
+2026-04-06 13:30:42 | INFO     | agent.context.context_service       | 🆕 No cached annotation yet, running first annotation
+2026-04-06 13:30:42 | INFO     | agent.vision_element_detector       | 🔍 Vision detection
+2026-04-06 13:31:05 | INFO     | agent.vision_element_detector       | ⏱️  Vision API response time: 23.22s
+2026-04-06 13:31:05 | INFO     | agent.vision_element_detector       | ✅ Detected 70 elements via vision
+2026-04-06 13:31:05 | DEBUG    | agent.context.context_service       | 💾 Annotation cache updated for step 0
+2026-04-06 13:31:05 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-04-06 13:31:06 | INFO     | agent.vision_element_detector       | 📸 Annotated image saved
+2026-04-06 13:34:11 | INFO     | agent.services.execution_service    | ⏱️  LLM response time: 186.12s
+2026-04-06 13:34:11 | INFO     | agent.services.execution_service    | ☁️  Screenshot uploaded: /api/executions/69d3681c393be16e18adda61/steps/0/screenshot
+2026-04-06 13:34:11 | INFO     | agent.services.execution_service    | ✅ Agent decision received
+2026-04-06 13:34:11 | INFO     | agent.services.execution_service    |    📝 Game state: The match-3 level is in progress with 59 floor tiles left to turn green. The board is divided into two halves with chained pieces blocking the center and middle sections. Green grass (activated tiles) is currently located at the bottom corners. No special items are present on the board.
+2026-04-06 13:34:11 | INFO     | agent.services.execution_service    |    🤔 Reasoning: Scanned the entire board for valid matches. There are no available matches on the boundary of the green floor tiles. The only valid match available is in the left section: swapping the Blue book at (1042, 321) left to (922, 321) creates a vertical line of 3 Blue books. This match is adjacent to two Yellow chains, so it will break them and open up the board for future moves.
+2026-04-06 13:34:11 | INFO     | agent.services.execution_service    |    🔍 Force annotate: False
+2026-04-06 13:34:11 | INFO     | agent.services.execution_service    |    🎯 Actions count: 2
+2026-04-06 13:34:11 | INFO     | agent.services.execution_service    |    🏁 End game: False
+2026-04-06 13:34:11 | INFO     | agent.services.execution_service    |    📋 Test results: []
+2026-04-06 13:34:11 | INFO     | agent.services.execution_service    |    📊 Token usage — Input: 7656, Output: 23734, Total: 31390
+2026-04-06 13:34:11 | INFO     | agent.services.execution_service    | 💾 ExecutionStep 0 DB write dispatched (background)
+2026-04-06 13:34:11 | INFO     | agent.services.execution_service    |    action (1/2): swipe x=1042 y=321 duration=0.5
+2026-04-06 13:34:11 | INFO     | agent.appium_manager                | 🔄 SWIPE (Appium): (1042, 321) → (922, 321) duration=0.5s
+2026-04-06 13:34:12 | INFO     | agent.appium_manager                | 🔄 SWIPE (Appium): (1042, 321) → (922, 321) duration=0.5s
+2026-04-06 13:34:12 | INFO     | agent.services.execution_service    |    todo_write (2/2): updated 2 tasks {'pending': 1, 'in_progress': 1, 'completed': 0, 'cancelled': 0, 'actions': 1, 'verifications': 1}
+2026-04-06 13:34:14 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 1 | Run 69d3681c
+================================================================================
+2026-04-06 13:34:14 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[IN_PROGRESS] [s1] [ACTION] Just complete the match 3 game within total moves.
+[PENDING] [step-1775432926299] [VERIFY] Verify if the game ends
+============================================================
+2026-04-06 13:34:17 | INFO     | agent.services.execution_service    | 💾 step_1.png (captured in 2.80s)
+2026-04-06 13:34:17 | DEBUG    | agent.context.context_service       | 🔍 Annotation cache: dhash distance=3 (threshold=15)
+2026-04-06 13:34:17 | INFO     | agent.context.context_service       | ♻️  Reusing cached annotations from step 0 (distance=3 < 15)
+2026-04-06 13:34:17 | DEBUG    | agent.context.context_service       |    Cached text: Detected interactive elements on screen:
+- Locked level icon at (2162, 165) bbox: [2087, 108, 2237, 222] - Locked level icon
+- Locked level icon at (2162, 314) bbox: [2087, 244, 2237, 385] - Locked level icon
+- Locked level icon at (2162, 476) bbox: [2087, 406, 2237, 546] - Locked level icon
+- Locked level icon at (2162, 638) bbox: [2087, 568, 2237, 709] - Locked level icon
+- Locked level icon at (2162, 800) bbox: [2087, 730, 2237, 871] - Locked level icon
+- Settings icon at (2162, 939) bbox: [2087, 885, 2237, 993] - Settings icon
+- Buy more moves button at (224, 939) bbox: [120, 888, 329, 990] - Buy more moves button
+- Green cup game piece at (777, 221) bbox: [717, 183, 837, 259] - Green cup game piece
+- Blue book game piece at (897, 221) bbox: [837, 183, 958, 259] - Blue book game piece
+- Yellow chain game piece at (1018, 221) bbox: [958, 183, 1078, 259] - Yellow chain game piece
+- Yellow lamp game piece at (1138, 221) bbox: [1078, 183, 1199, 259] - Yellow lamp game piece
+- Yellow lamp game piece at (1331, 221) bbox: [1271, 183, 1391, 259] - Yellow lamp game piece
+- Green chain game piece at (1451, 221) bbox: [1391, 183, 1512, 259] - Green chain game piece
+- Red bow game piece at (1572, 221) bbox: [1512, 183, 1632, 259] - Red bow game piece
+- Red bow game piece at (1692, 221) bbox: [1632, 183, 1753, 259] - Red bow game piece
+- Pink button game piece at (681, 321) bbox: [621, 284, 741, 359] - Pink button game piece
+- Yellow lamp game piece at (801, 321) bbox: [741, 284, 862, 359] - Yellow lamp game piece
+- Green cup game piece at (922, 321) bbox: [862, 284, 982, 359] - Green cup game piece
+- Blue book game piece at (1042, 321) bbox: [982, 284, 1102, 359] - Blue book game piece
+- Green cup game piece at (1162, 321) bbox: [1102, 284, 1223, 359] - Green cup game piece
+- Green cup game piece at (1331, 321) bbox: [1271, 284, 1391, 359] - Green cup game piece
+- Red chain game piece at (1451, 321) bbox: [1391, 284, 1512, 359] - Red chain game piece
+- Blue book game piece at (1572, 321) bbox: [1512, 284, 1632, 359] - Blue book game piece
+- Pink button game piece at (1692, 321) bbox: [1632, 284, 1753, 359] - Pink button game piece
+- Red bow game piece at (1813, 321) bbox: [1753, 284, 1873, 359] - Red bow game piece
+- Pink button game piece at (681, 423) bbox: [621, 385, 741, 461] - Pink button game piece
+- Yellow lamp game piece at (801, 423) bbox: [741, 385, 862, 461] - Yellow lamp game piece
+- Blue book game piece at (922, 423) bbox: [862, 385, 982, 461] - Blue book game piece
+- Yellow chain game piece at (1042, 423) bbox: [982, 385, 1102, 461] - Yellow chain game piece
+- Pink chain game piece at (1162, 423) bbox: [1102, 385, 1223, 461] - Pink chain game piece
+- Red chain game piece at (1331, 423) bbox: [1271, 385, 1391, 461] - Red chain game piece
+- Yellow lamp game piece at (1451, 423) bbox: [1391, 385, 1512, 461] - Yellow lamp game piece
+- Yellow lamp game piece at (1572, 423) bbox: [1512, 385, 1632, 461] - Yellow lamp game piece
+- Pink button game piece at (1692, 423) bbox: [1632, 385, 1753, 461] - Pink button game piece
+- Green cup game piece at (1813, 423) bbox: [1753, 385, 1873, 461] - Green cup game piece
+- Red bow game piece at (681, 523) bbox: [621, 486, 741, 561] - Red bow game piece
+- Green cup game piece at (801, 523) bbox: [741, 486, 862, 561] - Green cup game piece
+- Pink button game piece at (922, 523) bbox: [862, 486, 982, 561] - Pink button game piece
+- Green grass game piece at (1042, 523) bbox: [982, 486, 1102, 561] - Green grass game piece
+- Green grass game piece at (1162, 523) bbox: [1102, 486, 1223, 561] - Green grass game piece
+- Green grass game piece at (1331, 523) bbox: [1271, 486, 1391, 561] - Green grass game piece
+- Green grass game piece at (1451, 523) bbox: [1391, 486, 1512, 561] - Green grass game piece
+- Red chain game piece at (1572, 523) bbox: [1512, 486, 1632, 561] - Red chain game piece
+- Blue book game piece at (1692, 523) bbox: [1632, 486, 1753, 561] - Blue book game piece
+- Blue book game piece at (1813, 523) bbox: [1753, 486, 1873, 561] - Blue book game piece
+- Yellow lamp game piece at (681, 624) bbox: [621, 586, 741, 662] - Yellow lamp game piece
+- Blue book game piece at (801, 624) bbox: [741, 586, 862, 662] - Blue book game piece
+- Pink button game piece at (922, 624) bbox: [862, 586, 982, 662] - Pink button game piece
+- Yellow chain game piece at (1042, 624) bbox: [982, 586, 1102, 662] - Yellow chain game piece
+- Pink chain game piece at (1162, 624) bbox: [1102, 586, 1223, 662] - Pink chain game piece
+- Red chain game piece at (1331, 624) bbox: [1271, 586, 1391, 662] - Red chain game piece
+- Yellow lamp game piece at (1451, 624) bbox: [1391, 586, 1512, 662] - Yellow lamp game piece
+- Blue book game piece at (1572, 624) bbox: [1512, 586, 1632, 662] - Blue book game piece
+- Green chain game piece at (1692, 624) bbox: [1632, 586, 1753, 662] - Green chain game piece
+- Yellow lamp game piece at (1813, 624) bbox: [1753, 586, 1873, 662] - Yellow lamp game piece
+- Red bow game piece at (681, 725) bbox: [621, 687, 741, 763] - Red bow game piece
+- Pink button game piece at (801, 725) bbox: [741, 687, 862, 763] - Pink button game piece
+- Green chain game piece at (922, 725) bbox: [862, 687, 982, 763] - Green chain game piece
+- Blue chain game piece at (1042, 725) bbox: [982, 687, 1102, 763] - Blue chain game piece
+- Blue chain game piece at (1451, 725) bbox: [1391, 687, 1512, 763] - Blue chain game piece
+- Yellow lamp game piece at (1572, 725) bbox: [1512, 687, 1632, 763] - Yellow lamp game piece
+- Pink button game piece at (1692, 725) bbox: [1632, 687, 1753, 763] - Pink button game piece
+- Red bow game piece at (1813, 725) bbox: [1753, 687, 1873, 763] - Red bow game piece
+- Red bow game piece at (801, 826) bbox: [741, 788, 862, 864] - Red bow game piece
+- Red bow game piece at (922, 826) bbox: [862, 788, 982, 864] - Red bow game piece
+- Green chain game piece at (1042, 826) bbox: [982, 788, 1102, 864] - Green chain game piece
+- Green chain game piece at (1451, 826) bbox: [1391, 788, 1512, 864] - Green chain game piece
+- Pink button game piece at (1572, 826) bbox: [1512, 788, 1632, 864] - Pink button game piece
+- Yellow lamp game piece at (1692, 826) bbox: [1632, 788, 1753, 864] - Yellow lamp game piece
+- Green grass game piece at (245, 613) bbox: [187, 572, 303, 655] - Green grass game piece
+2026-04-06 13:34:17 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...

@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from typing import Literal, Optional
 
+from agent.vision_element_detector import DEFAULT_VISION_PROMPT
 from dependencies import get_org
 from models.organization import Organization
 from repositories.game_repository import GameRepository
@@ -14,12 +15,15 @@ class CreateGameRequest(BaseModel):
     name: str
     description: str = ""
     gameplay: str = ""
+    vision_prompt: Optional[str] = None  # Custom vision detector prompt; None = use default
     platform: Literal["android", "ios", "unity"] = "android"
 
 
 class UpdateGameRequest(BaseModel):
     description: Optional[str] = None
     gameplay: Optional[str] = None
+    vision_prompt: Optional[str] = None  # Set to "" to clear back to default
+
 
 
 @router.post("")
@@ -35,6 +39,7 @@ async def create_game(
         name=request.name,
         description=request.description,
         gameplay=request.gameplay,
+        vision_prompt=request.vision_prompt or DEFAULT_VISION_PROMPT,
         platform=request.platform,
     )
     return {
@@ -43,6 +48,7 @@ async def create_game(
         "name": game.name,
         "description": game.description,
         "gameplay": game.gameplay,
+        "vision_prompt": game.vision_prompt,
         "platform": game.platform,
         "created_at": game.created_at,
     }
@@ -60,6 +66,7 @@ async def list_games(org_id: str, org: Organization = Depends(get_org)):
             "name": g.name,
             "description": g.description,
             "gameplay": g.gameplay,
+            "vision_prompt": g.vision_prompt,
             "platform": g.platform,
             "created_at": g.created_at,
         }
@@ -81,16 +88,20 @@ async def patch_game(
     if not game or game.org_id != org_id:
         raise HTTPException(status_code=404, detail="Game not found")
 
-    if request.description is None and request.gameplay is None:
+    if request.description is None and request.gameplay is None and request.vision_prompt is None:
         raise HTTPException(
             status_code=400,
-            detail="Provide at least one field: description or gameplay",
+            detail="Provide at least one field: description, gameplay, or vision_prompt",
         )
+
+    # Empty string means "reset to default prompt"
+    vision_prompt = DEFAULT_VISION_PROMPT if request.vision_prompt == "" else request.vision_prompt
 
     game = await _repo.update_fields(
         game,
         description=request.description,
         gameplay=request.gameplay,
+        vision_prompt=vision_prompt,
     )
 
     return {
@@ -99,6 +110,7 @@ async def patch_game(
         "name": game.name,
         "description": game.description,
         "gameplay": game.gameplay,
+        "vision_prompt": game.vision_prompt,
         "platform": game.platform,
         "created_at": game.created_at,
     }

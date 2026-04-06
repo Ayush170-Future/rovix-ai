@@ -16,6 +16,23 @@ except ImportError:
 
 logger = get_logger("agent.vision_element_detector")
 
+DEFAULT_VISION_PROMPT = """You are an expert UI detection system. Your task is to extract ALL INTERACTABLE elements (buttons, icons, text fields, tabs, sliders, game objects) from the provided screenshot.
+Accuracy and exhaustive detection are critical for the downstream agent. Do not include static non-interactable decorations or background text.
+
+Provide the exact bounding box and a concise classification for each element. The label should be 2-5 words describing WHAT it is and WHAT it does (e.g., "Settings menu icon", "Submit login button", "Red health potion").
+To minimize latency, output ONLY a valid JSON list of objects with no markdown formatting. Do not provide detailed descriptions.
+
+Output format:
+[
+  {
+    "bounding_box": [y_min, x_min, y_max, x_max],
+    "label": "2-5 word description of element and function"
+  }
+]
+
+Bounding boxes must be in [y_min, x_min, y_max, x_max] format normalized between 0-1000.
+"""
+
 
 @dataclass
 class VisionDetectionResult:
@@ -44,24 +61,7 @@ class VisionElementDetector:
         self.max_image_size = max_image_size
         self.image_quality = image_quality
         self.client = genai.Client(api_key=api_key)
-        
-        self.prompt = """
-You are an expert UI detection system. Your task is to extract ALL INTERACTABLE elements (buttons, icons, text fields, tabs, sliders, game objects) from the provided screenshot.
-Accuracy and exhaustive detection are critical for the downstream agent. Do not include static non-interactable decorations or background text.
-
-Provide the exact bounding box and a concise classification for each element. The label should be 2-5 words describing WHAT it is and WHAT it does (e.g., "Settings menu icon", "Submit login button", "Red health potion").
-To minimize latency, output ONLY a valid JSON list of objects with no markdown formatting. Do not provide detailed descriptions.
-
-Output format:
-[
-  {
-    "bounding_box": [y_min, x_min, y_max, x_max],
-    "label": "2-5 word description of element and function"
-  }
-]
-
-Bounding boxes must be in [y_min, x_min, y_max, x_max] format normalized between 0-1000.
-"""
+        self.prompt = DEFAULT_VISION_PROMPT
 
     def _parse_gemini_response(self, response_text: str) -> List[Dict]:
         cleaned = response_text.replace("```json", "").replace("```", "").strip()
@@ -140,13 +140,13 @@ Bounding boxes must be in [y_min, x_min, y_max, x_max] format normalized between
         except Exception as e:
             logger.warning(f"⚠️  Failed to save annotated image: {e}")
 
-    async def detect_elements(self, screenshot_path: str) -> VisionDetectionResult:
+    async def detect_elements(self, screenshot_path: str, prompt: Optional[str] = None) -> VisionDetectionResult:
         logger.info(f"🔍 Vision detection")
-        
+
         try:
             # Wrap entire detection with timeout
             result = await asyncio.wait_for(
-                self._detect_elements_with_retry(screenshot_path),
+                self._detect_elements_with_retry(screenshot_path, prompt=prompt),
                 timeout=self.timeout
             )
             return result
@@ -182,13 +182,14 @@ Bounding boxes must be in [y_min, x_min, y_max, x_max] format normalized between
         image.save(buf, format="JPEG", quality=self.image_quality, optimize=True)
         return buf.getvalue(), "image/jpeg", original_width, original_height
 
-    async def _detect_elements_with_retry(self, screenshot_path: str) -> VisionDetectionResult:
+    async def _detect_elements_with_retry(self, screenshot_path: str, prompt: Optional[str] = None) -> VisionDetectionResult:
         """Internal method with retry logic"""
         image_bytes, mime_type, image_width, image_height = self._prepare_image_for_api(screenshot_path)
-        
+        active_prompt = prompt if prompt else self.prompt
+
         last_error = None
         overall_start = time.time()
-        
+
         for attempt in range(self.max_retries):
             try:
                 start_time = time.time()
@@ -201,7 +202,7 @@ Bounding boxes must be in [y_min, x_min, y_max, x_max] format normalized between
                             data=image_bytes,
                             mime_type=mime_type,
                         ),
-                        self.prompt
+                        active_prompt
                     ],
                     config=types.GenerateContentConfig(
                         temperature=0.5,

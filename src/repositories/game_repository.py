@@ -9,6 +9,7 @@ class GameRepository:
         name: str,
         description: str = "",
         gameplay: str = "",
+        vision_prompt: Optional[str] = None,
         platform: Literal["android", "ios", "unity"] = "android",
     ) -> Game:
         game = Game(
@@ -16,6 +17,7 @@ class GameRepository:
             name=name,
             description=description,
             gameplay=gameplay,
+            vision_prompt=vision_prompt,
             platform=platform,
         )
         await game.insert()
@@ -33,10 +35,13 @@ class GameRepository:
         *,
         description: Optional[str] = None,
         gameplay: Optional[str] = None,
+        vision_prompt: Optional[str] = None,
     ) -> Game:
         if description is not None:
             game.description = description
         if gameplay is not None:
             game.gameplay = gameplay
+        if vision_prompt is not None:
+            game.vision_prompt = vision_prompt
         await game.save()
         return game

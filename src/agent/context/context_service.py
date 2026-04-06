@@ -61,11 +61,12 @@ class ContextService:
         vision_detector=None,
         action_handler=None,
         sdk_enabled: bool = True,
-        force_annotate: bool = False
+        force_annotate: bool = False,
+        vision_prompt: str = None,
     ):
         with self._lock:
             self._ensure_session(session_id)
-            
+
             marker_msg = self._build_marker_message(is_current=True)
             screenshot_msg = self._build_screenshot_message(screenshot_path, step, frame)
             actions_msg = await self._build_available_actions_message(
@@ -76,7 +77,8 @@ class ContextService:
                 action_handler,
                 sdk_enabled,
                 step,
-                force_annotate
+                force_annotate,
+                vision_prompt=vision_prompt,
             )
             todo_msg = self._build_todo_context_message(session_id)
             
@@ -210,7 +212,8 @@ class ContextService:
         action_handler,
         sdk_enabled: bool,
         step: int = 0,
-        force_annotate: bool = False
+        force_annotate: bool = False,
+        vision_prompt: str = None,
     ) -> HumanMessage:
         
         if not sdk_enabled and vision_detector:
@@ -238,7 +241,7 @@ class ContextService:
                 else:
                     logger.info(f"🆕 Screen changed (distance={distance} >= {ANNOTATION_CACHE_THRESHOLD}), running fresh annotation")
 
-            detection_result = await vision_detector.detect_elements(screenshot_path)
+            detection_result = await vision_detector.detect_elements(screenshot_path, prompt=vision_prompt)
             
             if detection_result.success:
                 action_message_content = "Detected interactive elements on screen:"

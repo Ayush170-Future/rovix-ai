@@ -1,0 +1,55 @@
+2026-04-06 01:37:46 | INFO     | agent.database                      | Connected to MongoDB: game_testing
+2026-04-06 01:37:46 | INFO     | agent.services.execution_service    | 🤖 Using Anthropic model: claude-sonnet-4-6 (Vertex AI, location=global)
+2026-04-06 01:41:59 | INFO     | agent.services.android_build_runner | Downloading APK from gs://rovix_ai_bucket/game_builds/69a1a52bddccbd191280e7eb/69d28eb0cf05947fe6b5670a/android/20260405180924_12dd91d8ed4c4ca9a0938ae0a4cbe62d_uptodown-com.playrix.homescapes.apk (provider=local)
+2026-04-06 01:42:05 | INFO     | agent.services.android_build_runner | Installing APK on RZCW31HH47R (package=com.uptodown)
+2026-04-06 01:42:05 | INFO     | agent.services.android_build_runner | Launching com.uptodown / com.uptodown.activities.MainActivity
+2026-04-06 01:42:06 | INFO     | agent.appium_manager                | 📱 Using device with UDID: RZCW31HH47R
+2026-04-06 01:42:06 | INFO     | agent.appium_manager                | 🎯 Appium will launch app: com.uptodown
+2026-04-06 01:42:06 | INFO     | agent.appium_manager                | 🔌 Connecting to Appium server at http://127.0.0.1:4723...
+2026-04-06 01:42:15 | ERROR    | agent.appium_manager                | ❌ Failed to start Appium session: Message: Cannot start the 'com.uptodown' application. Consider checking the driver's troubleshooting documentation. Original error: Cannot start the 'com.uptodown' application. Consider checking the driver's troubleshooting documentation. Original error: Activity name '.com.uptodown.activities.MainActivity' used to start the app doesn't exist or cannot be launched! Make sure it exists and is a launchable activity
+Stacktrace:
+UnknownError: Cannot start the 'com.uptodown' application. Consider checking the driver's troubleshooting documentation. Original error: Cannot start the 'com.uptodown' application. Consider checking the driver's troubleshooting documentation. Original error: Activity name '.com.uptodown.activities.MainActivity' used to start the app doesn't exist or cannot be launched! Make sure it exists and is a launchable activity
+    at getResponseForW3CError (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/protocol/errors.ts:1103:34)
+    at asyncHandler (/opt/homebrew/lib/node_modules/appium/node_modules/@appium/base-driver/lib/protocol/protocol.ts:507:57)
+The above error is caused by
+Error: Cannot start the 'com.uptodown' application. Consider checking the driver's troubleshooting documentation. Original error: Cannot start the 'com.uptodown' application. Consider checking the driver's troubleshooting documentation. Original error: Activity name '.com.uptodown.activities.MainActivity' used to start the app doesn't exist or cannot be launched! Make sure it exists and is a launchable activity
+    at ADB.startApp (/Users/ayushsingh/.appium/node_modules/appium-uiautomator2-driver/node_modules/appium-adb/lib/tools/app-commands.ts:637:11)
+    at AndroidUiautomator2Driver.ensureAppStarts (/Users/ayushsingh/.appium/node_modules/appium-uiautomator2-driver/lib/driver.ts:814:5)
+    at AndroidUiautomator2Driver.performSessionPostExecSetup (/Users/ayushsingh/.appium/node_modules/appium-uiautomator2-driver/lib/driver.ts:634:7)
+    at AndroidUiautomator2Driver.startUiAutomator2Session (/Users/ayushsingh/.appium/node_modules/appium-uiautomator2-driver/lib/driver.ts:691:5)
+    at AndroidUiautomator2Driver.createSession (/Users/ayushsingh/.appium/node_modules/appium-uiautomator2-driver/lib/driver.ts:407:22)
+    at AppiumDriver.createSession (/opt/homebrew/lib/node_modules/appium/lib/appium.js:360:35)
+2026-04-06 01:42:15 | ERROR    | agent.appium_manager                |    Make sure Appium server is running: appium
+2026-04-06 01:42:15 | INFO     | agent.services.execution_service    | Starting execution 69d2c20fabbfb78719f438d0 on device RZCW31HH47R
+2026-04-06 01:42:15 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 0 | Run 69d2c20f
+================================================================================
+2026-04-06 01:42:15 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[PENDING] [step_1] [ACTION] Tap the 'Play' button to enter a Match-3 level.
+[PENDING] [step_2] [ACTION] Swap two adjacent tiles to form a match of three. (depends on: step_1)
+[PENDING] [step_3] [VERIFY] Confirm that the tiles disappear and new tiles fall from the top to refill the grid. (depends on: step_2)
+[PENDING] [step_4] [ACTION] Swap two adjacent tiles that do not result in a match. (depends on: step_3)
+[PENDING] [step_5] [VERIFY] Confirm that the tiles remain in the swapped position and the move count decreases. (depends on: step_4)
+[PENDING] [step_6] [ACTION] Perform one valid match-3 move. (depends on: step_5)
+[PENDING] [step_7] [VERIFY] Verify that the move counter decreases by 1. (depends on: step_6)
+[PENDING] [step_8] [ACTION] Perform moves until the move counter reaches zero without meeting level goals. (depends on: step_7)
+[PENDING] [step_9] [VERIFY] Confirm that the level fails and the retry screen is displayed. (depends on: step_8)
+[PENDING] [step_10] [ACTION] Start a level containing a key and make a match next to the key tile. (depends on: step_9)
+[PENDING] [step_11] [VERIFY] Confirm that the key moves along its path toward the lock. (depends on: step_10)
+[PENDING] [step_12] [ACTION] Match four tiles of the same color in a straight line. (depends on: step_11)
+[PENDING] [step_13] [VERIFY] Confirm that a Rocket power-up is generated on the board. (depends on: step_12)
+[PENDING] [step_14] [ACTION] Press the back button during active gameplay. (depends on: step_13)
+[PENDING] [step_15] [VERIFY] Confirm that the level exits immediately to the mansion view without a confirmation prompt. (depends on: step_14)
+[PENDING] [step_16] [ACTION] Exhaust all lives to zero and attempt to tap the 'Play' button. (depends on: step_15)
+[PENDING] [step_17] [VERIFY] Confirm that the game prevents the player from starting the level. (depends on: step_16)
+[PENDING] [step_18] [ACTION] Use a star to complete a renovation task in the tablet menu. (depends on: step_17)
+[PENDING] [step_19] [VERIFY] Confirm the task completes and story dialogue appears. (depends on: step_18)
+============================================================
+2026-04-06 01:42:15 | ERROR    | agent.services.execution_service    | ❌ Screenshot capture failed: No Appium session active (type: DeviceErrorType.DEVICE_DISCONNECTED, retries: 0)
+2026-04-06 01:42:15 | ERROR    | agent.services.execution_service    | Execution 69d2c20fabbfb78719f438d0 aborted: No Appium session active

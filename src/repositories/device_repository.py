@@ -25,7 +25,7 @@ class DeviceRepository:
         adb_port: int = 5037,
         appium_url: str,
         agent_url: Optional[str] = None,
-        provider: Literal["local", "browserstack"] = "local",
+        provider: Literal["local", "vm", "browserstack"] = "local",
         bs_device_name: Optional[str] = None,
         bs_os_version: Optional[str] = None,
         enabled: bool = True,

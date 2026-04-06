@@ -1,0 +1,34 @@
+2026-04-06 03:42:13 | INFO     | agent.database                      | Connected to MongoDB: game_testing
+2026-04-06 03:42:13 | INFO     | agent.services.execution_service    | 🤖 Using Anthropic model: claude-sonnet-4-6 (Vertex AI, location=global)
+2026-04-06 03:42:13 | INFO     | agent.services.execution_service    | Marked 1 stale execution run(s) as failed on startup
+2026-04-06 03:42:23 | INFO     | agent.services.android_build_runner | Downloading APK from gs://rovix_ai_bucket/game_builds/69a1a52bddccbd191280e7eb/69d28eb0cf05947fe6b5670a/android/20260405180924_12dd91d8ed4c4ca9a0938ae0a4cbe62d_uptodown-com.playrix.homescapes.apk (provider=local)
+2026-04-06 03:42:30 | INFO     | agent.services.android_build_runner | Installing APK on RZCW31HH47R (package=com.uptodown)
+2026-04-06 03:42:30 | INFO     | agent.services.android_build_runner | Launching com.uptodown / com.uptodown.activities.MainActivity
+2026-04-06 03:42:30 | INFO     | agent.appium_manager                | 📱 Using device with UDID: RZCW31HH47R
+2026-04-06 03:42:30 | INFO     | agent.appium_manager                | 🎯 Appium will launch app: com.uptodown
+2026-04-06 03:42:30 | INFO     | agent.appium_manager                | 🔌 Connecting to Appium server at http://127.0.0.1:4723...
+2026-04-06 03:42:34 | INFO     | agent.appium_manager                | ✅ Appium session started: 3ece2754-c077-4c30-8ee1-25939072aadb
+2026-04-06 03:42:34 | INFO     | agent.services.execution_service    | Starting execution 69d2de479d4222f1520d47e8 on device RZCW31HH47R
+2026-04-06 03:42:34 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 0 | Run 69d2de47
+================================================================================
+2026-04-06 03:42:34 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[PENDING] [s1] [ACTION] Tap on the current level icon and press the 'Play' button to enter the match-3 board.
+[PENDING] [s2] [ACTION] Swipe adjacent pieces to create matches of three or more identical items to clear board objectives. (depends on: s1)
+[PENDING] [s3] [ACTION] Complete all specific level goals (e.g., clearing carpet, collecting apples) within the allotted number of moves. (depends on: s2)
+[PENDING] [s4] [VERIFY] Verify that the 'Level Complete' victory screen is displayed showing the objectives achieved. (depends on: s3)
+[PENDING] [s5] [ACTION] Tap the 'Continue' button on the reward summary screen to return to the mansion view. (depends on: s4)
+[PENDING] [s6] [VERIFY] Verify that the player's star counter at the top of the screen has increased by the amount earned. (depends on: s5)
+============================================================
+2026-04-06 03:42:36 | INFO     | agent.services.execution_service    | 💾 step_0.png (captured in 2.25s)
+2026-04-06 03:42:37 | INFO     | agent.context.context_service       | 🆕 No cached annotation yet, running first annotation
+2026-04-06 03:42:37 | INFO     | agent.vision_element_detector       | 🔍 Vision detection
+2026-04-06 03:43:22 | ERROR    | agent.vision_element_detector       | ❌ [TIMEOUT] Vision detection timed out after 45.0s
+2026-04-06 03:43:22 | WARNING  | agent.context.context_service       | ⚠️ Context service: Vision detection failed, providing fallback message
+2026-04-06 03:43:22 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...

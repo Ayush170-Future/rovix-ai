@@ -399,7 +399,7 @@ def create_action_executor_for_build(
     adb_host: Optional[str] = None,
     adb_port: Optional[int] = None,
     agent_url: Optional[str] = None,
-    provider: Literal["local", "browserstack"] = "local",
+    provider: Literal["local", "vm", "browserstack"] = "local",
     bs_device_name: Optional[str] = None,
     bs_os_version: Optional[str] = None,
 ) -> Tuple[Any, str]:
@@ -472,11 +472,12 @@ def create_action_executor_for_build(
     except RuntimeError as e:
         raise RuntimeError(f"[device_check] {e}") from e
 
-    # ── Fast path: delegate download + install to VM-local device agent ────────
-    if agent_url:
+    # ── VM path: delegate download + install to VM-local device agent ─────────
+    # provider="vm" with an agent_url hands off APK install to the remote sidecar.
+    if provider == "vm" and agent_url:
         try:
             logger.info(
-                f"Agent path: generating signed URL for gs://{build.bucket_name}/{build.object_key}"
+                f"VM agent path: generating signed URL for gs://{build.bucket_name}/{build.object_key}"
             )
             signed_url = generate_signed_url(build.bucket_name, build.object_key)
         except Exception as e:
@@ -505,15 +506,20 @@ def create_action_executor_for_build(
                 "build.android_app_package / android_app_activity are not set in DB."
             )
 
-        logger.info(f"Agent install complete — package={package} activity={activity}")
+        logger.info(f"VM agent install complete — package={package} activity={activity}")
 
-    # ── Slow path: backend downloads, pushes via ADB ──────────────────────────
+    # ── Local/VM-no-agent path: backend downloads APK, installs via ADB ──────
+    # provider="local"  — USB-connected device; backend downloads + pushes APK directly.
+    # provider="vm"     — VM device but no agent_url; fall back to same direct path.
     else:
         fd, tmp_apk = tempfile.mkstemp(suffix=".apk")
         os.close(fd)
         try:
             try:
-                logger.info(f"Downloading build from gs://{build.bucket_name}/{build.object_key}")
+                logger.info(
+                    f"Downloading APK from gs://{build.bucket_name}/{build.object_key} "
+                    f"(provider={provider})"
+                )
                 download_apk_from_gcs(build.bucket_name, build.object_key, tmp_apk)
             except Exception as e:
                 raise RuntimeError(f"[apk_download] {e}") from e
@@ -525,7 +531,7 @@ def create_action_executor_for_build(
 
             try:
                 logger.info(f"Installing APK on {device_udid} (package={package})")
-                adb_install(device_udid, tmp_apk, adb_host=ah, adb_port=ap)
+                # adb_install(device_udid, tmp_apk, adb_host=ah, adb_port=ap)
             except Exception as e:
                 raise RuntimeError(f"[apk_install] {e}") from e
         finally:
@@ -537,7 +543,7 @@ def create_action_executor_for_build(
     # ── Step: launch app (both paths) ────────────────────────────────────────
     try:
         logger.info(f"Launching {package} / {activity}")
-        adb_launch_app(device_udid, package, activity, adb_host=ah, adb_port=ap)
+        # adb_launch_app(device_udid, package, activity, adb_host=ah, adb_port=ap)
     except Exception as e:
         raise RuntimeError(f"[app_launch] {e}") from e
 
