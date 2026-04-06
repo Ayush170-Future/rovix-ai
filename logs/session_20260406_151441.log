@@ -1,0 +1,4 @@
+2026-04-06 15:14:46 | INFO     | agent.database                      | Connected to MongoDB: game_testing
+2026-04-06 15:14:46 | INFO     | agent.services.execution_service    | 🤖 Using Anthropic model: claude-sonnet-4-6 (Vertex AI, location=global)
+2026-04-06 15:14:46 | INFO     | agent.services.execution_service    | Marked 1 stale execution run(s) as failed on startup
+2026-04-06 15:15:10 | INFO     | agent.services.android_build_runner | Uploading build to BrowserStack (URL ingest from signed GCS link)…

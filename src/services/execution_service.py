@@ -15,6 +15,7 @@ from langchain_openai import AzureChatOpenAI
 from agent.context import ContextService
 from agent.device_results import ActionResult, DeviceErrorType, ScreenshotResult
 from agent.prompts import SYSTEM_PROMPT_WITH_TODO, SYSTEM_PROMPT_WITH_TODO_IMPROVED
+from agent.vision_element_detector import annotate_actions
 from agent.logger import get_logger
 from services.views import Action, AgentOutput
 from models.test_scenario import TestScenario, Step
@@ -333,6 +334,16 @@ class ExecutionService:
         output = self._parse_response(raw_response)
         token_usage = self._extract_token_usage(raw_response)
 
+        # Annotate the local screenshot with the agent's actions, re-upload to
+        # overwrite the same GCS blob, then delete the local file.
+        self._bg_task(
+            self._annotate_and_reupload(
+                screenshot_path, output.actions,
+                session.execution_run_id, step_num,
+            ),
+            label=f"Action annotation step {step_num}",
+        )
+
         logger.info("✅ Agent decision received")
         logger.info(f"   📝 Game state: {output.game_state_summary}")
         logger.info(f"   🤔 Reasoning: {output.reason}")
@@ -498,11 +509,42 @@ class ExecutionService:
             blob.upload_from_filename(local_path)
 
         await asyncio.to_thread(_do_upload)
-        try:
-            os.remove(local_path)
-        except OSError:
-            pass
+        # Local file is kept intentionally so the action-annotation background
+        # task can read it after the LLM returns. It is deleted there instead.
+        # try:
+        #     os.remove(local_path)
+        # except OSError:
+        #     pass
         return f"/api/executions/{execution_run_id}/steps/{step_num}/screenshot"
+
+    async def _annotate_and_reupload(
+        self,
+        local_path: str,
+        actions: List[Action],
+        execution_run_id: str,
+        step_num: int,
+    ) -> None:
+        """Annotate the local screenshot with action overlays, re-upload to GCS
+        (overwriting the original), then delete the plain local file.
+        The annotated file is kept on disk at step_N_annotated.png for monitoring."""
+        try:
+            annotated_path = await asyncio.to_thread(annotate_actions, local_path, actions)
+            if annotated_path:
+                blob_name = f"screenshots/{execution_run_id}/step_{step_num}.png"
+
+                def _reupload():
+                    blob = self._gcs_bucket.blob(blob_name)
+                    blob.upload_from_filename(annotated_path)
+
+                await asyncio.to_thread(_reupload)
+                logger.info(f"📍 Action-annotated screenshot uploaded for step {step_num} (local: {annotated_path})")
+        except Exception as exc:
+            logger.warning(f"⚠️  Action annotation/reupload failed (non-fatal): {exc}")
+        finally:
+            try:
+                os.remove(local_path)
+            except OSError:
+                pass
 
     def _get_todo_snapshot(self, session_id: str) -> List[dict]:
         return [t.to_dict() for t in TodoPersistenceService.get_todo_list(session_id)]

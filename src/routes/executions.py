@@ -98,5 +98,5 @@ async def get_step_screenshot(
     return StreamingResponse(
         iter([data]),
         media_type="image/png",
-        headers={"Cache-Control": "max-age=86400"},
+        headers={"Cache-Control": "no-cache, no-store, must-revalidate"},
     )

@@ -1,13 +1,17 @@
 import io
 import json
+import math
 import time
 import asyncio
 import os
 from PIL import Image, ImageDraw, ImageFont
 from google import genai
 from google.genai import types
-from typing import List, Dict, Optional, Tuple
+from typing import List, Dict, Optional, Tuple, TYPE_CHECKING
 from dataclasses import dataclass
+
+if TYPE_CHECKING:
+    from services.views import Action
 
 try:
     from .logger import get_logger
@@ -287,3 +291,91 @@ class VisionElementDetector:
                 'bounding_box': bbox_data['bbox']
             })
         return results
+
+
+def annotate_actions(image_path: str, actions: "List[Action]") -> "Optional[str]":
+    """
+    Draw action overlays onto a copy saved as ``<base>_annotated.png``.
+      - click       → yellow filled dot
+      - swipe       → orange arrow from start to end
+      - multi_swipe → orange polyline with arrowhead on the last segment
+    wait / todo_write / key_press are skipped.
+
+    Returns the path to the annotated file, or None when there are no
+    visual actions or the source file is missing.
+    """
+    visual_actions = [
+        a for a in (actions or [])
+        if a.action_type in ("click", "swipe", "multi_swipe")
+    ]
+    if not visual_actions:
+        logger.info("📍 No visual actions — skipping annotation")
+        return None
+    if not os.path.exists(image_path):
+        logger.warning(f"⚠️  annotate_actions: source file missing: {image_path}")
+        return None
+
+    try:
+        img = Image.open(image_path).convert("RGB")
+        draw = ImageDraw.Draw(img)
+        w, h = img.size
+
+        dot_r = max(18, int(min(w, h) * 0.012))
+        line_w = max(6, int(min(w, h) * 0.005))
+        head_size = dot_r * 2
+
+        drawn = 0
+        for action in visual_actions:
+            if action.action_type == "click" and action.x is not None and action.y is not None:
+                _draw_dot(draw, action.x, action.y, dot_r)
+                drawn += 1
+
+            elif action.action_type == "swipe":
+                if all(v is not None for v in [action.x, action.y, action.end_x, action.end_y]):
+                    _draw_arrow(draw, action.x, action.y, action.end_x, action.end_y, line_w, head_size)
+                    drawn += 1
+
+            elif action.action_type == "multi_swipe" and action.waypoints:
+                pts = [tuple(p) for p in action.waypoints if len(p) == 2]
+                if len(pts) >= 2:
+                    for i in range(len(pts) - 1):
+                        if i == len(pts) - 2:
+                            _draw_arrow(draw, pts[i][0], pts[i][1], pts[i + 1][0], pts[i + 1][1], line_w, head_size)
+                        else:
+                            draw.line([pts[i], pts[i + 1]], fill=(255, 200, 0), width=line_w)
+                    drawn += 1
+
+        base_name = os.path.splitext(image_path)[0]
+        output_path = f"{base_name}_annotated.png"
+        img.save(output_path, format="PNG")
+        logger.info(f"✏️  Saved annotated screenshot ({drawn} action(s)) → {output_path}")
+        return output_path
+    except Exception as e:
+        logger.warning(f"⚠️  Failed to annotate actions on screenshot: {e}")
+        return None
+
+
+def _draw_dot(draw: ImageDraw.ImageDraw, x: int, y: int, r: int) -> None:
+    draw.ellipse([x - r - 3, y - r - 3, x + r + 3, y + r + 3], fill="black")
+    draw.ellipse([x - r, y - r, x + r, y + r], fill=(255, 220, 0))
+
+
+def _draw_arrow(
+    draw: ImageDraw.ImageDraw,
+    x1: int, y1: int,
+    x2: int, y2: int,
+    line_w: int,
+    head_size: int,
+) -> None:
+    draw.line([(x1, y1), (x2, y2)], fill=(255, 80, 0), width=line_w)
+
+    angle = math.atan2(y2 - y1, x2 - x1)
+    spread = math.pi / 6  # 30°
+    lx = x2 - head_size * math.cos(angle - spread)
+    ly = y2 - head_size * math.sin(angle - spread)
+    rx = x2 - head_size * math.cos(angle + spread)
+    ry = y2 - head_size * math.sin(angle + spread)
+    draw.polygon([(x2, y2), (lx, ly), (rx, ry)], fill=(255, 80, 0))
+
+    # Start dot
+    draw.ellipse([x1 - line_w, y1 - line_w, x1 + line_w, y1 + line_w], fill=(255, 80, 0))
