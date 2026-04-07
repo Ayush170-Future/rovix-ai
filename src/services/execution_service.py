@@ -44,7 +44,7 @@ GCS_BUCKET_NAME = os.getenv("GCS_BUCKET_NAME", "rovix_ai_bucket")
 MODEL_PROVIDER = os.getenv("MODEL_PROVIDER", "google")
 
 # Google / Gemini
-GOOGLE_MODEL = os.getenv("GOOGLE_MODEL", "gemini-3-pro-preview")
+GOOGLE_MODEL = os.getenv("GOOGLE_MODEL", "gemini-3-flash-preview")
 
 # Anthropic via Vertex AI
 ANTHROPIC_PROJECT_ID = os.getenv("ANTHROPIC_PROJECT_ID", "")
@@ -305,7 +305,8 @@ class ExecutionService:
             vision_detector=self._vision_detector,
             action_handler=None,
             sdk_enabled=False,
-            force_annotate=session.force_annotate,
+            # force_annotate=session.force_annotate,
+            force_annotate=True,
             vision_prompt=session.vision_prompt,
         )
 

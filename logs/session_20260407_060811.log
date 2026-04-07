@@ -1,0 +1,498 @@
+2026-04-07 06:08:17 | INFO     | agent.database                      | Connected to MongoDB: game_testing
+2026-04-07 06:08:17 | INFO     | agent.services.execution_service    | 🤖 Using Google model: gemini-3-flash-preview
+2026-04-07 06:08:17 | INFO     | agent.services.execution_service    | Marked 1 stale execution run(s) as failed on startup
+2026-04-07 06:08:30 | INFO     | agent.services.android_build_runner | Downloading APK from gs://rovix_ai_bucket/game_builds/69a1a52bddccbd191280e7eb/69d28eb0cf05947fe6b5670a/android/20260405180924_12dd91d8ed4c4ca9a0938ae0a4cbe62d_uptodown-com.playrix.homescapes.apk (provider=local)
+2026-04-07 06:08:36 | INFO     | agent.services.android_build_runner | Installing APK on RZCW31HH47R (package=com.uptodown)
+2026-04-07 06:08:36 | INFO     | agent.services.android_build_runner | Launching com.uptodown / com.uptodown.activities.MainActivity
+2026-04-07 06:08:36 | INFO     | agent.appium_manager                | 📱 Using device with UDID: RZCW31HH47R
+2026-04-07 06:08:36 | INFO     | agent.appium_manager                | 🎯 Appium will launch app: com.uptodown
+2026-04-07 06:08:36 | INFO     | agent.appium_manager                | 🔌 Connecting to Appium server at http://127.0.0.1:4723...
+2026-04-07 06:08:41 | INFO     | agent.appium_manager                | ✅ Appium session started: 71e940fa-b514-455d-874f-ca6e42945da2
+2026-04-07 06:08:41 | INFO     | agent.services.execution_service    | Starting execution 69d452069ed7599e5affc0bd on device RZCW31HH47R
+2026-04-07 06:08:41 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 0 | Run 69d45206
+================================================================================
+2026-04-07 06:08:41 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[PENDING] [s1] [ACTION] Just complete the match 3 game within total moves.
+[PENDING] [step-1775432926299] [VERIFY] Verify if the game ends
+============================================================
+2026-04-07 06:08:43 | INFO     | agent.services.execution_service    | 💾 step_0.png (captured in 1.89s)
+2026-04-07 06:08:43 | INFO     | agent.context.context_service       | 🔄 Force annotation requested, bypassing cache
+2026-04-07 06:08:43 | INFO     | agent.vision_element_detector       | 🔍 Vision detection
+2026-04-07 06:09:08 | INFO     | agent.vision_element_detector       | ⏱️  Vision API response time: 24.77s
+2026-04-07 06:09:08 | INFO     | agent.vision_element_detector       | ✅ Detected 71 elements via vision
+2026-04-07 06:09:08 | INFO     | agent.context.context_service       | 📋 Actions message:
+Detected interactive elements on screen:
+- Locked level icon at (2151, 166) bbox: [2066, 108, 2237, 225] - Locked level icon
+- Locked level icon at (2150, 312) bbox: [2063, 240, 2237, 385] - Locked level icon
+- Locked level icon at (2152, 474) bbox: [2066, 406, 2239, 543] - Locked level icon
+- Locked level icon at (2152, 632) bbox: [2066, 563, 2239, 702] - Locked level icon
+- Locked level icon at (2152, 797) bbox: [2066, 726, 2239, 868] - Locked level icon
+- Settings icon at (2151, 945) bbox: [2066, 888, 2237, 1003] - Settings icon
+- Yellow lamp game piece at (686, 306) bbox: [626, 251, 746, 361] - Yellow lamp game piece
+- Pink button game piece at (794, 306) bbox: [734, 251, 854, 361] - Pink button game piece
+- Yellow lamp game piece at (902, 306) bbox: [842, 251, 963, 361] - Yellow lamp game piece
+- Blue book game piece at (1011, 306) bbox: [951, 251, 1071, 361] - Blue book game piece
+- Green cup game piece at (1119, 306) bbox: [1059, 251, 1179, 361] - Green cup game piece
+- Red bow tie game piece at (686, 427) bbox: [626, 372, 746, 482] - Red bow tie game piece
+- Blue book game piece at (794, 427) bbox: [734, 372, 854, 482] - Blue book game piece
+- Blue book game piece at (902, 427) bbox: [842, 372, 963, 482] - Blue book game piece
+- Yellow lamp game piece at (1011, 427) bbox: [951, 372, 1071, 482] - Yellow lamp game piece
+- Pink button game piece at (1119, 427) bbox: [1059, 372, 1179, 482] - Pink button game piece
+- Yellow lamp game piece at (686, 549) bbox: [626, 494, 746, 604] - Yellow lamp game piece
+- Green cup game piece at (794, 549) bbox: [734, 494, 854, 604] - Green cup game piece
+- Pink button game piece at (902, 549) bbox: [842, 494, 963, 604] - Pink button game piece
+- Green cup game piece at (1011, 549) bbox: [951, 494, 1071, 604] - Green cup game piece
+- Green cup game piece at (1119, 549) bbox: [1059, 494, 1179, 604] - Green cup game piece
+- Red bow tie game piece at (686, 669) bbox: [626, 614, 746, 724] - Red bow tie game piece
+- Blue book game piece at (794, 669) bbox: [734, 614, 854, 724] - Blue book game piece
+- Pink button game piece at (902, 669) bbox: [842, 614, 963, 724] - Pink button game piece
+- Yellow lamp game piece at (1011, 669) bbox: [951, 614, 1071, 724] - Yellow lamp game piece
+- Red bow tie game piece at (1119, 669) bbox: [1059, 614, 1179, 724] - Red bow tie game piece
+- Purple umbrella game piece at (686, 791) bbox: [626, 736, 746, 846] - Purple umbrella game piece
+- Pink button game piece at (794, 791) bbox: [734, 736, 854, 846] - Pink button game piece
+- Green cup game piece at (902, 791) bbox: [842, 736, 963, 846] - Green cup game piece
+- Red bow tie game piece at (1011, 791) bbox: [951, 736, 1071, 846] - Red bow tie game piece
+- Red bow tie game piece at (794, 913) bbox: [734, 858, 854, 968] - Red bow tie game piece
+- Red bow tie game piece at (902, 913) bbox: [842, 858, 963, 968] - Red bow tie game piece
+- Green cup game piece at (1011, 913) bbox: [951, 858, 1071, 968] - Green cup game piece
+- Yellow lamp game piece at (794, 184) bbox: [734, 129, 854, 239] - Yellow lamp game piece
+- Pink button game piece at (902, 184) bbox: [842, 129, 963, 239] - Pink button game piece
+- Green cup game piece at (1011, 184) bbox: [951, 129, 1071, 239] - Green cup game piece
+- Yellow lamp game piece at (1119, 184) bbox: [1059, 129, 1179, 239] - Yellow lamp game piece
+- Yellow lamp game piece at (1336, 223) bbox: [1276, 168, 1396, 278] - Yellow lamp game piece
+- Green cup game piece at (1444, 223) bbox: [1384, 168, 1505, 278] - Green cup game piece
+- Red bow tie game piece at (1552, 223) bbox: [1492, 168, 1613, 278] - Red bow tie game piece
+- Red bow tie game piece at (1661, 223) bbox: [1601, 168, 1721, 278] - Red bow tie game piece
+- Green cup game piece at (1336, 345) bbox: [1276, 290, 1396, 400] - Green cup game piece
+- Pink button game piece at (1444, 345) bbox: [1384, 290, 1505, 400] - Pink button game piece
+- Yellow lamp game piece at (1552, 345) bbox: [1492, 290, 1613, 400] - Yellow lamp game piece
+- Pink button game piece at (1661, 345) bbox: [1601, 290, 1721, 400] - Pink button game piece
+- Blue book game piece at (1769, 345) bbox: [1709, 290, 1830, 400] - Blue book game piece
+- Pink button game piece at (1336, 467) bbox: [1276, 412, 1396, 522] - Pink button game piece
+- Yellow lamp game piece at (1444, 467) bbox: [1384, 412, 1505, 522] - Yellow lamp game piece
+- Yellow lamp game piece at (1552, 467) bbox: [1492, 412, 1613, 522] - Yellow lamp game piece
+- Pink button game piece at (1661, 467) bbox: [1601, 412, 1721, 522] - Pink button game piece
+- Green cup game piece at (1769, 467) bbox: [1709, 412, 1830, 522] - Green cup game piece
+- Green cup game piece at (1336, 589) bbox: [1276, 534, 1396, 644] - Green cup game piece
+- Green cup game piece at (1444, 589) bbox: [1384, 534, 1505, 644] - Green cup game piece
+- Pink button game piece at (1552, 589) bbox: [1492, 534, 1613, 644] - Pink button game piece
+- Green cup game piece at (1661, 589) bbox: [1601, 534, 1721, 644] - Green cup game piece
+- Yellow lamp game piece at (1769, 589) bbox: [1709, 534, 1830, 644] - Yellow lamp game piece
+- Pink button game piece at (1336, 711) bbox: [1276, 656, 1396, 766] - Pink button game piece
+- Blue book game piece at (1444, 711) bbox: [1384, 656, 1505, 766] - Blue book game piece
+- Blue book game piece at (1552, 711) bbox: [1492, 656, 1613, 766] - Blue book game piece
+- Pink button game piece at (1661, 711) bbox: [1601, 656, 1721, 766] - Pink button game piece
+- Red bow tie game piece at (1769, 711) bbox: [1709, 656, 1830, 766] - Red bow tie game piece
+- Blue book game piece at (1444, 833) bbox: [1384, 778, 1505, 888] - Blue book game piece
+- Yellow lamp game piece at (1552, 833) bbox: [1492, 778, 1613, 888] - Yellow lamp game piece
+- Pink button game piece at (1661, 833) bbox: [1601, 778, 1721, 888] - Pink button game piece
+- Purple umbrella game piece at (1769, 833) bbox: [1709, 778, 1830, 888] - Purple umbrella game piece
+- Green cup game piece at (1444, 955) bbox: [1384, 900, 1505, 1010] - Green cup game piece
+- Pink button game piece at (1552, 955) bbox: [1492, 900, 1613, 1010] - Pink button game piece
+- Yellow lamp game piece at (1661, 955) bbox: [1601, 900, 1721, 1010] - Yellow lamp game piece
+- Player profile icon at (234, 217) bbox: [96, 108, 373, 327] - Player profile icon
+- Green square game piece goal at (242, 615) bbox: [180, 563, 305, 668] - Green square game piece goal
+- Money counter at (224, 935) bbox: [120, 888, 329, 983] - Money counter
+ Annotated Items Represented in Grid for better Spatial understanding:
+ Board Grid (use for match reasoning):
+        c0                               c1                               c2                               c3                               c4                               c5                               c6                               c7                               c8                               c9                               c10                              c11                              
+r0     --                                --                                [Yellow lamp game piece]          [Pink button game piece]          [Green cup game piece]            [Yellow lamp game piece]          --                                --                                --                                --                                --                                [Locked level icon]              
+r1     [Player profile icon]             --                                --                                --                                --                                --                                [Yellow lamp game piece]          [Green cup game piece]            [Red bow tie game piece]          [Red bow tie game piece]          --                                --                               
+r2     --                                [Yellow lamp game piece]          [Pink button game piece]          [Yellow lamp game piece]          [Blue book game piece]            [Green cup game piece]            [Green cup game piece]            [Pink button game piece]          [Yellow lamp game piece]          [Pink button game piece]          [Blue book game piece]            [Locked level icon]              
+r3     --                                [Red bow tie game piece]          [Blue book game piece]            [Blue book game piece]            [Yellow lamp game piece]          [Pink button game piece]          [Pink button game piece]          [Yellow lamp game piece]          [Yellow lamp game piece]          [Pink button game piece]          [Green cup game piece]            --                               
+r4     --                                --                                --                                --                                --                                --                                --                                --                                --                                --                                --                                [Locked level icon]              
+r5     --                                [Yellow lamp game piece]          [Green cup game piece]            [Pink button game piece]          [Green cup game piece]            [Green cup game piece]            [Green cup game piece]            [Green cup game piece]            [Pink button game piece]          [Green cup game piece]            [Yellow lamp game piece]          --                               
+r6     [Green square game piece goal]    --                                --                                --                                --                                --                                --                                --                                --                                --                                --                                [Locked level icon]              
+r7     --                                [Red bow tie game piece]          [Blue book game piece]            [Pink button game piece]          [Yellow lamp game piece]          [Red bow tie game piece]          --                                --                                --                                --                                --                                --                               
+r8     --                                --                                --                                --                                --                                --                                [Pink button game piece]          [Blue book game piece]            [Blue book game piece]            [Pink button game piece]          [Red bow tie game piece]          --                               
+r9     --                                [Purple umbrella game piece]      [Pink button game piece]          [Green cup game piece]            [Red bow tie game piece]          --                                --                                --                                --                                --                                --                                [Locked level icon]              
+r10    --                                --                                --                                --                                --                                --                                --                                [Blue book game piece]            [Yellow lamp game piece]          [Pink button game piece]          [Purple umbrella game piece]      --                               
+r11    [Money counter]                   --                                [Red bow tie game piece]          [Red bow tie game piece]          [Green cup game piece]            --                                --                                --                                --                                --                                --                                [Settings icon]                  
+r12    --                                --                                --                                --                                --                                --                                --                                [Green cup game piece]            [Pink button game piece]          [Yellow lamp game piece]          --                                --                               
+2026-04-07 06:09:08 | DEBUG    | agent.context.context_service       | 💾 Annotation cache updated for step 0
+2026-04-07 06:09:08 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-04-07 06:09:08 | INFO     | agent.vision_element_detector       | 📸 Annotated image saved
+2026-04-07 06:09:27 | INFO     | agent.services.execution_service    | ⏱️  LLM response time: 19.49s
+2026-04-07 06:09:27 | INFO     | agent.services.execution_service    | ☁️  Screenshot uploaded: /api/executions/69d452069ed7599e5affc0bd/steps/0/screenshot
+2026-04-07 06:09:27 | INFO     | agent.services.execution_service    | ✅ Agent decision received
+2026-04-07 06:09:27 | INFO     | agent.services.execution_service    |    📝 Game state: The player is in a match-3 level of Homescapes with the goal of turning 65 floor tiles green. There are 33 moves remaining. Two paper plane boosters are visible on green tiles at (686, 791) and (1769, 833). Chained pieces are present in the center. Most tiles are currently not green.
+2026-04-07 06:09:27 | INFO     | agent.services.execution_service    |    🤔 Reasoning: To progress toward the goal of turning 65 tiles green, activating the paper plane boosters already sitting on green tiles is an efficient move. This will turn the targeted tiles green and potentially trigger other cascades or spread the green color. I will also initialize the todo list to track the testing progress.
+2026-04-07 06:09:27 | INFO     | agent.services.execution_service    |    🔍 Force annotate: False
+2026-04-07 06:09:27 | INFO     | agent.services.execution_service    |    🎯 Actions count: 3
+2026-04-07 06:09:27 | INFO     | agent.services.execution_service    |    🏁 End game: False
+2026-04-07 06:09:27 | INFO     | agent.services.execution_service    |    📋 Test results: []
+2026-04-07 06:09:27 | INFO     | agent.services.execution_service    |    📊 Token usage — Input: 7410, Output: 3128, Total: 10538
+2026-04-07 06:09:27 | INFO     | agent.services.execution_service    | 💾 ExecutionStep 0 DB write dispatched (background)
+2026-04-07 06:09:27 | INFO     | agent.services.execution_service    |    todo_write (1/3): updated 2 tasks {'pending': 1, 'in_progress': 1, 'completed': 0, 'cancelled': 0, 'actions': 1, 'verifications': 1}
+2026-04-07 06:09:27 | INFO     | agent.services.execution_service    |    action (2/3): click x=686 y=791 duration=0.1
+2026-04-07 06:09:27 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (686, 791) duration=0.1s
+2026-04-07 06:09:28 | INFO     | agent.services.execution_service    |    action (3/3): click x=1769 y=833 duration=0.1
+2026-04-07 06:09:28 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (1769, 833) duration=0.1s
+2026-04-07 06:09:28 | INFO     | agent.vision_element_detector       | ✏️  Saved annotated screenshot (2 action(s)) → screenshots/69d452069ed7599e5affc0bd/step_0_annotated.png
+2026-04-07 06:09:30 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 1 | Run 69d45206
+================================================================================
+2026-04-07 06:09:30 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[IN_PROGRESS] [1] [ACTION] Complete the match-3 level by turning all 65 tiles green
+[PENDING] [2] [VERIFY] Verify if the game ends correctly after reaching the goal or running out of moves (depends on: 1)
+============================================================
+2026-04-07 06:09:33 | INFO     | agent.services.execution_service    | 💾 step_1.png (captured in 2.92s)
+2026-04-07 06:09:33 | INFO     | agent.context.context_service       | 🔄 Force annotation requested, bypassing cache
+2026-04-07 06:09:33 | INFO     | agent.vision_element_detector       | 🔍 Vision detection
+2026-04-07 06:09:33 | INFO     | agent.services.execution_service    | 📍 Action-annotated screenshot uploaded for step 0 (local: screenshots/69d452069ed7599e5affc0bd/step_0_annotated.png)
+2026-04-07 06:10:02 | INFO     | agent.vision_element_detector       | ⏱️  Vision API response time: 28.92s
+2026-04-07 06:10:02 | INFO     | agent.vision_element_detector       | ✅ Detected 68 elements via vision
+2026-04-07 06:10:02 | INFO     | agent.context.context_service       | 📋 Actions message:
+Detected interactive elements on screen:
+- Locked level icon at (2149, 171) bbox: [2087, 123, 2212, 219] - Locked level icon
+- Locked level icon at (2152, 313) bbox: [2087, 247, 2217, 379] - Locked level icon
+- Locked level icon at (2152, 471) bbox: [2087, 407, 2217, 535] - Locked level icon
+- Locked level icon at (2152, 631) bbox: [2087, 567, 2217, 695] - Locked level icon
+- Locked level icon at (2152, 791) bbox: [2087, 725, 2217, 857] - Locked level icon
+- Settings icon at (2152, 950) bbox: [2087, 885, 2217, 1015] - Settings icon
+- Yellow lamp game piece at (784, 216) bbox: [734, 178, 835, 255] - Yellow lamp game piece
+- Pink button game piece at (902, 216) bbox: [852, 178, 953, 255] - Pink button game piece
+- Green cup game piece with chain at (1019, 216) bbox: [970, 178, 1069, 255] - Green cup game piece with chain
+- Yellow lamp game piece at (1130, 216) bbox: [1081, 178, 1179, 255] - Yellow lamp game piece
+- Yellow lamp game piece at (1331, 216) bbox: [1281, 178, 1382, 255] - Yellow lamp game piece
+- Green cup game piece at (1448, 216) bbox: [1399, 178, 1497, 255] - Green cup game piece
+- Blue book game piece at (1562, 216) bbox: [1512, 178, 1613, 255] - Blue book game piece
+- Red bow tie game piece at (1676, 216) bbox: [1627, 178, 1726, 255] - Red bow tie game piece
+- Pink button game piece at (678, 321) bbox: [628, 282, 729, 361] - Pink button game piece
+- Pink button game piece at (790, 321) bbox: [741, 282, 840, 361] - Pink button game piece
+- Yellow lamp game piece at (902, 321) bbox: [852, 282, 953, 361] - Yellow lamp game piece
+- Blue book game piece with chain at (1019, 321) bbox: [970, 282, 1069, 361] - Blue book game piece with chain
+- Green cup game piece at (1130, 321) bbox: [1081, 282, 1179, 361] - Green cup game piece
+- Green cup game piece at (1331, 321) bbox: [1281, 282, 1382, 361] - Green cup game piece
+- Pink button game piece at (1448, 321) bbox: [1399, 282, 1497, 361] - Pink button game piece
+- Red bow tie game piece at (1562, 321) bbox: [1512, 282, 1613, 361] - Red bow tie game piece
+- Pink button game piece at (1676, 321) bbox: [1627, 282, 1726, 361] - Pink button game piece
+- Blue book game piece at (1789, 321) bbox: [1740, 282, 1839, 361] - Blue book game piece
+- Yellow lamp game piece at (678, 425) bbox: [628, 386, 729, 465] - Yellow lamp game piece
+- Blue book game piece at (790, 425) bbox: [741, 386, 840, 465] - Blue book game piece
+- Blue book game piece at (902, 425) bbox: [852, 386, 953, 465] - Blue book game piece
+- Yellow lamp game piece with chain at (1019, 425) bbox: [970, 386, 1069, 465] - Yellow lamp game piece with chain
+- Pink button game piece with chain at (1130, 425) bbox: [1081, 386, 1179, 465] - Pink button game piece with chain
+- Pink button game piece with chain at (1331, 425) bbox: [1281, 386, 1382, 465] - Pink button game piece with chain
+- Yellow lamp game piece with chain at (1448, 425) bbox: [1399, 386, 1497, 465] - Yellow lamp game piece with chain
+- Yellow lamp game piece at (1562, 425) bbox: [1512, 386, 1613, 465] - Yellow lamp game piece
+- Pink button game piece at (1676, 425) bbox: [1627, 386, 1726, 465] - Pink button game piece
+- Green cup game piece at (1789, 425) bbox: [1740, 386, 1839, 465] - Green cup game piece
+- Red bow tie game piece at (678, 530) bbox: [628, 491, 729, 570] - Red bow tie game piece
+- Green cup game piece at (790, 530) bbox: [741, 491, 840, 570] - Green cup game piece
+- Pink button game piece at (902, 530) bbox: [852, 491, 953, 570] - Pink button game piece
+- Green cup game piece with chain at (1019, 530) bbox: [970, 491, 1069, 570] - Green cup game piece with chain
+- Green cup game piece at (1130, 530) bbox: [1081, 491, 1179, 570] - Green cup game piece
+- Green cup game piece with chain at (1331, 530) bbox: [1281, 491, 1382, 570] - Green cup game piece with chain
+- Yellow lamp game piece with chain at (1448, 530) bbox: [1399, 491, 1497, 570] - Yellow lamp game piece with chain
+- Yellow lamp game piece at (1562, 530) bbox: [1512, 491, 1613, 570] - Yellow lamp game piece
+- Green cup game piece at (1676, 530) bbox: [1627, 491, 1726, 570] - Green cup game piece
+- Yellow lamp game piece at (1789, 530) bbox: [1740, 491, 1839, 570] - Yellow lamp game piece
+- Yellow lamp game piece at (678, 634) bbox: [628, 596, 729, 673] - Yellow lamp game piece
+- Pink button game piece at (790, 634) bbox: [741, 596, 840, 673] - Pink button game piece
+- Pink button game piece at (902, 634) bbox: [852, 596, 953, 673] - Pink button game piece
+- Yellow lamp game piece with chain at (1019, 634) bbox: [970, 596, 1069, 673] - Yellow lamp game piece with chain
+- Pink button game piece with chain at (1130, 634) bbox: [1081, 596, 1179, 673] - Pink button game piece with chain
+- Pink button game piece with chain at (1331, 634) bbox: [1281, 596, 1382, 673] - Pink button game piece with chain
+- Yellow lamp game piece with chain at (1448, 634) bbox: [1399, 596, 1497, 673] - Yellow lamp game piece with chain
+- Pink button game piece at (1562, 634) bbox: [1512, 596, 1613, 673] - Pink button game piece
+- Red bow tie game piece with chain at (1676, 634) bbox: [1627, 596, 1726, 673] - Red bow tie game piece with chain
+- Red bow tie game piece at (1789, 634) bbox: [1740, 596, 1839, 673] - Red bow tie game piece
+- Red bow tie game piece at (678, 739) bbox: [628, 700, 729, 778] - Red bow tie game piece
+- Pink button game piece at (790, 739) bbox: [741, 700, 840, 778] - Pink button game piece
+- Green cup game piece at (902, 739) bbox: [852, 700, 953, 778] - Green cup game piece
+- Red bow tie game piece with chain at (1019, 739) bbox: [970, 700, 1069, 778] - Red bow tie game piece with chain
+- Blue book game piece with chain at (1448, 739) bbox: [1399, 700, 1497, 778] - Blue book game piece with chain
+- Blue book game piece at (1562, 739) bbox: [1512, 700, 1613, 778] - Blue book game piece
+- Pink button game piece at (1676, 739) bbox: [1627, 700, 1726, 778] - Pink button game piece
+- Purple kite game piece at (1789, 739) bbox: [1740, 700, 1839, 778] - Purple kite game piece
+- Red bow tie game piece at (790, 844) bbox: [741, 805, 840, 883] - Red bow tie game piece
+- Red bow tie game piece at (902, 844) bbox: [852, 805, 953, 883] - Red bow tie game piece
+- Green cup game piece with chain at (1019, 844) bbox: [970, 805, 1069, 883] - Green cup game piece with chain
+- Green cup game piece at (1448, 844) bbox: [1399, 805, 1497, 883] - Green cup game piece
+- Yellow lamp game piece at (1562, 844) bbox: [1512, 805, 1613, 883] - Yellow lamp game piece
+- Yellow lamp game piece at (1676, 844) bbox: [1627, 805, 1726, 883] - Yellow lamp game piece
+ Annotated Items Represented in Grid for better Spatial understanding:
+ Board Grid (use for match reasoning):
+        c0                                    c1                                    c2                                    c3                                    c4                                    c5                                    c6                                    c7                                    c8                                    c9                                    c10                                   
+r0     --                                     --                                     --                                     --                                     --                                     --                                     --                                     --                                     --                                     --                                     [Locked level icon]                   
+r1     --                                     [Yellow lamp game piece]               [Pink button game piece]               [Green cup game piece with chain]      [Yellow lamp game piece]               [Yellow lamp game piece]               [Green cup game piece]                 [Blue book game piece]                 [Red bow tie game piece]               --                                     --                                    
+r2     [Pink button game piece]               [Pink button game piece]               [Yellow lamp game piece]               [Blue book game piece with chain]      [Green cup game piece]                 [Green cup game piece]                 [Pink button game piece]               [Red bow tie game piece]               [Pink button game piece]               [Blue book game piece]                 [Locked level icon]                   
+r3     [Yellow lamp game piece]               [Blue book game piece]                 [Blue book game piece]                 [Yellow lamp game piece with chain]    [Pink button game piece with chain]    [Pink button game piece with chain]    [Yellow lamp game piece with chain]    [Yellow lamp game piece]               [Pink button game piece]               [Green cup game piece]                 --                                    
+r4     --                                     --                                     --                                     --                                     --                                     --                                     --                                     --                                     --                                     --                                     [Locked level icon]                   
+r5     [Red bow tie game piece]               [Green cup game piece]                 [Pink button game piece]               [Green cup game piece with chain]      [Green cup game piece]                 [Green cup game piece with chain]      [Yellow lamp game piece with chain]    [Yellow lamp game piece]               [Green cup game piece]                 [Yellow lamp game piece]               --                                    
+r6     [Yellow lamp game piece]               [Pink button game piece]               [Pink button game piece]               [Yellow lamp game piece with chain]    [Pink button game piece with chain]    [Pink button game piece with chain]    [Yellow lamp game piece with chain]    [Pink button game piece]               [Red bow tie game piece with chain]    [Red bow tie game piece]               [Locked level icon]                   
+r7     [Red bow tie game piece]               [Pink button game piece]               [Green cup game piece]                 [Red bow tie game piece with chain]    --                                     --                                     [Blue book game piece with chain]      [Blue book game piece]                 [Pink button game piece]               [Purple kite game piece]               --                                    
+r8     --                                     --                                     --                                     --                                     --                                     --                                     --                                     --                                     --                                     --                                     [Locked level icon]                   
+r9     --                                     [Red bow tie game piece]               [Red bow tie game piece]               [Green cup game piece with chain]      --                                     --                                     [Green cup game piece]                 [Yellow lamp game piece]               [Yellow lamp game piece]               --                                     --                                    
+r10    --                                     --                                     --                                     --                                     --                                     --                                     --                                     --                                     --                                     --                                     [Settings icon]                       
+2026-04-07 06:10:02 | DEBUG    | agent.context.context_service       | 💾 Annotation cache updated for step 1
+2026-04-07 06:10:02 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-04-07 06:10:02 | INFO     | agent.vision_element_detector       | 📸 Annotated image saved
+2026-04-07 06:10:14 | INFO     | agent.services.execution_service    | ⏱️  LLM response time: 11.55s
+2026-04-07 06:10:14 | INFO     | agent.services.execution_service    | ☁️  Screenshot uploaded: /api/executions/69d452069ed7599e5affc0bd/steps/1/screenshot
+2026-04-07 06:10:14 | INFO     | agent.services.execution_service    | ✅ Agent decision received
+2026-04-07 06:10:14 | INFO     | agent.services.execution_service    |    📝 Game state: The player is in a match-3 level with 32 moves left. The goal is to turn 65 tiles green, with 62 remaining. A purple kite booster is located on a green tile at (1789, 739). Several pieces are chained in the center.
+2026-04-07 06:10:14 | INFO     | agent.services.execution_service    |    🤔 Reasoning: Activating the purple kite booster on a green tile is an efficient move as it will turn its target tile green and potentially help spread the green color across the board. This aligns with the primary goal of completing the level.
+2026-04-07 06:10:14 | INFO     | agent.services.execution_service    |    🔍 Force annotate: False
+2026-04-07 06:10:14 | INFO     | agent.services.execution_service    |    🎯 Actions count: 1
+2026-04-07 06:10:14 | INFO     | agent.services.execution_service    |    🏁 End game: False
+2026-04-07 06:10:14 | INFO     | agent.services.execution_service    |    📋 Test results: []
+2026-04-07 06:10:14 | INFO     | agent.services.execution_service    |    📊 Token usage — Input: 13102, Output: 1591, Total: 14693
+2026-04-07 06:10:14 | INFO     | agent.services.execution_service    | 💾 ExecutionStep 1 DB write dispatched (background)
+2026-04-07 06:10:14 | INFO     | agent.services.execution_service    |    action (1/1): click x=1789 y=739 duration=0.1
+2026-04-07 06:10:14 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (1789, 739) duration=0.1s
+2026-04-07 06:10:14 | INFO     | agent.vision_element_detector       | ✏️  Saved annotated screenshot (1 action(s)) → screenshots/69d452069ed7599e5affc0bd/step_1_annotated.png
+2026-04-07 06:10:16 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 2 | Run 69d45206
+================================================================================
+2026-04-07 06:10:16 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[IN_PROGRESS] [1] [ACTION] Complete the match-3 level by turning all 65 tiles green
+[PENDING] [2] [VERIFY] Verify if the game ends correctly after reaching the goal or running out of moves (depends on: 1)
+============================================================
+2026-04-07 06:10:19 | INFO     | agent.services.execution_service    | 💾 step_2.png (captured in 2.92s)
+2026-04-07 06:10:19 | INFO     | agent.context.context_service       | 🔄 Force annotation requested, bypassing cache
+2026-04-07 06:10:19 | INFO     | agent.vision_element_detector       | 🔍 Vision detection
+2026-04-07 06:10:19 | INFO     | agent.services.execution_service    | 📍 Action-annotated screenshot uploaded for step 1 (local: screenshots/69d452069ed7599e5affc0bd/step_1_annotated.png)
+2026-04-07 06:10:43 | INFO     | agent.vision_element_detector       | ⏱️  Vision API response time: 24.34s
+2026-04-07 06:10:43 | INFO     | agent.vision_element_detector       | ✅ Detected 72 elements via vision
+2026-04-07 06:10:43 | INFO     | agent.context.context_service       | 📋 Actions message:
+Detected interactive elements on screen:
+- Player profile icon at (232, 210) bbox: [103, 108, 361, 313] - Player profile icon
+- Progress bar at (236, 620) bbox: [120, 367, 353, 874] - Progress bar
+- Goal item counter at (242, 620) bbox: [180, 572, 305, 669] - Goal item counter
+- Moves counter at (224, 933) bbox: [120, 885, 329, 982] - Moves counter
+- Yellow lamp game piece at (776, 215) bbox: [717, 172, 835, 259] - Yellow lamp game piece
+- Pink button game piece at (895, 215) bbox: [835, 172, 955, 259] - Pink button game piece
+- Green cup game piece with chain at (1015, 215) bbox: [955, 172, 1076, 259] - Green cup game piece with chain
+- Yellow lamp game piece at (1136, 215) bbox: [1076, 172, 1196, 259] - Yellow lamp game piece
+- Red bow tie game piece at (1319, 215) bbox: [1259, 172, 1379, 259] - Red bow tie game piece
+- Green cup game piece at (1439, 215) bbox: [1379, 172, 1500, 259] - Green cup game piece
+- Blue book game piece at (1560, 215) bbox: [1500, 172, 1620, 259] - Blue book game piece
+- Red bow tie game piece at (1680, 215) bbox: [1620, 172, 1740, 259] - Red bow tie game piece
+- Pink button game piece at (680, 318) bbox: [621, 270, 739, 367] - Pink button game piece
+- Pink button game piece at (799, 318) bbox: [739, 270, 859, 367] - Pink button game piece
+- Yellow lamp game piece at (919, 318) bbox: [859, 270, 980, 367] - Yellow lamp game piece
+- Blue book game piece at (1040, 318) bbox: [980, 270, 1100, 367] - Blue book game piece
+- Green cup game piece at (1160, 318) bbox: [1100, 270, 1220, 367] - Green cup game piece
+- Green cup game piece at (1319, 318) bbox: [1259, 270, 1379, 367] - Green cup game piece
+- Pink button game piece at (1439, 318) bbox: [1379, 270, 1500, 367] - Pink button game piece
+- Red bow tie game piece at (1560, 318) bbox: [1500, 270, 1620, 367] - Red bow tie game piece
+- Pink button game piece at (1680, 318) bbox: [1620, 270, 1740, 367] - Pink button game piece
+- Green cup game piece at (1800, 318) bbox: [1740, 270, 1861, 367] - Green cup game piece
+- Yellow lamp game piece at (680, 426) bbox: [621, 378, 739, 475] - Yellow lamp game piece
+- Blue book game piece at (799, 426) bbox: [739, 378, 859, 475] - Blue book game piece
+- Blue book game piece at (919, 426) bbox: [859, 378, 980, 475] - Blue book game piece
+- Yellow lamp game piece with chain at (1040, 426) bbox: [980, 378, 1100, 475] - Yellow lamp game piece with chain
+- Pink button game piece with chain at (1160, 426) bbox: [1100, 378, 1220, 475] - Pink button game piece with chain
+- Pink button game piece with chain at (1319, 426) bbox: [1259, 378, 1379, 475] - Pink button game piece with chain
+- Yellow lamp game piece with chain at (1439, 426) bbox: [1379, 378, 1500, 475] - Yellow lamp game piece with chain
+- Yellow lamp game piece at (1560, 426) bbox: [1500, 378, 1620, 475] - Yellow lamp game piece
+- Blue book game piece at (1680, 426) bbox: [1620, 378, 1740, 475] - Blue book game piece
+- Blue book game piece at (1800, 426) bbox: [1740, 378, 1861, 475] - Blue book game piece
+- Red bow tie game piece at (680, 534) bbox: [621, 486, 739, 583] - Red bow tie game piece
+- Green cup game piece at (799, 534) bbox: [739, 486, 859, 583] - Green cup game piece
+- Pink button game piece at (919, 534) bbox: [859, 486, 980, 583] - Pink button game piece
+- Green cup game piece at (1040, 534) bbox: [980, 486, 1100, 583] - Green cup game piece
+- Green cup game piece at (1160, 534) bbox: [1100, 486, 1220, 583] - Green cup game piece
+- Green cup game piece at (1319, 534) bbox: [1259, 486, 1379, 583] - Green cup game piece
+- Yellow lamp game piece with chain at (1439, 534) bbox: [1379, 486, 1500, 583] - Yellow lamp game piece with chain
+- Yellow lamp game piece at (1560, 534) bbox: [1500, 486, 1620, 583] - Yellow lamp game piece
+- Green cup game piece at (1680, 534) bbox: [1620, 486, 1740, 583] - Green cup game piece
+- Green cup game piece at (1800, 534) bbox: [1740, 486, 1861, 583] - Green cup game piece
+- Yellow lamp game piece at (680, 642) bbox: [621, 594, 739, 691] - Yellow lamp game piece
+- Pink button game piece at (799, 642) bbox: [739, 594, 859, 691] - Pink button game piece
+- Pink button game piece at (919, 642) bbox: [859, 594, 980, 691] - Pink button game piece
+- Yellow lamp game piece with chain at (1040, 642) bbox: [980, 594, 1100, 691] - Yellow lamp game piece with chain
+- Pink button game piece with chain at (1160, 642) bbox: [1100, 594, 1220, 691] - Pink button game piece with chain
+- Pink button game piece with chain at (1319, 642) bbox: [1259, 594, 1379, 691] - Pink button game piece with chain
+- Yellow lamp game piece at (1439, 642) bbox: [1379, 594, 1500, 691] - Yellow lamp game piece
+- Pink button game piece at (1560, 642) bbox: [1500, 594, 1620, 691] - Pink button game piece
+- Blue book game piece with chain at (1680, 642) bbox: [1620, 594, 1740, 691] - Blue book game piece with chain
+- Yellow lamp game piece at (1800, 642) bbox: [1740, 594, 1861, 691] - Yellow lamp game piece
+- Red bow tie game piece at (680, 750) bbox: [621, 702, 739, 799] - Red bow tie game piece
+- Pink button game piece at (799, 750) bbox: [739, 702, 859, 799] - Pink button game piece
+- Green cup game piece at (919, 750) bbox: [859, 702, 980, 799] - Green cup game piece
+- Yellow lamp game piece with chain at (1040, 750) bbox: [980, 702, 1100, 799] - Yellow lamp game piece with chain
+- Blue book game piece at (1439, 750) bbox: [1379, 702, 1500, 799] - Blue book game piece
+- Blue book game piece at (1560, 750) bbox: [1500, 702, 1620, 799] - Blue book game piece
+- Pink button game piece at (1680, 750) bbox: [1620, 702, 1740, 799] - Pink button game piece
+- Red bow tie game piece at (1800, 750) bbox: [1740, 702, 1861, 799] - Red bow tie game piece
+- Red bow tie game piece at (799, 858) bbox: [739, 810, 859, 907] - Red bow tie game piece
+- Red bow tie game piece at (919, 858) bbox: [859, 810, 980, 907] - Red bow tie game piece
+- Green cup game piece with chain at (1040, 858) bbox: [980, 810, 1100, 907] - Green cup game piece with chain
+- Green cup game piece at (1439, 858) bbox: [1379, 810, 1500, 907] - Green cup game piece
+- Yellow lamp game piece at (1560, 858) bbox: [1500, 810, 1620, 907] - Yellow lamp game piece
+- Yellow lamp game piece at (1680, 858) bbox: [1620, 810, 1740, 907] - Yellow lamp game piece
+- Locked level icon at (2142, 167) bbox: [2070, 108, 2215, 226] - Locked level icon
+- Locked level icon at (2142, 312) bbox: [2070, 237, 2215, 388] - Locked level icon
+- Locked level icon at (2142, 474) bbox: [2070, 399, 2215, 550] - Locked level icon
+- Locked level icon at (2142, 636) bbox: [2070, 561, 2215, 712] - Locked level icon
+- Locked level icon at (2142, 798) bbox: [2070, 723, 2215, 874] - Locked level icon
+- Settings menu icon at (2142, 933) bbox: [2070, 885, 2215, 982] - Settings menu icon
+ Annotated Items Represented in Grid for better Spatial understanding:
+ Board Grid (use for match reasoning):
+        c0                                    c1                                    c2                                    c3                                    c4                                    c5                                    c6                                    c7                                    c8                                    c9                                    c10                                   c11                                   
+r0     --                                     --                                     --                                     --                                     --                                     --                                     --                                     --                                     --                                     --                                     --                                     [Locked level icon]                   
+r1     [Player profile icon]                  --                                     [Yellow lamp game piece]               [Pink button game piece]               [Green cup game piece with chain]      [Yellow lamp game piece]               [Red bow tie game piece]               [Green cup game piece]                 [Blue book game piece]                 [Red bow tie game piece]               --                                     --                                    
+r2     --                                     [Pink button game piece]               [Pink button game piece]               [Yellow lamp game piece]               [Blue book game piece]                 [Green cup game piece]                 [Green cup game piece]                 [Pink button game piece]               [Red bow tie game piece]               [Pink button game piece]               [Green cup game piece]                 [Locked level icon]                   
+r3     --                                     [Yellow lamp game piece]               [Blue book game piece]                 [Blue book game piece]                 [Yellow lamp game piece with chain]    [Pink button game piece with chain]    [Pink button game piece with chain]    [Yellow lamp game piece with chain]    [Yellow lamp game piece]               [Blue book game piece]                 [Blue book game piece]                 --                                    
+r4     --                                     --                                     --                                     --                                     --                                     --                                     --                                     --                                     --                                     --                                     --                                     [Locked level icon]                   
+r5     --                                     [Red bow tie game piece]               [Green cup game piece]                 [Pink button game piece]               [Green cup game piece]                 [Green cup game piece]                 [Green cup game piece]                 [Yellow lamp game piece with chain]    [Yellow lamp game piece]               [Green cup game piece]                 [Green cup game piece]                 --                                    
+r6     [Goal item counter]                    [Yellow lamp game piece]               [Pink button game piece]               [Pink button game piece]               [Yellow lamp game piece with chain]    [Pink button game piece with chain]    [Pink button game piece with chain]    [Yellow lamp game piece]               [Pink button game piece]               [Blue book game piece with chain]      [Yellow lamp game piece]               [Locked level icon]                   
+r7     --                                     [Red bow tie game piece]               [Pink button game piece]               [Green cup game piece]                 [Yellow lamp game piece with chain]    --                                     --                                     [Blue book game piece]                 [Blue book game piece]                 [Pink button game piece]               [Red bow tie game piece]               --                                    
+r8     --                                     --                                     --                                     --                                     --                                     --                                     --                                     --                                     --                                     --                                     --                                     [Locked level icon]                   
+r9     --                                     --                                     [Red bow tie game piece]               [Red bow tie game piece]               [Green cup game piece with chain]      --                                     --                                     [Green cup game piece]                 [Yellow lamp game piece]               [Yellow lamp game piece]               --                                     --                                    
+r10    [Moves counter]                        --                                     --                                     --                                     --                                     --                                     --                                     --                                     --                                     --                                     --                                     [Settings menu icon]                  
+2026-04-07 06:10:43 | DEBUG    | agent.context.context_service       | 💾 Annotation cache updated for step 2
+2026-04-07 06:10:43 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-04-07 06:10:44 | INFO     | agent.vision_element_detector       | 📸 Annotated image saved
+2026-04-07 06:11:56 | INFO     | agent.services.execution_service    | ⏱️  LLM response time: 73.04s
+2026-04-07 06:11:56 | INFO     | agent.services.execution_service    | ☁️  Screenshot uploaded: /api/executions/69d452069ed7599e5affc0bd/steps/2/screenshot
+2026-04-07 06:11:56 | INFO     | agent.services.execution_service    | ✅ Agent decision received
+2026-04-07 06:11:56 | INFO     | agent.services.execution_service    |    📝 Game state: The player is in a match-3 level with 31 moves remaining. The goal is to turn 65 tiles green, with 59 still needed. Chained pieces are present in the center columns. Some tiles are already green, mostly on the left and right sides of the board.
+2026-04-07 06:11:56 | INFO     | agent.services.execution_service    |    🤔 Reasoning: To progress and break chains, I will match 3 pink buttons in row 6. By swapping the pink button at (1560, 642) with the yellow lamp at (1439, 642), a horizontal match of three pink buttons will be formed using the two chained pink buttons at (1160, 642) and (1319, 642). This will help clear the chains and eventually allow for more matches to spread the green color.
+2026-04-07 06:11:56 | INFO     | agent.services.execution_service    |    🔍 Force annotate: False
+2026-04-07 06:11:56 | INFO     | agent.services.execution_service    |    🎯 Actions count: 1
+2026-04-07 06:11:56 | INFO     | agent.services.execution_service    |    🏁 End game: False
+2026-04-07 06:11:56 | INFO     | agent.services.execution_service    |    📋 Test results: []
+2026-04-07 06:11:56 | INFO     | agent.services.execution_service    |    📊 Token usage — Input: 18586, Output: 14062, Total: 32648
+2026-04-07 06:11:56 | INFO     | agent.services.execution_service    | 💾 ExecutionStep 2 DB write dispatched (background)
+2026-04-07 06:11:56 | INFO     | agent.services.execution_service    |    action (1/1): swipe x=1560 y=642 duration=0.5
+2026-04-07 06:11:56 | INFO     | agent.appium_manager                | 🔄 SWIPE (Appium): (1560, 642) → (1439, 642) duration=0.5s
+2026-04-07 06:11:57 | INFO     | agent.appium_manager                | 🔄 SWIPE (Appium): (1560, 642) → (1439, 642) duration=0.5s
+2026-04-07 06:11:57 | INFO     | agent.vision_element_detector       | ✏️  Saved annotated screenshot (1 action(s)) → screenshots/69d452069ed7599e5affc0bd/step_2_annotated.png
+2026-04-07 06:11:59 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 3 | Run 69d45206
+================================================================================
+2026-04-07 06:11:59 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[IN_PROGRESS] [1] [ACTION] Complete the match-3 level by turning all 65 tiles green
+[PENDING] [2] [VERIFY] Verify if the game ends correctly after reaching the goal or running out of moves (depends on: 1)
+============================================================
+2026-04-07 06:12:02 | INFO     | agent.services.execution_service    | 💾 step_3.png (captured in 2.87s)
+2026-04-07 06:12:02 | INFO     | agent.context.context_service       | 🔄 Force annotation requested, bypassing cache
+2026-04-07 06:12:02 | INFO     | agent.vision_element_detector       | 🔍 Vision detection
+2026-04-07 06:12:02 | INFO     | agent.services.execution_service    | 📍 Action-annotated screenshot uploaded for step 2 (local: screenshots/69d452069ed7599e5affc0bd/step_2_annotated.png)
+2026-04-07 06:13:17 | ERROR    | agent.vision_element_detector       | ❌ [TIMEOUT] Vision detection timed out after 75.0s
+2026-04-07 06:13:17 | WARNING  | agent.context.context_service       | ⚠️ Context service: Vision detection failed, providing fallback message
+2026-04-07 06:13:17 | INFO     | agent.context.context_service       | 📋 Actions message:
+⚠️ Vision detection failed after 3 attempts: Vision detection timed out after 75.0s
+Fallback: Analyze the screenshot carefully to identify clickable areas and their positions.
+2026-04-07 06:13:17 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-04-07 06:14:27 | INFO     | agent.services.execution_service    | ⏱️  LLM response time: 69.34s
+2026-04-07 06:14:27 | INFO     | agent.services.execution_service    | ☁️  Screenshot uploaded: /api/executions/69d452069ed7599e5affc0bd/steps/3/screenshot
+2026-04-07 06:14:27 | INFO     | agent.services.execution_service    | ✅ Agent decision received
+2026-04-07 06:14:27 | INFO     | agent.services.execution_service    |    📝 Game state: The player is on a match-3 level with 31 moves remaining. The goal is to turn 65 tiles green, with 59 still needed. Chained pieces are present in the middle columns. Green tiles are currently located in the bottom left and right areas. No boosters are currently visible on the board. The current board state matches the previous state, suggesting the last action might not have been processed or the game is animating.
+2026-04-07 06:14:27 | INFO     | agent.services.execution_service    |    🤔 Reasoning: To spread the green color, I will match 3 pink buttons vertically on the left side of the board. Swapping the pink button at (919, 534) with the green cup at (799, 534) will create a match of three pink buttons at (799, 534), (799, 642), and (799, 750). Since the button at (799, 750) is on a green tile, the green color will spread upwards to the tiles at (799, 534) and (799, 642). I will also include a brief wait to ensure the game state updates.
+2026-04-07 06:14:27 | INFO     | agent.services.execution_service    |    🔍 Force annotate: False
+2026-04-07 06:14:27 | INFO     | agent.services.execution_service    |    🎯 Actions count: 2
+2026-04-07 06:14:27 | INFO     | agent.services.execution_service    |    🏁 End game: False
+2026-04-07 06:14:27 | INFO     | agent.services.execution_service    |    📋 Test results: []
+2026-04-07 06:14:27 | INFO     | agent.services.execution_service    |    📊 Token usage — Input: 20071, Output: 12680, Total: 32751
+2026-04-07 06:14:27 | INFO     | agent.services.execution_service    | 💾 ExecutionStep 3 DB write dispatched (background)
+2026-04-07 06:14:27 | INFO     | agent.services.execution_service    |    action (1/2): wait x=None y=None duration=0.5
+2026-04-07 06:14:27 | INFO     | agent.appium_manager                | ⏳ WAIT: 0.5s
+2026-04-07 06:14:27 | INFO     | agent.vision_element_detector       | ✏️  Saved annotated screenshot (1 action(s)) → screenshots/69d452069ed7599e5affc0bd/step_3_annotated.png
+2026-04-07 06:14:27 | INFO     | agent.services.execution_service    |    action (2/2): swipe x=919 y=534 duration=0.5
+2026-04-07 06:14:27 | INFO     | agent.appium_manager                | 🔄 SWIPE (Appium): (919, 534) → (799, 534) duration=0.5s
+2026-04-07 06:14:28 | INFO     | agent.appium_manager                | 🔄 SWIPE (Appium): (919, 534) → (799, 534) duration=0.5s
+2026-04-07 06:14:30 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 4 | Run 69d45206
+================================================================================
+2026-04-07 06:14:30 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[IN_PROGRESS] [1] [ACTION] Complete the match-3 level by turning all 65 tiles green
+[PENDING] [2] [VERIFY] Verify if the game ends correctly after reaching the goal or running out of moves (depends on: 1)
+============================================================
+2026-04-07 06:14:33 | INFO     | agent.services.execution_service    | 💾 step_4.png (captured in 3.29s)
+2026-04-07 06:14:33 | INFO     | agent.context.context_service       | 🔄 Force annotation requested, bypassing cache
+2026-04-07 06:14:33 | INFO     | agent.vision_element_detector       | 🔍 Vision detection
+2026-04-07 06:14:33 | INFO     | agent.services.execution_service    | 📍 Action-annotated screenshot uploaded for step 3 (local: screenshots/69d452069ed7599e5affc0bd/step_3_annotated.png)
+2026-04-07 06:15:48 | ERROR    | agent.vision_element_detector       | ❌ [TIMEOUT] Vision detection timed out after 75.0s
+2026-04-07 06:15:48 | WARNING  | agent.context.context_service       | ⚠️ Context service: Vision detection failed, providing fallback message
+2026-04-07 06:15:48 | INFO     | agent.context.context_service       | 📋 Actions message:
+⚠️ Vision detection failed after 3 attempts: Vision detection timed out after 75.0s
+Fallback: Analyze the screenshot carefully to identify clickable areas and their positions.
+2026-04-07 06:15:48 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-04-07 06:16:47 | INFO     | agent.services.execution_service    | ⏱️  LLM response time: 58.88s
+2026-04-07 06:16:47 | INFO     | agent.services.execution_service    | ☁️  Screenshot uploaded: /api/executions/69d452069ed7599e5affc0bd/steps/4/screenshot
+2026-04-07 06:16:47 | INFO     | agent.services.execution_service    | ✅ Agent decision received
+2026-04-07 06:16:47 | INFO     | agent.services.execution_service    |    📝 Game state: The player is in a match-3 level with 30 moves left. The goal is to turn 65 tiles green, and 57 remain. The board has several chained pieces in the central columns. Green tiles are currently located in the bottom-left and bottom-right areas. A vertical match-3 of pink buttons can be made on the left side of the board to spread the green color.
+2026-04-07 06:16:47 | INFO     | agent.services.execution_service    |    🤔 Reasoning: I will create a vertical match-3 of pink buttons on the left side of the board. By swapping the pink button at (919, 534) with the green cup at (799, 534), I will align three pink buttons at (799, 534), (799, 642), and (799, 750). Since the piece at (799, 750) is on a green tile, this match will spread the green color to the tiles at (799, 534) and (799, 642), progressing toward the objective.
+2026-04-07 06:16:47 | INFO     | agent.services.execution_service    |    🔍 Force annotate: False
+2026-04-07 06:16:47 | INFO     | agent.services.execution_service    |    🎯 Actions count: 1
+2026-04-07 06:16:47 | INFO     | agent.services.execution_service    |    🏁 End game: False
+2026-04-07 06:16:47 | INFO     | agent.services.execution_service    |    📋 Test results: []
+2026-04-07 06:16:47 | INFO     | agent.services.execution_service    |    📊 Token usage — Input: 21691, Output: 10437, Total: 32128
+2026-04-07 06:16:47 | INFO     | agent.services.execution_service    | 💾 ExecutionStep 4 DB write dispatched (background)
+2026-04-07 06:16:47 | INFO     | agent.services.execution_service    |    action (1/1): swipe x=919 y=534 duration=0.5
+2026-04-07 06:16:47 | INFO     | agent.appium_manager                | 🔄 SWIPE (Appium): (919, 534) → (799, 534) duration=0.5s
+2026-04-07 06:16:48 | INFO     | agent.appium_manager                | 🔄 SWIPE (Appium): (919, 534) → (799, 534) duration=0.5s
+2026-04-07 06:16:48 | INFO     | agent.vision_element_detector       | ✏️  Saved annotated screenshot (1 action(s)) → screenshots/69d452069ed7599e5affc0bd/step_4_annotated.png
+2026-04-07 06:16:50 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 5 | Run 69d45206
+================================================================================
+2026-04-07 06:16:50 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[IN_PROGRESS] [1] [ACTION] Complete the match-3 level by turning all 65 tiles green
+[PENDING] [2] [VERIFY] Verify if the game ends correctly after reaching the goal or running out of moves (depends on: 1)
+============================================================
+2026-04-07 06:16:53 | INFO     | agent.services.execution_service    | 💾 step_5.png (captured in 2.92s)
+2026-04-07 06:16:53 | INFO     | agent.context.context_service       | 🔄 Force annotation requested, bypassing cache
+2026-04-07 06:16:53 | INFO     | agent.vision_element_detector       | 🔍 Vision detection
+2026-04-07 06:16:53 | INFO     | agent.services.execution_service    | 📍 Action-annotated screenshot uploaded for step 4 (local: screenshots/69d452069ed7599e5affc0bd/step_4_annotated.png)
+2026-04-07 06:18:08 | ERROR    | agent.vision_element_detector       | ❌ [TIMEOUT] Vision detection timed out after 75.0s
+2026-04-07 06:18:08 | WARNING  | agent.context.context_service       | ⚠️ Context service: Vision detection failed, providing fallback message
+2026-04-07 06:18:08 | INFO     | agent.context.context_service       | 📋 Actions message:
+⚠️ Vision detection failed after 3 attempts: Vision detection timed out after 75.0s
+Fallback: Analyze the screenshot carefully to identify clickable areas and their positions.
+2026-04-07 06:18:08 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-04-07 06:19:25 | INFO     | agent.services.execution_service    | ⏱️  LLM response time: 76.91s
+2026-04-07 06:19:25 | INFO     | agent.services.execution_service    | ☁️  Screenshot uploaded: /api/executions/69d452069ed7599e5affc0bd/steps/5/screenshot
+2026-04-07 06:19:25 | INFO     | agent.services.execution_service    | ✅ Agent decision received
+2026-04-07 06:19:25 | INFO     | agent.services.execution_service    |    📝 Game state: The player is in a match-3 level with 29 moves left. The goal is to turn 65 tiles green, with 54 still to go. There are chained pieces in the central columns. A small green patch exists at the top-right (around 1319, 215) and a larger one on the left. The current goal is to spread the green color using matches adjacent to existing green tiles.
+2026-04-07 06:19:25 | INFO     | agent.services.execution_service    |    🤔 Reasoning: I will perform a horizontal match-3 of pink buttons in the third row. By swapping the red bow tie at (1560, 318) with the pink button at (1680, 318), I will align three pink buttons at (1439, 318), (1560, 318), and (1680, 318). Since the tile at (1439, 318) is adjacent to the green tile at (1439, 215), the green color will spread across the matched tiles, progressing toward the objective.
+2026-04-07 06:19:25 | INFO     | agent.services.execution_service    |    🔍 Force annotate: False
+2026-04-07 06:19:25 | INFO     | agent.services.execution_service    |    🎯 Actions count: 1
+2026-04-07 06:19:25 | INFO     | agent.services.execution_service    |    🏁 End game: False
+2026-04-07 06:19:25 | INFO     | agent.services.execution_service    |    📋 Test results: []
+2026-04-07 06:19:25 | INFO     | agent.services.execution_service    |    📊 Token usage — Input: 18018, Output: 14986, Total: 33004
+2026-04-07 06:19:25 | INFO     | agent.services.execution_service    | 💾 ExecutionStep 5 DB write dispatched (background)
+2026-04-07 06:19:25 | INFO     | agent.services.execution_service    |    action (1/1): swipe x=1560 y=318 duration=0.5
+2026-04-07 06:19:25 | INFO     | agent.appium_manager                | 🔄 SWIPE (Appium): (1560, 318) → (1680, 318) duration=0.5s
+2026-04-07 06:19:26 | INFO     | agent.appium_manager                | 🔄 SWIPE (Appium): (1560, 318) → (1680, 318) duration=0.5s

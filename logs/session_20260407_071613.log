@@ -1,0 +1,27 @@
+2026-04-07 07:16:19 | INFO     | agent.database                      | Connected to MongoDB: game_testing
+2026-04-07 07:16:19 | INFO     | agent.services.execution_service    | 🤖 Using Google model: gemini-3-flash-preview
+2026-04-07 07:16:19 | INFO     | agent.services.execution_service    | Marked 1 stale execution run(s) as failed on startup
+2026-04-07 07:16:24 | INFO     | agent.services.android_build_runner | Downloading APK from gs://rovix_ai_bucket/game_builds/69a1a52bddccbd191280e7eb/69d28eb0cf05947fe6b5670a/android/20260405180924_12dd91d8ed4c4ca9a0938ae0a4cbe62d_uptodown-com.playrix.homescapes.apk (provider=local)
+2026-04-07 07:16:30 | INFO     | agent.services.android_build_runner | Installing APK on RZCW31HH47R (package=com.uptodown)
+2026-04-07 07:16:30 | INFO     | agent.services.android_build_runner | Launching com.uptodown / com.uptodown.activities.MainActivity
+2026-04-07 07:16:30 | INFO     | agent.appium_manager                | 📱 Using device with UDID: RZCW31HH47R
+2026-04-07 07:16:30 | INFO     | agent.appium_manager                | 🎯 Appium will launch app: com.uptodown
+2026-04-07 07:16:30 | INFO     | agent.appium_manager                | 🔌 Connecting to Appium server at http://127.0.0.1:4723...
+2026-04-07 07:16:35 | INFO     | agent.appium_manager                | ✅ Appium session started: faa1b5b9-e95c-4746-bbac-2ed3e98f2531
+2026-04-07 07:16:35 | INFO     | agent.services.execution_service    | Starting execution 69d461f0c08a5037f546911f on device RZCW31HH47R
+2026-04-07 07:16:35 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 0 | Run 69d461f0
+================================================================================
+2026-04-07 07:16:35 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[PENDING] [s1] [ACTION] Just complete the match 3 game within total moves.
+[PENDING] [step-1775432926299] [VERIFY] Verify if the game ends
+============================================================
+2026-04-07 07:16:37 | INFO     | agent.services.execution_service    | 💾 step_0.png (captured in 1.99s)
+2026-04-07 07:16:37 | INFO     | agent.context.context_service       | 🔄 Force annotation requested, bypassing cache
+2026-04-07 07:16:37 | INFO     | agent.vision_element_detector       | 🔍 Vision detection

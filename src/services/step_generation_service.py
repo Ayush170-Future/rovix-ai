@@ -52,7 +52,7 @@ async def generate_steps(
     game_description: str = "",
 ) -> GeneratedScenario:
     model = ChatGoogleGenerativeAI(
-        model="gemini-3-flash-preview",
+        model="gemini-3.1-pro-preview",
         temperature=0.3,
         api_key=os.getenv("GOOGLE_API_KEY"),
     )

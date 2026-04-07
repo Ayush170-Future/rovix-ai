@@ -346,7 +346,7 @@ def annotate_actions(image_path: str, actions: "List[Action]") -> "Optional[str]
                     drawn += 1
 
         base_name = os.path.splitext(image_path)[0]
-        output_path = f"{base_name}_annotated.png"
+        output_path = f"{base_name}_action_annotated.png"
         img.save(output_path, format="PNG")
         logger.info(f"✏️  Saved annotated screenshot ({drawn} action(s)) → {output_path}")
         return output_path

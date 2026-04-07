@@ -9,6 +9,57 @@ from PIL import Image
 from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 
 ANNOTATION_CACHE_THRESHOLD = 15  # dhash Hamming distance below which we reuse cached annotations
+GRID_CLUSTER_TOLERANCE = 40  # px — positions within this distance share the same row/col
+
+
+def _build_board_grid(elements: list) -> str:
+    """
+    Cluster all detected elements into a 2D grid by their center positions
+    and return a formatted board grid string.
+    """
+    if not elements:
+        return ""
+
+    def cluster(values: list, tolerance: int) -> dict:
+        """Map each value to a row/col index by grouping nearby pixel values."""
+        sorted_vals = sorted(set(values))
+        groups = []
+        for v in sorted_vals:
+            if groups and v - groups[-1] <= tolerance:
+                continue
+            groups.append(v)
+        return {v: next(i for i, g in enumerate(groups) if abs(v - g) <= tolerance) for v in values}
+
+    xs = [e["screen_position"][0] for e in elements]
+    ys = [e["screen_position"][1] for e in elements]
+    col_map = cluster(xs, GRID_CLUSTER_TOLERANCE)
+    row_map = cluster(ys, GRID_CLUSTER_TOLERANCE)
+
+    grid: dict = {}
+    for e in elements:
+        r = row_map[e["screen_position"][1]]
+        c = col_map[e["screen_position"][0]]
+        grid[(r, c)] = e["name"]
+
+    num_rows = max(r for r, _ in grid) + 1
+    num_cols = max(c for _, c in grid) + 1
+
+    max_label_len = max(len(v) for v in grid.values())
+    cell_w = max_label_len + 2
+
+    header = "        " + "".join(f"c{c}".ljust(cell_w + 3) for c in range(num_cols))
+    lines = ["Board Grid (use for match reasoning):", header]
+    for r in range(num_rows):
+        row_cells = []
+        for c in range(num_cols):
+            if (r, c) in grid:
+                label = f"[{grid[(r, c)]}]"
+            else:
+                label = "--"
+            row_cells.append(label.ljust(cell_w + 3))
+        lines.append(f"r{r:<6}" + " ".join(row_cells))
+
+    return "\n".join(lines)
 
 # TODO: Add a `force_vision_refresh: bool` field to AgentOutput so the LLM can request
 # fresh annotation when cached elements don't match what it sees on screen.
@@ -252,6 +303,7 @@ class ContextService:
                         pos = element['screen_position']
                         bbox = element['bounding_box']
                         action_message_content += f"\n- {name} at ({pos[0]}, {pos[1]}) bbox: [{bbox[0]}, {bbox[1]}, {bbox[2]}, {bbox[3]}] - {desc}"
+                    action_message_content += "\n Annotated Items Represented in Grid for better Spatial understanding:\n " + _build_board_grid(detection_result.elements)
                 else:
                     action_message_content += "\n- No elements detected. Analyze the screenshot to identify clickable areas."
             else:
@@ -261,7 +313,8 @@ class ContextService:
                     "Fallback: Analyze the screenshot carefully to identify clickable areas and their positions."
                 )
                 logger.warning(f"⚠️ Context service: Vision detection failed, providing fallback message")
-            
+
+            logger.info(f"📋 Actions message:\n{action_message_content}")
             built_message = HumanMessage(content=[{"type": "text", "text": action_message_content}])
 
             if detection_result.success:
