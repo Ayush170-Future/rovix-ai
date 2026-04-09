@@ -82,6 +82,12 @@ class AgentSession:
     consecutive_device_failures: int = 0
     # Background atomic $push/$inc to execution_runs; await before complete/fail.
     pending_run_append_tasks: List[Any] = field(default_factory=list)
+    # Soft-stop flag: set to True via POST /api/executions/{id}/stop.
+    # Checked at each step boundary — loop breaks cleanly on next iteration.
+    # TODO: This is in-process memory only. In a multi-worker or producer-consumer
+    # setup, this flag should live in the job broker (e.g. Redis) so any API worker
+    # can write it and the worker process that owns the execution will pick it up.
+    cancelled: bool = False
 
 
 # ── Service ──────────────────────────────────────────────────────────────────
@@ -163,6 +169,15 @@ class ExecutionService:
 
     def is_device_busy(self, device_udid: str) -> bool:
         return device_udid in self._sessions
+
+    def cancel_run(self, device_udid: str) -> bool:
+        """Set the cancelled flag on the active session for this device.
+        Returns True if a running session was found, False if device is idle."""
+        session = self._sessions.get(device_udid)
+        if not session:
+            return False
+        session.cancelled = True
+        return True
 
     async def mark_stale_runs_failed(self) -> None:
         count = await self._execution_repo.mark_stale_as_failed()
@@ -247,6 +262,9 @@ class ExecutionService:
         logger.info(f"Starting execution {session.execution_run_id} on device {session.device_udid}")
         try:
             for step_num in range(MAX_STEPS):
+                if session.cancelled:
+                    logger.info(f"Execution {session.execution_run_id} cancelled by client")
+                    break
                 session.step_count = step_num
                 end_game = await self._handle_step(session, step_num)
                 if end_game:
@@ -254,7 +272,10 @@ class ExecutionService:
                 await asyncio.sleep(POLLING_INTERVAL)
 
             await self._await_pending_run_appends(session)
-            await self._execution_repo.complete(session.execution_run_id, session.collected_results)
+            if session.cancelled:
+                await self._execution_repo.cancel(session.execution_run_id)
+            else:
+                await self._execution_repo.complete(session.execution_run_id, session.collected_results)
             logger.info(
                 f"Execution {session.execution_run_id} completed — "
                 f"{len(session.collected_results)} assertion result(s)"

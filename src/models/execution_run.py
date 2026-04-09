@@ -19,6 +19,7 @@ class ExecutionRun(Document):
     game_id: str
     build_id: Optional[str] = None
     org_id: str
+    name: str = ""
     device_udid: str
     device_id: Optional[str] = None  # registry slug when run used a Device row
     status: Literal["queued", "running", "completed", "failed", "cancelled"] = "queued"

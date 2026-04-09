@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 
 from dependencies import get_org
 from models.organization import Organization
@@ -36,6 +36,7 @@ class SaveStepsRequest(BaseModel):
 class ExecuteRequest(BaseModel):
     device_id: str
     build_id: str
+    name: Optional[str] = None
 
 
 @router.post("/api/games/{game_id}/scenarios")
@@ -83,6 +84,7 @@ async def list_game_executions(game_id: str, org: Organization = Depends(get_org
             "id": str(r.id),
             "scenario_id": r.scenario_id,
             "build_id": r.build_id,
+            "name": r.name,
             "scenario_title": title_by_scenario_id.get(r.scenario_id, ""),
             "device_udid": r.device_udid,
             "device_id": r.device_id,
@@ -202,6 +204,8 @@ async def execute_scenario(
     if execution_service.is_device_busy(device.udid):
         raise HTTPException(status_code=409, detail="Device is already running an execution")
 
+    run_name = (request.name or "").strip() or scenario.title
+
     run = await _execution_repo.create(
         scenario_id=scenario_id,
         game_id=scenario.game_id,
@@ -209,6 +213,7 @@ async def execute_scenario(
         org_id=str(org.id),
         device_udid=device.udid,
         total_assertions=len(scenario.assertions),
+        name=run_name,
         device_id=device.device_id,
     )
 

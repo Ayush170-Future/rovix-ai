@@ -1,0 +1,449 @@
+2026-04-08 21:23:41 | INFO     | agent.database                      | Connected to MongoDB: game_testing
+2026-04-08 21:23:41 | INFO     | agent.services.execution_service    | 🤖 Using Google model: gemini-3-flash-preview
+2026-04-08 21:23:41 | INFO     | agent.services.android_build_runner | Downloading APK from gs://rovix_ai_bucket/game_builds/69a1a52bddccbd191280e7eb/69d28eb0cf05947fe6b5670a/android/20260405180924_12dd91d8ed4c4ca9a0938ae0a4cbe62d_uptodown-com.playrix.homescapes.apk (provider=local)
+2026-04-08 21:23:47 | INFO     | agent.services.android_build_runner | Installing APK on RZCW31HH47R (package=com.uptodown)
+2026-04-08 21:23:47 | INFO     | agent.services.android_build_runner | Launching com.uptodown / com.uptodown.activities.MainActivity
+2026-04-08 21:23:47 | INFO     | agent.appium_manager                | 📱 Using device with UDID: RZCW31HH47R
+2026-04-08 21:23:47 | INFO     | agent.appium_manager                | 🎯 Appium will launch app: com.uptodown
+2026-04-08 21:23:47 | INFO     | agent.appium_manager                | 🔌 Connecting to Appium server at http://127.0.0.1:4723...
+2026-04-08 21:23:52 | INFO     | agent.appium_manager                | ✅ Appium session started: f544d65a-e21a-4ec4-8c40-917c16d9e126
+2026-04-08 21:23:52 | INFO     | agent.services.execution_service    | Starting execution 69d67a051044b1f8002b23fc on device RZCW31HH47R
+2026-04-08 21:23:52 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 0 | Run 69d67a05
+================================================================================
+2026-04-08 21:23:52 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[PENDING] [s1] [ACTION] Just complete the match 3 game within total moves.
+[PENDING] [step-1775432926299] [VERIFY] Verify if the game ends
+============================================================
+2026-04-08 21:23:53 | INFO     | agent.services.execution_service    | 💾 step_0.png (captured in 1.63s)
+2026-04-08 21:23:53 | INFO     | agent.context.context_service       | 🔄 Force annotation requested, bypassing cache
+2026-04-08 21:23:53 | INFO     | agent.vision_element_detector       | 🔍 Vision detection
+2026-04-08 21:24:20 | INFO     | agent.vision_element_detector       | ⏱️  Vision API response time: 26.80s
+2026-04-08 21:24:20 | INFO     | agent.vision_element_detector       | ✅ Detected 75 elements via vision
+2026-04-08 21:24:20 | INFO     | agent.context.context_service       | 📋 Actions message:
+Detected interactive elements on screen:
+- Blue book piece at (675, 213) bbox: [626, 168, 724, 259] - Blue book piece
+- Purple button piece at (788, 213) bbox: [739, 168, 837, 259] - Purple button piece
+- Purple button piece at (901, 213) bbox: [852, 168, 951, 259] - Purple button piece
+- Green cup piece chained at (1014, 213) bbox: [965, 168, 1064, 259] - Green cup piece chained
+- Purple button piece at (1127, 213) bbox: [1078, 168, 1177, 259] - Purple button piece
+- Blue book piece at (675, 310) bbox: [626, 265, 724, 356] - Blue book piece
+- Blue book piece at (788, 310) bbox: [739, 265, 837, 356] - Blue book piece
+- Purple button piece at (901, 310) bbox: [852, 265, 951, 356] - Purple button piece
+- Blue book piece chained at (1014, 310) bbox: [965, 265, 1064, 356] - Blue book piece chained
+- Blue book piece at (1127, 310) bbox: [1078, 265, 1177, 356] - Blue book piece
+- Green cup piece at (675, 407) bbox: [626, 362, 724, 453] - Green cup piece
+- Yellow lamp piece at (788, 407) bbox: [739, 362, 837, 453] - Yellow lamp piece
+- Red ribbon piece at (901, 407) bbox: [852, 362, 951, 453] - Red ribbon piece
+- Green cup piece at (1014, 407) bbox: [965, 362, 1064, 453] - Green cup piece
+- Yellow lamp piece at (1127, 407) bbox: [1078, 362, 1177, 453] - Yellow lamp piece
+- Purple button piece at (675, 505) bbox: [626, 460, 724, 550] - Purple button piece
+- Green cup piece at (788, 505) bbox: [739, 460, 837, 550] - Green cup piece
+- Purple button piece at (901, 505) bbox: [852, 460, 951, 550] - Purple button piece
+- Green cup piece at (1014, 505) bbox: [965, 460, 1064, 550] - Green cup piece
+- Yellow lamp piece at (1127, 505) bbox: [1078, 460, 1177, 550] - Yellow lamp piece
+- Blue book piece at (675, 602) bbox: [626, 557, 724, 648] - Blue book piece
+- Green cup piece at (788, 602) bbox: [739, 557, 837, 648] - Green cup piece
+- Green cup piece at (901, 602) bbox: [852, 557, 951, 648] - Green cup piece
+- Yellow lamp piece at (1014, 602) bbox: [965, 557, 1064, 648] - Yellow lamp piece
+- Green cup piece at (1127, 602) bbox: [1078, 557, 1177, 648] - Green cup piece
+- Red ribbon piece at (675, 699) bbox: [626, 654, 724, 745] - Red ribbon piece
+- Blue book piece at (788, 699) bbox: [739, 654, 837, 745] - Blue book piece
+- Purple button piece at (901, 699) bbox: [852, 654, 951, 745] - Purple button piece
+- Red ribbon piece at (1014, 699) bbox: [965, 654, 1064, 745] - Red ribbon piece
+- Yellow lamp piece at (1127, 699) bbox: [1078, 654, 1177, 745] - Yellow lamp piece
+- Blue book piece at (675, 796) bbox: [626, 751, 724, 842] - Blue book piece
+- Green cup piece at (788, 796) bbox: [739, 751, 837, 842] - Green cup piece
+- Purple button piece at (901, 796) bbox: [852, 751, 951, 842] - Purple button piece
+- Green cup piece at (1014, 796) bbox: [965, 751, 1064, 842] - Green cup piece
+- Purple button piece at (1127, 796) bbox: [1078, 751, 1177, 842] - Purple button piece
+- Yellow lamp piece at (1315, 213) bbox: [1266, 168, 1365, 259] - Yellow lamp piece
+- Green cup piece chained at (1428, 213) bbox: [1379, 168, 1478, 259] - Green cup piece chained
+- Green cup piece at (1541, 213) bbox: [1492, 168, 1591, 259] - Green cup piece
+- Red ribbon piece at (1655, 213) bbox: [1606, 168, 1704, 259] - Red ribbon piece
+- Green cup piece at (1315, 310) bbox: [1266, 265, 1365, 356] - Green cup piece
+- Yellow lamp piece chained at (1428, 310) bbox: [1379, 265, 1478, 356] - Yellow lamp piece chained
+- Yellow lamp piece at (1541, 310) bbox: [1492, 265, 1591, 356] - Yellow lamp piece
+- Purple button piece at (1655, 310) bbox: [1606, 265, 1704, 356] - Purple button piece
+- Red ribbon piece at (1768, 310) bbox: [1719, 265, 1818, 356] - Red ribbon piece
+- Purple button piece at (1315, 407) bbox: [1266, 362, 1365, 453] - Purple button piece
+- Yellow lamp piece chained at (1428, 407) bbox: [1379, 362, 1478, 453] - Yellow lamp piece chained
+- Green cup piece at (1541, 407) bbox: [1492, 362, 1591, 453] - Green cup piece
+- Purple button piece at (1655, 407) bbox: [1606, 362, 1704, 453] - Purple button piece
+- Yellow lamp piece at (1768, 407) bbox: [1719, 362, 1818, 453] - Yellow lamp piece
+- Purple button piece at (1315, 505) bbox: [1266, 460, 1365, 550] - Purple button piece
+- Green cup piece at (1428, 505) bbox: [1379, 460, 1478, 550] - Green cup piece
+- Purple button piece at (1541, 505) bbox: [1492, 460, 1591, 550] - Purple button piece
+- Green cup piece at (1655, 505) bbox: [1606, 460, 1704, 550] - Green cup piece
+- Red ribbon piece at (1768, 505) bbox: [1719, 460, 1818, 550] - Red ribbon piece
+- Red ribbon piece chained at (1315, 602) bbox: [1266, 557, 1365, 648] - Red ribbon piece chained
+- Yellow lamp piece chained at (1428, 602) bbox: [1379, 557, 1478, 648] - Yellow lamp piece chained
+- Blue book piece at (1541, 602) bbox: [1492, 557, 1591, 648] - Blue book piece
+- Blue book piece at (1655, 602) bbox: [1606, 557, 1704, 648] - Blue book piece
+- Yellow lamp piece at (1768, 602) bbox: [1719, 557, 1818, 648] - Yellow lamp piece
+- Blue book piece chained at (1315, 699) bbox: [1266, 654, 1365, 745] - Blue book piece chained
+- Yellow lamp piece at (1428, 699) bbox: [1379, 654, 1478, 745] - Yellow lamp piece
+- Purple button piece at (1541, 699) bbox: [1492, 654, 1591, 745] - Purple button piece
+- Red ribbon piece at (1655, 699) bbox: [1606, 654, 1704, 745] - Red ribbon piece
+- Green cup piece chained at (1428, 796) bbox: [1379, 751, 1478, 842] - Green cup piece chained
+- Purple button piece at (1541, 796) bbox: [1492, 751, 1591, 842] - Purple button piece
+- Yellow lamp piece at (1655, 796) bbox: [1606, 751, 1704, 842] - Yellow lamp piece
+- Locked level button at (2192, 165) bbox: [2123, 108, 2261, 222] - Locked level button
+- Locked level button at (2192, 309) bbox: [2123, 251, 2261, 367] - Locked level button
+- Locked level button at (2192, 452) bbox: [2123, 395, 2261, 510] - Locked level button
+- Locked level button at (2192, 597) bbox: [2123, 540, 2261, 654] - Locked level button
+- Locked level button at (2192, 741) bbox: [2123, 683, 2261, 799] - Locked level button
+- Settings button at (2192, 888) bbox: [2123, 831, 2261, 946] - Settings button
+- Green cube target counter at (244, 611) bbox: [183, 554, 305, 669] - Green cube target counter
+- Cost to continue at (227, 931) bbox: [134, 888, 320, 975] - Cost to continue
+- Player profile icon at (228, 190) bbox: [96, 68, 361, 313] - Player profile icon
+ Annotated Items Represented in Grid for better Spatial understanding:
+ Board Grid (use for match reasoning):
+        c0                            c1                            c2                            c3                            c4                            c5                            c6                            c7                            c8                            c9                            c10                           c11                           
+r0     [Player profile icon]          --                             --                             --                             --                             --                             --                             --                             --                             --                             --                             [Locked level button]         
+r1     --                             [Blue book piece]              [Purple button piece]          [Purple button piece]          [Green cup piece chained]      [Purple button piece]          [Yellow lamp piece]            [Green cup piece chained]      [Green cup piece]              [Red ribbon piece]             --                             --                            
+r2     --                             [Blue book piece]              [Blue book piece]              [Purple button piece]          [Blue book piece chained]      [Blue book piece]              [Green cup piece]              [Yellow lamp piece chained]    [Yellow lamp piece]            [Purple button piece]          [Red ribbon piece]             [Locked level button]         
+r3     --                             [Green cup piece]              [Yellow lamp piece]            [Red ribbon piece]             [Green cup piece]              [Yellow lamp piece]            [Purple button piece]          [Yellow lamp piece chained]    [Green cup piece]              [Purple button piece]          [Yellow lamp piece]            --                            
+r4     --                             --                             --                             --                             --                             --                             --                             --                             --                             --                             --                             [Locked level button]         
+r5     --                             [Purple button piece]          [Green cup piece]              [Purple button piece]          [Green cup piece]              [Yellow lamp piece]            [Purple button piece]          [Green cup piece]              [Purple button piece]          [Green cup piece]              [Red ribbon piece]             --                            
+r6     [Green cube target counter]    [Blue book piece]              [Green cup piece]              [Green cup piece]              [Yellow lamp piece]            [Green cup piece]              [Red ribbon piece chained]     [Yellow lamp piece chained]    [Blue book piece]              [Blue book piece]              [Yellow lamp piece]            [Locked level button]         
+r7     --                             [Red ribbon piece]             [Blue book piece]              [Purple button piece]          [Red ribbon piece]             [Yellow lamp piece]            [Blue book piece chained]      [Yellow lamp piece]            [Purple button piece]          [Red ribbon piece]             --                             --                            
+r8     --                             --                             --                             --                             --                             --                             --                             --                             --                             --                             --                             [Locked level button]         
+r9     --                             [Blue book piece]              [Green cup piece]              [Purple button piece]          [Green cup piece]              [Purple button piece]          --                             [Green cup piece chained]      [Purple button piece]          [Yellow lamp piece]            --                             --                            
+r10    --                             --                             --                             --                             --                             --                             --                             --                             --                             --                             --                             [Settings button]             
+r11    [Cost to continue]             --                             --                             --                             --                             --                             --                             --                             --                             --                             --                             --                            
+2026-04-08 21:24:20 | DEBUG    | agent.context.context_service       | 💾 Annotation cache updated for step 0
+2026-04-08 21:24:20 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-04-08 21:24:20 | INFO     | agent.vision_element_detector       | 📸 Annotated image saved
+2026-04-08 21:25:02 | INFO     | agent.services.execution_service    | ⏱️  LLM response time: 41.58s
+2026-04-08 21:25:02 | INFO     | agent.services.execution_service    | ☁️  Screenshot uploaded: /api/executions/69d67a051044b1f8002b23fc/steps/0/screenshot
+2026-04-08 21:25:02 | INFO     | agent.services.execution_service    | ✅ Agent decision received
+2026-04-08 21:25:02 | INFO     | agent.services.execution_service    |    📝 Game state: The player is on a match-3 level with the goal of turning 36 tiles green. 29 moves remain. The board is divided into two sections: the left side has green carpet, while the right side is mostly uncarpeted and contains chained pieces. Several pieces are chained on both sides, restricting movement. A connection point exists between the boards. Currently, the game is in an active state, and I have identified multiple moves to unchain pieces and spread the carpet to the right board.
+2026-04-08 21:25:02 | INFO     | agent.services.execution_service    |    🤔 Reasoning: To efficiently clear the level, I need to spread the green carpet and unchain pieces. I've identified two non-interfering moves: a double unchain on the right side by swapping (1315, 213) and (1315, 310), which matches Greens and Yellows across chained pieces; and a carpet-spreading move on the left by swapping (1014, 602) and (1127, 602) to create a Yellow match on the carpet's edge. Performing both actions in one turn optimizes for speed.
+2026-04-08 21:25:02 | INFO     | agent.services.execution_service    |    🔍 Force annotate: False
+2026-04-08 21:25:02 | INFO     | agent.services.execution_service    |    🎯 Actions count: 3
+2026-04-08 21:25:02 | INFO     | agent.services.execution_service    |    🏁 End game: False
+2026-04-08 21:25:02 | INFO     | agent.services.execution_service    |    📋 Test results: []
+2026-04-08 21:25:02 | INFO     | agent.services.execution_service    |    📊 Token usage — Input: 7493, Output: 6639, Total: 14132
+2026-04-08 21:25:02 | INFO     | agent.services.execution_service    | 💾 ExecutionStep 0 DB write dispatched (background)
+2026-04-08 21:25:02 | INFO     | agent.services.execution_service    |    todo_write (1/3): updated 2 tasks {'pending': 1, 'in_progress': 1, 'completed': 0, 'cancelled': 0, 'actions': 1, 'verifications': 1}
+2026-04-08 21:25:02 | INFO     | agent.services.execution_service    |    action (2/3): swipe x=1315 y=213 duration=0.2
+2026-04-08 21:25:02 | INFO     | agent.appium_manager                | 🔄 SWIPE (Appium): (1315, 213) → (1315, 310) duration=0.2s
+2026-04-08 21:25:02 | INFO     | agent.appium_manager                | 🔄 SWIPE (Appium): (1315, 213) → (1315, 310) duration=0.2s
+2026-04-08 21:25:02 | INFO     | agent.services.execution_service    |    action (3/3): swipe x=1014 y=602 duration=0.2
+2026-04-08 21:25:02 | INFO     | agent.appium_manager                | 🔄 SWIPE (Appium): (1014, 602) → (1127, 602) duration=0.2s
+2026-04-08 21:25:03 | INFO     | agent.appium_manager                | 🔄 SWIPE (Appium): (1014, 602) → (1127, 602) duration=0.2s
+2026-04-08 21:25:03 | INFO     | agent.vision_element_detector       | ✏️  Saved annotated screenshot (2 action(s)) → screenshots/69d67a051044b1f8002b23fc/step_0_action_annotated.png
+2026-04-08 21:25:05 | INFO     | agent.services.execution_service    | Execution 69d67a051044b1f8002b23fc cancelled by client
+2026-04-08 21:25:05 | INFO     | agent.services.execution_service    | Execution 69d67a051044b1f8002b23fc completed — 0 assertion result(s)
+2026-04-08 21:25:05 | INFO     | agent.appium_manager                | 🔌 Closing Appium session...
+2026-04-08 21:25:07 | INFO     | agent.services.execution_service    | 📍 Action-annotated screenshot uploaded for step 0 (local: screenshots/69d67a051044b1f8002b23fc/step_0_action_annotated.png)
+2026-04-08 21:27:36 | INFO     | agent.services.android_build_runner | Downloading APK from gs://rovix_ai_bucket/game_builds/69a1a52bddccbd191280e7eb/69d28eb0cf05947fe6b5670a/android/20260405180924_12dd91d8ed4c4ca9a0938ae0a4cbe62d_uptodown-com.playrix.homescapes.apk (provider=local)
+2026-04-08 21:27:42 | INFO     | agent.services.android_build_runner | Installing APK on RZCW31HH47R (package=com.uptodown)
+2026-04-08 21:27:42 | INFO     | agent.services.android_build_runner | Launching com.uptodown / com.uptodown.activities.MainActivity
+2026-04-08 21:27:42 | INFO     | agent.appium_manager                | 📱 Using device with UDID: RZCW31HH47R
+2026-04-08 21:27:42 | INFO     | agent.appium_manager                | 🎯 Appium will launch app: com.uptodown
+2026-04-08 21:27:42 | INFO     | agent.appium_manager                | 🔌 Connecting to Appium server at http://127.0.0.1:4723...
+2026-04-08 21:27:46 | INFO     | agent.appium_manager                | ✅ Appium session started: c2c70e81-ff67-44f1-8789-d9ebe65a1878
+2026-04-08 21:27:46 | INFO     | agent.services.execution_service    | Starting execution 69d67af01044b1f8002b23fe on device RZCW31HH47R
+2026-04-08 21:27:46 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 0 | Run 69d67af0
+================================================================================
+2026-04-08 21:27:46 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[PENDING] [s1] [ACTION] Just complete the match 3 game within total moves.
+[PENDING] [step-1775432926299] [VERIFY] Verify if the game ends
+============================================================
+2026-04-08 21:27:47 | INFO     | agent.services.execution_service    | 💾 step_0.png (captured in 1.88s)
+2026-04-08 21:27:48 | INFO     | agent.context.context_service       | 🔄 Force annotation requested, bypassing cache
+2026-04-08 21:27:48 | INFO     | agent.vision_element_detector       | 🔍 Vision detection
+2026-04-08 21:29:03 | ERROR    | agent.vision_element_detector       | ❌ [TIMEOUT] Vision detection timed out after 75.0s
+2026-04-08 21:29:03 | WARNING  | agent.context.context_service       | ⚠️ Context service: Vision detection failed, providing fallback message
+2026-04-08 21:29:03 | INFO     | agent.context.context_service       | 📋 Actions message:
+⚠️ Vision detection failed after 3 attempts: Vision detection timed out after 75.0s
+Fallback: Analyze the screenshot carefully to identify clickable areas and their positions.
+2026-04-08 21:29:03 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-04-08 21:29:26 | INFO     | agent.services.execution_service    | ⏱️  LLM response time: 23.89s
+2026-04-08 21:29:26 | INFO     | agent.services.execution_service    | ☁️  Screenshot uploaded: /api/executions/69d67af01044b1f8002b23fe/steps/0/screenshot
+2026-04-08 21:29:26 | INFO     | agent.services.execution_service    | ✅ Agent decision received
+2026-04-08 21:29:26 | INFO     | agent.services.execution_service    |    📝 Game state: The player is on a match-3 level in Homescapes. The objective is to turn 34 floor tiles green, with 27 moves remaining. The board is divided into two sections. The left section is mostly covered in green carpet, while the right section has only one green tile. A spinner booster is present on the left grid. Some pieces on the right are locked in chains.
+2026-04-08 21:29:26 | INFO     | agent.services.execution_service    |    🤔 Reasoning: I will begin by setting up the todo list to track the test plan. My first gameplay move will be to spread the green carpet from the right side's beachhead by swapping the pink button on the green tile at (7,3) with the adjacent green cup at (8,3). This creates a match on a green tile, which is the mechanic for spreading carpet. Simultaneously, I will activate the spinner on the left to target tiles that need to be turned green, optimizing for speed.
+2026-04-08 21:29:26 | INFO     | agent.services.execution_service    |    🔍 Force annotate: False
+2026-04-08 21:29:26 | INFO     | agent.services.execution_service    |    🎯 Actions count: 3
+2026-04-08 21:29:26 | INFO     | agent.services.execution_service    |    🏁 End game: False
+2026-04-08 21:29:26 | INFO     | agent.services.execution_service    |    📋 Test results: []
+2026-04-08 21:29:26 | INFO     | agent.services.execution_service    |    📊 Token usage — Input: 3502, Output: 4372, Total: 7874
+2026-04-08 21:29:26 | INFO     | agent.services.execution_service    | 💾 ExecutionStep 0 DB write dispatched (background)
+2026-04-08 21:29:26 | INFO     | agent.services.execution_service    |    todo_write (1/3): updated 2 tasks {'pending': 1, 'in_progress': 1, 'completed': 0, 'cancelled': 0, 'actions': 1, 'verifications': 1}
+2026-04-08 21:29:26 | INFO     | agent.services.execution_service    |    action (2/3): swipe x=1512 y=545 duration=0.5
+2026-04-08 21:29:26 | INFO     | agent.appium_manager                | 🔄 SWIPE (Appium): (1512, 545) → (1627, 545) duration=0.5s
+2026-04-08 21:29:27 | INFO     | agent.appium_manager                | 🔄 SWIPE (Appium): (1512, 545) → (1627, 545) duration=0.5s
+2026-04-08 21:29:27 | INFO     | agent.services.execution_service    |    action (3/3): click x=907 y=660 duration=0.1
+2026-04-08 21:29:27 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (907, 660) duration=0.1s
+2026-04-08 21:29:28 | INFO     | agent.vision_element_detector       | ✏️  Saved annotated screenshot (2 action(s)) → screenshots/69d67af01044b1f8002b23fe/step_0_action_annotated.png
+2026-04-08 21:29:30 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 1 | Run 69d67af0
+================================================================================
+2026-04-08 21:29:30 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[IN_PROGRESS] [s1] [ACTION] Just complete the match 3 game within total moves.
+[PENDING] [v1] [VERIFY] Verify if the game ends (depends on: s1)
+============================================================
+2026-04-08 21:29:33 | INFO     | agent.services.execution_service    | 💾 step_1.png (captured in 3.52s)
+2026-04-08 21:29:33 | INFO     | agent.context.context_service       | 🔄 Force annotation requested, bypassing cache
+2026-04-08 21:29:33 | INFO     | agent.vision_element_detector       | 🔍 Vision detection
+2026-04-08 21:29:33 | INFO     | agent.services.execution_service    | 📍 Action-annotated screenshot uploaded for step 0 (local: screenshots/69d67af01044b1f8002b23fe/step_0_action_annotated.png)
+2026-04-08 21:29:58 | INFO     | agent.vision_element_detector       | ⏱️  Vision API response time: 24.46s
+2026-04-08 21:29:58 | INFO     | agent.vision_element_detector       | ✅ Detected 69 elements via vision
+2026-04-08 21:29:58 | INFO     | agent.context.context_service       | 📋 Actions message:
+Detected interactive elements on screen:
+- Pink button piece at (782, 205) bbox: [724, 157, 840, 253] - Pink button piece
+- Blue book piece at (895, 205) bbox: [837, 157, 953, 253] - Blue book piece
+- Green cup piece chained at (1008, 205) bbox: [951, 157, 1066, 253] - Green cup piece chained
+- Pink button piece at (1121, 205) bbox: [1064, 157, 1179, 253] - Pink button piece
+- Blue book piece at (674, 307) bbox: [616, 259, 732, 355] - Blue book piece
+- Pink button piece at (782, 307) bbox: [724, 259, 840, 355] - Pink button piece
+- Green cup piece at (895, 307) bbox: [837, 259, 953, 355] - Green cup piece
+- Blue book piece chained at (1008, 307) bbox: [951, 259, 1066, 355] - Blue book piece chained
+- Blue book piece at (1121, 307) bbox: [1064, 259, 1179, 355] - Blue book piece
+- Green cup piece at (674, 408) bbox: [616, 360, 732, 456] - Green cup piece
+- Blue book piece at (782, 408) bbox: [724, 360, 840, 456] - Blue book piece
+- Yellow lamp piece at (895, 408) bbox: [837, 360, 953, 456] - Yellow lamp piece
+- Green cup piece at (1008, 408) bbox: [951, 360, 1066, 456] - Green cup piece
+- Yellow lamp piece at (1121, 408) bbox: [1064, 360, 1179, 456] - Yellow lamp piece
+- Pink button piece at (674, 510) bbox: [616, 462, 732, 558] - Pink button piece
+- Yellow lamp piece at (782, 510) bbox: [724, 462, 840, 558] - Yellow lamp piece
+- Blue book piece at (895, 510) bbox: [837, 462, 953, 558] - Blue book piece
+- Red ribbon piece at (1008, 510) bbox: [951, 462, 1066, 558] - Red ribbon piece
+- Green cup piece at (1121, 510) bbox: [1064, 462, 1179, 558] - Green cup piece
+- Blue book piece at (674, 611) bbox: [616, 563, 732, 659] - Blue book piece
+- Green cup piece at (782, 611) bbox: [724, 563, 840, 659] - Green cup piece
+- Yellow lamp piece at (895, 611) bbox: [837, 563, 953, 659] - Yellow lamp piece
+- Pink button piece at (1008, 611) bbox: [951, 563, 1066, 659] - Pink button piece
+- Blue book piece at (1121, 611) bbox: [1064, 563, 1179, 659] - Blue book piece
+- Red ribbon piece at (674, 713) bbox: [616, 665, 732, 761] - Red ribbon piece
+- Blue book piece at (782, 713) bbox: [724, 665, 840, 761] - Blue book piece
+- Pink button piece at (895, 713) bbox: [837, 665, 953, 761] - Pink button piece
+- Red ribbon piece at (1008, 713) bbox: [951, 665, 1066, 761] - Red ribbon piece
+- Purple toy piece at (1121, 713) bbox: [1064, 665, 1179, 761] - Purple toy piece
+- Blue book piece at (674, 814) bbox: [616, 766, 732, 862] - Blue book piece
+- Red ribbon piece at (782, 814) bbox: [724, 766, 840, 862] - Red ribbon piece
+- Green cup piece at (895, 814) bbox: [837, 766, 953, 862] - Green cup piece
+- Pink button piece at (1008, 814) bbox: [951, 766, 1066, 862] - Pink button piece
+- Red ribbon piece at (1333, 213) bbox: [1276, 173, 1391, 253] - Red ribbon piece
+- Green cup piece at (1447, 213) bbox: [1389, 173, 1505, 253] - Green cup piece
+- Red ribbon piece at (1560, 213) bbox: [1502, 173, 1618, 253] - Red ribbon piece
+- Green cup piece at (1673, 213) bbox: [1615, 173, 1731, 253] - Green cup piece
+- Yellow lamp piece at (1333, 315) bbox: [1276, 275, 1391, 355] - Yellow lamp piece
+- Blue book piece chained at (1447, 315) bbox: [1389, 275, 1505, 355] - Blue book piece chained
+- Blue book piece at (1560, 315) bbox: [1502, 275, 1618, 355] - Blue book piece
+- Red ribbon piece at (1673, 315) bbox: [1615, 275, 1731, 355] - Red ribbon piece
+- Pink button piece chained at (1333, 416) bbox: [1276, 376, 1391, 456] - Pink button piece chained
+- Yellow lamp piece chained at (1447, 416) bbox: [1389, 376, 1505, 456] - Yellow lamp piece chained
+- Green cup piece at (1560, 416) bbox: [1502, 376, 1618, 456] - Green cup piece
+- Yellow lamp piece at (1673, 416) bbox: [1615, 376, 1731, 456] - Yellow lamp piece
+- Green cup piece at (1333, 518) bbox: [1276, 478, 1391, 558] - Green cup piece
+- Red ribbon piece at (1447, 518) bbox: [1389, 478, 1505, 558] - Red ribbon piece
+- Red ribbon piece at (1560, 518) bbox: [1502, 478, 1618, 558] - Red ribbon piece
+- Red ribbon piece at (1673, 518) bbox: [1615, 478, 1731, 558] - Red ribbon piece
+- Pink button piece chained at (1333, 620) bbox: [1276, 581, 1391, 659] - Pink button piece chained
+- Yellow lamp piece chained at (1447, 620) bbox: [1389, 581, 1505, 659] - Yellow lamp piece chained
+- Blue book piece at (1560, 620) bbox: [1502, 581, 1618, 659] - Blue book piece
+- Yellow lamp piece at (1673, 620) bbox: [1615, 581, 1731, 659] - Yellow lamp piece
+- Blue book piece chained at (1333, 721) bbox: [1276, 682, 1391, 761] - Blue book piece chained
+- Blue book piece at (1447, 721) bbox: [1389, 682, 1505, 761] - Blue book piece
+- Yellow lamp piece at (1560, 721) bbox: [1502, 682, 1618, 761] - Yellow lamp piece
+- Red ribbon piece at (1673, 721) bbox: [1615, 682, 1731, 761] - Red ribbon piece
+- Green cup piece chained at (1333, 823) bbox: [1276, 784, 1391, 862] - Green cup piece chained
+- Pink button piece at (1447, 823) bbox: [1389, 784, 1505, 862] - Pink button piece
+- Yellow lamp piece at (1560, 823) bbox: [1502, 784, 1618, 862] - Yellow lamp piece
+- Player profile picture at (230, 175) bbox: [93, 31, 368, 319] - Player profile picture
+- Moves remaining counter at (239, 613) bbox: [175, 557, 303, 670] - Moves remaining counter
+- Coins display at (228, 935) bbox: [127, 894, 329, 977] - Coins display
+- Locked booster button at (2185, 163) bbox: [2114, 108, 2256, 219] - Locked booster button
+- Locked booster button at (2185, 300) bbox: [2114, 245, 2256, 356] - Locked booster button
+- Locked booster button at (2185, 447) bbox: [2114, 392, 2256, 503] - Locked booster button
+- Locked booster button at (2185, 594) bbox: [2114, 538, 2256, 650] - Locked booster button
+- Locked booster button at (2185, 741) bbox: [2114, 685, 2256, 797] - Locked booster button
+- Settings button at (2185, 885) bbox: [2114, 830, 2256, 941] - Settings button
+ Annotated Items Represented in Grid for better Spatial understanding:
+ Board Grid (use for match reasoning):
+        c0                            c1                            c2                            c3                            c4                            c5                            c6                            c7                            c8                            c9                            c10                           
+r0     [Player profile picture]       --                             --                             --                             --                             --                             --                             --                             --                             --                             [Locked booster button]       
+r1     --                             --                             [Pink button piece]            [Blue book piece]              [Green cup piece chained]      [Pink button piece]            [Red ribbon piece]             [Green cup piece]              [Red ribbon piece]             [Green cup piece]              --                            
+r2     --                             [Blue book piece]              [Pink button piece]            [Green cup piece]              [Blue book piece chained]      [Blue book piece]              [Yellow lamp piece]            [Blue book piece chained]      [Blue book piece]              [Red ribbon piece]             [Locked booster button]       
+r3     --                             [Green cup piece]              [Blue book piece]              [Yellow lamp piece]            [Green cup piece]              [Yellow lamp piece]            [Pink button piece chained]    [Yellow lamp piece chained]    [Green cup piece]              [Yellow lamp piece]            [Locked booster button]       
+r4     --                             [Pink button piece]            [Yellow lamp piece]            [Blue book piece]              [Red ribbon piece]             [Green cup piece]              [Green cup piece]              [Red ribbon piece]             [Red ribbon piece]             [Red ribbon piece]             --                            
+r5     [Moves remaining counter]      [Blue book piece]              [Green cup piece]              [Yellow lamp piece]            [Pink button piece]            [Blue book piece]              [Pink button piece chained]    [Yellow lamp piece chained]    [Blue book piece]              [Yellow lamp piece]            [Locked booster button]       
+r6     --                             [Red ribbon piece]             [Blue book piece]              [Pink button piece]            [Red ribbon piece]             [Purple toy piece]             [Blue book piece chained]      [Blue book piece]              [Yellow lamp piece]            [Red ribbon piece]             [Locked booster button]       
+r7     --                             [Blue book piece]              [Red ribbon piece]             [Green cup piece]              [Pink button piece]            --                             [Green cup piece chained]      [Pink button piece]            [Yellow lamp piece]            --                             --                            
+r8     --                             --                             --                             --                             --                             --                             --                             --                             --                             --                             [Settings button]             
+r9     [Coins display]                --                             --                             --                             --                             --                             --                             --                             --                             --                             --                            
+2026-04-08 21:29:58 | DEBUG    | agent.context.context_service       | 💾 Annotation cache updated for step 1
+2026-04-08 21:29:58 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-04-08 21:29:58 | INFO     | agent.vision_element_detector       | 📸 Annotated image saved
+2026-04-08 21:30:22 | INFO     | agent.services.execution_service    | ⏱️  LLM response time: 23.83s
+2026-04-08 21:30:22 | INFO     | agent.services.execution_service    | ☁️  Screenshot uploaded: /api/executions/69d67af01044b1f8002b23fe/steps/1/screenshot
+2026-04-08 21:30:22 | INFO     | agent.services.execution_service    | ✅ Agent decision received
+2026-04-08 21:30:22 | INFO     | agent.services.execution_service    |    📝 Game state: The objective is to turn 29 more floor tiles green with 26 moves remaining. The board has a central carpet bridge connecting the left and right sections. A spinner booster is available at (1121, 713). Several pieces on the right are chained.
+2026-04-08 21:30:22 | INFO     | agent.services.execution_service    |    🤔 Reasoning: I will swap the Yellow lamp at (782, 510) with the Blue book at (895, 510) to create a vertical match-3 of Yellow lamps on the carpeted area. This will help maintain the carpet state. I will also activate the spinner booster at (1121, 713) to clear obstacles and potentially spread more carpet, as boosters are efficient for clearing levels quickly.
+2026-04-08 21:30:22 | INFO     | agent.services.execution_service    |    🔍 Force annotate: False
+2026-04-08 21:30:22 | INFO     | agent.services.execution_service    |    🎯 Actions count: 2
+2026-04-08 21:30:22 | INFO     | agent.services.execution_service    |    🏁 End game: False
+2026-04-08 21:30:22 | INFO     | agent.services.execution_service    |    📋 Test results: []
+2026-04-08 21:30:22 | INFO     | agent.services.execution_service    |    📊 Token usage — Input: 8893, Output: 3324, Total: 12217
+2026-04-08 21:30:22 | INFO     | agent.services.execution_service    | 💾 ExecutionStep 1 DB write dispatched (background)
+2026-04-08 21:30:22 | INFO     | agent.services.execution_service    |    action (1/2): swipe x=782 y=510 duration=0.5
+2026-04-08 21:30:22 | INFO     | agent.appium_manager                | 🔄 SWIPE (Appium): (782, 510) → (895, 510) duration=0.5s
+2026-04-08 21:30:23 | INFO     | agent.appium_manager                | 🔄 SWIPE (Appium): (782, 510) → (895, 510) duration=0.5s
+2026-04-08 21:30:23 | INFO     | agent.services.execution_service    |    action (2/2): click x=1121 y=713 duration=0.1
+2026-04-08 21:30:23 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (1121, 713) duration=0.1s
+2026-04-08 21:30:23 | INFO     | agent.vision_element_detector       | ✏️  Saved annotated screenshot (2 action(s)) → screenshots/69d67af01044b1f8002b23fe/step_1_action_annotated.png
+2026-04-08 21:30:25 | INFO     | agent.services.execution_service    | 
+================================================================================
+🎮 Step 2 | Run 69d67af0
+================================================================================
+2026-04-08 21:30:25 | INFO     | agent.services.execution_service    | 
+============================================================
+📋 CURRENT TODO LIST:
+============================================================
+Current Todo List:
+
+[IN_PROGRESS] [s1] [ACTION] Just complete the match 3 game within total moves.
+[PENDING] [v1] [VERIFY] Verify if the game ends (depends on: s1)
+============================================================
+2026-04-08 21:30:28 | INFO     | agent.services.execution_service    | 💾 step_2.png (captured in 3.45s)
+2026-04-08 21:30:28 | INFO     | agent.context.context_service       | 🔄 Force annotation requested, bypassing cache
+2026-04-08 21:30:28 | INFO     | agent.vision_element_detector       | 🔍 Vision detection
+2026-04-08 21:30:29 | INFO     | agent.services.execution_service    | 📍 Action-annotated screenshot uploaded for step 1 (local: screenshots/69d67af01044b1f8002b23fe/step_1_action_annotated.png)
+2026-04-08 21:30:55 | INFO     | agent.vision_element_detector       | ⏱️  Vision API response time: 26.49s
+2026-04-08 21:30:55 | INFO     | agent.vision_element_detector       | ✅ Detected 77 elements via vision
+2026-04-08 21:30:55 | INFO     | agent.context.context_service       | 📋 Actions message:
+Detected interactive elements on screen:
+- Yellow lamp piece at (787, 211) bbox: [734, 168, 840, 255] - Yellow lamp piece
+- Pink button piece at (891, 211) bbox: [837, 168, 946, 255] - Pink button piece
+- Green cup piece chained at (999, 211) bbox: [946, 168, 1052, 255] - Green cup piece chained
+- Green cup piece at (1105, 211) bbox: [1052, 168, 1158, 255] - Green cup piece
+- Red bow piece at (1326, 211) bbox: [1273, 168, 1379, 255] - Red bow piece
+- Green cup piece at (1432, 211) bbox: [1379, 168, 1485, 255] - Green cup piece
+- Yellow lamp piece at (1538, 211) bbox: [1485, 168, 1591, 255] - Yellow lamp piece
+- Green cup piece at (1645, 211) bbox: [1591, 168, 1700, 255] - Green cup piece
+- Green cup piece at (681, 318) bbox: [628, 275, 734, 362] - Green cup piece
+- Pink button piece at (787, 318) bbox: [734, 275, 840, 362] - Pink button piece
+- Pink button piece at (891, 318) bbox: [837, 275, 946, 362] - Pink button piece
+- Blue book piece chained at (999, 318) bbox: [946, 275, 1052, 362] - Blue book piece chained
+- Pink button piece at (1105, 318) bbox: [1052, 275, 1158, 362] - Pink button piece
+- Yellow lamp piece at (1326, 318) bbox: [1273, 275, 1379, 362] - Yellow lamp piece
+- Pink button piece chained at (1432, 318) bbox: [1379, 275, 1485, 362] - Pink button piece chained
+- Red bow piece at (1538, 318) bbox: [1485, 275, 1591, 362] - Red bow piece
+- Yellow lamp piece at (1645, 318) bbox: [1591, 275, 1700, 362] - Yellow lamp piece
+- Pink button piece at (1753, 318) bbox: [1700, 275, 1806, 362] - Pink button piece
+- Blue book piece at (681, 425) bbox: [628, 382, 734, 469] - Blue book piece
+- Pink button piece at (787, 425) bbox: [734, 382, 840, 469] - Pink button piece
+- Yellow lamp piece at (891, 425) bbox: [837, 382, 946, 469] - Yellow lamp piece
+- Blue book piece at (999, 425) bbox: [946, 382, 1052, 469] - Blue book piece
+- Blue book piece at (1105, 425) bbox: [1052, 382, 1158, 469] - Blue book piece
+- Pink button piece chained at (1219, 425) bbox: [1165, 382, 1273, 469] - Pink button piece chained
+- Red bow piece chained at (1326, 425) bbox: [1273, 382, 1379, 469] - Red bow piece chained
+- Yellow lamp piece chained at (1432, 425) bbox: [1379, 382, 1485, 469] - Yellow lamp piece chained
+- Red bow piece at (1538, 425) bbox: [1485, 382, 1591, 469] - Red bow piece
+- Blue book piece at (1645, 425) bbox: [1591, 382, 1700, 469] - Blue book piece
+- Blue book piece at (1753, 425) bbox: [1700, 382, 1806, 469] - Blue book piece
+- Green cup piece at (681, 532) bbox: [628, 489, 734, 576] - Green cup piece
+- Blue book piece at (787, 532) bbox: [734, 489, 840, 576] - Blue book piece
+- Green cup piece at (891, 532) bbox: [837, 489, 946, 576] - Green cup piece
+- Green cup piece at (999, 532) bbox: [946, 489, 1052, 576] - Green cup piece
+- Yellow lamp piece at (1105, 532) bbox: [1052, 489, 1158, 576] - Yellow lamp piece
+- Yellow lamp piece at (1219, 532) bbox: [1165, 489, 1273, 576] - Yellow lamp piece
+- Blue book piece at (1326, 532) bbox: [1273, 489, 1379, 576] - Blue book piece
+- Green cup piece at (1432, 532) bbox: [1379, 489, 1485, 576] - Green cup piece
+- Blue book piece at (1538, 532) bbox: [1485, 489, 1591, 576] - Blue book piece
+- Red bow piece at (1645, 532) bbox: [1591, 489, 1700, 576] - Red bow piece
+- Red bow piece at (1753, 532) bbox: [1700, 489, 1806, 576] - Red bow piece
+- Pink button piece at (681, 639) bbox: [628, 596, 734, 683] - Pink button piece
+- Blue book piece at (787, 639) bbox: [734, 596, 840, 683] - Blue book piece
+- Blue book piece at (891, 639) bbox: [837, 596, 946, 683] - Blue book piece
+- Red bow piece at (999, 639) bbox: [946, 596, 1052, 683] - Red bow piece
+- Green cup piece at (1105, 639) bbox: [1052, 596, 1158, 683] - Green cup piece
+- Pink button piece chained at (1219, 639) bbox: [1165, 596, 1273, 683] - Pink button piece chained
+- Yellow lamp piece chained at (1326, 639) bbox: [1273, 596, 1379, 683] - Yellow lamp piece chained
+- Yellow lamp piece chained at (1432, 639) bbox: [1379, 596, 1485, 683] - Yellow lamp piece chained
+- Yellow lamp piece at (1538, 639) bbox: [1485, 596, 1591, 683] - Yellow lamp piece
+- Blue book piece at (1645, 639) bbox: [1591, 596, 1700, 683] - Blue book piece
+- Yellow lamp piece at (1753, 639) bbox: [1700, 596, 1806, 683] - Yellow lamp piece
+- Blue book piece at (681, 746) bbox: [628, 703, 734, 790] - Blue book piece
+- Green cup piece at (787, 746) bbox: [734, 703, 840, 790] - Green cup piece
+- Green cup piece at (891, 746) bbox: [837, 703, 946, 790] - Green cup piece
+- Purple bomb piece at (999, 746) bbox: [946, 703, 1052, 790] - Purple bomb piece
+- Blue book piece at (1105, 746) bbox: [1052, 703, 1158, 790] - Blue book piece
+- Green cup piece at (1432, 746) bbox: [1379, 703, 1485, 790] - Green cup piece
+- Blue book piece at (1538, 746) bbox: [1485, 703, 1591, 790] - Blue book piece
+- Yellow lamp piece at (1645, 746) bbox: [1591, 703, 1700, 790] - Yellow lamp piece
+- Red bow piece at (1753, 746) bbox: [1700, 703, 1806, 790] - Red bow piece
+- Blue book piece at (787, 853) bbox: [734, 810, 840, 897] - Blue book piece
+- Red bow piece at (891, 853) bbox: [837, 810, 946, 897] - Red bow piece
+- Green cup piece at (999, 853) bbox: [946, 810, 1052, 897] - Green cup piece
+- Pink button piece at (1105, 853) bbox: [1052, 810, 1158, 897] - Pink button piece
+- Blue book piece at (1326, 853) bbox: [1273, 810, 1379, 897] - Blue book piece
+- Yellow lamp piece at (1432, 853) bbox: [1379, 810, 1485, 897] - Yellow lamp piece
+- Pink button piece at (1538, 853) bbox: [1485, 810, 1591, 897] - Pink button piece
+- Yellow lamp piece at (1645, 853) bbox: [1591, 810, 1700, 897] - Yellow lamp piece
+- Booster button at (2188, 167) bbox: [2123, 115, 2253, 219] - Booster button
+- Booster button at (2188, 317) bbox: [2123, 257, 2253, 378] - Booster button
+- Booster button at (2188, 468) bbox: [2123, 408, 2253, 529] - Booster button
+- Booster button at (2188, 621) bbox: [2123, 561, 2253, 682] - Booster button
+- Booster button at (2188, 774) bbox: [2123, 714, 2253, 835] - Booster button
+- Settings button at (2188, 928) bbox: [2123, 868, 2253, 989] - Settings button
+- Player profile picture at (230, 192) bbox: [86, 54, 375, 330] - Player profile picture
+- Moves remaining counter at (246, 614) bbox: [185, 559, 308, 670] - Moves remaining counter
+- Coins display at (235, 935) bbox: [156, 889, 315, 981] - Coins display
+ Annotated Items Represented in Grid for better Spatial understanding:
+ Board Grid (use for match reasoning):
+        c0                            c1                            c2                            c3                            c4                            c5                            c6                            c7                            c8                            c9                            c10                           c11                           c12                           
+r0     [Player profile picture]       --                             --                             --                             --                             --                             --                             --                             --                             --                             --                             --                             [Booster button]              
+r1     --                             --                             [Yellow lamp piece]            [Pink button piece]            [Green cup piece chained]      [Green cup piece]              --                             [Red bow piece]                [Green cup piece]              [Yellow lamp piece]            [Green cup piece]              --                             --                            
+r2     --                             [Green cup piece]              [Pink button piece]            [Pink button piece]            [Blue book piece chained]      [Pink button piece]            --                             [Yellow lamp piece]            [Pink button piece chained]    [Red bow piece]                [Yellow lamp piece]            [Pink button piece]            [Booster button]              
+r3     --                             [Blue book piece]              [Pink button piece]            [Yellow lamp piece]            [Blue book piece]              [Blue book piece]              [Pink button piece chained]    [Red bow piece chained]        [Yellow lamp piece chained]    [Red bow piece]                [Blue book piece]              [Blue book piece]              --                            
+r4     --                             --                             --                             --                             --                             --                             --                             --                             --                             --                             --                             --                             [Booster button]              
+r5     --                             [Green cup piece]              [Blue book piece]              [Green cup piece]              [Green cup piece]              [Yellow lamp piece]            [Yellow lamp piece]            [Blue book piece]              [Green cup piece]              [Blue book piece]              [Red bow piece]                [Red bow piece]                --                            
+r6     [Moves remaining counter]      [Pink button piece]            [Blue book piece]              [Blue book piece]              [Red bow piece]                [Green cup piece]              [Pink button piece chained]    [Yellow lamp piece chained]    [Yellow lamp piece chained]    [Yellow lamp piece]            [Blue book piece]              [Yellow lamp piece]            [Booster button]              
+r7     --                             [Blue book piece]              [Green cup piece]              [Green cup piece]              [Purple bomb piece]            [Blue book piece]              --                             --                             [Green cup piece]              [Blue book piece]              [Yellow lamp piece]            [Red bow piece]                [Booster button]              
+r8     --                             --                             [Blue book piece]              [Red bow piece]                [Green cup piece]              [Pink button piece]            --                             [Blue book piece]              [Yellow lamp piece]            [Pink button piece]            [Yellow lamp piece]            --                             --                            
+r9     [Coins display]                --                             --                             --                             --                             --                             --                             --                             --                             --                             --                             --                             [Settings button]             
+2026-04-08 21:30:55 | DEBUG    | agent.context.context_service       | 💾 Annotation cache updated for step 2
+2026-04-08 21:30:55 | INFO     | agent.services.execution_service    | 🤖 Getting agent decision from LLM...
+2026-04-08 21:30:55 | INFO     | agent.vision_element_detector       | 📸 Annotated image saved
+2026-04-08 21:31:11 | INFO     | agent.services.execution_service    | ⏱️  LLM response time: 16.43s
+2026-04-08 21:31:11 | INFO     | agent.services.execution_service    | ☁️  Screenshot uploaded: /api/executions/69d67af01044b1f8002b23fe/steps/2/screenshot
+2026-04-08 21:31:11 | INFO     | agent.services.execution_service    | ✅ Agent decision received
+2026-04-08 21:31:11 | INFO     | agent.services.execution_service    |    📝 Game state: The objective is to turn 26 more floor tiles green with 24 moves remaining. A purple bomb booster is available on the carpet at (999, 746). The right section of the board still has many non-green tiles and chained pieces.
+2026-04-08 21:31:11 | INFO     | agent.services.execution_service    |    🤔 Reasoning: I will activate the purple bomb at (999, 746). This will clear a large radius of pieces, potentially breaking chains and spreading the green carpet to the right side of the board. Using boosters is the most efficient way to achieve the objective quickly while maximizing the impact per move.
+2026-04-08 21:31:11 | INFO     | agent.services.execution_service    |    🔍 Force annotate: False
+2026-04-08 21:31:11 | INFO     | agent.services.execution_service    |    🎯 Actions count: 1
+2026-04-08 21:31:11 | INFO     | agent.services.execution_service    |    🏁 End game: False
+2026-04-08 21:31:11 | INFO     | agent.services.execution_service    |    📋 Test results: []
+2026-04-08 21:31:11 | INFO     | agent.services.execution_service    |    📊 Token usage — Input: 14391, Output: 1777, Total: 16168
+2026-04-08 21:31:11 | INFO     | agent.services.execution_service    | 💾 ExecutionStep 2 DB write dispatched (background)
+2026-04-08 21:31:11 | INFO     | agent.services.execution_service    |    action (1/1): click x=999 y=746 duration=0.1
+2026-04-08 21:31:11 | INFO     | agent.appium_manager                | 👆 CLICK (Appium): (999, 746) duration=0.1s
+2026-04-08 21:31:12 | INFO     | agent.vision_element_detector       | ✏️  Saved annotated screenshot (1 action(s)) → screenshots/69d67af01044b1f8002b23fe/step_2_action_annotated.png
+2026-04-08 21:31:14 | INFO     | agent.services.execution_service    | Execution 69d67af01044b1f8002b23fe cancelled by client
+2026-04-08 21:31:14 | INFO     | agent.services.execution_service    | Execution 69d67af01044b1f8002b23fe completed — 0 assertion result(s)
+2026-04-08 21:31:14 | INFO     | agent.appium_manager                | 🔌 Closing Appium session...
+2026-04-08 21:31:16 | INFO     | agent.services.execution_service    | 📍 Action-annotated screenshot uploaded for step 2 (local: screenshots/69d67af01044b1f8002b23fe/step_2_action_annotated.png)

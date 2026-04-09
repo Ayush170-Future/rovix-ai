@@ -3,7 +3,8 @@
     "allow": [
       "WebFetch(domain:arxiv.org)",
       "WebFetch(domain:github.com)",
-      "WebFetch(domain:raw.githubusercontent.com)"
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:console.cloud.google.com)"
     ]
   }
 }

@@ -3,7 +3,7 @@ import os
 from datetime import datetime
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.params import Query
 from fastapi.responses import StreamingResponse
 from google.cloud import storage as gcs
@@ -32,6 +32,7 @@ async def get_execution(execution_run_id: str, org: Organization = Depends(get_o
         "id": str(run.id),
         "scenario_id": run.scenario_id,
         "build_id": run.build_id,
+        "name": run.name,
         "device_udid": run.device_udid,
         "device_id": run.device_id,
         "status": run.status,
@@ -44,6 +45,25 @@ async def get_execution(execution_run_id: str, org: Organization = Depends(get_o
         "failure_reason": run.failure_reason,
         "assertion_results": [r.model_dump() for r in run.assertion_results],
     }
+
+
+@router.post("/{execution_run_id}/stop")
+async def stop_execution(execution_run_id: str, request: Request, org: Organization = Depends(get_org)):
+    run = await _execution_repo.find_by_id(execution_run_id)
+    if not run or run.org_id != str(org.id):
+        raise HTTPException(status_code=404, detail="Execution not found")
+    if run.status in ("completed", "failed", "cancelled"):
+        raise HTTPException(status_code=409, detail=f"Execution already finished (status: {run.status})")
+
+    execution_service = request.app.state.execution_service
+    found = execution_service.cancel_run(run.device_udid)
+
+    if not found:
+        # Run is queued (no session yet) or session already cleaned up — cancel in DB directly.
+        await _execution_repo.cancel(execution_run_id)
+        return {"status": "cancelled"}
+
+    return {"status": "cancelling"}
 
 
 @router.get("/{execution_run_id}/steps")

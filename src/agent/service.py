@@ -14,7 +14,6 @@ from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
 from dotenv import load_dotenv
 import sys
 import time
-from langchain_aws import ChatBedrockConverse
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_google_vertexai.model_garden import ChatAnthropicVertex
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))

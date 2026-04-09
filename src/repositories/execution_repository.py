@@ -12,6 +12,7 @@ class ExecutionRepository:
         org_id: str,
         device_udid: str,
         total_assertions: int,
+        name: str = "",
         device_id: Optional[str] = None,
     ) -> ExecutionRun:
         run = ExecutionRun(
@@ -19,6 +20,7 @@ class ExecutionRepository:
             game_id=game_id,
             build_id=build_id,
             org_id=org_id,
+            name=name,
             device_udid=device_udid,
             device_id=device_id,
             total_assertions=total_assertions,
@@ -77,6 +79,17 @@ class ExecutionRepository:
         run.assertion_results = assertion_results
         run.passed = sum(1 for r in assertion_results if r.verdict == "pass")
         run.failed = sum(1 for r in assertion_results if r.verdict == "fail")
+        run.completed_at = datetime.utcnow()
+        if run.started_at:
+            run.duration_seconds = int((run.completed_at - run.started_at).total_seconds())
+        await run.save()
+        return run
+
+    async def cancel(self, run_id: str) -> Optional[ExecutionRun]:
+        run = await ExecutionRun.get(run_id)
+        if not run:
+            return None
+        run.status = "cancelled"
         run.completed_at = datetime.utcnow()
         if run.started_at:
             run.duration_seconds = int((run.completed_at - run.started_at).total_seconds())
