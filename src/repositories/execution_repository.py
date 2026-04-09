@@ -14,6 +14,7 @@ class ExecutionRepository:
         total_assertions: int,
         name: str = "",
         device_id: Optional[str] = None,
+        model_mode: Optional[str] = None,
     ) -> ExecutionRun:
         run = ExecutionRun(
             scenario_id=scenario_id,
@@ -24,6 +25,7 @@ class ExecutionRepository:
             device_udid=device_udid,
             device_id=device_id,
             total_assertions=total_assertions,
+            model_mode=model_mode,
         )
         await run.insert()
         return run

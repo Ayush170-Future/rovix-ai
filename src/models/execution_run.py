@@ -31,6 +31,7 @@ class ExecutionRun(Document):
     completed_at: Optional[datetime] = None
     duration_seconds: Optional[int] = None
     failure_reason: Optional[str] = None
+    model_mode: Optional[str] = None  # "fast" | "reasoning"
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
     class Settings:

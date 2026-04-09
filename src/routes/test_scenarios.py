@@ -37,6 +37,7 @@ class ExecuteRequest(BaseModel):
     device_id: str
     build_id: str
     name: Optional[str] = None
+    model_mode: Optional[str] = None  # "fast" | "reasoning" | None (uses env default)
 
 
 @router.post("/api/games/{game_id}/scenarios")
@@ -215,6 +216,7 @@ async def execute_scenario(
         total_assertions=len(scenario.assertions),
         name=run_name,
         device_id=device.device_id,
+        model_mode=request.model_mode,
     )
 
     await execution_service.start_execution(
@@ -223,6 +225,7 @@ async def execute_scenario(
         game=game,
         device=device,
         build=build,
+        model_mode=request.model_mode,
     )
 
     return {

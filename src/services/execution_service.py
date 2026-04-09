@@ -8,12 +8,9 @@ from typing import Any, Dict, List, Optional
 
 from google.cloud import storage as gcs
 
-from langchain_google_genai import ChatGoogleGenerativeAI
-from langchain_google_vertexai.model_garden import ChatAnthropicVertex
-from langchain_openai import AzureChatOpenAI
-
 from agent.context import ContextService
 from agent.device_results import ActionResult, DeviceErrorType, ScreenshotResult
+from agent.model_providers import build_model
 from agent.prompts import SYSTEM_PROMPT_WITH_TODO, SYSTEM_PROMPT_WITH_TODO_IMPROVED
 from agent.vision_element_detector import annotate_actions
 from agent.logger import get_logger
@@ -40,30 +37,23 @@ MAX_STEPS = int(os.getenv("MAX_STEPS", "1000"))
 MAX_CONSECUTIVE_DEVICE_FAILURES = int(os.getenv("MAX_CONSECUTIVE_DEVICE_FAILURES", "3"))
 GCS_BUCKET_NAME = os.getenv("GCS_BUCKET_NAME", "rovix_ai_bucket")
 
-# Model provider selection: "google" (default) | "anthropic" | "azure"
+# Fallback model config (used when model_mode is not specified on a run)
 MODEL_PROVIDER = os.getenv("MODEL_PROVIDER", "google")
-
-# Google / Gemini
 GOOGLE_MODEL = os.getenv("GOOGLE_MODEL", "gemini-3-flash-preview")
-
-# Anthropic via Vertex AI
-ANTHROPIC_PROJECT_ID = os.getenv("ANTHROPIC_PROJECT_ID", "")
-ANTHROPIC_LOCATION = os.getenv("ANTHROPIC_LOCATION", "us-east5")
 ANTHROPIC_MODEL = os.getenv("ANTHROPIC_MODEL", "claude-sonnet-4-6")
-
-# Azure OpenAI
-AZURE_OPENAI_API_KEY = os.getenv("AZURE_OPENAI_API_KEY", "")
-AZURE_OPENAI_INSTANCE_NAME = os.getenv("AZURE_OPENAI_API_INSTANCE_NAME", "")
 AZURE_OPENAI_DEPLOYMENT = os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME", "gpt-4o")
-AZURE_OPENAI_API_VERSION = os.getenv("AZURE_OPENAI_API_VERSION", "2024-12-01-preview")
+
+# Per-mode model config — overrides MODEL_PROVIDER when model_mode is set on a run
+FAST_MODEL_PROVIDER = os.getenv("FAST_MODEL_PROVIDER", "google")
+FAST_MODEL_NAME = os.getenv("FAST_MODEL_NAME", "gemini-3-flash-preview")
+REASONING_MODEL_PROVIDER = os.getenv("REASONING_MODEL_PROVIDER", "google")
+REASONING_MODEL_NAME = os.getenv("REASONING_MODEL_NAME", "gemini-3.1-pro-preview")
 
 
 class FatalExecutionError(Exception):
     """Stops the run with a persisted failure_reason (device / invalid action)."""
     pass
 
-
-# ── Session state ────────────────────────────────────────────────────────────
 @dataclass
 class AgentSession:
     execution_run_id: str
@@ -77,6 +67,7 @@ class AgentSession:
     installed_package: str = ""
     force_annotate: bool = False
     vision_prompt: str = None  # Game-specific vision detector prompt; None = use detector default
+    structured_model: Any = None  # Per-session LLM instance built from resolved model_mode
     step_count: int = 0
     collected_results: List[AssertionResult] = field(default_factory=list)
     consecutive_device_failures: int = 0
@@ -89,9 +80,6 @@ class AgentSession:
     # can write it and the worker process that owns the execution will pick it up.
     cancelled: bool = False
 
-
-# ── Service ──────────────────────────────────────────────────────────────────
-
 class ExecutionService:
     def __init__(self):
         # TODO: Multi-instance / horizontal scale — _sessions is per-process memory only.
@@ -101,7 +89,6 @@ class ExecutionService:
         self._sessions: Dict[str, AgentSession] = {}
         self._execution_repo = ExecutionRepository()
         self._step_repo = ExecutionStepRepository()
-        self._structured_model = self._init_model()
         self._vision_detector = self._init_vision_detector()
         self._gcs_client = gcs.Client()
         self._gcs_bucket = self._gcs_client.bucket(GCS_BUCKET_NAME)
@@ -126,37 +113,23 @@ class ExecutionService:
             if isinstance(r, Exception):
                 logger.error(f"❌ ExecutionRun incremental update failed: {r}")
 
-    def _init_model(self):
-        if MODEL_PROVIDER == "anthropic":
-            logger.info(f"🤖 Using Anthropic model: {ANTHROPIC_MODEL} (Vertex AI, location={ANTHROPIC_LOCATION})")
-            model = ChatAnthropicVertex(
-                model_name=ANTHROPIC_MODEL,
-                project=ANTHROPIC_PROJECT_ID,
-                location=ANTHROPIC_LOCATION,
-                max_tokens=4096,
-            )
-        elif MODEL_PROVIDER == "azure":
-            logger.info(f"🤖 Using Azure OpenAI model: {AZURE_OPENAI_DEPLOYMENT} (instance={AZURE_OPENAI_INSTANCE_NAME})")
-            model = AzureChatOpenAI(
-                temperature=0.0,
-                azure_deployment=AZURE_OPENAI_DEPLOYMENT,
-                azure_endpoint=f"https://{AZURE_OPENAI_INSTANCE_NAME}.openai.azure.com",
-                api_key=AZURE_OPENAI_API_KEY,
-                api_version=AZURE_OPENAI_API_VERSION,
-            )
+    @staticmethod
+    def _resolve_model(model_mode: Optional[str]):
+        """Resolve (provider, model_name) from model_mode, then build the LLM."""
+        if model_mode == "fast":
+            provider, model_name = FAST_MODEL_PROVIDER, FAST_MODEL_NAME
+        elif model_mode == "reasoning":
+            provider, model_name = REASONING_MODEL_PROVIDER, REASONING_MODEL_NAME
         else:
-            logger.info(f"🤖 Using Google model: {GOOGLE_MODEL}")
-            model = ChatGoogleGenerativeAI(
-                model=GOOGLE_MODEL,
-                temperature=1.0,
-                api_key=os.getenv("GOOGLE_API_KEY"),
-            )
+            # Fall back to legacy MODEL_PROVIDER env
+            provider = MODEL_PROVIDER
+            model_name = {
+                "anthropic": ANTHROPIC_MODEL,
+                "azure": AZURE_OPENAI_DEPLOYMENT,
+            }.get(provider, GOOGLE_MODEL)
 
-        return model.with_structured_output(
-            schema=AgentOutput.model_json_schema(),
-            method="json_schema",
-            include_raw=True,
-        )
+        logger.info(f"🤖 Model resolved — mode={model_mode!r} provider={provider} model={model_name}")
+        return build_model(provider, model_name)
 
     def _init_vision_detector(self):
         from agent.vision_element_detector import VisionElementDetector
@@ -191,6 +164,7 @@ class ExecutionService:
         game: Game,
         device: Device,
         build: Build,
+        model_mode: Optional[str] = None,
     ) -> None:
         session_id = run_id
         context_svc = ContextService(system_prompt=SYSTEM_PROMPT_WITH_TODO_IMPROVED, keep_full_steps=4)
@@ -201,6 +175,8 @@ class ExecutionService:
             test_plan=self._build_test_plan(scenario),
         )
 
+        structured_model = self._resolve_model(model_mode)
+
         session = AgentSession(
             execution_run_id=run_id,
             session_id=session_id,
@@ -210,6 +186,7 @@ class ExecutionService:
             context_service=context_svc,
             provider=device.provider,
             vision_prompt=game.vision_prompt,
+            structured_model=structured_model,
         )
 
         try:
@@ -342,7 +319,7 @@ class ExecutionService:
         start = time.time()
 
         # TODO: add time limit to the LLM call like vision api call.
-        raw_response = await asyncio.to_thread(self._structured_model.invoke, messages)
+        raw_response = await asyncio.to_thread(session.structured_model.invoke, messages)
         elapsed = time.time() - start
         logger.info(f"⏱️  LLM response time: {elapsed:.2f}s")
 
